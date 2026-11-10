@@ -6,6 +6,24 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The pre-stage's weights can be pinned to a GPU, as the video node's can.**
+With ComfyUI-MultiGPU installed, the Creator's weights popover had a device
+pill on every checkpoint, encoder and VAE row, and the pre-stage's had none:
+its stills were built on a weights class of their own that had nowhere to keep
+a pin, every image family's manifest said `device: false` outright, and the
+render emitted each loader with no device, the VAE not even through
+`loader_for`. Both sides now read pins through one rule
+(`models.pinned_devices`) and emit through one swap (`loader_for`, by way of
+`render_image.emit_loader`), and the seven image manifests build their weight
+rows from one helper that derives which fields can move from the loader each
+one is emitted through. Pins are kept per arch, beside the files they name, so
+moving Krea 2's encoder to `cuda:1` leaves Ideogram's where it was; the
+popover's pill is the Creator's own control, and the weights pill reads
+`weights · cuda:1` the way the Creator's does. The headless render route
+takes `devices` for a picture now instead of refusing it, the chat room
+carries a still's remembered pins into its renders, and remembering a still
+family's files no longer forgets its pins.
+
 **The pre-stage's MiniMax stills are made by MiniMax H3 Image.** The
 MiniMax choice on the pre-stage used to run the H3 *video* model on the
 shortest legal clip and decode its first latent frame, because there was no

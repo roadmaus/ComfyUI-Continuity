@@ -2801,7 +2801,13 @@ class Room {
   stillWeightsState() {
     const state = S.emptyPreStage();
     state.arch = this.sync.stillArch();
-    S.adoptRememberedPreStage(state.models, rememberedWeights());
+    const remembered = rememberedWeights();
+    S.adoptRememberedPreStage(state.models, remembered);
+    // The pins too: this state *is* the machine's memory, and a pick in the
+    // popover writes the side back whole (`rememberStillWeights`), so a side
+    // read without them would forget them on the next pick.
+    state.models[state.arch].devices = S.parsePreStageDevices(
+      remembered?.[S.preStageFamilyId(state.arch)]?.devices, state.arch);
     return state;
   }
 
@@ -2810,6 +2816,10 @@ class Room {
   clipWeightsPiece() {
     const piece = { ...S.emptyTimeline(), family: this.sync.videoFamily() };
     adoptWeights(piece);
+    // The machine's pins, for `stillWeightsState`'s reason: a pick here writes
+    // the block back whole, and `adoptWeights` fills files only.
+    const family = S.pieceFamily(piece);
+    piece.models.devices = S.parseModels(rememberedWeights()?.[family] ?? {}, family).devices;
     return piece;
   }
 

@@ -50,7 +50,7 @@ import { STOP_TITLE } from "./guide.js";
 import { openControl } from "./control.js";
 import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder, rememberedWeights,
-         rememberStillWeights } from "./models.js";
+         rememberStillWeights, weightDevicePill, deviceSpread, catalogDevices } from "./models.js";
 import { viewUrl, primeSettings } from "./api.js";
 import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { t } from "./i18n.js";
@@ -1919,12 +1919,16 @@ export class PreStageRow {
 
   renderWeightsPill() {
     const missing = S.missingPreStageModels(this.state);
+    // Pinned cards before precision, as the Creator's pill orders them
+    // (`models.weightsPill`): a still split over two cards is the bigger news.
+    const spread = deviceSpread(this.state.models[this.state.arch]?.devices,
+                                S.PRESTAGE_DEVICE_FIELDS[this.state.arch] ?? []);
     const label = missing.length
       ? (missing.length === 1
           ? t("no {field}", { field: t(S.PRESTAGE_FIELD_LABEL[missing[0]]).toLowerCase() })
           : t("{count} weights missing", { count: missing.length }))
-      : this.state.models.dtype === "default"
-        ? t("weights") : t("weights · {dtype}", { dtype: this.state.models.dtype.replace("fp8_", "fp8 ") });
+      : spread ?? (this.state.models.dtype === "default"
+        ? t("weights") : t("weights · {dtype}", { dtype: this.state.models.dtype.replace("fp8_", "fp8 ") }));
     return el("button", {
       class: `mmc-pill mmc-weights${missing.length ? " missing" : ""}`,
       title: missing.length
@@ -1943,7 +1947,10 @@ export class PreStageRow {
 
     const render = () => {
       const byFolder = catalogByFolder();
+      const devices = catalogDevices();
       const side = state.models[state.arch];
+      side.devices ??= {};
+      const pinnable = S.PRESTAGE_DEVICE_FIELDS[state.arch] ?? [];
       const missing = new Set(S.missingPreStageModels(state));
 
       const rows = S.PRESTAGE_FIELDS[state.arch].map((field) => el("div", {
@@ -1969,6 +1976,19 @@ export class PreStageRow {
             },
           }),
         }),
+        // The Creator's own device pill, over this side's pins: the same
+        // control, the same ComfyUI-MultiGPU swap at render
+        // (`render_image.emit_loader`).
+        pinnable.includes(field)
+          ? weightDevicePill({
+              pins: side.devices, field, label: t(S.PRESTAGE_FIELD_LABEL[field]), devices,
+              onChange: () => {
+                rememberStillWeights(S.preStageFamilyId(state.arch), side);
+                this.commit();
+                render();
+              },
+            })
+          : null,
       ]));
 
       rows.push(el("div", { class: "mmc-weight-row" }, [

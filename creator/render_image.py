@@ -67,6 +67,20 @@ FOLDERS = {
     "control": "model_patches",
 }
 
+# The core loader each field is emitted through, before `loader_for` swaps it
+# for a GGUF or ComfyUI-MultiGPU class. This is the still side's answer to a
+# `models.Slot`'s `loader`, and what decides which fields can be pinned to a
+# device: the three DiT fields, the encoder and the VAE can; the ControlNet
+# branch is a `ModelPatchLoader`, which the MultiGPU pack does not wrap.
+LOADERS = {
+    "model": "UNETLoader",
+    "turbo_model": "UNETLoader",
+    "uncond_model": "UNETLoader",
+    "clip": "CLIPLoader",
+    "vae": "VAELoader",
+    "control": "ModelPatchLoader",
+}
+
 LABEL = {
     "model": "the checkpoint",
     "turbo_model": "the Turbo checkpoint",
@@ -88,6 +102,10 @@ class ImageWeights:
     arch: str
     files: dict = field(default_factory=dict)
     dtype: str = "default"
+    # `{field: "cuda:1"}`, through ComfyUI-MultiGPU — `models.Weights.devices`
+    # for a still. Empty is the normal state and means wherever ComfyUI would
+    # have put it.
+    devices: dict = field(default_factory=dict)
 
     @classmethod
     def from_blob(cls, data, family):
@@ -96,6 +114,11 @@ class ImageWeights:
         The block is `{krea2: {...}, ideogram4: {...}, dtype}` — per-arch
         sub-blocks so flipping the model pill never forgets the other side.
         Which fields a side carries is the family's declaration.
+
+        A side's `devices` is per arch too, for the files' own reason: a pin
+        names a field, and `model` on one arch is not the file it is on
+        another. Read through `models.pinned_devices`, the rule the video
+        block's pins go through.
         """
         arch = family.ARCH
         block = (data or {}).get("models")
@@ -110,12 +133,20 @@ class ImageWeights:
             if isinstance(value, str) and value.strip():
                 files[name] = value.strip()
         dtype = block.get("dtype")
+        devices = core.pinned_devices(side.get("devices"),
+                                      {name: LOADERS.get(name) for name in family.FIELDS})
         return cls(arch=arch,
                    files=files,
-                   dtype=dtype if isinstance(dtype, str) and dtype else "default")
+                   dtype=dtype if isinstance(dtype, str) and dtype else "default",
+                   devices=devices)
 
     def get(self, name):
         return self.files.get(name)
+
+    def device(self, name):
+        """Where `name` should be loaded, or None for wherever ComfyUI would —
+        `models.Weights.device`, for a still."""
+        return self.devices.get(name) or None
 
 
 def check(weights, payload, family):
@@ -229,14 +260,74 @@ def edit_seed(sampling, payload, family):
     return dataclasses.replace(sampling, seed=int.from_bytes(digest, "big"))
 
 
-def emit_unet(graph, weights, name):
-    """One DiT loader, GGUF-aware the way `models.Links` is: a `.gguf`
-    filename swaps the class through `loader_for`, and `weight_dtype` is only a
-    core-loader input — a quantized file's precision is already decided."""
+# Each field's filename input on its core loader. GGUF's loaders and
+# MultiGPU's wrappers keep the same names, which is why one table serves all
+# three classes.
+LOADER_INPUT = {"UNETLoader": "unet_name", "CLIPLoader": "clip_name",
+                "VAELoader": "vae_name"}
+
+
+def emit_loader(graph, weights, name, **extra):
+    """One field's loader -> its output socket, on the device it was pinned to.
+
+    The still side of `models.Links._loader`, and through the same
+    `loader_for`: a `.gguf` filename swaps the class for ComfyUI-GGUF's, a
+    pinned device swaps whatever that produced for its ComfyUI-MultiGPU
+    subclass, and with neither the core loader is emitted unchanged — so a still
+    nobody asked to quantize or split never depends on another pack.
+    `weight_dtype` is only the core DiT loader's input; a quantized file's
+    precision was decided when it was quantized. `extra` is the loader's fixed
+    inputs, e.g. `CLIPLoader`'s `type`.
+    """
     filename = weights.get(name)
-    node_id, _ = loader_for("UNETLoader", None, filename)
-    dtype = {} if is_gguf(filename) else {"weight_dtype": weights.dtype}
-    return graph.node(node_id, unet_name=filename, **dtype).out(0)
+    loader = LOADERS[name]
+    node_id, pin = loader_for(loader, weights.device(name), filename)
+    if loader == "UNETLoader" and not is_gguf(filename):
+        extra = {**extra, "weight_dtype": weights.dtype}
+    return graph.node(node_id, **{LOADER_INPUT[loader]: filename}, **extra, **pin).out(0)
+
+
+def emit_unet(graph, weights, name):
+    """One DiT loader — `emit_loader` for one of the three DiT fields. Kept by
+    name because Ideogram's branch loads its unconditional checkpoint here."""
+    return emit_loader(graph, weights, name)
+
+
+def manifest_weight(name, ui, *, gguf, required=True):
+    """One row of an image family's manifest `weights` -> the dict the frontend
+    reads.
+
+    Every still family wrote this dict out for itself, which is how they all
+    came to say `"device": False` while the video families derived theirs from
+    the slot table. Built here instead, from the same tables the render reads:
+    the folder and label from `FOLDERS` / `LABEL`, whether a device can be
+    pinned from `LOADERS` against the MultiGPU wrappers. What stays the
+    family's is what the family knows — its strings (`ui`: title, help, hints,
+    avoid), which of its fields ComfyUI-GGUF can load, and whether a field may
+    be left empty (`required`, only written when it may: absent reads as
+    required on the frontend).
+    """
+    row = {
+        "id": name,
+        "folder": FOLDERS[name],
+        "label": LABEL[name],
+        "loads": True,
+        # No still family routes between checkpoints the way H3's pair is
+        # routed: a Turbo file is picked by the turbo pill, not the payload.
+        "routed": False,
+        "audio": False,
+    }
+    if not required:
+        row["required"] = False
+    row.update({
+        "gguf": gguf,
+        "device": LOADERS.get(name) in core.MULTIGPU,
+        "title": ui["title"],
+        "help": ui["help"],
+        "hints": ui["hints"],
+        "avoid": ui.get("avoid", []),
+    })
+    return row
 
 
 def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
@@ -261,10 +352,10 @@ def emit(payload, weights, sampling, unique_id, family, filename_prefix=None):
 
     graph = GraphBuilder()
 
-    clip = graph.node(loader_for("CLIPLoader", None, weights.get("clip"))[0],
-                      clip_name=weights.get("clip"),
-                      type=family.CLIP_TYPE).out(0)
-    vae = graph.node("VAELoader", vae_name=weights.get("vae")).out(0)
+    # Every loader through `emit_loader`, so a device pinned in the weights
+    # popover moves it exactly as it moves the video node's.
+    clip = emit_loader(graph, weights, "clip", type=family.CLIP_TYPE)
+    vae = emit_loader(graph, weights, "vae")
     model = emit_unet(graph, weights, payload.checkpoint_field)
     # Model-only, exactly as the official workflows patch these DiTs — there is
     # no text-encoder half to a Krea or Ideogram LoRA.

@@ -1716,3 +1716,83 @@ try:
 finally:
     comfy_nodes.NODE_CLASS_MAPPINGS.clear()
     comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore_preview)
+
+# ---- devices ------------------------------------------------------------------
+#
+# A still's loaders move to a card the way a clip's do: `render_image.emit_loader`
+# goes through `models.loader_for`, so a pin on the arch's side swaps the core
+# loader for its ComfyUI-MultiGPU subclass and adds `device`. The pre-stage once
+# emitted every loader with no device at all, and the VAE outside `loader_for`
+# entirely; these pin that it no longer can. The pack is absent here, so both
+# halves are worth checking: nothing pinned is the core loaders, and a pin
+# without the pack is refused rather than quietly loaded on one card.
+
+def pinned(arch="krea2", **pins):
+    models = {k: dict(v) for k, v in MODELS.items()}
+    models[arch]["devices"] = pins
+    return blob(arch=arch, models=models)
+
+
+check("no MultiGPU loaders on a still when nothing is pinned",
+      [k for k in by_class(build().expand) if k.endswith("MultiGPU")], [])
+expect_error("a pinned still without the pack is refused up front",
+             lambda: build(pinned(clip="cuda:1")), "ComfyUI-MultiGPU")
+
+
+class _FakeMultiGPU:
+    FUNCTION = "override"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {"required": {}, "optional": {"device": (["cpu", "cuda:0", "cuda:1"],
+                                                        {"default": "cuda:0"})}}
+
+
+_restore_devices = dict(comfy_nodes.NODE_CLASS_MAPPINGS)
+for wrapper in ("UNETLoaderMultiGPU", "CLIPLoaderMultiGPU", "VAELoaderMultiGPU"):
+    comfy_nodes.NODE_CLASS_MAPPINGS[wrapper] = _FakeMultiGPU
+try:
+    split = by_class(build(pinned(clip="cuda:1", vae="cpu")).expand)
+    check("the still's pinned encoder uses the pack's loader, on its card",
+          [(i["clip_name"], i["type"], i["device"]) for _, i in split.get("CLIPLoaderMultiGPU", [])],
+          [(MODELS["krea2"]["clip"], "krea2", "cuda:1")])
+    check("...and the VAE, which used to bypass `loader_for`",
+          [(i["vae_name"], i["device"]) for _, i in split.get("VAELoaderMultiGPU", [])],
+          [(MODELS["krea2"]["vae"], "cpu")])
+    check("an unpinned DiT stays on the core loader, with its precision",
+          ([i["unet_name"] for _, i in split.get("UNETLoader", [])],
+           "UNETLoaderMultiGPU" in split,
+           split["UNETLoader"][0][1]["weight_dtype"]),
+          ([MODELS["krea2"]["model"]], False, "default"))
+    check("...and the core encoder and VAE loaders are gone",
+          ("CLIPLoader" in split, "VAELoader" in split), (False, False))
+
+    # Ideogram's second DiT goes through the same helper, so it can be pinned
+    # on its own — the unconditional checkpoint on the other card.
+    ideo = by_class(build(pinned("ideogram4", uncond_model="cuda:1"),
+                          steps=20, cfg=7.0).expand)
+    check("Ideogram's unconditional checkpoint takes its own pin",
+          [(i["unet_name"], i["device"]) for _, i in ideo.get("UNETLoaderMultiGPU", [])],
+          [(MODELS["ideogram4"]["uncond_model"], "cuda:1")])
+    check("...leaving the conditional one on the core loader",
+          [i["unet_name"] for _, i in ideo.get("UNETLoader", [])],
+          [MODELS["ideogram4"]["model"]])
+
+    # A pin on the other arch's side does nothing to this one: pins are per
+    # side, like the files they name.
+    other = blob(models={**{k: dict(v) for k, v in MODELS.items()},
+                         "ideogram4": {**MODELS["ideogram4"], "devices": {"clip": "cuda:1"}}})
+    check("a pin on another arch's side does not move this arch's loaders",
+          [k for k in by_class(build(other).expand) if k.endswith("MultiGPU")], [])
+finally:
+    comfy_nodes.NODE_CLASS_MAPPINGS.clear()
+    comfy_nodes.NODE_CLASS_MAPPINGS.update(_restore_devices)
+
+ri_mod = importlib.import_module(f"{PACKAGE}.creator.render_image")
+k2_still = importlib.import_module(f"{PACKAGE}.creator.families.krea2.still")
+check("a pin on a field no MultiGPU loader wraps is dropped on read",
+      ri_mod.ImageWeights.from_blob(
+          {"models": {"krea2": {**MODELS["krea2"],
+                                "devices": {"clip": "cuda:1", "nonsense": "cuda:0"}}}},
+          k2_still).devices,
+      {"clip": "cuda:1"})

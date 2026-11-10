@@ -296,7 +296,10 @@ def main():
     on = f", on {models[models['route']]}" if models.get(models.get("route")) else ""
     # And where each model loads: everything on one card is the slow render
     # nobody asked for, and it is invisible from the speed line alone.
-    pins = models.get("devices") or {}
+    # A picture's pins are on its arch's side (`models.<arch>.devices`), a
+    # clip's on the flat block.
+    piece = queued.get("piece") or {}
+    pins = ((models.get(piece["arch"]) or {}) if piece.get("arch") else models).get("devices") or {}
     on += (" (" + ", ".join(f"{slot} on {device}" for slot, device in sorted(pins.items())) + ")"
            if pins else " (every model on ComfyUI's default device)")
     # And how the card runs it, which the node's row sets in the browser and the

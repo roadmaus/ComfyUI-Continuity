@@ -15,6 +15,11 @@ A few notes that apply everywhere:
 - GGUF files work if [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) is
   installed. Drop the `.gguf` in the same folder and pick it like any other
   file.
+- With [ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU)
+  installed, each checkpoint, text encoder and VAE row in the weights popover
+  gets a device pill, on the video node and the pre-stage alike. Putting the
+  text encoder on a second card leaves the first one to the DiT. With nothing
+  pinned, everything loads where ComfyUI would put it.
 - If a long render dies with a `HostBuffer.read_file_slice` CUDA OOM, start
   ComfyUI with `--disable-dynamic-vram`
   ([ComfyUI#15255](https://github.com/Comfy-Org/ComfyUI/issues/15255)).

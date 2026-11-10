@@ -4258,6 +4258,13 @@ export const PRESTAGE_MIN_DENOISE = KREA.capabilities.init_image.min_denoise;
  *  popover order — and what the popover calls each one. */
 export const PRESTAGE_FIELDS = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, IMAGE_FAMILY[arch].weights.map((w) => w.id)]));
+/** Which of each architecture's fields a device can be pinned for — the
+ *  manifest's `device` flag, which `render_image.manifest_weight` derives from
+ *  the field's loader exactly as the video families derive theirs from a slot.
+ *  `deviceFields` for a still. */
+export const PRESTAGE_DEVICE_FIELDS = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    IMAGE_FAMILY[arch].weights.filter((w) => w.device).map((w) => w.id)]));
 export const PRESTAGE_FIELD_LABEL = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.flatMap((arch) =>
     IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.title])));
@@ -4403,8 +4410,25 @@ export function parsePreStageTurbo(raw) {
 
 export function emptyPreStageModels() {
   const empty = { dtype: "default" };
-  for (const arch of PRESTAGE_IMAGE_ARCHES) empty[arch] = {};
+  // Each side carries its own `devices` — `{field: "cuda:1"}`, through
+  // ComfyUI-MultiGPU — for the reason its files are per side: a pin names a
+  // field, and `model` on Krea 2 is not the file it is on Ideogram.
+  for (const arch of PRESTAGE_IMAGE_ARCHES) empty[arch] = { devices: {} };
   return empty;
+}
+
+/** A side's device pins, as `parseModels` reads the video block's: only the
+ *  fields that can be pinned, and not checked against this machine's device
+ *  list, so a blob saved on a two-card box keeps its pin on a one-card one and
+ *  the render names the missing pack (`models.loader_for`). Mirrors
+ *  `models.pinned_devices`. */
+export function parsePreStageDevices(raw, arch) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const field of PRESTAGE_DEVICE_FIELDS[arch] ?? []) {
+    if (typeof raw[field] === "string" && raw[field].trim()) out[field] = raw[field].trim();
+  }
+  return out;
 }
 
 /** The rows this node dialled for the arches it is not on — `{arch: row}`.
@@ -4559,6 +4583,7 @@ export function parsePreStage(raw) {
             state.models[arch][field] = side[field].trim();
           }
         }
+        state.models[arch].devices = parsePreStageDevices(side.devices, arch);
       }
       if (MODEL_DTYPES.includes(models.dtype)) state.models.dtype = models.dtype;
       // Last, because both guesses read fields filled above — the LoRA stack
@@ -4597,6 +4622,8 @@ export function serializePreStage(state) {
     for (const field of PRESTAGE_FIELDS[arch]) {
       if (state.models?.[arch]?.[field]) side[field] = state.models[arch][field];
     }
+    const devices = parsePreStageDevices(state.models?.[arch]?.devices, arch);
+    if (Object.keys(devices).length) side.devices = devices;
     if (Object.keys(side).length) models[arch] = side;
   }
   if (state.models?.dtype && state.models.dtype !== "default") models.dtype = state.models.dtype;

@@ -50,23 +50,12 @@ _UI = {
 
 
 def _weights():
-    return [{
-        "id": name,
-        "folder": render_image.FOLDERS[name],
-        "label": render_image.LABEL[name],
-        "loads": True,
-        "routed": False,
-        "audio": False,
-        # The unconditional checkpoint is optional: without it the guider
-        # degrades to ordinary CFG, which the node itself documents.
-        "required": name != "uncond_model",
-        "gguf": name in ("model", "uncond_model", "clip"),
-        "device": False,
-        "title": _UI[name]["title"],
-        "help": _UI[name]["help"],
-        "hints": _UI[name]["hints"],
-        "avoid": [],
-    } for name in still.FIELDS]
+    # The unconditional checkpoint is optional: without it the guider
+    # degrades to ordinary CFG, which the node itself documents.
+    return [render_image.manifest_weight(name, _UI[name],
+                                        gguf=name in ("model", "uncond_model", "clip"),
+                                        required=name != "uncond_model")
+            for name in still.FIELDS]
 
 
 def _canvas():

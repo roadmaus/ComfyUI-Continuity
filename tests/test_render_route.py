@@ -141,6 +141,20 @@ else:
           blob["models"]["devices"], {"clip": "cuda:1", "fl2va": "cuda:1", "vae": "cpu"})
 del STORED["h3"]["devices"]
 
+# A picture's loaders move the same way, the pins on its arch's side: a still
+# was once refused for asking, and rendered on one card whatever was pinned.
+STORED["krea2"]["devices"] = {"clip": "cuda:1", "vae": "cuda:0"}
+built = render(family="krea2", prompt="a cat", still=True, devices={"vae": "cpu"})
+if "problem" in built:
+    FAILURES.append(f"a still with pinned devices was refused: {built['problem']}")
+else:
+    _, _, blob = inputs(built)
+    check("a still's pins ride on its arch's side, a request's own over the machine's",
+          blob["models"]["krea2"].get("devices"), {"clip": "cuda:1", "vae": "cpu"})
+    check("...beside the files, not instead of them",
+          blob["models"]["krea2"].get("clip"), STORED["krea2"]["clip"])
+del STORED["krea2"]["devices"]
+
 # The machine's row: what a node last set for the card, under a request's own.
 # Before it was read here every headless render ran plain attention.
 MACHINE = {"h3": {"attention": "kitchen", "chunk_ffn": True}}

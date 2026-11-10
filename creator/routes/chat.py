@@ -390,6 +390,13 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
                            "dtype": (piece.get("models") or {}).get("dtype")
                                     or ((stored or {}).get(family["id"]) or {}).get("dtype")
                                     or "default"}
+        # The side's device pins, merged slot by slot over the machine's the way
+        # the video branch below merges them: `_picked` keeps filenames only.
+        # `own` is the node's side as it arrived, before `picked` replaced it.
+        devices = {**(((stored or {}).get(family["id"]) or {}).get("devices") or {}),
+                   **((own or {}).get("devices") or {})}
+        if devices:
+            piece["models"][piece["arch"]] = {**picked, "devices": devices}
     else:
         # Flat, and the whole block rather than the filenames alone:
         # `models.Weights.from_blob` reads the precision, the route and the

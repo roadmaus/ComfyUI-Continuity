@@ -136,7 +136,7 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
   // What the pill reports when everything is picked, in order of how much it
   // changes about the run: which cards it is spread over first, then precision,
   // then nothing worth saying.
-  const spread = new Set(S.deviceFields(family).map((f) => models.devices[f]).filter(Boolean));
+  const spread = deviceSpread(models.devices, S.deviceFields(family));
   const settled = models.backend === "raylight"
     // First of all, because it is the biggest thing the pill can be hiding: a
     // render that samples somewhere else entirely. It outranks the route, which
@@ -146,11 +146,8 @@ export function weightsPill({ piece, models, checkpoints, onChange, turbo, face 
     ? t("weights · {count} GPUs", { count: models.gpus })
     : models.route !== "auto"
       ? t("weights · always {checkpoint}", { checkpoint: S.checkpointLabels(family)[models.route] })
-      : spread.size
-        ? (spread.size > 1
-            ? t("weights · {count} devices", { count: spread.size })
-            : t("weights · {device}", { device: [...spread][0] }))
-        : models.dtype === "default" ? t("weights") : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") });
+      : spread ?? (models.dtype === "default" ? t("weights")
+        : t("weights · {dtype}", { dtype: models.dtype.replace("fp8_", "fp8 ") }));
   const label = missing.length
     ? (missing.length === 1
         ? t("no {model}", { model: missing[0].toLowerCase() })
@@ -305,11 +302,61 @@ function rememberWeights(family, models) {
   patchSettings({ weights: { [family]: block } });
 }
 
-/** The same memory for an image family, whose block is its slots and nothing
- *  else — no route, no devices, no dtype — so it is written as the picks
- *  alone. `side` is the pre-stage's `models[arch]`. */
+/**
+ * Where one field's weights are loaded — the pill beside a row in either
+ * weights popover, the Creator's and the pre-stage's. Only drawn when
+ * ComfyUI-MultiGPU is installed (`devices` is the catalog's list, empty
+ * without the pack): with one card there is nothing to choose, and a control
+ * whose only option is the default is a control that lies about what it does.
+ *
+ * A button of its own rather than part of the row, because the row is already
+ * a button and nesting two is invalid — and because these are two different
+ * questions about the same file. `pins` is the `{field: device}` map it edits
+ * in place; `onChange` runs after a pick.
+ */
+export function weightDevicePill({ pins, field, label, devices, onChange }) {
+  if (!devices.length) return null;
+  const pinned = pins[field] || "";
+  return el("button", {
+    class: `mmc-weight-device${pinned ? " pinned" : ""}`,
+    title: pinned
+      ? t("Loaded on {device}, through ComfyUI-MultiGPU.", { device: pinned })
+      : t("Loaded wherever ComfyUI would put it. Pick a device to pin it — "
+        + "putting the text encoder on a second card frees the first one for the DiT."),
+    text: pinned || t("auto"),
+    onclick: (event) => openChoicePopover(event.currentTarget, {
+      title: t("{model} — device", { model: label }),
+      options: [t(AUTO), ...devices],
+      value: pinned || t(AUTO),
+      onPick: (picked) => {
+        if (picked === t(AUTO)) delete pins[field];
+        else pins[field] = picked;
+        onChange();
+      },
+    }),
+  });
+}
+
+/** What a weights pill says about pinned devices, or null when nothing is
+ *  pinned: the one card, or how many. Shared by both nodes' pills, so a still
+ *  on a second card reads the way a clip on one does. */
+export function deviceSpread(pins, fields) {
+  const spread = new Set(fields.map((field) => pins?.[field]).filter(Boolean));
+  if (!spread.size) return null;
+  return spread.size > 1
+    ? t("weights · {count} devices", { count: spread.size })
+    : t("weights · {device}", { device: [...spread][0] });
+}
+
+/** The same memory for an image family, whose block is its picks and its
+ *  device pins — no route, and no dtype, which the pre-stage keeps once for
+ *  every arch. `side` is the pre-stage's `models[arch]`. The pins go with the
+ *  files because the server replaces a family's block whole: written as the
+ *  picks alone, every pick would forget the pins. */
 export function rememberStillWeights(family, side) {
-  const block = Object.fromEntries(Object.entries(side).filter(([, name]) => name));
+  const block = Object.fromEntries(Object.entries(side)
+    .filter(([key, name]) => key !== "devices" && typeof name === "string" && name));
+  if (side.devices && Object.keys(side.devices).length) block.devices = { ...side.devices };
   patchSettings({ weights: { [family]: block } });
 }
 
@@ -387,38 +434,10 @@ export function openWeightsPopover(anchor, { piece, models, checkpoints, onChang
       }),
     ]);
 
-    /**
-     * Where one field's weights are loaded. Only drawn when ComfyUI-MultiGPU is
-     * installed: with one card there is nothing to choose, and a control whose
-     * only option is the default is a control that lies about what it does.
-     *
-     * A button of its own rather than part of the row, because the row is
-     * already a button and nesting two is invalid — and because these are two
-     * different questions about the same file.
-     */
-    const devicePill = (field) => {
-      if (!devices.length || !deviceFields.includes(field)) return null;
-      const pinned = models.devices[field] || "";
-      return el("button", {
-        class: `mmc-weight-device${pinned ? " pinned" : ""}`,
-        title: pinned
-          ? t("Loaded on {device}, through ComfyUI-MultiGPU.", { device: pinned })
-          : t("Loaded wherever ComfyUI would put it. Pick a device to pin it — "
-            + "putting the text encoder on a second card frees the first one for the DiT."),
-        text: pinned || t("auto"),
-        onclick: (event) => openChoicePopover(event.currentTarget, {
-          title: t("{model} — device", { model: t(label_[field]) }),
-          options: [t(AUTO), ...devices],
-          value: pinned || t(AUTO),
-          onPick: (picked) => {
-            if (picked === t(AUTO)) delete models.devices[field];
-            else models.devices[field] = picked;
-            commit();
-            render();
-          },
-        }),
-      });
-    };
+    const devicePill = (field) => deviceFields.includes(field)
+      ? weightDevicePill({ pins: models.devices, field, label: t(label_[field]), devices,
+                           onChange: () => { commit(); render(); } })
+      : null;
 
     const needed = required();
     const rows = fields.map((field) => {

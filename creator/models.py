@@ -234,19 +234,8 @@ class Weights:
             raw = {}
         picked = {name: _clean(raw.get(name)) for name in slots}
         dtype = raw.get("dtype")
-        devices = {}
-        pinned = raw.get("devices")
-        if isinstance(pinned, dict):
-            for name, slot in slots.items():
-                # Only the slots that become a loader something can move. Asked
-                # of the wrapper table rather than assumed: ComfyUI-MultiGPU
-                # subclasses the core loaders and neither `ModelPatchLoader` nor
-                # `LatentUpscaleModelLoader` is one of them.
-                if slot.loader not in MULTIGPU:
-                    continue
-                chosen = _clean(pinned.get(name))
-                if chosen:
-                    devices[name] = chosen
+        devices = pinned_devices(raw.get("devices"),
+                                 {name: slot.loader for name, slot in slots.items()})
         route = raw.get("route")
         backend = raw.get("backend")
         # Clamped rather than refused: the blob may have been saved on an
@@ -360,6 +349,39 @@ def device_options():
     if not isinstance(declared, (tuple, list)) or not declared:
         return []
     return [str(option) for option in declared[0]]
+
+
+def pinned_devices(raw, loaders):
+    """`{field: device}` out of a blob's `devices` map, for the fields that can
+    be moved at all. -> a dict, empty when nothing is pinned.
+
+    `loaders` is `{field: core loader node id}`, the field's loader *before*
+    any GGUF swap. Only a field whose loader ComfyUI-MultiGPU wraps keeps its
+    pin — asked of the wrapper table rather than assumed, because the pack
+    subclasses the core loaders and neither `ModelPatchLoader` nor
+    `LatentUpscaleModelLoader` is one of them. A pin on anything else is a
+    request nothing can honour, and is dropped rather than carried into a graph.
+
+    The one reading both weights blocks share: the video side's flat
+    `models.devices` (`Weights.from_blob`) and the still side's per-arch
+    `models.<arch>.devices` (`render_image.ImageWeights.from_blob`). Two copies
+    of this rule is how the pre-stage went without device pins at all.
+
+    Not validated against the machine's device list, for the reason
+    `state.js parseModels` gives: a blob saved on a two-card box and opened on a
+    one-card one should keep its pin and be refused by `loader_for`, naming the
+    pack, rather than lose the setting quietly.
+    """
+    if not isinstance(raw, dict):
+        return {}
+    devices = {}
+    for name, loader in loaders.items():
+        if loader not in MULTIGPU:
+            continue
+        chosen = _clean(raw.get(name))
+        if chosen:
+            devices[name] = chosen
+    return devices
 
 
 def is_gguf(filename):

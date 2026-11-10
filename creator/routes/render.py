@@ -153,15 +153,17 @@ def _request(body, accel=None):
     rail = room._rail({("still_family" if still else "video_family"): family_id,
                        **({"short_edge": edge} if edge else {})})
     overrides = {k: v for k, v in (body.get("models") or {}).items() if isinstance(v, str)}
+    # Where a slot loads for this render, over the machine's remembered pins —
+    # `chat._build` merges the two slot by slot, for a clip and a picture alike.
+    devices = {k: v for k, v in (body.get("devices") or {}).items()
+               if isinstance(k, str) and isinstance(v, str)}
     if still:
-        if body.get("devices"):
-            raise headless.HeadlessError(
-                "devices is for a video family; a picture family loads where ComfyUI puts it.")
         if body.get("accel"):
             raise headless.HeadlessError(
                 "accel is for a video family; a picture family's row has no attention to pick.")
         piece = {"version": 1, "arch": rail["still_arch"], "loras": [], "turbo": {},
-                 "models": {rail["still_arch"]: overrides}}
+                 "models": {rail["still_arch"]: {**overrides,
+                                                 **({"devices": devices} if devices else {})}}}
         if body.get("output_prefix"):
             # The blob's own key, which the save node reads over the machine's
             # folder (`outputs.image`). Game Forge sends one so a take's renders
@@ -181,8 +183,6 @@ def _request(body, accel=None):
         if body.get("output_prefix"):
             raise headless.HeadlessError("output_prefix is for a still here; a clip lands in "
                                          "this machine's renders folder.")
-        devices = {k: v for k, v in (body.get("devices") or {}).items()
-                   if isinstance(k, str) and isinstance(v, str)}
         try:
             row = {**((accel or {}).get(family_id) or {}),
                    **sampling.machine(body.get("accel") or {})}
