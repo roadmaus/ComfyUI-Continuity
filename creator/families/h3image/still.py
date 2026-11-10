@@ -53,6 +53,12 @@ from . import declare
 
 ARCH = declare.STILL_ARCH
 
+# Saved references in this family's latent space — H3's own, see
+# `declare.REFMOD`. Read by `compile_image.compile_prestage` to hand this
+# graph the rendition of a picture rather than the picture, where the slot
+# has one.
+REFMOD = declare.REFMOD
+
 # Which weights fields this architecture has. One DiT, no second checkpoint and
 # no distillation LoRA: the six-step schedule is the checkpoint itself.
 FIELDS = ("model", "clip", "vae")
@@ -217,13 +223,32 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
     """The sampler branch over the shared prologue's loaders."""
     from ... import render_image
 
-    images = {f"images.image_{slot + 1}": render_image.load_picture(
-                  graph, payload, f"ref:{slot}", name)
-              for slot, name in enumerate(payload.refs)}
+    # A slot read from a saved reference shows the encoder the mod's own
+    # decode — what H3 video's encode does (`encode._mod_tensors`): the mod
+    # is the member, a compressed one is the blur the DiT will attend to, and
+    # a mod standing alone has no other picture. The conditioning node then
+    # anchors that picture as usual, and `ContinuityRefModH3ImageAnchor`
+    # puts the file's latent back in the slot's place: one throwaway encode
+    # per mod, in exchange for core's node reading the prompt and sizing the
+    # canvas exactly as the template's does.
+    images = {}
+    for slot, name in enumerate(payload.refs):
+        mod = payload.mods.get(slot)
+        if mod is None:
+            images[f"images.image_{slot + 1}"] = render_image.load_picture(
+                graph, payload, f"ref:{slot}", name)
+            continue
+        latent = graph.node("ContinuityRefModLatent", name=mod,
+                            space=declare.REFMOD["space"]).out(0)
+        images[f"images.image_{slot + 1}"] = graph.node(
+            "VAEDecode", samples=latent, vae=vae).out(0)
     conditioning = graph.node(CONDITIONING_NODE, clip=clip, vae=vae,
                               prompt=payload.prompt, width=payload.width,
                               height=payload.height, **images)
     positive = conditioning.out(0)
+    for slot, mod in sorted(payload.mods.items()):
+        positive = graph.node("ContinuityRefModH3ImageAnchor", conditioning=positive,
+                              name=mod, slot=slot).out(0)
     # cfg 1 never evaluates the negative; the template zeroes it, and at real
     # cfg a zeroed copy is still the unconditional the model sees in training
     # more nearly than an empty prompt with the pictures stripped would be.
@@ -269,8 +294,16 @@ def compile_still(data, image_size_lookup=None):
     A mask makes Picture 1 the picture edited in place whether or not the
     `edit_first` switch is on: an inpaint *is* that edit, and the canvas has to
     be Picture 1's for the mask to land where it was traced.
+
+    The picture an edit or an inpaint changes is read as itself, never as a
+    saved reference hung on it: the render keeps that picture's pixels (all
+    of them outside a mask), and a mod pooled to a 48-grid is the wrong thing
+    to keep. Its mod stays on it for every other render. A mod standing alone
+    in Picture 1 has no pixels to draw a mask over, so an inpaint refuses it.
     """
-    from ... import compile_image
+    import dataclasses
+
+    from ... import compile_image, refmod
     from ...compile import CompileError
 
     data = migrate(data)
@@ -280,8 +313,15 @@ def compile_still(data, image_size_lookup=None):
                    for r in data.get("refs") or []):
             raise CompileError(INPAINT_NEEDS_PICTURE)
         data = {**data, compile_image.EDIT_FIRST_FIELD: True}
-    return compile_image.compile_prestage(data, sys.modules[__name__],
-                                          image_size_lookup)
+    payload = compile_image.compile_prestage(data, sys.modules[__name__],
+                                             image_size_lookup)
+    if payload.control is not None and payload.refs and refmod.is_mod(payload.refs[0]):
+        raise CompileError(INPAINT_NEEDS_PICTURE)
+    if (0 in payload.mods and payload.init is not None
+            and payload.init.get("filename") == payload.refs[0]):
+        payload = dataclasses.replace(
+            payload, mods={slot: mod for slot, mod in payload.mods.items() if slot})
+    return payload
 
 
 def emit_still(data, plan, sampling, unique_id):

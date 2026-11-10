@@ -6,6 +6,17 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**MiniMax H3 Image reads saved references, the same files MiniMax H3 does.**
+Core's H3 Image VAE is the H3 video encoder with a 2D decoder after it, so an
+H3 RefMod is already the latent the image model's conditioning node would
+anchor: the family now declares H3's latent space, the ledger counts a member
+saved on either tab as saved on both, and the pre-stage graph shows the
+encoder each mod's decode and puts the file's latent back in that picture's
+reference block (`ContinuityRefModLatent`, `ContinuityRefModH3ImageAnchor`).
+The picture an edit or inpaint changes is always read as itself, a clip or
+stack mod falls back to another look or the member's words, and mods can be
+made with the H3 Image VAE picked.
+
 **A planned piece holds together from clip to clip.** Director's clips lost
 the thread in four places, and each is closed. Shots are grouped into
 *scenes* — everything from one real cut to the next — and a scene's place is

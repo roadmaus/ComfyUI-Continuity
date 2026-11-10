@@ -28,6 +28,16 @@ OUTPUT_STEM = "H3Image"
 # saved workflow keeps rendering a MiniMax still rather than failing to compile.
 STILL_ARCH = "minimax"
 
+# Saved references (`creator/refmod.py`), in H3's own space: the image VAE is
+# the H3 video encoder with a 2D decoder put after it (core's `H3ImageVAE`
+# subclasses the video VAE, same latent mean and std, same /16 grid), so a mod
+# made for MiniMax H3 is already the latent this family's conditioning node
+# would have anchored — one file serves both, and a member saved on either tab
+# reads as saved on the other. Made the way H3 makes a still's. No clips: an
+# image model has no time axis to lay one along, and the reference blocks it
+# reads are `image` ones.
+REFMOD = {"space": "h3_video", "edge": 1024, "grid": 48, "clips": False}
+
 PROMPT_PIPELINE = "plain"
 LORA_STACK = "core"
 DURATION_HEAD = None

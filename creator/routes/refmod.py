@@ -96,8 +96,12 @@ def _vae(name, space):
     label = refmod.space_label(space)
     if not name:
         raise jobs.JobError(f"pick the {label} VAE in the weights control first")
+    path = folder_paths.get_full_path("vae", name) or ""
     try:
-        vaekind.check(folder_paths.get_full_path("vae", name) or "", space, name)
+        # A VAE whose encoder writes this space is the space's VAE here,
+        # whatever it decodes with (`refmod.SPACES[...]["encoders"]`).
+        if vaekind.identify(path) not in refmod.SPACES[space].get("encoders", ()):
+            vaekind.check(path, space, name)
     except ValueError as exc:
         raise jobs.JobError(str(exc)) from exc
     loader = nodes.NODE_CLASS_MAPPINGS["VAELoader"]()

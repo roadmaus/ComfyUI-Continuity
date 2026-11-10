@@ -85,9 +85,13 @@ LATENT_CHANNELS = 24
 # a 1 MP Klein reference is 4,096 tokens, not 1,024). `even` is whether the
 # grid has to hold whole patches. `stride` is source pixels per latent cell,
 # which is what `media._source_size` reads a mod's picture size off.
+#
+# `encoders` are the other VAE kinds whose encoder writes this space: the H3
+# Image VAE is core's `H3ImageVAE`, the video VAE's encoder and latent
+# statistics with a 2D decoder after them, so it makes the same mod.
 SPACES = {
     "h3_video": {"channels": 24, "dims": 5, "patch": 2, "even": True, "stride": 16,
-                 "label": "MiniMax H3"},
+                 "label": "MiniMax H3", "encoders": ("h3_image",)},
     "flux2": {"channels": 128, "dims": 4, "patch": 1, "even": False, "stride": 16,
               "label": "Flux 2"},
 }

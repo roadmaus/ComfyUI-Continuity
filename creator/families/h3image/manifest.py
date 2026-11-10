@@ -79,6 +79,10 @@ def manifest():
                      "needs_lora": False, "edits_first": True,
                      "noun": list(still.REFS_NOUN),
                      "edit_first": compile_image.EDIT_FIRST_FIELD},
+            # Saved references in H3's own space — `declare.REFMOD`. The
+            # same files MiniMax H3 reads, so the ledger counts a member
+            # saved there as saved here.
+            "refmod": dict(declare.REFMOD),
             # The guide is a mask: the bench's matte, which the sampler reads
             # as its noise mask over Picture 1. `method: "mask"` tells the
             # pre-stage there is no branch file and no strength to show.
