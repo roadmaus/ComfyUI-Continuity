@@ -43,7 +43,20 @@ is a sequence of ordinary chat renders nobody had to type, and after the run
 
 **Ids, not positions.** Every authored row has an id minted once (`b3`, `e2`,
 `s5`) and never reused, so an edit to one row never renumbers another, and a
-derived row's id is built from its authored row's (`kf.s5`, `s5.2`).
+derived row's id is built from its authored row's (`kf.s5`, `cut.s5`, `s5.2`).
+
+**A clip is rendered knowing what is round it.** A shot is one sentence and
+a clip is sampled from one prompt, and between the two a piece used to lose
+its thread in three places, each of which code now closes rather than the
+model. A shot is in a *scene* (`scenes`), whose place and setting ride into
+every shot of it whether or not the shot's words repeat them. A shot too long
+for one clip is written as its clips (`part_text`), and a clip that carries on
+is told what the one before it showed, so it does not play its sentence again
+from the start. And a `cut`, which is sampled fresh and sees nothing of the
+shot it cuts away from, can open on that shot's last frame turned to the new
+angle (`rows`, the angle rows). The run does the fourth thing: clips that
+carry straight on are queued as one piece (`chain`), so the seam between them
+is a timeline's.
 """
 
 import copy
@@ -53,7 +66,8 @@ import math
 import re
 import unicodedata
 
-from .chat import ACT_RENDER, KIND_STILL, KIND_VIDEO, ROLE_START, SEAM_CUT, SEAM_KEY
+from .chat import (ACT_RENDER, GRAB_KEY, GRAB_LAST, KIND_STILL, KIND_VIDEO, ROLE_START,
+                   SEAM_CUT, SEAM_KEY)
 
 
 VERSION = 1
@@ -85,11 +99,42 @@ CONTINUES = (CUT, PIN, NEW)
 # What the shot prompt says on top of its own action for the two continuous
 # joins. Fixed wording, appended by code, never written by the model: the
 # point is that it reads identically on every shot.
+#
+# Each says only what the render it goes to can act on. A `cut` is sampled
+# fresh — it is never shown the shot it cuts away from — so "the same moment as
+# the previous shot" named something the video model had never seen, and it is
+# told instead what must not change. A `pin` does inherit the frames before it,
+# and what it is told is what those frames were of (`{was}`, the clip in
+# front, by its own words): a model handed a tail of footage and a prompt
+# plays the prompt from its start, so the prompt has to say that the start is
+# already on film. `PART` is the same thing for the second and later clips of
+# one long shot when nobody wrote them apart (`shot["parts"]`): the words above
+# it are the whole shot's, and what it must not do is begin them again.
 CONTINUITY = {
-    CUT: "Same moment as the previous shot, seen from a new camera angle.",
-    PIN: "The camera holds its position and the action carries straight on "
-         "from the previous shot.",
+    CUT: "A new camera angle on the same scene at the same moment: the place, "
+         "the light and what everybody wears are unchanged.",
+    PIN: "Continuity: no cut. This carries straight on from the last frame of "
+         "the previous clip, which showed: {was} That has already happened and "
+         "is not shown again; the camera carries on from where it is.",
 }
+PART = ("Continuity: no cut. This is part {part} of {parts} of one continuous "
+        "shot, and the action above is already under way: carry it on from the "
+        "last frame of the previous part and do not begin it again.")
+
+# What the picture a `cut` opens on is asked for as: the last frame of the clip
+# before it, turned to the new angle by the edit family (`rows`, the angle
+# rows). The shot's own words say where the camera goes; the rest is what an
+# edit must be told to keep (`prompts/chat/edit.txt`).
+ANGLE = ("Show this same scene from a new camera angle: {action} Keep the place, "
+         "the light, and everybody's face, hair and clothes exactly as they are.")
+
+# The most clips the run renders as one piece. Clips that carry straight on
+# from one another are queued together, as one timeline, so each seam is the
+# timeline's own — read off the pass in front, with its latent where the
+# family hands one — and not a
+# tail decoded back out of a saved file (`chain`). The price is that such a
+# piece lands or fails whole, so it is kept to a few clips.
+CHAIN_LIMIT = 4
 
 # The reference a place or a thing is cited as on a shot — the compiler's own
 # scope names (`compile.IMAGE_TAKES`). A person is cited by name instead, as a
@@ -400,7 +445,34 @@ def read_shots(raw, names):
             raise PlanError(f'shot {at}\'s "continues" must be cut, pin or new; '
                             f"it was {_shown(item.get('continues'))}.")
         _check_cites(action, names, f"shot {at}")
-        out.append({"action": action, "continues": continues})
+        shot = {"action": action, "continues": continues}
+        # Where and when the scene is, on the shot that opens one. Absent
+        # rather than empty, so a plan written before the field and a shot
+        # that has none are the same document.
+        setting = _text(item.get("setting"), f'shot {at}\'s "setting"', required=False)
+        if setting:
+            _check_cites(setting, names, f"shot {at}'s setting")
+            shot["setting"] = setting
+        out.append(shot)
+    return out
+
+
+def read_parts(raw, count, names):
+    """The parts call -> `count` sentences, one per clip of a shot too long
+    for one, in order."""
+    items = raw.get("parts") if isinstance(raw, dict) else raw
+    if not isinstance(items, list):
+        raise PlanError('"parts" must be a list of sentences.')
+    if len(items) != count:
+        raise PlanError(f'"parts" must hold exactly {count} sentences, one for each clip; '
+                        f"it held {len(items)}.")
+    out = []
+    for at, item in enumerate(items, 1):
+        if isinstance(item, dict):
+            item = item.get("action") or item.get("text")
+        text = _text(item, f"part {at}")
+        _check_cites(text, names, f"part {at}")
+        out.append(text)
     return out
 
 
@@ -440,6 +512,10 @@ def new_plan(brief, basics, rail, cast=(), assumptions=(), keyframes=None,
         "rail": follow_rail({}, rail)[0]["rail"],
         "shot_limit": _whole(shot_limit, "the shot limit", 1, MAX_SECONDS),
         "keyframes": bool(keyframes),
+        # Whether a `cut` opens on the frame the shot before ended on, turned
+        # to the new angle (`rows`). Written on a new plan and absent from an
+        # older one, which renders as it did.
+        "match_cuts": True,
         "beats": [], "entities": [], "shots": [],
         "renders": {}, "ids": {},
     }
@@ -519,6 +595,9 @@ def validate(plan):
         if shot.get("continues") not in CONTINUES:
             raise PlanError(f"shot {shot['id']}'s join must be cut, pin or new.")
         _check_cites(shot.get("action"), names(plan), f"shot {shot['id']}")
+        _check_cites(shot.get("setting"), names(plan), f"shot {shot['id']}'s setting")
+        for part in shot.get("parts") or ():
+            _check_cites(part, names(plan), f"shot {shot['id']}'s parts")
     empty = [b["id"] for b in plan["beats"] if not any(s["beat"] == b["id"] for s in plan["shots"])]
     if empty:
         raise PlanError(f"beat {empty[0]} has no shots.")
@@ -675,6 +754,76 @@ def _renders(entity):
     return "new" in (entity.get("source") or {})
 
 
+# ---- scenes ----------------------------------------------------------------------
+#
+# A scene is the shots from one real cut to the next: a `new` shot and every
+# `cut` and `pin` behind it. Nothing the model writes says so; it is read off
+# the joins, because the joins already say it.
+#
+# What a scene is for is the one thing a shot list loses. Each shot is written
+# as its own sentence and rendered as its own clip, and a clip sampled fresh is
+# shown only what its own sentence cites — so the second angle on a kitchen,
+# written "close on her hands", was sent no kitchen at all and the video model
+# built another one. A scene gives every shot in it two things whether or not
+# the shot's words repeat them: the scene's **place**, cited, so its sheet
+# rides into the clip; and the scene's **setting**, one line of where and when
+# it is, written once on the shot that opens the scene and appended to all of
+# them, as the look is appended to every shot of the piece.
+
+def scenes(plan):
+    """The shots, grouped into scenes -> `[[shot, ...], ...]`, in order."""
+    out = []
+    for shot in plan.get("shots") or []:
+        if not out or shot.get("continues") == NEW:
+            out.append([])
+        out[-1].append(shot)
+    return out
+
+
+def _places(plan, text):
+    return [e for e in _cited_entities(plan, text) if e["kind"] == "place"]
+
+
+def scenery(plan):
+    """`{shot id: (place, setting)}`: what each shot takes from its scene.
+
+    The place is the first one any shot of the scene cites, and None for a
+    shot that cites a place of its own — a shot that says where it is, is
+    there. The setting is the first one written in the scene.
+    """
+    out = {}
+    for scene in scenes(plan):
+        place = next((p for shot in scene for p in _places(plan, shot["action"])), None)
+        setting = next((s["setting"] for s in scene if s.get("setting")), "")
+        for shot in scene:
+            own = _places(plan, f"{shot['action']} {setting}")
+            out[shot["id"]] = (None if own else place, setting)
+    return out
+
+
+def setting_line(plan, shot, held=None):
+    """The line a shot's prompt carries for its scene, citations as written,
+    or "". `held` is `scenery(plan)` where the caller has it."""
+    place, setting = (held if held is not None else scenery(plan)).get(shot["id"], (None, ""))
+    parts = (["@" + place["name"]] if place else []) + ([setting.rstrip(".")] if setting else [])
+    return f"Setting: {' — '.join(parts)}." if parts else ""
+
+
+def part_text(shot, part, parts):
+    """What one clip of a shot shows, in the plan's words -> `(text, told)`.
+
+    A shot that fits one clip is its action. A shot cut into parts is each
+    part's own sentence where they were written (`shot["parts"]`, one per
+    clip) and `told` says so; where they were not — the split moved since, or
+    the call that writes them failed — every part is the whole action, and
+    the wording appended says which part of it this is (`PART`).
+    """
+    written = shot.get("parts") or []
+    if parts > 1 and len(written) == parts:
+        return written[part - 1], True
+    return shot["action"], False
+
+
 def rows(plan):
     """Every renderable row, in the order it may render -> `[{id, kind,
     phase, deps, ...}]`.
@@ -687,6 +836,13 @@ def rows(plan):
     things by their sheets. Then the clips, each depending on its keyframe
     if it has one, the sheets it cites, and the clip in front of it.
 
+    A `cut` with no keyframe gets an **angle** row in front of it instead,
+    where the plan matches its cuts and the rail has an edit family: the last
+    frame of the clip before, turned to the new angle, which the clip then
+    opens on. It is the run's, not prep — the frame it is made from does not
+    exist until the clip before has rendered — so nobody approves it, which
+    is the price of a cut that stays in the room it cut from.
+
     The list is already in dependency order: everything a row depends on
     comes earlier in it, so the run's order is this order.
     """
@@ -697,22 +853,32 @@ def rows(plan):
                         "entity": entity["id"], "deps": []})
     shots = {s["id"]: s for s in plan["shots"]}
     storyboard = plan.get("keyframes", True)
+    angles = bool(plan.get("match_cuts")) and not storyboard \
+        and bool((plan.get("rail") or {}).get("edit"))
+    held = scenery(plan)
     previous = None
     clip_rows = []
     for clip in clips(plan):
         shot = shots[clip["shot"]]
-        sheets = [e["id"] for e in _cited_entities(plan, shot["action"]) if _renders(e)]
+        cited = _cited_entities(plan, f"{shot['action']} {setting_line(plan, shot, held)}")
+        sheets = [e["id"] for e in cited if _renders(e)]
         deps = list(sheets)
         if storyboard and clip["part"] == 1 and clip["continues"] in (CUT, NEW):
             key = f"kf.{clip['id']}"
             out.append({"id": key, "kind": "keyframe", "phase": PREP,
                         "clip": clip["id"], "shot": shot["id"], "deps": list(sheets)})
             deps.append(key)
+        elif angles and previous and clip["part"] == 1 and clip["continues"] == CUT:
+            key = f"cut.{clip['id']}"
+            clip_rows.append({"id": key, "kind": "angle", "phase": RUN, "clip": clip["id"],
+                              "shot": shot["id"], "deps": [previous]})
+            deps.append(key)
         if previous:
             deps.append(previous)
         clip_rows.append({"id": clip["id"], "kind": "clip", "phase": RUN, "clip": clip["id"],
                           "shot": shot["id"], "seconds": clip["seconds"],
-                          "continues": clip["continues"], "deps": deps})
+                          "continues": clip["continues"], "part": clip["part"],
+                          "parts": clip["parts"], "deps": deps})
         previous = clip["id"]
     return out + clip_rows
 
@@ -725,6 +891,16 @@ def _row(plan, row_id, every=None):
 
 
 # ---- prompts -------------------------------------------------------------------
+
+def _plain(plan, text):
+    """Prose with the plan's names as plain words: "@red_boat" is "red boat".
+    For words that go where a citation would be of something the render was
+    never sent — an edit of one picture, or what the clip before showed."""
+    def plain(match):
+        entity = _entity(plan, match.group(1))
+        return entity["name"].replace("_", " ") if entity else match.group(0)
+    return CITE_RE.sub(plain, text or "")
+
 
 def _with_look(prompt, plan, camera=True):
     """A prompt with the piece's camera and look after it. A sheet takes the
@@ -823,16 +999,42 @@ def action_for(plan, row_id):
         prompt = SHEETS[entity["kind"]].format(description=_inline(entity["description"]))
         return _blank(KIND_STILL, _with_look(prompt, plan, camera=False), [])
     shot = next(s for s in plan["shots"] if s["id"] == row["shot"])
-    prompt, cited = _resolve(plan, shot["action"], handles)
+    made = [r for r in every if r["kind"] == "clip"]
+    if row["kind"] == "angle":
+        # The frame the clip before ended on, changed in place: cited plain,
+        # as a typed "now from above" cites the picture it changes. The clip's
+        # handle stands for that frame, which the run cuts out of its take
+        # when it builds this (`GRAB_KEY`).
+        action = _blank(KIND_STILL, ANGLE.format(action=_plain(plan, shot["action"])),
+                        [handles[row["deps"][0]]])
+        action[GRAB_KEY] = GRAB_LAST
+        return action
+    setting = setting_line(plan, shot)
     if row["kind"] == "keyframe":
+        prompt, cited = _resolve(plan, "\n\n".join(filter(None, [shot["action"], setting])),
+                                 handles)
         return _blank(KIND_STILL, _with_look(prompt, plan), cited)
-    wording = CONTINUITY.get(row["continues"])
+    text, told = part_text(shot, row["part"], row["parts"])
+    at = made.index(row)
+    wording = ""
+    if row["continues"] == CUT:
+        text = f"{text} {CONTINUITY[CUT]}"
+    elif row["continues"] == PIN and at:
+        if row["part"] > 1 and not told:
+            wording = PART.format(part=row["part"], parts=row["parts"])
+        else:
+            before = made[at - 1]
+            was = part_text(next(s for s in plan["shots"] if s["id"] == before["shot"]),
+                            before["part"], before["parts"])[0]
+            wording = CONTINUITY[PIN].format(was=_plain(plan, was).rstrip(". ") + ".")
+    prompt, cited = _resolve(plan, "\n\n".join(filter(None, [text, setting])), handles)
     if wording:
-        prompt = f"{prompt} {wording}"
-    keyframe = f"kf.{row['id']}"
-    if keyframe in row["deps"]:
-        cited = [f"{handles[keyframe]}:{ROLE_START}"] + cited
-    after = next((handles[d] for d in row["deps"] if d in {c["id"] for c in clips(plan)}), None)
+        prompt = f"{prompt}\n\n{wording}"
+    for key in (f"kf.{row['id']}", f"cut.{row['id']}"):
+        if key in row["deps"]:
+            cited = [f"{handles[key]}:{ROLE_START}"] + cited
+    ids = {r["id"] for r in made}
+    after = next((handles[d] for d in row["deps"] if d in ids), None)
     action = _blank(KIND_VIDEO, _with_look(prompt, plan), cited, row["seconds"], after)
     # Only a pin carries on from the clip before. A cut or a new scene goes on
     # the strip after it as a hard cut, opening on its own frame or its
@@ -860,11 +1062,7 @@ def change_action(plan, row_id, change):
     if not handle:
         raise PlanError(f"{row_id} has no picture to change yet.")
 
-    def plain(match):
-        entity = _entity(plan, match.group(1))
-        return entity["name"].replace("_", " ") if entity else match.group(0)
-
-    return _blank(KIND_STILL, CITE_RE.sub(plain, _text(change, "the change")), [handle])
+    return _blank(KIND_STILL, _plain(plan, _text(change, "the change")), [handle])
 
 
 def prune(plan):
@@ -911,10 +1109,26 @@ def fingerprint(plan, row_id, every=None, memo=None):
         shot = next(s for s in plan["shots"] if s["id"] == row["shot"])
         # Citations by entity id, not name: renaming the keeper is not a
         # change to anything the shot shows.
-        action = CITE_RE.sub(lambda m: "@" + ((_entity(plan, m.group(1)) or {}).get("id")
-                                              or m.group(1)), shot["action"])
+        def by_id(text):
+            return CITE_RE.sub(lambda m: "@" + ((_entity(plan, m.group(1)) or {}).get("id")
+                                                or m.group(1)), text)
+        action = by_id(shot["action"])
         body = [action, row.get("seconds"), row.get("continues")]
-        family = rail.get("video") if row["kind"] == "clip" else rail.get("still")
+        # What the scene and the split add to the prompt, and only where they
+        # add something: a shot with neither reads exactly as it did before
+        # there were scenes, so its render does not go stale.
+        extra = {}
+        if row["kind"] != "angle":
+            line = setting_line(plan, shot)
+            if line:
+                extra["setting"] = by_id(line)
+        if row["kind"] == "clip" and row["parts"] > 1:
+            text, told = part_text(shot, row["part"], row["parts"])
+            extra["part"] = by_id(text) if told else f"{row['part']}/{row['parts']}"
+        if extra:
+            body.append(extra)
+        family = {"clip": rail.get("video"), "angle": rail.get("edit")}.get(
+            row["kind"], rail.get("still"))
     records = plan.get("renders") or {}
     deps = []
     for dep in row["deps"]:
@@ -1007,14 +1221,60 @@ def run_steps(plan):
 
 def next_step(plan):
     """The one row the run renders next, or None when nothing is ready (done,
-    or waiting on something rendering). Rendering is strictly one at a time:
-    a pin waits for its predecessor's last frame anyway, and one GPU does
-    one thing."""
+    or waiting on something rendering). One render at a time, since one GPU
+    does one thing; what is rendered *with* this row is `chain`'s to say."""
     st = states(plan)
     if any(s == RENDERING for s in st.values()):
         return None
     ready = _ready(plan, RUN, st)
     return ready[0] if ready else None
+
+
+def chain(plan, row_id):
+    """The rows the run renders together with `row_id`, itself first.
+
+    A clip, and the clips behind it that carry straight on (`pin`) and still
+    need rendering, up to `CHAIN_LIMIT`: one piece of several shots, which is
+    what the timeline renders, so every seam inside it is the timeline's. A
+    still is always alone, and so is a clip whose follower is a cut — that
+    one opens on its own picture and inherits nothing.
+    """
+    every, st = rows(plan), states(plan)
+    at = next((i for i, r in enumerate(every) if r["id"] == row_id), None)
+    if at is None:
+        raise PlanError(f"there is no row {row_id} in the plan.")
+    out = [row_id]
+    if every[at]["kind"] != "clip":
+        return out
+    for row in every[at + 1:]:
+        if len(out) >= CHAIN_LIMIT or row["kind"] != "clip" or row["continues"] != PIN \
+                or st[row["id"]] in (APPROVED, RENDERING):
+            break
+        if any(dep != out[-1] and st.get(dep) != APPROVED for dep in row["deps"]):
+            break
+        out.append(row["id"])
+    return out
+
+
+def start_chain(plan, row_ids, handles):
+    """The rows of one chain queued together, each to land as its handle ->
+    `(plan, [(row, mark, action)])`.
+
+    A row behind the first continues from a clip that has not rendered yet,
+    so its action and its fingerprint are read off a plan in which the rows
+    before it have landed under the handles reserved for them — which is the
+    plan there will be when it does land, so the mark it carries is current
+    then.
+    """
+    trial, made = plan, []
+    for row_id, handle in zip(row_ids, handles):
+        action = action_for(trial, row_id)
+        trial, mark = start(trial, row_id)
+        made.append((row_id, mark, action))
+        trial = land(trial, row_id, handle, mark)
+    for row_id, mark, _action in made:
+        plan = _record(plan, row_id, state=RENDERING, fingerprint=mark, error=None)
+    return plan, made
 
 
 def _ready(plan, phase, st=None):
@@ -1032,10 +1292,10 @@ def _ready(plan, phase, st=None):
 
 HEADER = "header"
 EDITABLE = {
-    "header": ("title", "seconds", "look", "camera", "keyframes", "shot_limit"),
+    "header": ("title", "seconds", "look", "camera", "keyframes", "shot_limit", "match_cuts"),
     "b": ("text", "weight"),
     "e": ("name", "description", "source"),
-    "s": ("action", "continues", "one_take"),
+    "s": ("action", "continues", "one_take", "setting", "parts"),
 }
 
 
@@ -1070,6 +1330,8 @@ def edit(plan, row_id, fields):
             plan["keyframes"] = bool(fields["keyframes"])
         if "shot_limit" in fields:
             plan["shot_limit"] = _whole(fields["shot_limit"], "the shot limit", 1, MAX_SECONDS)
+        if "match_cuts" in fields:
+            plan["match_cuts"] = bool(fields["match_cuts"])
         return validate(plan)
     key = {"b": "beats", "e": "entities", "s": "shots"}[prefix]
     row = next((r for r in plan[key] if r["id"] == row_id), None)
@@ -1086,9 +1348,22 @@ def edit(plan, row_id, fields):
                 row["one_take"] = True
             else:
                 row.pop("one_take", None)
+        if "parts" in fields:
+            # One sentence per clip (`part_text`); none is the whole action
+            # for every part.
+            parts = fields.pop("parts")
+            if parts:
+                row["parts"] = read_parts(parts, len(parts), names(plan))
+            else:
+                row.pop("parts", None)
+        elif "action" in fields and " ".join(str(fields["action"] or "").split()) != row["action"]:
+            # The parts were this action cut up; they are not the new one's.
+            row.pop("parts", None)
         if fields:
-            merged = read_shots([{**{k: row[k] for k in ("action", "continues")}, **fields}],
-                                names(plan))[0]
+            merged = read_shots([{**{k: row[k] for k in ("action", "continues", "setting")
+                                     if k in row}, **fields}], names(plan))[0]
+            if "setting" not in merged:
+                row.pop("setting", None)
             row.update(merged)
     else:
         _edit_entity(plan, row, fields)

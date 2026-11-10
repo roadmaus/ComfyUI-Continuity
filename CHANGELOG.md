@@ -6,6 +6,50 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A planned piece holds together from clip to clip.** Director's clips lost
+the thread in four places, and each is closed. Shots are grouped into
+*scenes* — everything from one real cut to the next — and a scene's place is
+cited into every shot of it, with a one-line *setting* (place, time, light)
+written on the shot that opens the scene and appended to the rest, so a
+second angle is no longer sampled with no room to be in and the video model
+no longer builds another one. The setting is on the plan card under each
+shot that opens a scene, and can be changed there or by talking. A shot too
+long for one clip is written as its clips by a new planning call, one
+sentence each, instead of every clip being handed the whole shot's sentence
+to play again from its start; where that call fails the clips are told which
+part of the shot they are. A clip that carries on is told what the clip
+before it showed, and a new angle is told what must not change rather than
+about "the previous shot", which it was never shown.
+
+**Clips that carry straight on are rendered as one piece.** The run queued
+every clip as its own prompt, so each seam was a tail decoded back out of
+the saved file of the clip before. A clip and the clips that `pin` to it
+(up to four) are now one render of several shots, as the node renders a
+timeline: the seam is read off the pass in front, and on H3 takes that
+pass's latent by whichever seam handoff the machine is set to, instead of
+re-encoding decoded frames. Each shot still lands as its own clip, under its own
+handle and held on its own take, so a later "make shot 3 darker" is the turn
+it always was. Such a render lands or fails whole, and Run again starts it
+over.
+
+**A cut can open on the frame before it.** With the storyboard off and an
+edit model on the rail, a shot that is a new angle on the same moment opens
+on the last frame of the shot before it, turned to the new angle by the edit
+model during the run — the same room, light and clothes, from somewhere
+else. Nobody approves that frame first, since it does not exist until the
+clip before has rendered; *Match cuts* on the plan card turns it off, and a
+plan made before this renders as it did.
+
+**The planning model is told more.** The small profile's shots call is shown
+the beat on either side of the one it writes and the choices the piece was
+planned on, where it used to choose how a beat joins the one before without
+having read it; and a first shot that claims to carry on from a shot set in
+another place is made a real cut by code. Rendered clips of a plan made
+before this read as out of date where their prompt is now different — a shot
+in a scene whose place it did not name, or a shot cut into parts — and Run
+renders those again.
+
+
 **The pre-stage's weights can be pinned to a GPU, as the video node's can.**
 With ComfyUI-MultiGPU installed, the Creator's weights popover had a device
 pill on every checkpoint, encoder and VAE row, and the pre-stage's had none:

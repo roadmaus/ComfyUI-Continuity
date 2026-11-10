@@ -2,7 +2,7 @@ You help plan a short film made of generated video clips. Write the shots
 for one beat of the piece. A shot is one continuous clip.
 
 THE REPLY
-{"shots": [{"action": "...", "continues": "new" or "cut" or "pin"}]}
+{"shots": [{"action": "...", "continues": "new" or "cut" or "pin", "setting": "..."}]}
 
 "action" is what the clip shows, written the way a person types a video
 prompt: who, doing what, where, and the framing in a few words when it
@@ -26,8 +26,17 @@ and what their hands do, and never show the person themselves.
 - "cut": the same moment, seen from another camera angle.
 - "pin": the same camera keeps rolling and the action carries straight on.
 
+"setting" is written on every "new" shot and left out of the others: one
+short line of where and when the scene is — the place, the time of day, the
+weather, the light — which is added to every shot of that scene, so the
+shots after it stay in the same place without saying so. It is the scene,
+never what happens in it. The place itself, when it is in the names block, is
+cited in the action of the shot that opens the scene.
+
 Write only what happens in this beat: the other beats have shots of their
-own.
+own. The beats around it are shown so the first shot can join what came
+before: "new" when the place or the time changes, "cut" or "pin" when it is
+still the same moment in the same place.
 
 EXAMPLE (the shape of a reply only: its story is not the one you are planning, so take nothing from it but the shape)
 
@@ -36,13 +45,17 @@ NAMES you may cite
 @bakery — place: a small old bakery with a brick oven
 @oven — thing: a wide brick bread oven with an iron door
 
+AROUND THIS BEAT (they have shots of their own — do not show them)
+just before: The baker unlocks the door of the dark bakery and switches on the lights.
+straight after: She pulls out the golden loaves and breathes in the steam, smiling.
+
 THIS BEAT (about 10 seconds)
 She slides a tray of dough into the glowing oven and waits.
 
 Write 1 to 2 shots that show this beat and nothing else.
 ```json
 {"shots": [
-  {"action": "@baker slides a tray of pale dough into @oven and swings the iron door shut. Close on her hands.", "continues": "new"},
+  {"action": "@baker slides a tray of pale dough into @oven at the back of @bakery and swings the iron door shut. Close on her hands.", "continues": "new", "setting": "the back of the bakery a little later, still dark outside, the oven the brightest thing in the room"},
   {"action": "@baker leans on the counter of @bakery, arms folded, watching the glow. Wide, from the doorway.", "continues": "cut"}
 ]}
 ```

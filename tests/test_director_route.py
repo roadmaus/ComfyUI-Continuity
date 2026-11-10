@@ -401,3 +401,57 @@ try:
     check("…and refuses a citation of nobody", False, True)
 except director.PlanError as problem:
     check("…and refuses a citation of nobody", "cites @nobody" in str(problem), True)
+
+# ---- the frame a cut opens on ---------------------------------------------------------
+#
+# A run step that changes the last frame of a clip (`chat.GRAB_KEY`) is built
+# against a ledger in which the clip's handle is that frame: a real file, cut
+# out of the clip's take. A second of video whose frames go from black to
+# white says which end was read.
+
+import av  # noqa: E402
+import folder_paths  # noqa: E402
+import numpy  # noqa: E402
+from PIL import Image  # noqa: E402
+
+chat = importlib.import_module(f"{PACKAGE}.creator.chat")
+take_name = "continuity-director-route-take.mp4"
+take_path = os.path.join(folder_paths.get_output_directory(), take_name)
+os.makedirs(os.path.dirname(take_path), exist_ok=True)
+with av.open(take_path, "w") as out:
+    stream = out.add_stream("libx264", rate=24)
+    stream.width, stream.height, stream.pix_fmt = 64, 48, "yuv420p"
+    for n in range(24):
+        frame = av.VideoFrame.from_ndarray(numpy.full((48, 64, 3), n * 11, dtype=numpy.uint8), format="rgb24")
+        for packet in stream.encode(frame):
+            out.mux(packet)
+    for packet in stream.encode():
+        out.mux(packet)
+
+grab_run = {"chat": "grab", "strip": [{"chat_handle": "clip-4", "hold": True, "aspect": "4:3",
+                                       "take": {"filename": f"{take_name} [output]", "duration_s": 1.0}}]}
+grab_ledger = [{"handle": "pic-1", "kind": "still", "filename": "a.png [output]"},
+               {"handle": "clip-4", "kind": "clip", "filename": f"{take_name} [output]", "text": "a clip"}]
+grab_step = {"handle": "pic-9", "action": {"kind": "still", "from": ["clip-4"], chat.GRAB_KEY: chat.GRAB_LAST}}
+try:
+    grabbed = route._grabbed(grab_run, grab_step, grab_ledger)
+    frame_entry = next(e for e in grabbed if e["handle"] == "clip-4")
+    check("the clip's handle stands as a picture, and nothing else in the ledger moved",
+          (frame_entry["kind"], frame_entry["filename"].endswith(".png [temp]"), grabbed[0]),
+          ("still", True, grab_ledger[0]))
+    frame_path = os.path.join(folder_paths.get_temp_directory(), frame_entry["filename"][:-len(" [temp]")])
+    with Image.open(frame_path) as picture:
+        check("that picture is the clip's last frame, at the clip's size",
+              (picture.size, picture.convert("L").getpixel((32, 24)) > 200), ((64, 48), True))
+    os.remove(frame_path)
+    check("a step that grabs nothing gets the ledger as it is",
+          route._grabbed(grab_run, {"handle": "clip-5", "action": {"kind": "video", "from": []}}, grab_ledger)
+          is grab_ledger, True)
+    try:
+        route._grabbed({**grab_run, "strip": []}, grab_step, grab_ledger)
+        check("a clip with no take to cut from is refused by name", False, True)
+    except chat.ActionError as problem:
+        check("a clip with no take to cut from is refused by name",
+              "@clip-4 has no finished take" in str(problem), True)
+finally:
+    os.remove(take_path)

@@ -65,7 +65,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, director, director_calls, director_run, jobs, settings
+from .. import chat, director, director_calls, director_run, jobs, media, settings
 from ..families import manifest, refine
 from ..guard import same_origin
 from . import chat as chat_routes
@@ -468,23 +468,61 @@ def _brief(run):
     return {k: v for k, v in public.items() if k != "steps"}
 
 
+def _grabbed(run, step, ledger):
+    """The ledger with the clip a step cuts a frame from standing as that
+    frame (`chat.GRAB_KEY`): the last frame of the clip's take, written
+    beside ComfyUI's temporary files, under the clip's own handle. A step
+    that grabs nothing gets the ledger back as it is."""
+    if step["action"].get(chat.GRAB_KEY) != chat.GRAB_LAST:
+        return ledger
+    import folder_paths
+    import numpy
+    from PIL import Image
+
+    handle = chat.split_handle((step["action"].get("from") or [""])[0])[0]
+    card = next((c for c in run["strip"] if c.get(chat.STRIP_KEY) == handle), None)
+    take = (card or {}).get("take") or {}
+    if not take.get("filename"):
+        raise chat.ActionError(f"@{handle} has no finished take to cut a frame from.")
+    frames = media.clip_frames({"filename": take["filename"], "start": 0.0,
+                                "duration": float(take.get("duration_s") or 0)}, 1, "tail")
+    pixels = (frames[-1].clamp(0, 1) * 255).round().to("cpu").numpy().astype(numpy.uint8)
+    name = f"continuity-cut-{run['chat']}-{step['handle']}.png"
+    os.makedirs(folder_paths.get_temp_directory(), exist_ok=True)
+    Image.fromarray(pixels).save(os.path.join(folder_paths.get_temp_directory(), name))
+    frame = {"handle": handle, "kind": "still", "aspect": (card or {}).get("aspect") or "",
+             "turn": 0, "filename": f"{name} [temp]", "text": ""}
+    return [frame if e.get("handle") == handle else e for e in ledger]
+
+
 def _build_step(run, step):
     """One run step's render, built the way `chat/render` builds one: the
     action held to `chat.validate` against the run's ledger, strip and cast,
-    then `_build` over the room's base with the step's seed."""
+    then `_build` over the room's base with the step's seed.
+
+    A step with `mates` is a clip and the clips that carry straight on from
+    it, built as one piece of several shots; each mate's action continues
+    `after` a shot that is only in this render, so it is read against a
+    strip that already has the shots before it."""
     ledger, cast = chat_routes._with_piece({"piece": run["piece"], "ledger": run["ledger"]})
     try:
-        action = chat.with_seam(chat.validate(step["action"], ledger,
-                                              strip=[c.get(chat.STRIP_KEY) for c in run["strip"]],
-                                              cast=[m.get("name") for m in cast]),
+        ledger = _grabbed(run, step, ledger)
+        strip = [c.get(chat.STRIP_KEY) for c in run["strip"]]
+        names = [m.get("name") for m in cast]
+        action = chat.with_seam(chat.validate(step["action"], ledger, strip=strip, cast=names),
                                 step["action"])
+        more, on_strip = [], strip + [step["handle"]]
+        for mate in step.get("mates") or ():
+            more.append((chat.validate(mate["action"], ledger, strip=on_strip, cast=names),
+                         mate["handle"], mate["seed"] if mate["seed"] != step["seed"] else None))
+            on_strip = on_strip + [mate["handle"]]
         piece = run["base"]["piece"]
         rail = chat_routes._rail({**run["rail"], **chat_routes._families_of(piece, False)})
-    except chat.ActionError as problem:
+    except (chat.ActionError, media.MediaError) as problem:
         return {"problem": str(problem)}
     base = (piece, {**run["base"]["widgets"], "seed": step["seed"]})
     return chat_routes._build(action, ledger, rail, settings.load().get("weights") or {},
-                              base, run["strip"], cast)
+                              base, run["strip"], cast, more, step["handle"] if more else None)
 
 
 def _outcome(record, cancelled):

@@ -169,9 +169,11 @@ check("row order", [r["id"] for r in every],
       ["e2", "e3", "kf.s1", "kf.s2", "kf.s3", "s1", "s2", "s3", "s4"])
 check("a cited person has no sheet", any(r["id"] == "e1" for r in every), False)
 deps = {r["id"]: r["deps"] for r in every}
-check("keyframe waits for its sheets", deps["kf.s3"], ["e3"])
-check("clip deps: sheets, keyframe, previous", deps["s3"], ["e3", "kf.s3", "s2"])
-check("a pin has no keyframe", deps["s4"], ["e3", "s3"])
+# s3 is a new angle in the scene s2 opened below the lighthouse, so the
+# lighthouse's sheet rides into it though its words name only the bottle.
+check("keyframe waits for its sheets, its scene's place among them", deps["kf.s3"], ["e3", "e2"])
+check("clip deps: sheets, keyframe, previous", deps["s3"], ["e3", "e2", "kf.s3", "s2"])
+check("a pin has no keyframe", deps["s4"], ["e3", "e2", "s3"])
 for row in every:
     at = [r["id"] for r in every].index(row["id"])
     for dep in row["deps"]:
@@ -299,16 +301,19 @@ check("sheet prompt", sheet["prompt"],
       "happening, the whole place readable.\n\nLook: overcast, desaturated teal, 35mm grain.")
 kf = director.action_for(done, "kf.s3")
 check("keyframe resolves cast and entities", (kf["prompt"].split("\n")[0], kf["from"]),
-      ("@george picks up @pic-2 from a rock pool", ["pic-2:object"]))
+      ("@george picks up @pic-2 from a rock pool", ["pic-2:object", "pic-1:scene"]))
+check("...and is set in its scene's place", "Setting: @pic-1." in kf["prompt"], True)
 clip3 = director.action_for(done, "s3")
 check("cut clip opens on its keyframe, after the clip before",
-      (clip3["from"], clip3["after"], clip3["seconds"]), (["pic-5:start", "pic-2:object"], "clip-2", 10))
+      (clip3["from"], clip3["after"], clip3["seconds"]), (["pic-5:start", "pic-2:object", "pic-1:scene"], "clip-2", 10))
 check("cut wording appended", director.CONTINUITY["cut"] in clip3["prompt"], True)
 check("a cut goes on the strip as a hard cut, not carried on from the clip before",
       clip3.get(chat.SEAM_KEY), chat.SEAM_CUT)
 clip4 = director.action_for(done, "s4")
-check("pin clip has no keyframe", (clip4["from"], clip4["after"]), (["pic-2:object"], "clip-3"))
-check("pin wording appended", director.CONTINUITY["pin"] in clip4["prompt"], True)
+check("pin clip has no keyframe", (clip4["from"], clip4["after"]),
+      (["pic-2:object", "pic-1:scene"], "clip-3"))
+check("a pin is told what the clip before it showed, in plain words",
+      "which showed: george picks up bottle from a rock pool." in clip4["prompt"], True)
 check("a pin carries on", clip4.get(chat.SEAM_KEY), None)
 first = director.action_for(done, "s1")
 check("the first clip follows nothing", first["after"], None)
@@ -495,3 +500,189 @@ check("arrange: remove a shot", len(director.arrange(done, "remove", shot="s3")[
 check("arrange: remove a beat", len(director.arrange(done, "remove", beat="b2")["beats"]), 2)
 check("arrange: move", director.arrange(done, "move", shot="s4", before="s1")["shots"][0]["id"], "s4")
 refuses("arrange: something else", lambda: director.arrange(done, "swap", shot="s1"), "add, remove or move")
+
+# ---- scenes: a place and a setting carried through the shots of one ---------------------
+
+
+def kitchen(seconds=30, keyframes=False, rail=RAIL, weights=("medium", "medium")):
+    """Two scenes. The first opens in the kitchen and has a new angle and a
+    carry-on that never name it; the second is somewhere else."""
+    doc = director.new_plan("a cook burns the soup", director.read_basics(
+        {"title": "Soup", "seconds": seconds, "look": "warm"}), rail, keyframes=keyframes)
+    doc = director.add_beats(doc, director.read_beats(
+        [{"text": "she cooks", "weight": weights[0]}, {"text": "she leaves", "weight": weights[1]}]))
+    doc = director.add_entities(doc, director.read_entities([
+        {"name": "cook", "kind": "person", "description": "a cook in whites"},
+        {"name": "kitchen", "kind": "place", "description": "a narrow steel kitchen"},
+        {"name": "yard", "kind": "place", "description": "a wet back yard"}]))
+    names = director.names(doc)
+    doc = director.set_shots(doc, "b1", director.read_shots([
+        {"action": "@cook stirs a pot in @kitchen. Wide.", "continues": "new",
+         "setting": "late evening service, steam, hard overhead light."},
+        {"action": "@cook's hand lifts the spoon. Close.", "continues": "cut"},
+        {"action": "@cook tastes it and winces.", "continues": "pin"}], names))
+    doc = director.set_shots(doc, "b2", director.read_shots([
+        {"action": "@cook steps out into @yard and lights a cigarette.", "continues": "new"}], names))
+    return director.validate(doc)
+
+
+soup = kitchen()
+check("a scene runs from one real cut to the next",
+      [[s["id"] for s in scene] for scene in director.scenes(soup)], [["s1", "s2", "s3"], ["s4"]])
+check("a setting is kept on the shot that wrote it, and only there",
+      [s.get("setting") for s in soup["shots"]],
+      ["late evening service, steam, hard overhead light.", None, None, None])
+held = director.scenery(soup)
+check("a shot that names its place inherits none; the others take the scene's",
+      [(held[s][0] or {}).get("name") for s in ("s1", "s2", "s3", "s4")],
+      [None, "kitchen", "kitchen", None])
+check("the setting line cites the place a shot did not",
+      [director.setting_line(soup, s) for s in soup["shots"]],
+      ["Setting: late evening service, steam, hard overhead light.",
+       "Setting: @kitchen — late evening service, steam, hard overhead light.",
+       "Setting: @kitchen — late evening service, steam, hard overhead light.", ""])
+soup_deps = {r["id"]: r["deps"] for r in director.rows(soup)}
+check("so the place's sheet is something every shot of the scene waits for",
+      (soup_deps["s2"], soup_deps["s3"], soup_deps["s4"]),
+      (["e1", "e2", "cut.s2", "s1"], ["e1", "e2", "s2"], ["e1", "e3", "s3"]))
+refuses("a setting citing nobody", lambda: director.edit(soup, "s1", {"setting": "in @cellar"}),
+        "cites @cellar")
+check("a setting can be taken off again",
+      "setting" in director.edit(soup, "s1", {"setting": ""})["shots"][0], False)
+check("an edit to the action keeps the setting",
+      director.edit(soup, "s1", {"action": "@cook salts a pot in @kitchen."})["shots"][0]["setting"],
+      "late evening service, steam, hard overhead light.")
+
+
+def through(doc, upto):
+    """`doc` with its sheets approved and its clips landed up to `upto`."""
+    pictures = clips = 0
+    for row in director.rows(doc):
+        if row["kind"] == "sheet":
+            pictures += 1
+            doc = director.approve(render(doc, row["id"], f"pic-{pictures}"), row["id"])
+    for row in director.rows(doc):
+        if row["kind"] != "clip":
+            continue
+        if row["id"] == upto:
+            break
+        clips += 1
+        doc = render(doc, row["id"], f"clip-{clips}")
+    return doc
+
+
+plain = director.edit(soup, "header", {"match_cuts": False})
+ready = through(soup, "s2")
+angle2 = director.action_for(through(plain, "s2"), "s2")
+check("a new angle is sent the scene's place though its words never name it",
+      angle2["from"], ["pic-2:scene"])
+check("...and is told what must not change, not about a shot it was never shown",
+      (director.CONTINUITY["cut"] in angle2["prompt"], "previous" in angle2["prompt"]), (True, False))
+check("...with the setting after its own words and before the look",
+      angle2["prompt"].split("\n\n")[1:],
+      ["Setting: @pic-2 — late evening service, steam, hard overhead light.", "Look: warm."])
+
+# A setting changes what the scene's shots render from, so it stales them; a
+# plan with no setting and no place to inherit hashes as it always did.
+check("a setting edited stales every shot of its scene and nothing before it",
+      [director.fingerprint(soup, r) != director.fingerprint(
+          director.edit(soup, "s1", {"setting": "dawn"}), r) for r in ("e1", "s1", "s2", "s3")],
+      [False, True, True, True])
+
+# ---- a long shot, written as its clips ----------------------------------------------------
+
+long_soup = director.edit(kitchen(seconds=35, weights=("short", "long")), "header", {"shot_limit": 7})
+split = [c for c in director.clips(long_soup) if c["shot"] == "s4"]
+check("the last shot is cut in parts", [c["id"] for c in split], ["s4.1", "s4.2", "s4.3", "s4.4"])
+check("unwritten, every part is the whole action and says so",
+      director.part_text(long_soup["shots"][3], 2, 4),
+      ("@cook steps out into @yard and lights a cigarette.", False))
+parted = director.edit(long_soup, "s4", {"parts": [
+    "@cook pushes the door open and steps into @yard.", "@cook shakes a cigarette from the pack.",
+    "@cook lights it, cupping the flame.", "@cook breathes out and leans on the wall."]})
+check("written, each part is its own sentence",
+      director.part_text(parted["shots"][3], 3, 4), ("@cook lights it, cupping the flame.", True))
+refuses("a part citing nobody",
+        lambda: director.edit(long_soup, "s4", {"parts": ["@ghost waves", "b", "c", "d"]}), "cites @ghost")
+check("parts written for another split are not used",
+      director.part_text({**parted["shots"][3], "parts": ["a", "b"]}, 1, 4)[1], False)
+check("a new action drops the parts written for the old one",
+      "parts" in director.edit(parted, "s4", {"action": "@cook kicks a can across @yard."})["shots"][3],
+      False)
+check("...and the same action said again keeps them",
+      len(director.edit(parted, "s4", {"action": parted["shots"][3]["action"]})["shots"][3]["parts"]), 4)
+check("writing the parts stales the clips of that shot and no other",
+      sorted(r["id"] for r in director.rows(parted)
+             if director.fingerprint(parted, r["id"]) != director.fingerprint(long_soup, r["id"])),
+      ["s4.1", "s4.2", "s4.3", "s4.4"])
+
+
+third = director.action_for(through(parted, "s4.3"), "s4.3")
+check("a written part is its own words, told what the part before showed",
+      (third["prompt"].split("\n\n")[0],
+       "which showed: cook shakes a cigarette from the pack." in third["prompt"]),
+      ("@cook lights it, cupping the flame.", True))
+whole = director.action_for(through(long_soup, "s4.3"), "s4.3")
+check("an unwritten part is told which part of the shot it is, and not to begin again",
+      (director.PART.format(part=3, parts=4) in whole["prompt"], "which showed" in whole["prompt"]),
+      (True, False))
+check("the first part of a shot says neither",
+      "Continuity" in director.action_for(through(long_soup, "s4.1"), "s4.1")["prompt"], False)
+
+# ---- a cut that opens on the frame before it -----------------------------------------------
+
+check("a new plan matches its cuts", soup["match_cuts"], True)
+angled = director.rows(soup)
+check("with the storyboard off and an edit family, a cut gets an angle row in front of it",
+      [(r["id"], r["kind"], r["phase"]) for r in angled if r["phase"] == "run"],
+      [("s1", "clip", "run"), ("cut.s2", "angle", "run"), ("s2", "clip", "run"),
+       ("s3", "clip", "run"), ("s4", "clip", "run")])
+check("the angle waits for the clip before; the cut waits for the angle",
+      ({r["id"]: r["deps"] for r in angled}["cut.s2"], soup_deps["s2"]), (["s1"], ["e1", "e2", "cut.s2", "s1"]))
+check("off on the card, there is none",
+      [r["id"] for r in director.rows(director.edit(soup, "header", {"match_cuts": False}))
+       if r["kind"] == "angle"], [])
+check("a plan written before the switch has none",
+      [r["id"] for r in director.rows({k: v for k, v in soup.items() if k != "match_cuts"})
+       if r["kind"] == "angle"], [])
+check("a rail with no edit family has none",
+      [r["id"] for r in director.rows(kitchen(rail={k: v for k, v in RAIL.items() if k != "edit_family"}))
+       if r["kind"] == "angle"], [])
+check("the storyboard's own opening frame stands in its place",
+      [r["kind"] for r in director.rows(kitchen(keyframes=True)) if r.get("shot") == "s2"],
+      ["keyframe", "clip"])
+turn = director.action_for(ready, "cut.s2")
+check("the angle is the frame the clip before ended on, changed in place",
+      (turn["kind"], turn["from"], turn[chat.GRAB_KEY]), ("still", ["clip-1"], chat.GRAB_LAST))
+check("...asked for in the shot's own words, names plain",
+      turn["prompt"], director.ANGLE.format(action="cook's hand lifts the spoon. Close."))
+ready = render(ready, "cut.s2", "pic-9")
+check("an angle is the run's: landed, it is approved with nobody asked",
+      director.state_of(ready, "cut.s2"), "approved")
+check("the cut opens on it", director.action_for(ready, "s2")["from"], ["pic-9:start", "pic-2:scene"])
+check("the run renders the angle between the two clips",
+      director.run_steps(soup), ["s1", "cut.s2", "s2", "s3", "s4"])
+
+# ---- clips that carry straight on, rendered as one piece ------------------------------------
+
+check("a clip is queued with the clips that carry on from it",
+      director.chain(through(plain, "s2"), "s2"), ["s2", "s3"])
+check("a cut ends the chain: it opens on its own picture",
+      director.chain(through(plain, "s1"), "s1"), ["s1"])
+check("a still is always alone", director.chain(soup, "e1"), ["e1"])
+tail = through(director.edit(long_soup, "header", {"match_cuts": False}), "s4.1")
+check("...up to the limit, and no further",
+      (director.CHAIN_LIMIT, director.chain(tail, "s4.1")), (4, ["s4.1", "s4.2", "s4.3", "s4.4"]))
+check("a clip already rendered ends the chain in front of it",
+      director.chain(render(tail, "s4.3", "clip-40"), "s4.1"), ["s4.1", "s4.2"])
+queued, made = director.start_chain(tail, ["s4.1", "s4.2", "s4.3"], ["clip-7", "clip-8", "clip-9"])
+check("a chain's rows are all rendering", [director.state_of(queued, r) for r, _m, _a in made],
+      ["rendering"] * 3)
+check("each row behind the first continues from the handle reserved for the one before",
+      [a["after"] for _r, _m, a in made], ["clip-3", "clip-7", "clip-8"])
+landing = queued
+for (row, mark, _action), handle in zip(made, ["clip-7", "clip-8", "clip-9"]):
+    landing = director.land(landing, row, handle, mark)
+check("...and lands current under the mark it was queued with",
+      [director.state_of(landing, r) for r, _m, _a in made], ["approved"] * 3)
+check("nothing is ready while a chain renders", director.next_step(queued), None)

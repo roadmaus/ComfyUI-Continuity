@@ -30,6 +30,21 @@ has steps, taken off the room's counter at the press, and each step uses the
 next one. A step that fails leaves its number unused, which is exactly what a
 failed render in the room does.
 
+**Clips that carry straight on are one render.** A step is a row, but the
+run queues a clip together with the clips behind it that `pin` to it
+(`director.chain`): one piece of several shots, sampled in one prompt, the way
+the node renders a timeline. That is the point of it — a seam inside one
+render is read off the pass in front, with its latent where the family hands
+one, where a seam off a
+landed clip is a tail decoded back out of a saved file — and it is why the
+steps of one chain share a prompt id and land, or fail, together. Each still
+lands as its own shot under its own handle, from its own take.
+
+**A cut can open on the frame before it.** Where the plan matches its cuts
+(`director.rows`, the angle rows) the step in front of a `cut` clip is a
+still: the last frame of the clip before, turned to the new angle on the
+room's edit path. It takes a picture handle, reserved with the clips'.
+
 **Rehearsed before it is queued.** Run first builds every clip in order
 against stand-in takes (`rehearse`), so a citation the video family cannot
 read or a seam off its grid is refused at the press, by name, rather than an
@@ -72,6 +87,12 @@ STOPPED_WORDS = "stopped before it finished"
 RESTART_WORDS = "lost when ComfyUI restarted; Run renders it again"
 
 
+# What a step's handle starts with, by the kind of row it renders, and what
+# the kind is called when there are too few.
+PREFIX = {"clip": "clip-", "angle": "pic-"}
+WORDS = {"clip": "clips", "angle": "opening frames"}
+
+
 class RunError(ValueError):
     """A run that cannot start, said as a sentence for the plan card."""
 
@@ -98,10 +119,14 @@ def begin(chat_id, plan, *, ledger, strip, piece, rail, base, handles, prior=Non
     todo = director.run_steps(plan)
     if not todo:
         raise RunError("every clip of this plan is already rendered.")
-    handles = [str(h) for h in handles or () if str(h or "").startswith("clip-")]
-    if len(handles) < len(todo):
-        raise RunError(f"the run has {len(todo)} clips to render and the room reserved "
-                       f"{len(handles)} handles for them.")
+    kinds = {r["id"]: r["kind"] for r in director.rows(plan)}
+    handles = [str(h) for h in handles or () if str(h or "").startswith(tuple(PREFIX.values()))]
+    for kind, prefix in PREFIX.items():
+        need = sum(1 for row in todo if kinds[row] == kind)
+        have = sum(1 for h in handles if h.startswith(prefix))
+        if have < need:
+            raise RunError(f"the run has {need} {WORDS[kind]} to render and the room reserved "
+                           f"{have} handles for them.")
     if prior is not None and prior.get("state") == RUNNING:
         raise RunError("this chat's run is still going. Stop it first.")
     base = base if isinstance(base, dict) else {}
@@ -120,7 +145,9 @@ def begin(chat_id, plan, *, ledger, strip, piece, rail, base, handles, prior=Non
         "rail": dict(rail or {}),
         "base": {"piece": base["piece"], "widgets": dict(base.get("widgets") or {})},
         "handles": handles,
-        "total": len(todo),
+        # Clips, which is what the progress line counts: a cut's opening
+        # frame is a step of the run but not a shot of the piece.
+        "total": sum(1 for row in todo if kinds[row] == "clip"),
         "steps": kept,
         # Where this press's steps start in `steps`: the progress line counts
         # what this Run has done, not what an earlier one did.
@@ -147,6 +174,14 @@ def _seed(run):
     return int(widgets.get("seed") or run["rail"].get("seed") or 0)
 
 
+def _reserved(run, kind):
+    """The next handle reserved for a row of this kind, taken off the list."""
+    for at, handle in enumerate(run["handles"]):
+        if handle.startswith(PREFIX[kind]):
+            return run["handles"].pop(at)
+    return None
+
+
 def next_step(run):
     """The step the run renders next -> `(run, step)`, or `(run, None)` when
     there is nothing to render: the run is done, or cannot go on, which the
@@ -155,6 +190,11 @@ def next_step(run):
     The step carries everything its render needs: the row, the reserved
     handle, the action the row becomes and the fingerprint it lands under.
     The plan marks the row rendering.
+
+    A clip comes with the clips that carry straight on from it
+    (`director.chain`), each a step of its own in the record, all of them
+    rendering: the step answered is the first, and the rest ride on it as
+    `mates`, which is the answer's alone and not the record's.
     """
     run = copy.deepcopy(run)
     if run["state"] != RUNNING:
@@ -168,29 +208,50 @@ def next_step(run):
             run["state"] = FAILED
             run["error"] = "nothing in the plan is ready to render; something it waits on failed."
         return run, None
+    kinds = {r["id"]: r["kind"] for r in director.rows(plan)}
+    rows = director.chain(plan, row)
+    handles = [_reserved(run, kinds[r]) for r in rows]
+    if None in handles:
+        run["state"], run["error"] = FAILED, "the run ran out of reserved handles."
+        return run, None
     try:
-        action = director.action_for(plan, row)
+        plan, made = director.start_chain(plan, rows, handles)
     except director.PlanError as problem:
         run["state"], run["error"] = FAILED, str(problem)
         return run, None
-    if not run["handles"]:
-        run["state"], run["error"] = FAILED, "the run ran out of reserved handles."
-        return run, None
-    plan, mark = director.start(plan, row)
     run["plan"] = plan
-    step = {"row": row, "handle": run["handles"].pop(0), "mark": mark, "action": action,
-            "seed": _seed(run), "state": BUILDING, "prompt_id": None, "piece": None,
-            "saved": None, "takes": [], "error": None}
-    run["steps"].append(step)
-    return run, copy.deepcopy(step)
+    steps = [{"row": row_id, "kind": kinds[row_id], "chain": list(rows), "handle": handle,
+              "mark": mark, "action": action, "seed": _seed(run), "state": BUILDING,
+              "prompt_id": None, "piece": None, "saved": None, "takes": [], "error": None}
+             for (row_id, mark, action), handle in zip(made, handles)]
+    run["steps"].extend(steps)
+    return run, {**copy.deepcopy(steps[0]), "mates": copy.deepcopy(steps[1:])}
+
+
+def _chain(run, row):
+    """The steps rendered in one prompt with `row`'s, itself among them, in
+    order: the ones still open that name the same chain."""
+    step = _step(run, row)
+    rows = step.get("chain") or [row]
+    return [_step(run, r) for r in rows]
 
 
 def queued(run, row, prompt_id, piece):
     """The step's prompt is on the queue as `prompt_id`; `piece` is the blob
-    it was built as, which the room lands its strip from."""
+    it was built as, which the room lands its strip from.
+
+    A chain's steps are all on the queue under that one id, and each holds
+    the piece up to and including its own shot — the piece as it would have
+    been built had the shots before it been rendered already, which is the
+    one the room and `_landed` know how to land a shot from.
+    """
     run = copy.deepcopy(run)
-    step = _step(run, row)
-    step.update(state=QUEUED, prompt_id=str(prompt_id), piece=piece)
+    steps = _chain(run, row)
+    segments = (piece or {}).get("segments") or []
+    front = len(segments) - len(steps)
+    for at, step in enumerate(steps):
+        own = piece if len(steps) == 1 else {**piece, "segments": segments[:front + at + 1]}
+        step.update(state=QUEUED, prompt_id=str(prompt_id), piece=own)
     return run
 
 
@@ -223,6 +284,11 @@ def _landed(run, step, saved, takes, is_clip):
     take = next((t for t in takes if _whole(t.get("segment")) == last + 1), None) if is_clip else None
     shot = f"{_path(take)} [output]" if take else None
     action = step["action"]
+    # A shot in front of this one that has landed since the piece was built
+    # (the shots of a chain land one after another off one piece) is on the
+    # strip with its take, and that card is the one kept.
+    have = {c.get(chat.STRIP_KEY): c for c in run["strip"]
+            if c.get(chat.STRIP_KEY) and isinstance(c.get("take"), dict)}
     entry = {"handle": step["handle"], "kind": "clip" if is_clip else "still",
              "aspect": action.get("aspect") or piece.get("aspect") or run["rail"].get("aspect") or "",
              "turn": 0, "filename": shot or f"{_path(saved)} [{saved.get('type') or 'output'}]",
@@ -236,7 +302,8 @@ def _landed(run, step, saved, takes, is_clip):
             held.update(hold=True, take={"filename": shot,
                                          "duration_s": _number(take.get("duration_s")),
                                          **size, "has_audio": take.get("has_audio") is not False})
-        run["strip"] = [json.loads(json.dumps(s)) for s in segments[:last]] + [held]
+        run["strip"] = [json.loads(json.dumps(have.get(s.get(chat.STRIP_KEY)) or s))
+                        for s in segments[:last]] + [held]
     return entry
 
 
@@ -258,27 +325,29 @@ def landed(run, row, outputs):
     """The step's render finished with these history outputs. -> the run.
 
     A prompt that finished without saving anything is a failure, said: the
-    next clip has nothing to continue from.
+    next clip has nothing to continue from. The steps of a chain land in
+    order, each as its own shot.
     """
     saved, takes, is_clip = outputs_of(outputs)
     if saved is None:
         return failed(run, row, "the render finished without saving a file")
     run = copy.deepcopy(run)
-    step = _step(run, row)
-    step.update(state=LANDED, saved=saved, takes=takes, clip=is_clip)
-    entry = _landed(run, step, saved, takes, is_clip)
-    step["filename"] = entry["filename"]
-    run["plan"] = director.land(run["plan"], row, step["handle"], step["mark"])
+    for step in _chain(run, row):
+        step.update(state=LANDED, saved=saved, takes=takes, clip=is_clip)
+        entry = _landed(run, step, saved, takes, is_clip)
+        step["filename"] = entry["filename"]
+        run["plan"] = director.land(run["plan"], step["row"], step["handle"], step["mark"])
     return run
 
 
 def failed(run, row, error):
-    """The step failed; so does the run, in the step's words."""
+    """The step failed; so does the run, in the step's words — and so do the
+    steps on the queue with it, which were the same render."""
     run = copy.deepcopy(run)
-    step = _step(run, row)
     sentence = " ".join(str(error or "the render failed").split())[:600]
-    step.update(state=STEP_FAILED, error=sentence)
-    run["plan"] = director.fail(run["plan"], row, sentence)
+    for step in _chain(run, row):
+        step.update(state=STEP_FAILED, error=sentence)
+        run["plan"] = director.fail(run["plan"], step["row"], sentence)
     if run["state"] == RUNNING:
         run["state"] = FAILED
         order = [c["id"] for c in director.clips(run["plan"])]
@@ -325,6 +394,9 @@ def rehearse(run, build):
     the next one is built `after` it exactly as it will be.
     """
     trial = copy.deepcopy(run)
+    # A cut's opening frame is cut out of a clip that does not exist yet, so
+    # it cannot be built now; its clip is rehearsed opening on its references.
+    trial["plan"] = {**trial["plan"], "match_cuts": False}
     order = [c["id"] for c in director.clips(trial["plan"])]
     while True:
         trial, step = next_step(trial)
@@ -335,15 +407,22 @@ def rehearse(run, build):
             n = order.index(step["row"]) + 1 if step["row"] in order else "?"
             return f"clip {n} of {len(order)} would not render: {built['problem']}"
         trial = queued(trial, step["row"], "rehearsal", built["piece"])
-        take = f"rehearsal-{step['handle']}.mp4"
+        steps = [step, *step["mates"]]
+        front = len(built["piece"].get("segments") or []) - len(steps)
+        takes = [{"segment": front + at + 1, "filename": f"rehearsal-{one['handle']}.mp4",
+                  "subfolder": "", "duration_s": one["action"].get("seconds") or 0,
+                  "has_audio": True} for at, one in enumerate(steps)]
         trial = landed(trial, step["row"], {"rehearsal": {
-            "mmc_video": [{"filename": take, "subfolder": "", "type": "output"}],
-            "mmc_takes": [{"segment": len(built["piece"].get("segments") or []), "filename": take,
-                           "subfolder": "", "duration_s": step["action"].get("seconds") or 0,
-                           "has_audio": True}]}})
+            "mmc_video": [{"filename": takes[-1]["filename"], "subfolder": "", "type": "output"}],
+            "mmc_takes": takes}})
 
 
 # ---- what the room is told --------------------------------------------------------
+
+
+# What of a step the room is told.
+PUBLIC = ("row", "kind", "chain", "handle", "mark", "action", "state", "prompt_id", "piece",
+          "saved", "takes", "clip", "error", "seed")
 
 
 def public(run):
@@ -359,11 +438,10 @@ def public(run):
         # chat whose plan was replaced must not file this run's clips on it.
         "brief": (run.get("plan") or {}).get("brief"),
         "total": run.get("total") or 0,
-        "done": sum(1 for s in run["steps"][run.get("first") or 0:] if s["state"] == LANDED),
+        "done": sum(1 for s in run["steps"][run.get("first") or 0:]
+                    if s["state"] == LANDED and s.get("kind", "clip") == "clip"),
         "current": current["row"] if current else None,
-        "steps": [{k: s.get(k) for k in ("row", "handle", "mark", "action", "state", "prompt_id",
-                                         "piece", "saved", "takes", "clip", "error", "seed")}
-                  for s in run["steps"]],
+        "steps": [{k: s.get(k) for k in PUBLIC} for s in run["steps"]],
     }
 
 
@@ -385,8 +463,8 @@ async def drive(run, io):
         told on the socket;
       * `stopping()`, whether Stop was pressed.
 
-    Strictly one clip at a time: a `pin` waits for its predecessor's last
-    frame, and one GPU does one thing.
+    Strictly one render at a time: one GPU does one thing. A render is one
+    clip, or a clip and the clips that carry straight on from it.
     """
     io.save(run)
     io.tell("state", run, None)
@@ -405,45 +483,51 @@ async def drive(run, io):
         if "problem" in built:
             run = failed(run, step["row"], built["problem"])
             io.save(run)
-            io.tell("failed", run, _step_of(run, step))
+            _tell(io, "failed", run, [step, *step["mates"]])
             break
         try:
             prompt_id = await io.enqueue(built["prompt"])
         except Exception as problem:  # noqa: BLE001
             run = failed(run, step["row"], str(problem))
             io.save(run)
-            io.tell("failed", run, _step_of(run, step))
+            _tell(io, "failed", run, [step, *step["mates"]])
             break
         run = queued(run, step["row"], prompt_id, built["piece"])
         io.save(run)
-        io.tell("queued", run, _step_of(run, step))
+        steps = [step, *step["mates"]]
+        _tell(io, "queued", run, steps)
         outcome, detail = await io.wait(prompt_id)
         if outcome == "landed":
             run = landed(run, step["row"], detail)
             io.save(run)
             kind = "landed" if _step_of(run, step)["state"] == LANDED else "failed"
-            io.tell(kind, run, _step_of(run, step))
+            _tell(io, kind, run, steps)
             if kind == "failed":
                 break
             continue
         if outcome == "stopped":
             run = stopped(run)
             io.save(run)
-            io.tell("failed", run, _step_of(run, step))
+            _tell(io, "failed", run, steps)
             break
         run = failed(run, step["row"], detail)
         io.save(run)
-        io.tell("failed", run, _step_of(run, step))
+        _tell(io, "failed", run, steps)
         break
     io.save(run)
     io.tell("state", run, None)
     return run
 
 
+def _tell(io, kind, run, steps):
+    """The room told about every step of one render, in order."""
+    for step in steps:
+        io.tell(kind, run, _step_of(run, step))
+
+
 def _step_of(run, step):
     """The record's copy of `step`, as it stands now."""
     for held in reversed(run["steps"]):
         if held["row"] == step["row"] and held["handle"] == step["handle"]:
-            return {k: held.get(k) for k in ("row", "handle", "mark", "action", "state", "prompt_id",
-                                             "piece", "saved", "takes", "clip", "error", "seed")}
+            return {k: held.get(k) for k in PUBLIC}
     return step

@@ -173,13 +173,16 @@ class DryRun:
         return f"p{self.n}"
 
     async def wait(self, _prompt_id):
+        # A take for every shot the prompt sampled: the step's own, and one
+        # for each shot that carried straight on from it in the same piece.
         step, built = self.built[-1]
-        segment = len(built["piece"]["segments"])
+        shots = [step, *step["mates"]]
+        front = len(built["piece"]["segments"]) - len(shots)
         return "landed", {chat.NODE: {
             "mmc_video": [{"filename": f"reel_{self.n}.mp4", "subfolder": "", "type": "output"}],
-            "mmc_takes": [{"segment": segment, "filename": f"take_{self.n}.mp4", "subfolder": "",
-                           "duration_s": step["action"]["seconds"], "width": 1280, "height": 720,
-                           "has_audio": True}]}}
+            "mmc_takes": [{"segment": front + at + 1, "filename": f"take_{self.n}_{at}.mp4",
+                           "subfolder": "", "duration_s": shot["action"]["seconds"], "width": 1280,
+                           "height": 720, "has_audio": True} for at, shot in enumerate(shots)]}}
 
     def save(self, _run):
         pass
@@ -199,6 +202,9 @@ try:
         for keyframes in (False, True):
             label = f"{family}, storyboard {'on' if keyframes else 'off'}"
             plan, ledger, piece = prepared(family, keyframes)
+            # The frame a cut opens on is cut out of a rendered clip, and
+            # nothing renders here; `test_director_route.py` grabs one.
+            plan = director.edit(plan, director.HEADER, {"match_cuts": False})
             todo = director.run_steps(plan)
             run = run_mod.begin("graph", plan, ledger=ledger, strip=[], piece=piece,
                                 rail={"aspect": "16:9", "video_family": family, "seed_policy": "fixed"},
@@ -225,13 +231,26 @@ try:
             check(f"{label}: each is a one-node Creator prompt on the room's family",
                   {(b["family"], next(iter(p["prompt"].values()))["class_type"])
                    for b, (_s, p) in zip(blobs, io.built)}, {(family, "MiniMaxH3Creator")})
-            check(f"{label}: the clips chain on the strip, the kept shots held",
+            check(f"{label}: the shot that carries on is sampled in the first shot's render, and the "
+                  "cut in its own with both held in front of it",
                   [[bool(c.get("hold")) for c in b["segments"]] for b in blobs],
-                  [[False], [True, False], [True, True, False]])
-            check(f"{label}: the pin carries on across its seam and the cut does not",
-                  [b["segments"][-1].get("continue") for b in blobs], [None, True, None])
+                  [[False, False], [True, True, False]])
+            check(f"{label}: the pin carries on across a live seam, sound and blend with it, and the "
+                  "cut does not",
+                  [[(c.get("continue"), c.get("continue_audio"), bool(c.get("feather")))
+                    for c in b["segments"] if not c.get("hold")] for b in blobs],
+                  [[(None, None, False), (True, True, True)], [(None, None, False)]])
+            check(f"{label}: the shots of one render are stamped with the handles they land as",
+                  [c.get("chat_handle") for c in blobs[0]["segments"]], ["clip-1", "clip-2"])
+            check(f"{label}: and land as their own shots, each held on its own take",
+                  [(c["chat_handle"], c["take"]["filename"]) for c in run["strip"]],
+                  [("clip-1", "take_1_0.mp4 [output]"), ("clip-2", "take_1_1.mp4 [output]"),
+                   ("clip-3", "take_2_0.mp4 [output]")])
+            check(f"{label}: the shot that carries on is told what the one before it showed",
+                  "which showed: george wakes up inside carriage." in blobs[0]["segments"][1]["prompt"],
+                  True)
             check(f"{label}: the cut opens on its own frame only while the storyboard is on",
-                  [a["role"] for a in blobs[2]["segments"][-1]["assets"] if a["role"] == "first_frame"],
+                  [a["role"] for a in blobs[1]["segments"][-1]["assets"] if a["role"] == "first_frame"],
                   ["first_frame"] if keyframes else [])
             check(f"{label}: the seed is the room's", {s["seed"] for s, _b in io.built}, {11})
             first = blobs[0]["segments"][0]["assets"]
@@ -243,8 +262,9 @@ try:
             check(f"{label}: the cast is the chat's, the conductor among them",
                   sorted(s["handle"] for s in blobs[-1]["subjects"]), ["George", "conductor"])
             check(f"{label}: the shots with George cite him in the cast's spelling, as the compiler matches",
-                  [("@George" in b["segments"][-1]["prompt"], "@george" in b["segments"][-1]["prompt"])
-                   for b in blobs], [(True, False), (True, False), (False, False)])
+                  [("@George" in c["prompt"], "@george" in c["prompt"])
+                   for b in blobs for c in b["segments"] if not c.get("hold")],
+                  [(True, False), (True, False), (False, False)])
 finally:
     core_models.available, settings.load = _available, _load
     shutil.rmtree(PICTURE_DIR, ignore_errors=True)

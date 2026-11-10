@@ -129,6 +129,36 @@ def walk():
 
 STEPS = walk()
 
+
+def scene():
+    """A scene whose later shots never name its place, a setting on the shot
+    that opens it, a cut that opens on the frame before it (the storyboard
+    off, an edit family on the rail), and a shot long enough to be written
+    as its clips: what `director.scenery`, the angle rows and `part_text`
+    add to the rows and to what they hash."""
+    doc = plan(40, ["medium", "long"], {
+        0: [("@keeper walks along @coast", "new"), ("close on a shell", "cut"), ("@keeper kneels", "pin")],
+        1: [("@keeper reads the note for a long time", "new"), ("@keeper looks up", "cut")],
+    }, rail={"still": "krea2", "edit": "qwenedit", "video": "h3", "aspect": "16:9"},
+        keyframes=False, limit=6, entities=(KEEPER, COAST))
+    return director.edit(doc, "s1", {"setting": "low tide at dusk, wind — café light far off."})
+
+
+_scene = scene()
+PLANS["a scene, its cut matched"] = _scene
+PLANS["cuts not matched"] = director.edit(_scene, director.HEADER, {"match_cuts": False})
+STEPS["a scene: fresh"] = _scene
+_parts = len([c for c in director.clips(_scene) if c["shot"] == "s4"])
+_written = director.edit(_scene, "s4", {"parts": [f"@keeper reads line {n}" for n in range(_parts)]})
+STEPS["a scene: a long shot written as its clips"] = _written
+_made = _written
+for _at, _row in enumerate(r["id"] for r in director.rows(_written) if r["kind"] == "sheet"):
+    _made = director.approve(_render(_made, _row, f"pic-{30 + _at}"), _row)
+for _at, _row in enumerate(director.run_steps(_made)[:4]):
+    _made = _render(_made, _row, f"{'pic' if _row.startswith('cut.') else 'clip'}-{40 + _at}")
+STEPS["a scene: the first cut matched and rendered"] = _made
+STEPS["a scene: its setting changed"] = director.edit(_made, "s1", {"setting": "high tide, noon"})
+
 rng = random.Random(7)
 ALLOTS = []
 for _ in range(300):
@@ -240,5 +270,13 @@ check("the rail really clamps", director.limit_of(PLANS["the rail clamps the lim
 check("the rail really raises the floor", director.floor_of(PLANS["the rail raises the floor"]), 3)
 check("keyframes off really leaves none",
       [r for r in director.rows(PLANS["keyframes off"]) if r["kind"] == "keyframe"], [])
+
+
+check("the scene plan has what it is there to mirror: an angle row and a split shot",
+      (sorted({r["kind"] for r in director.rows(_scene)}), _parts > 1),
+      (["angle", "clip", "sheet"], True))
+check("...and its walk leaves rows in every state the card draws from",
+      sorted(set(director.states(STEPS["a scene: its setting changed"]).values())),
+      ["approved", "planned", "stale"])
 
 passed("the plan card's arithmetic is director.py's")

@@ -57,6 +57,26 @@ only what the model is shown and asked at once differs. Small is the
 default because it holds on every model; large is for the one the person
 knows can carry it, and `tools/director_bench.py --steps large` is how they
 find out.
+
+**A shot is written knowing where it sits.** The small shots call was once
+shown its own beat and nothing round it, and so chose how the beat joins the
+one before without having read it. It is shown the beat on either side now,
+as beats — what happens, never the shots written for it, which the floor
+model copies — and the choices the piece was planned on. What it still cannot
+know, code checks: a first shot that says it carries on from a shot set
+somewhere else is a real cut (`_joined`).
+
+**A scene says where it is once.** The shot that opens a scene (`new`) writes
+a `setting`, one line of place, time and light; code carries it, and the
+scene's place, into every shot of the scene (`director.scenery`), so a second
+angle is not sampled with no room to be in.
+
+**A shot too long for one clip is written apart.** Code cuts it
+(`director.clips`); the **parts** call then asks what happens in each clip,
+in order, so the second clip is not handed the whole shot's sentence to play
+again from its start. A parts call that fails costs the plan nothing: the
+shot keeps its one sentence and the wording says which part each clip is
+(`director.PART`).
 """
 
 import copy
@@ -70,7 +90,7 @@ from .families import refine
 
 _PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "director")
 
-CALLS = ("brief", "basics", "beats", "entities", "shots")
+CALLS = ("brief", "basics", "beats", "entities", "shots", "parts")
 
 # How many calls a plan is made in (the module header). Read off the room's
 # rail by `steps_of`; anything that is not "large" is small, so a rail saved
@@ -151,9 +171,13 @@ SCHEMAS = {
         "required": ["entities"]},
     "shots": {"type": "object", "properties": {
         "shots": _list_of({"action": {"type": "string"},
-                           "continues": {"type": "string", "enum": list(director.CONTINUES)}},
+                           "continues": {"type": "string", "enum": list(director.CONTINUES)},
+                           "setting": {"type": "string"}},
                           ("action", "continues"))},
         "required": ["shots"]},
+    "parts": {"type": "object", "properties": {
+        "parts": {"type": "array", "items": {"type": "string"}}},
+        "required": ["parts"]},
 }
 
 # The large profile's two calls: the brief, basics, beats and entities calls'
@@ -164,7 +188,8 @@ SCHEMAS["structure"] = {"type": "object", "properties": {
     "required": ["questions", "assumptions", "title", "seconds", "look", "beats", "entities"]}
 SCHEMAS["shotlist"] = {"type": "object", "properties": {
     "shots": _list_of({"beat": {"type": "integer"}, "action": {"type": "string"},
-                       "continues": {"type": "string", "enum": list(director.CONTINUES)}},
+                       "continues": {"type": "string", "enum": list(director.CONTINUES)},
+                       "setting": {"type": "string"}},
                       ("beat", "action", "continues"))},
     "required": ["shots"]}
 
@@ -314,16 +339,40 @@ def shots_message(plan, beat_id, cast=(), ledger=()):
     count = 1 if one_take(plan) else shots_for(seconds)
     order = [b["id"] for b in plan["beats"]]
     before = [s for s in plan["shots"] if order.index(s["beat"]) < order.index(beat_id)]
-    beat = next(b for b in plan["beats"] if b["id"] == beat_id)
+    at = order.index(beat_id)
+    beat = plan["beats"][at]
     many = "1 shot" if count == 1 else f"1 to {count} shots"
+    # The beats on either side, as beats: what has just happened and what
+    # happens next is what a join is chosen on, and a beat's sentence is not
+    # a shot to copy.
+    around = _block("AROUND THIS BEAT (they have shots of their own — do not show them)", [
+        f"just before: {plan['beats'][at - 1]['text']}" if at else "",
+        f"straight after: {plan['beats'][at + 1]['text']}" if at + 1 < len(order) else ""])
     return _message(
         _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _block("ASSUMED", [f"- {a}" for a in plan.get("assumptions") or ()]),
         _camera_block(plan),
         _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
+        around,
         _block(f"THIS BEAT (about {seconds} seconds)", [beat["text"]]),
         f"Write {many} that show this beat and nothing else."
         + (" It opens the piece, so its first shot is \"new\"." if not before else "")
         + " " + REPLY)
+
+
+def parts_message(plan, shot_id, count, seconds, cast=(), ledger=()):
+    """One long shot, to be written as the `count` clips it is filmed in."""
+    shot = next(s for s in plan["shots"] if s["id"] == shot_id)
+    beat = next(b for b in plan["beats"] if b["id"] == shot["beat"])
+    return _message(
+        _block("THE PIECE", [f"\"{plan['title']}\": {plan['brief']}"]),
+        _camera_block(plan),
+        _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
+        _block("THE BEAT IT SHOWS", [beat["text"]]),
+        _block(f"THE SHOT ({sum(seconds)} seconds, one continuous shot)", [shot["action"]]),
+        f"This shot is too long for one clip, so it is filmed as {count} clips with no cut "
+        f"between them, of {', '.join(str(n) for n in seconds)} seconds. Write what happens "
+        f"in each clip, in order: {count} sentences. " + REPLY)
 
 
 def beat_seconds(plan):
@@ -608,10 +657,16 @@ def read_shots(raw, plan, beat_id, ledger=()):
             return match.group(1)
         return director.CITE_RE.sub(plain, action)
 
+    def tidied(item):
+        if not isinstance(item, dict) or not isinstance(item.get("action"), str):
+            return item
+        item = dict(item, action=tidy(item["action"]))
+        if isinstance(item.get("setting"), str) and item["setting"].strip():
+            item["setting"] = tidy(item["setting"])
+        return item
+
     if isinstance(items, list):
-        items = [dict(i, action=tidy(i["action"]))
-                 if isinstance(i, dict) and isinstance(i.get("action"), str) else i
-                 for i in items]
+        items = [tidied(i) for i in items]
     shots = _check_repeats(_check_handles(director.read_shots(items, known), ledger),
                            plan, beat_id)
     if unknown:
@@ -801,6 +856,26 @@ def _reader_of_entities(brief, plan, known, attached, relisted, invented):
     return read
 
 
+def _joined(plan, beat_id, shots, log):
+    """A beat's shots with a first join the plan cannot have, made a real cut.
+
+    The small shots call writes how its beat joins the one before without
+    having read that beat's shots. Where both shots say where they are and
+    it is not the same place, "carries on" and "new angle" are both wrong —
+    the camera cannot hold its position across two rooms — and the shot is
+    `new`, which the log says."""
+    order = [b["id"] for b in plan["beats"]]
+    before = [s for s in plan["shots"] if order.index(s["beat"]) < order.index(beat_id)]
+    if not before or not shots or shots[0]["continues"] == director.NEW:
+        return shots
+    here = {e["id"] for e in director._places(plan, shots[0]["action"])}
+    there = {e["id"] for e in director._places(plan, before[-1]["action"])}
+    if here and there and not here & there:
+        log[-1]["overruled"] = f"{shots[0]['continues']} -> new: another place than the shot before"
+        return [{**shots[0], "continues": director.NEW}] + shots[1:]
+    return shots
+
+
 def _write_shots(ask, log, plan, cast, ledger, beats=None):
     """One shots call per beat, in order -> the plan with their shots."""
     for beat in list(beats if beats is not None else plan["beats"]):
@@ -808,7 +883,41 @@ def _write_shots(ask, log, plan, cast, ledger, beats=None):
             ask, log, "shots", shots_message(plan, beat["id"], cast, ledger),
             lambda raw, at=beat["id"]: read_shots(raw, plan, at, ledger),
             label=f"shots.{beat['id']}")
-        plan = director.set_shots(plan, beat["id"], shots)
+        plan = director.set_shots(plan, beat["id"], _joined(plan, beat["id"], shots, log))
+    return plan
+
+
+def with_parts(ask, log, plan, cast=(), ledger=()):
+    """The plan with every shot too long for one clip written as its clips
+    (`shot["parts"]`), where it is not already. -> the plan.
+
+    One parts call per such shot. A call that fails its re-ask is not the
+    plan's failure: the shot stays one sentence, each clip of it is told
+    which part it is (`director.PART`), and the card is warned.
+    """
+    made = {}
+    for clip in director.clips(plan):
+        made.setdefault(clip["shot"], []).append(clip["seconds"])
+    names = director.names(plan)
+    for number, shot in enumerate(list(plan["shots"]), 1):
+        seconds = made.get(shot["id"]) or []
+        if len(seconds) < 2 or len(shot.get("parts") or []) == len(seconds):
+            continue
+
+        def read(raw, count=len(seconds)):
+            items = raw.get("parts") if isinstance(raw, dict) else raw
+            if isinstance(items, list):
+                items = [cite_mentions(i, plan) if isinstance(i, str) else i for i in items]
+            return director.read_parts(items, count, names)
+        try:
+            parts = _call(ask, log, "parts",
+                          parts_message(plan, shot["id"], len(seconds), seconds, cast, ledger),
+                          read, label=f"parts.{shot['id']}")
+        except director.PlanError as problem:
+            log[-1]["warning"] = (f"shot {number} is filmed in {len(seconds)} clips from one "
+                                  f"description, since writing them apart failed: {problem}")
+            continue
+        plan = director.edit(plan, shot["id"], {"parts": parts})
     return plan
 
 
@@ -868,6 +977,7 @@ def plan_piece(brief, rail, ask, cast=(), ledger=(), keyframes=None,
                                              relisted, invented))
         plan = director.add_entities(plan, entities)
         plan = _take(director.validate(_write_shots(ask, log, plan, cast, ledger)))
+        plan = with_parts(ask, log, plan, cast, ledger)
     except director.PlanError as problem:
         raise PlanningFailed(str(problem), done.pop("plan", plan), log) from None
     return {"plan": plan, "questions": [], "assumptions": plan.get("assumptions") or [],
@@ -911,6 +1021,7 @@ def _plan_large(brief, rail, ask, cast, ledger, keyframes, shot_limit, questions
         plan, dropped = _cited_only(plan)
         done["uncited"][:] = dropped
         plan = _take(director.validate(plan))
+        plan = with_parts(ask, log, plan, cast, ledger)
     except director.PlanError:
         done["plan"] = plan
         raise
@@ -1360,7 +1471,7 @@ def shot_message(plan, shot_id, change, cast=(), ledger=()):
         _block("NAMES you may cite", _name_lines(plan, cast, ledger)),
         _block("THIS BEAT", [beat["text"]]),
         _block(f"THIS SHOT NOW (about {seconds[shot_id]} seconds, continues \"{shot['continues']}\")",
-               [shot["action"]]),
+               [shot["action"], f"setting: {shot['setting']}" if shot.get("setting") else ""]),
         _block("THE CHANGE", [change]),
         _keep("this one shot") + " Write 1 shot. " + REPLY)
 
@@ -1446,6 +1557,11 @@ def plan_turn(plan, text, ask, cast=(), ledger=(), steps=SMALL):
         else:
             out.update(_edit_row(plan, turn["row"], turn["change"], text, ask, log,
                                  cast, ledger, seconds, steps))
+        if out["plan"] is not None:
+            # A shot that is now too long for one clip, or was rewritten,
+            # is written as its clips again. Only clips read the parts, so a
+            # prep picture's mark in `render` stands.
+            out["plan"] = with_parts(ask, log, out["plan"], cast, ledger)
     except director.PlanError as problem:
         if len(log) == 1 and log[0]["call"] == "turn" and not log[0]["ok"]:
             # The turn call itself failed twice: what reaches the person is
@@ -1535,9 +1651,13 @@ def _edit_row(plan, row_id, change, text, ask, log, cast, ledger, seconds, steps
     shot = next(s for s in plan["shots"] if s["id"] == row_id)
     rewritten = _call(ask, log, "shots", shot_message(plan, row_id, change, cast, ledger),
                       lambda raw: _changed(_one(read_shots(raw, plan, shot["beat"], ledger), "shot"),
-                                           {k: shot[k] for k in ("action", "continues")}, "shot"),
+                                           {k: shot[k] for k in ("action", "continues", "setting")
+                                            if k in shot}, "shot"),
                       label="turn.shot")
-    new = director.edit(plan, row_id, rewritten)
+    # A scene's setting is kept unless the rewrite gives another: the change
+    # was to what the shot shows.
+    new = director.edit(plan, row_id, {**({"setting": shot["setting"]} if shot.get("setting") else {}),
+                                       **rewritten})
     out["plan"] = new
     frame = next((r["id"] for r in director.rows(new)
                   if r["kind"] == "keyframe" and r["shot"] == row_id), None)

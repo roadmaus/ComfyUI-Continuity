@@ -64,34 +64,39 @@ class Recorder:
     """The replay suite's renderer, recording the socket as the route sends it."""
 
     def __init__(self, chat):
-        self.chat, self.sent, self.n, self.current = chat, [], 0, None
+        self.chat, self.sent, self.n, self.queued = chat, [], 0, []
 
     async def build(self, run, step):
+        # The shots that carry straight on from this one are sampled with it,
+        # each a card of the same piece stamped with the handle it lands as.
         after = step["action"]["after"]
         handles = [c.get("chat_handle") for c in run["strip"]]
         kept = [{**c, "hold": True} for c in run["strip"][:handles.index(after) + 1]] if after else []
-        return {"prompt": {}, "piece": {"family": "ltx25", "aspect": "16:9",
-                                        "segments": kept + [{"prompt": step["action"]["prompt"],
-                                                             "duration_s": step["action"]["seconds"]}]}}
+        cards = [{"prompt": one["action"]["prompt"], "duration_s": one["action"]["seconds"],
+                  **({"chat_handle": one["handle"]} if step["mates"] else {})}
+                 for one in (step, *step["mates"])]
+        return {"prompt": {}, "piece": {"family": "ltx25", "aspect": "16:9", "segments": kept + cards}}
 
     async def enqueue(self, _prompt):
         self.n += 1
+        self.queued = []
         return f"{self.chat}-p{self.n}"
 
     async def wait(self, prompt_id):
-        segment = len(self.current["piece"]["segments"])
         return "landed", {"node": {
             "mmc_video": [{"filename": f"{prompt_id}.mp4", "subfolder": "chat", "type": "output"}],
-            "mmc_takes": [{"segment": segment, "filename": f"{prompt_id}-take.mp4", "subfolder": "chat",
-                           "duration_s": self.current["action"]["seconds"], "width": 1280,
-                           "height": 720, "has_audio": True}]}}
+            "mmc_takes": [{"segment": len(step["piece"]["segments"]),
+                           "filename": f"{prompt_id}-take{at or ''}.mp4", "subfolder": "chat",
+                           "duration_s": step["action"]["seconds"], "width": 1280,
+                           "height": 720, "has_audio": True}
+                          for at, step in enumerate(self.queued)]}}
 
     def save(self, _run):
         pass
 
     def tell(self, kind, run, step):
         if kind == "queued":
-            self.current = step
+            self.queued.append(step)
         public = run_mod.public(run)
         self.sent.append({"kind": kind, "chat": run["chat"],
                           "run": {k: v for k, v in public.items() if k != "steps"}, "step": step})
@@ -111,6 +116,8 @@ def ran(chat):
 
 live_run, live_events = ran("live")
 late_run, _ = ran("late")
+check("the run under test renders two shots as one prompt: the second carries on from the first",
+      [step["prompt_id"] for step in live_run["steps"]], ["live-p1", "live-p1", "live-p2"])
 
 
 def expected(run):

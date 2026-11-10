@@ -330,7 +330,7 @@ def _nodes():
             "MiniMaxH3Creator": creator_node.MiniMaxH3Creator}
 
 
-def _build(action, ledger, rail, stored, base, strip=None, cast=None):
+def _build(action, ledger, rail, stored, base, strip=None, cast=None, more=(), first=None):
     """The blocking half of a render: patch, fill, dry run, build the prompt.
 
     -> `{"piece": blob, "prompt": one-node prompt}`, or `{"problem": sentence}`.
@@ -351,6 +351,9 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
     canvas, and nothing here re-derives any of them. The room's gear is the
     node's own row over the same blob, so there is no second place they could
     have been set.
+
+    `more` and `first` are a Director run's: the shots rendered in the same
+    piece behind this one, and this shot's own handle (`chat.video_piece`).
 
     The patched blob goes back with the prompt id so the browser can hold it
     without patching a second copy of its own. Two implementations of the same
@@ -379,7 +382,8 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
     if still:
         rail = {**rail, "still_pictures": chat.still_pictures(family, manifest.catalog(),
                                                               _loras())}
-    node_id, field, piece = chat.piece_of(action, ledger, rail, piece_in, strip, cast)
+    node_id, field, piece = chat.piece_of(action, ledger, rail, piece_in, strip, cast,
+                                          more, first)
 
     if still:
         # Per-arch sub-blocks with one shared precision, which is the shape

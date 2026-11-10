@@ -13,6 +13,7 @@ same loop against a real model.
 """
 
 import json
+import re
 import os
 import sys
 
@@ -32,14 +33,34 @@ def fence(obj):
     return "Here you go.\n```json\n" + json.dumps(obj) + "\n```"
 
 
-def scripted(replies):
-    """An `ask` that answers from a list and records what it was asked."""
+def scripted(replies, parts=None):
+    """An `ask` that answers from a list and records what it was asked.
+
+    The parts call — a shot too long for one clip, written as its clips — is
+    asked last and only where the seconds fall that way, so it is answered
+    here rather than scripted into every list: as many sentences as the
+    message asks for, or `parts` (a reply, or a list of them) where a test is
+    about that call."""
     asked = []
+    parts = list(parts) if isinstance(parts, list) else parts
 
     def ask(system, message, schema, label):
         asked.append({"system": system, "message": message, "schema": schema, "label": label})
+        if label.startswith("parts."):
+            if isinstance(parts, list):
+                return parts.pop(0)
+            if parts is not None:
+                return parts
+            count = int(re.search(r"in order: (\d+) sentences", message).group(1))
+            return fence({"parts": [f"What happens in clip {n}." for n in range(1, count + 1)]})
         return replies.pop(0)
     return ask, asked
+
+
+def labels(asked):
+    """What was asked, less the parts calls: those follow from the seconds a
+    change leaves a shot with, not from the change (see "a long shot" below)."""
+    return [a["label"] for a in asked if not a["label"].startswith("parts.")]
 
 
 GOOD = [
@@ -326,7 +347,7 @@ out, asked = turn("in beat two he finds the driver asleep instead",
                    fence({"shots": [{"action": "@george finds the driver asleep at the controls.",
                                      "continues": "cut"}]})])
 check("a beat whose action changed has its shots written again, under new ids",
-      ([a["label"] for a in asked], [s["id"] for s in out["plan"]["shots"]]),
+      (labels(asked), [s["id"] for s in out["plan"]["shots"]]),
       (["turn", "turn.beat", "shots.b2"], ["s1", "s4"]))
 
 made = director.land(director.start(base, "e2")[0], "e2", "pic-7", director.fingerprint(base, "e2"))
@@ -373,7 +394,7 @@ WINTER = [fence({"act": "replan", "row": "", "change": "It is winter, snow every
 out, asked = turn("set it in winter", WINTER, plan=made)
 new = out["plan"]
 check("a replan writes the piece again from the beats down",
-      [a["label"] for a in asked], ["turn", "replan.basics", "replan.beats", "replan.entities", "shots.b3"])
+      labels(asked), ["turn", "replan.basics", "replan.beats", "replan.entities", "shots.b3"])
 check("…under new ids", ([b["id"] for b in new["beats"]], [s["id"] for s in new["shots"]]),
       (["b3"], ["s4"]))
 check("…keeping the entities it had, their sheets with them",
@@ -596,7 +617,7 @@ ask, asked = scripted([
 out = calls.plan_turn(made_large, "set it in winter", ask, cast=GEORGE, steps="large")
 new = out["plan"]
 check("large: …the sheet already made stays made", director.state_of(new, "e2"), "approved")
-check("large: a replan is two calls", [a["label"] for a in asked],
+check("large: a replan is two calls", labels(asked),
       ["turn", "replan.structure", "replan.shotlist"])
 check("large: …told who is already there",
       "ALREADY THERE" in asked[1]["message"] and "@carriage — an old train carriage" in asked[1]["message"],
@@ -664,7 +685,7 @@ check("\"another shot\" is an add whatever the model read",
 out, asked = turn("drop shot 2",
                   [fence({"act": "edit", "row": "shot 2", "change": "drop it", "say": ""})])
 check("\"drop shot 2\" takes shot 2 out, with no second call, whatever the model read",
-      (len(asked), out["act"], out["row"], out["log"][0]["overruled"], [s["id"] for s in out["plan"]["shots"]]),
+      (len(labels(asked)), out["act"], out["row"], out["log"][0]["overruled"], [s["id"] for s in out["plan"]["shots"]]),
       (1, "remove", "s2", "edit -> remove s2", ["s1", "s3"]))
 check("…and the records of the rows that went are gone",
       any(k.startswith("s2") or k == "kf.s2" for k in out["plan"]["renders"]), False)
@@ -685,7 +706,7 @@ check("an entity is nobody's to take out: re-asked, and the second answer kept",
 out, asked = turn("move shot 3 before shot 1",
                   [fence({"act": "move", "row": "shot 3", "place": "after shot 1", "change": "", "say": ""})])
 check("a shot is moved where the words say, into that beat, with no second call",
-      (len(asked), out["log"][0]["overruled"], [(s["id"], s["beat"], s["continues"]) for s in out["plan"]["shots"]]),
+      (len(labels(asked)), out["log"][0]["overruled"], [(s["id"], s["beat"], s["continues"]) for s in out["plan"]["shots"]]),
       (1, "move -> move s3 before s1", [("s3", "b1", "new"), ("s1", "b1", "new"), ("s2", "b2", "pin")]))
 check("…its record moved with it, stale now that it follows nothing",
       ("s3" in out["plan"]["renders"]) if base["renders"].get("s3") else True, True)
@@ -726,3 +747,68 @@ for words, want in (("drop the second shot", "remove"), ("add a shot of rain", "
                     ("put shot 1 last", "move"), ("another shot of the door", "add"),
                     ("make it darker", None), ("swap shots 2 and 3", "move")):
     check(f"asked act of {words!r}", calls.asked_act(words), want)
+
+
+# ---- a shot written knowing where it sits ----------------------------------------------
+
+ask, asked = scripted(list(GOOD))
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+check("the shots call is shown the beat on either side, as a beat, and its own last",
+      (asked[4]["message"].count("straight after: He finds the cab empty."),
+       asked[5]["message"].count("just before: @george wakes in the carriage."),
+       asked[5]["message"].index("AROUND THIS BEAT") < asked[5]["message"].index("THIS BEAT (about")),
+      (1, 1, True))
+check("...and the choices the piece was planned on", "ASSUMED\n- It is night." in asked[5]["message"], True)
+
+# A scene's setting, written on the shot that opens it and kept on the plan.
+replies = list(GOOD)
+replies[4] = fence({"shots": [{"action": "@george wakes up inside @carriage.", "continues": "new",
+                               "setting": "the carriage at night, rain on the glass, one lamp"}]})
+ask, asked = scripted(replies)
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+check("a setting the model writes is kept on its shot, its place cited",
+      [s.get("setting") for s in out["plan"]["shots"]],
+      ["@carriage at night, rain on the glass, one lamp", None, None])
+check("...and the schema asks for one", "setting" in calls.SCHEMAS["shots"]["properties"]["shots"]["items"]["properties"], True)
+
+# The first shot of a beat cannot carry on from a shot set somewhere else.
+replies = list(GOOD)
+replies[3] = fence({"entities": [{"name": "carriage", "kind": "place", "description": "an old train carriage"},
+                                 {"name": "cab", "kind": "place", "description": "the driver's cab"}]})
+replies[5] = fence({"shots": [{"action": "@george stands in the empty @cab.", "continues": "pin"}]})
+ask, asked = scripted(replies)
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+check("a carry-on into another place is a real cut, and the log says so",
+      (out["plan"]["shots"][1]["continues"], out["log"][5].get("overruled")),
+      ("new", "pin -> new: another place than the shot before"))
+ask, asked = scripted(list(GOOD))
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+check("the same place keeps the join the model wrote", out["plan"]["shots"][1]["continues"], "pin")
+
+# ---- a long shot, written as its clips ------------------------------------------------------
+
+replies = list(GOOD)
+replies[5] = fence({"shots": [{"action": "@george walks the length of @carriage and finds the cab empty.",
+                               "continues": "pin"}]})
+ask, asked = scripted(list(replies), parts=fence({"parts": [
+    "@george walks the length of the carriage, steadying himself on the seats.",
+    "@george slides the cab door open and finds nobody at the controls."]}))
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+long_shot = out["plan"]["shots"][1]
+check("a shot too long for one clip is asked for as its clips, last",
+      ([a["label"] for a in asked][-1], "filmed as 2 clips" in asked[-1]["message"],
+       "of 11, 11 seconds" in asked[-1]["message"]), ("parts.s2", True, True))
+check("...which are kept on it, a plain mention cited",
+      long_shot["parts"],
+      ["@george walks the length of @carriage, steadying himself on the seats.",
+       "@george slides the cab door open and finds nobody at the controls."])
+check("a shot that fits one clip is asked nothing more", "parts" in out["plan"]["shots"][0], False)
+
+ask, asked = scripted(list(replies), parts=[fence({"parts": ["only one"]}), fence({"parts": ["still one"]})])
+out = calls.plan_piece("a 30 second piece: @george on a night train", RAIL, ask, cast=GEORGE)
+check("a parts call that fails twice costs the plan nothing but a warning",
+      ("parts" in out["plan"]["shots"][1], len(out["warnings"]),
+       out["warnings"][0].startswith("parts.s2: shot 2 is filmed in 2 clips from one description")),
+      (False, 1, True))
+refuses_parts = _plan_error(lambda: director.read_parts({"parts": ["a"]}, 2, []))
+check("the parts reader wants one sentence a clip", refuses_parts, True)

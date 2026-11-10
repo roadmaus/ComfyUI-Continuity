@@ -153,6 +153,54 @@ function citedEntities(plan, text) {
   return out;
 }
 
+/** The shots, grouped into scenes: a `new` shot and every `cut` and `pin`
+ *  behind it (`director.scenes`). */
+export function scenes(plan) {
+  const out = [];
+  for (const shot of plan.shots ?? []) {
+    if (!out.length || shot.continues === "new") out.push([]);
+    out.at(-1).push(shot);
+  }
+  return out;
+}
+
+const placesOf = (plan, text) => citedEntities(plan, text).filter((e) => e.kind === "place");
+
+/** `{shot id: [place, setting]}`: what each shot takes from its scene — the
+ *  scene's first place unless the shot cites one of its own, and the scene's
+ *  setting (`director.scenery`). */
+export function scenery(plan) {
+  const out = {};
+  for (const scene of scenes(plan)) {
+    let place = null;
+    for (const shot of scene) {
+      place = placesOf(plan, shot.action)[0] ?? null;
+      if (place) break;
+    }
+    const setting = scene.find((shot) => shot.setting)?.setting ?? "";
+    for (const shot of scene) {
+      const own = placesOf(plan, `${shot.action} ${setting}`);
+      out[shot.id] = [own.length ? null : place, setting];
+    }
+  }
+  return out;
+}
+
+/** The line a shot's prompt carries for its scene, or "" (`director.setting_line`). */
+export function settingLine(plan, shot, held = null) {
+  const [place, setting] = (held ?? scenery(plan))[shot.id] ?? [null, ""];
+  const parts = [...(place ? [`@${place.name}`] : []),
+                 ...(setting ? [setting.replace(/\.+$/, "")] : [])];
+  return parts.length ? `Setting: ${parts.join(" — ")}.` : "";
+}
+
+/** What one clip of a shot shows -> `[text, told]` (`director.part_text`). */
+export function partText(shot, part, parts) {
+  const written = shot.parts ?? [];
+  if (parts > 1 && written.length === parts) return [written[part - 1], true];
+  return [shot.action, false];
+}
+
 /** Every renderable row, in the order it may render — `director.rows`. */
 export function rows(plan) {
   const out = [];
@@ -161,21 +209,32 @@ export function rows(plan) {
   }
   const shots = Object.fromEntries(plan.shots.map((s) => [s.id, s]));
   const storyboard = plan.keyframes ?? true;
+  const angles = Boolean(plan.match_cuts) && !storyboard && Boolean(plan.rail?.edit);
+  const held = scenery(plan);
   let previous = null;
   const clipRows = [];
   for (const clip of clips(plan)) {
     const shot = shots[clip.shot];
-    const sheets = citedEntities(plan, shot.action).filter(renders).map((e) => e.id);
+    const sheets = citedEntities(plan, `${shot.action} ${settingLine(plan, shot, held)}`)
+      .filter(renders).map((e) => e.id);
     const deps = [...sheets];
     if (storyboard && clip.part === 1 && (clip.continues === "cut" || clip.continues === "new")) {
       const key = `kf.${clip.id}`;
       out.push({ id: key, kind: "keyframe", phase: PREP, clip: clip.id, shot: shot.id,
                  deps: [...sheets] });
       deps.push(key);
+    } else if (angles && previous && clip.part === 1 && clip.continues === "cut") {
+      // The frame the clip before ended on, turned to the new angle: the
+      // run's, since that frame does not exist until then.
+      const key = `cut.${clip.id}`;
+      clipRows.push({ id: key, kind: "angle", phase: RUN, clip: clip.id, shot: shot.id,
+                      deps: [previous] });
+      deps.push(key);
     }
     if (previous) deps.push(previous);
     clipRows.push({ id: clip.id, kind: "clip", phase: RUN, clip: clip.id, shot: shot.id,
-                    seconds: clip.seconds, continues: clip.continues, deps });
+                    seconds: clip.seconds, continues: clip.continues, part: clip.part,
+                    parts: clip.parts, deps });
     previous = clip.id;
   }
   return [...out, ...clipRows];
@@ -268,10 +327,21 @@ export function fingerprint(plan, rowId, every = null, memo = null) {
     family = rail.still;
   } else {
     const shot = plan.shots.find((s) => s.id === row.shot);
-    const action = String(shot.action).replace(CITE_RE, (whole, name) =>
+    const byId = (text) => String(text).replace(CITE_RE, (whole, name) =>
       `@${entityNamed(plan, name)?.id || name}`);
-    body = [action, row.seconds ?? null, row.continues ?? null];
-    family = row.kind === "clip" ? rail.video : rail.still;
+    body = [byId(shot.action), row.seconds ?? null, row.continues ?? null];
+    // What the scene and the split add, only where they add something.
+    const extra = {};
+    if (row.kind !== "angle") {
+      const line = settingLine(plan, shot);
+      if (line) extra.setting = byId(line);
+    }
+    if (row.kind === "clip" && row.parts > 1) {
+      const [text, told] = partText(shot, row.part, row.parts);
+      extra.part = told ? byId(text) : `${row.part}/${row.parts}`;
+    }
+    if (Object.keys(extra).length) body.push(extra);
+    family = row.kind === "clip" ? rail.video : row.kind === "angle" ? rail.edit : rail.still;
   }
   const records = plan.renders ?? {};
   const deps = row.deps.map((dep) => {
@@ -329,6 +399,13 @@ export function canRun(plan) {
 export function runSteps(plan) {
   const st = states(plan);
   return rows(plan).filter((row) => row.phase === RUN && st[row.id] !== "approved").map((row) => row.id);
+}
+
+/** What the run reserves a handle for, by what it lands as: `{row, media}`
+ *  for every step of `runSteps` — a clip, or the picture a cut opens on. */
+export function runHandles(plan) {
+  const kinds = Object.fromEntries(rows(plan).map((row) => [row.id, row.kind]));
+  return runSteps(plan).map((row) => ({ row, media: kinds[row] === "angle" ? "image" : "video" }));
 }
 
 // The record-keeping, `director.start`/`land`/`fail`/`approve`: a copy of the
@@ -474,9 +551,11 @@ const seconds = (n) => (Number.isFinite(n) ? t("{n} s", { n }) : "—");
 function partsOf(shot, made) {
   const parts = made.filter((c) => c.shot === shot.id);
   if (parts.length < 2) return null;
+  const written = (shot.parts ?? []).length === parts.length ? shot.parts : null;
   return el("span", {
     class: "mmc-dr-parts",
-    title: t("Longer than one clip can run, so the run carries it on in parts with the camera held."),
+    title: [t("Longer than one clip can run, so the run carries it on in parts with the camera held."),
+            ...(written ?? []).map((text, at) => `${at + 1}. ${text}`)].join("\n"),
     text: t("{count} clips: {parts}", { count: parts.length,
                                          parts: parts.map((c) => seconds(c.seconds)).join(" + ") }),
   });
@@ -559,6 +638,12 @@ export function prepWords(plan, rowId) {
 /** The line a run clip's message says, and the tag its card wears: the shot
  *  by its number on the card, and the part where the run cut it in parts. */
 export function runWords(plan, rowId) {
+  if (String(rowId).startsWith("cut.")) {
+    const made = clips(plan).find((c) => `cut.${c.id}` === rowId);
+    const shot = plan.shots.findIndex((s) => s.id === made?.shot) + 1;
+    return { say: t("The frame shot {n} opens on: the last frame before it, from the new angle.", { n: shot }),
+             tag: t("Plan · shot {n}", { n: shot }) };
+  }
   const clip = clips(plan).find((c) => c.id === rowId);
   if (!clip) return { say: "", tag: t("Plan") };
   const n = plan.shots.findIndex((s) => s.id === clip.shot) + 1;
@@ -799,6 +884,18 @@ export function planCard(plan, hooks = {}) {
             }),
         el("div", { class: "mmc-dr-action" }, [
           editable(shot.action, { live, label: t("Shot"), onCommit: (action) => edit(shot.id, { action }) }),
+          // Where and when the scene is, on the shot that opens one: said
+          // once, carried into every shot of the scene.
+          doc.shots[0] === shot || shot.continues === "new"
+            ? el("div", { class: "mmc-dr-setting" }, [
+                el("span", { class: "mmc-dr-key", text: t("Setting") }),
+                editable(shot.setting ?? "", {
+                  live, label: t("Setting"),
+                  placeholder: t("No setting — each shot of this scene says where it is itself."),
+                  onCommit: (setting) => edit(shot.id, { setting }),
+                }),
+              ])
+            : null,
           partsOf(shot, sums.clips),
           takeOf(doc, shot, sums.seconds[shot.id], live, edit),
           frameOf(doc, shot, sums, picture),
@@ -853,7 +950,7 @@ export function planCard(plan, hooks = {}) {
   // clip left to render. `plan.run` is the server's word (`director/status`).
   const run = plan.run ?? null;
   const running = run?.state === "running";
-  const todo = sums.error ? [] : runSteps(doc);
+  const todo = sums.error ? [] : runSteps(doc).filter((row) => !row.startsWith("cut."));
   const ready = !sums.error && canRun(doc) && todo.length > 0;
   const runDoor = !live || !hooks.run ? null
     : running
@@ -886,6 +983,20 @@ export function planCard(plan, hooks = {}) {
       }),
       el("span", { text: t("Storyboard first") }),
     ]),
+    // Only where it does something: with the storyboard off, on a rail that
+    // can change a picture in place.
+    doc.keyframes === false && doc.rail?.edit
+      ? el("label", {
+          class: "mmc-dr-check",
+          title: t("A shot that is a new angle on the same moment opens on the last frame of the shot before it, turned to the new angle by the edit model during the run, so the place and the people stay as they were. Nobody approves that frame first. Off, such a shot opens from the people, places and things it cites."),
+        }, [
+          el("input", {
+            type: "checkbox", checked: Boolean(doc.match_cuts), disabled: live ? null : true,
+            onchange: (event) => edit("header", { match_cuts: event.target.checked }),
+          }),
+          el("span", { text: t("Match cuts") }),
+        ])
+      : null,
     el("span", { class: "mmc-bn-gap" }),
     el("span", {
       class: "mmc-dr-quiet",

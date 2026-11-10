@@ -1993,6 +1993,15 @@ STRIP_KEY = "chat_handle"
 # action the way a caption is, and read back on by `with_seam`.
 SEAM_KEY, SEAM_CUT = "seam", "cut"
 
+# A still made from a frame of a clip rather than from a picture: Director's
+# again (`director.rows`, the angle rows), for the picture a planned `cut`
+# opens on. The action cites the clip's handle plain, as a change to a picture
+# cites the picture, and this key beside it says which frame of the clip that
+# is. The run cuts the frame out of the clip's take and stands it in for the
+# handle before the action is read (`routes/director._grabbed`), so everything
+# from `validate` down sees a picture changed in place.
+GRAB_KEY, GRAB_LAST = "grab", "last"
+
 
 def with_seam(action, raw):
     """The validated `action` with the harness's hard cut from `raw` put back
@@ -2097,7 +2106,7 @@ def cast_entries(piece):
     return out
 
 
-def video_piece(action, ledger, rail, base=None, strip=None):
+def video_piece(action, ledger, rail, base=None, strip=None, more=(), first=None):
     """A `render` of a clip -> the `creator_data` piece the Creator node runs.
 
     Over `base`, the chat's own piece: its cast and the pool their files are
@@ -2122,6 +2131,14 @@ def video_piece(action, ledger, rail, base=None, strip=None):
     every scope (`:style`, `:person`, …) make a reference; a picture cited
     plain opens the shot if nothing else does, and rides as a reference
     otherwise. A clip or a sound is a reference whatever it wears.
+
+    `more` is Director's: the shots that carry straight on from this one and
+    are rendered with it, `[(action, handle, seed)]`, each the next card of
+    the same piece with a live seam in front of it — a strip of several shots
+    sampled in one render, which is what the node's timeline is. `first` is
+    this shot's own handle then: every card of such a piece is stamped with
+    the handle it will land as (`STRIP_KEY`), since each lands as its own
+    shot on the strip and the ones behind it are found by that name.
     """
     rail = rail or {}
     family = rail.get("video_family")
@@ -2129,6 +2146,54 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         raise ActionError("this room has no video model set up yet.")
 
     piece = json.loads(json.dumps(base)) if isinstance(base, dict) else {}
+    kept = _kept(strip, action)
+    card = _card(action, ledger, rail)
+    if kept and action.get(SEAM_KEY) != SEAM_CUT:
+        card.update(_seam(family))
+    cards = [card]
+    # The shots that carry straight on from this one, sampled in the same
+    # render: each opens on a live seam off the card in front of it, which
+    # here is a pass of this render and not a held take.
+    for follower, handle, seed in more or ():
+        behind = {**_card(follower, ledger, rail), **_seam(family), STRIP_KEY: handle}
+        if seed is not None:
+            behind["seed"] = int(seed)
+        cards.append(behind)
+    if more and first:
+        cards[0][STRIP_KEY] = first
+
+    piece.update({
+        "version": piece.get("version") or 2,
+        # The piece's standing description is the node's and stays; a bare
+        # piece has nothing to put in it, since everything written is on the card.
+        "prompt": piece.get("prompt") or "",
+        "family": family,
+        "models": piece.get("models") or {},
+        "loras": piece.get("loras") or [],
+        "turbo": piece.get("turbo") or {"on": False, "lora": None},
+        "subjects": [s for s in piece.get("subjects") or [] if isinstance(s, dict)],
+        "assets": _pool(piece),
+        # The room's aspect pill is the fallback for a fresh clip. Its input
+        # is the geometry anchor, though: a first or last frame, or footage
+        # carried forward by `after`, must keep its own canvas just as it does
+        # on the Creator node. Do not inherit a node blob's explicit pin (for
+        # example, "pill"), which would suppress that automatic selection.
+        "aspect_source": "auto",
+        **_canvas(action, rail, "video"),
+        "segments": kept + cards,
+    })
+    return piece
+
+
+def _seam(family):
+    """A live seam as a card added on the node opens one: both tracks, the
+    family's medium blend."""
+    return {"continue": True, "continue_audio": True, "feather": default_feather(family)}
+
+
+def _card(action, ledger, rail):
+    """One shot's card: its prompt as written, and what it cites, each in the
+    role its handle says or the one rule gives it (`video_piece`)."""
     assets, opened, closed = [], False, False
     for handle, kind, filename, scope in _cited(action, ledger):
         role, takes = "reference", None
@@ -2156,43 +2221,16 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         if takes:
             asset["takes"] = takes
         assets.append(asset)
-
-    kept = _kept(strip, action)
-    card = {
+    return {
         "prompt": action["prompt"],
         "assets": assets,
         "loras": [],
         "duration_s": action.get("seconds") or rail.get("seconds") or DEFAULT_SECONDS,
         "checkpoint": "auto",
     }
-    if kept and action.get(SEAM_KEY) != SEAM_CUT:
-        card.update({"continue": True, "continue_audio": True,
-                     "feather": default_feather(family)})
-
-    piece.update({
-        "version": piece.get("version") or 2,
-        # The piece's standing description is the node's and stays; a bare
-        # piece has nothing to put in it, since everything written is on the card.
-        "prompt": piece.get("prompt") or "",
-        "family": family,
-        "models": piece.get("models") or {},
-        "loras": piece.get("loras") or [],
-        "turbo": piece.get("turbo") or {"on": False, "lora": None},
-        "subjects": [s for s in piece.get("subjects") or [] if isinstance(s, dict)],
-        "assets": _pool(piece),
-        # The room's aspect pill is the fallback for a fresh clip. Its input
-        # is the geometry anchor, though: a first or last frame, or footage
-        # carried forward by `after`, must keep its own canvas just as it does
-        # on the Creator node. Do not inherit a node blob's explicit pin (for
-        # example, "pill"), which would suppress that automatic selection.
-        "aspect_source": "auto",
-        **_canvas(action, rail, "video"),
-        "segments": kept + [card],
-    })
-    return piece
 
 
-def piece_of(action, ledger, rail, base=None, strip=None, cast=None):
+def piece_of(action, ledger, rail, base=None, strip=None, cast=None, more=(), first=None):
     """The blob for whichever kind the action asked for, with its node's name.
 
     `(node id, the blob's widget name, the blob)` — the three things the route
@@ -2203,7 +2241,7 @@ def piece_of(action, ledger, rail, base=None, strip=None, cast=None):
         return ("MiniMaxH3PreStage", "prestage_data",
                 still_piece(action, ledger, rail, base, cast))
     return ("MiniMaxH3Creator", "creator_data",
-            video_piece(action, ledger, rail, base, strip))
+            video_piece(action, ledger, rail, base, strip, more, first))
 
 
 def still_turbo_checkpoint(piece):

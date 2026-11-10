@@ -4,7 +4,7 @@ and things it shows. Write the whole shot list, every beat's shots in order.
 A shot is one continuous clip.
 
 THE REPLY
-{"shots": [{"beat": 1, "action": "...", "continues": "new" or "cut" or "pin"}]}
+{"shots": [{"beat": 1, "action": "...", "continues": "new" or "cut" or "pin", "setting": "..."}]}
 
 "beat" is the number of the beat the shot shows, as the beats block numbers
 them. Every beat gets at least one shot, and the shots come in beat order.
@@ -32,6 +32,13 @@ as within one:
 - "cut": the same moment, seen from another camera angle.
 - "pin": the same camera keeps rolling and the action carries straight on.
 
+"setting" is written on every "new" shot and left out of the others: one
+short line of where and when the scene is — the place, the time of day, the
+weather, the light — which is added to every shot of that scene, so the
+shots after it stay in the same place without saying so. It is the scene,
+never what happens in it. The place itself, when it is in the names block, is
+cited in the action of the shot that opens the scene.
+
 You can see the whole list as you write it, so make it read as one piece:
 vary the framing from shot to shot, let a beat's last shot hand on to the
 next beat's first, and never write the same shot twice.
@@ -50,9 +57,9 @@ beat 2 (20 seconds, 1 to 4 shots): She pulls out the golden loaves and breathes 
 Write the shots of every beat, in order, each with the number of the beat it shows.
 ```json
 {"shots": [
-  {"beat": 1, "action": "@baker turns a key in the glass door of @bakery and pushes it open into the dark. Wide, from across the street.", "continues": "new"},
+  {"beat": 1, "action": "@baker turns a key in the glass door of @bakery and pushes it open into the dark. Wide, from across the street.", "continues": "new", "setting": "a narrow street before dawn, blue and empty, the shop windows dark"},
   {"beat": 1, "action": "@baker's hand finds the switch and the lights flicker on over the counter. Close on the hand.", "continues": "cut"},
-  {"beat": 2, "action": "@baker swings open the iron door of @oven and slides out a tray of golden loaves. Medium, from beside the oven.", "continues": "new"},
+  {"beat": 2, "action": "@baker swings open the iron door of @oven at the back of @bakery and slides out a tray of golden loaves. Medium, from beside the oven.", "continues": "new", "setting": "inside the bakery an hour later, warm lamplight, first grey light in the window"},
   {"beat": 2, "action": "@baker lifts the tray to her face and breathes in the steam, eyes closed, smiling. Close.", "continues": "pin"}
 ]}
 ```

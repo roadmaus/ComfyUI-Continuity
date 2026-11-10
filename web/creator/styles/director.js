@@ -116,6 +116,10 @@ export const css = `
 .mmc-dr-beatline .mmc-dr-secs { color: var(--mmc-text); }
 .mmc-dr-action { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .mmc-dr-parts { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); }
+.mmc-dr-setting {
+  display: flex; gap: 8px; align-items: baseline;
+  font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
+}
 /* A long shot's one-take switch, and what a long take costs beside it. */
 .mmc-dr-takeline { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 .mmc-dr-take {

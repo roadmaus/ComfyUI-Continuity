@@ -9,7 +9,9 @@ is approved), and the run is `director_run.drive` against a fake renderer
 that writes a placeholder file per clip and answers the way ComfyUI's history
 does. What is under test is the order of things and the record they leave:
 that Run waits for every approval, that a changed sheet makes what cites it
-stale, that each clip continues from the take before it, that a failure stops
+stale, that each clip continues from the take before it, that clips which
+carry straight on are one render landing as their own shots, that a cut can
+open on the frame before it, that a failure stops
 the run with what landed kept and Run again carries on from there, that a
 server restart brings a run back stopped, that Stop stops, and that a second
 Run after an edit renders only what the edit made stale. The planning
@@ -134,8 +136,8 @@ counter["clip"] = 0  # The refused press reserved nothing the room would keep.
 
 # ---- prep ---------------------------------------------------------------------------
 
-check("the first press makes the sheet, and the frame citing only the cast; the frame citing the "
-      "place waits for its sheet", director.prep_steps(plan), ["e2", "kf.s3"])
+check("the first press makes the sheet; both frames wait for it, the one that names the place and "
+      "the one that is only in the same scene", director.prep_steps(plan), ["e2"])
 plan = prep(plan, "e2")
 check("a landed sheet waits for the person", director.state_of(plan, "e2"), "pending")
 plan = director.approve(plan, "e2")
@@ -147,13 +149,14 @@ check("everything approved: Run is enabled", director.can_run(plan), True)
 # A sheet changed by talking: the new picture replaces the old and needs
 # approving again, and the frame that cites the place goes stale with it.
 plan = director.edit(plan, "e2", {"description": "an old sleeper carriage, brass lamps"})
-check("a changed sheet is stale, and so is the frame citing it, but not the one that does not",
-      [director.state_of(plan, r) for r in ("e2", "kf.s1", "kf.s3")], ["stale", "stale", "approved"])
+check("a changed sheet is stale, and so is every frame set in that place",
+      [director.state_of(plan, r) for r in ("e2", "kf.s1", "kf.s3")], ["stale", "stale", "stale"])
 check("…and Run is disabled again", director.can_run(plan), False)
 plan = director.approve(prep(plan, "e2"), "e2")
-check("the redone sheet is a new handle, so the frame still needs redoing",
-      director.state_of(plan, "kf.s1"), "stale")
-plan = director.approve(prep(plan, "kf.s1"), "kf.s1")
+check("the redone sheet is a new handle, so the frames still need redoing",
+      [director.state_of(plan, r) for r in ("kf.s1", "kf.s3")], ["stale", "stale"])
+for row in ("kf.s1", "kf.s3"):
+    plan = director.approve(prep(plan, row), row)
 check("redone and approved: Run is enabled", director.can_run(plan), True)
 
 # ---- the fake renderer --------------------------------------------------------------
@@ -161,11 +164,26 @@ check("redone and approved: Run is enabled", director.can_run(plan), True)
 FILES = tempfile.mkdtemp(prefix="director-replay-")
 
 
+def pieced(run, step):
+    """The segments `chat.video_piece` would build for a step: the strip up
+    to `after`, held, then this shot's card and a card for each shot that
+    carries on from it in the same render, those stamped with their handles."""
+    after = step["action"]["after"]
+    kept = []
+    if after:
+        at = [c.get("chat_handle") for c in run["strip"]].index(after)
+        kept = [{**c, "hold": True} for c in run["strip"][:at + 1]]
+    cards = [{"prompt": one["action"]["prompt"], "duration_s": one["action"]["seconds"],
+              **({"chat_handle": one["handle"]} if step["mates"] else {})}
+             for one in (step, *step["mates"])]
+    return kept + cards
+
+
 class Fake:
-    """`drive`'s io. Builds the piece `chat.video_piece` would (the strip up to
-    `after`, then this card), queues nothing, and answers each prompt as
-    ComfyUI's history would: a joined reel and this shot's take, both
-    written as placeholder files. `fail_at` fails that step's render;
+    """`drive`'s io. Builds the piece `chat.video_piece` would (`pieced`),
+    queues nothing, and answers each prompt as ComfyUI's history would: a
+    joined reel and a take for each shot sampled, written as placeholder
+    files; a still answers as a picture. `fail_at` fails that step's render;
     `stop_at` presses Stop while that step is on the queue."""
 
     def __init__(self, fail_at=None, stop_at=None, problem_at=None):
@@ -176,19 +194,18 @@ class Fake:
     async def build(self, run, step):
         self.built.append({"row": step["row"], "after": step["action"]["after"],
                            "strip": [c.get("chat_handle") for c in run["strip"]],
-                           "from": step["action"]["from"]})
+                           "from": step["action"]["from"],
+                           "with": [m["row"] for m in step["mates"]]})
         if self.problem_at == len(self.built):
             return {"problem": "no file is picked for the video model."}
-        after = step["action"]["after"]
-        kept = []
-        if after:
-            at = [c.get("chat_handle") for c in run["strip"]].index(after)
-            kept = [{**c, "hold": True} for c in run["strip"][:at + 1]]
-        card = {"prompt": step["action"]["prompt"], "duration_s": step["action"]["seconds"]}
-        return {"prompt": {"node": step["row"]}, "piece": {"family": "ltx25", "segments": kept + [card]}}
+        if step["action"]["kind"] == "still":
+            return {"prompt": {"node": step["row"]}, "piece": {"arch": "qwenedit"}}
+        return {"prompt": {"node": step["row"]}, "piece": {"family": "ltx25",
+                                                           "segments": pieced(run, step)}}
 
     async def enqueue(self, _prompt):
         self.count += 1
+        self.queued = []
         return f"p{self.count}"
 
     async def wait(self, prompt_id):
@@ -198,16 +215,21 @@ class Fake:
             return "stopped", None
         if self.fail_at == n:
             return "failed", "CUDA out of memory"
-        step = self.current
-        segment = len(step["piece"]["segments"])
-        for name in (f"reel_{n}.mp4", f"take_{n}.mp4"):
+        if self.queued[0]["action"]["kind"] == "still":
+            return "landed", {"continuity-chat": {
+                "mmc_image": [{"filename": f"frame_{n}.png", "subfolder": "", "type": "output"}]}}
+        takes = []
+        for at, step in enumerate(self.queued):
+            name = f"take_{n}.mp4" if not at else f"take_{n}_{at + 1}.mp4"
+            takes.append({"segment": len(step["piece"]["segments"]), "filename": name,
+                          "subfolder": "", "duration_s": step["action"]["seconds"],
+                          "width": 1280, "height": 720, "has_audio": True})
+        for name in (f"reel_{n}.mp4", *(t["filename"] for t in takes)):
             with open(os.path.join(FILES, name), "wb") as placeholder:
                 placeholder.write(b"\0")
         return "landed", {"continuity-chat": {
             "mmc_video": [{"filename": f"reel_{n}.mp4", "subfolder": "", "type": "output"}],
-            "mmc_takes": [{"segment": segment, "filename": f"take_{n}.mp4", "subfolder": "",
-                           "duration_s": step["action"]["seconds"], "width": 1280, "height": 720,
-                           "has_audio": True}]}}
+            "mmc_takes": takes}}
 
     def save(self, _run):
         self.saves += 1
@@ -215,7 +237,7 @@ class Fake:
     def tell(self, kind, run, step):
         self.told.append((kind, step["row"] if step else run["state"]))
         if kind == "queued":
-            self.current = step
+            self.queued.append(step)
 
     def stopping(self):
         return self.stop
@@ -226,6 +248,13 @@ def drive(run, fake):
 
 
 # ---- a run that fails, then carries on --------------------------------------------------
+#
+# One clip a render, which is how a run goes wherever no clip carries on from
+# another, and is said here by turning the chain off: what is under test down
+# to "clips that carry straight on" is the order of the steps and the record
+# each leaves, a clip at a time.
+
+director.CHAIN_LIMIT = 1
 
 run = begin(plan)
 check("the run holds a handle per clip, from the room's counter",
@@ -321,12 +350,7 @@ def rehearsal_build(problem_at=None):
         built.append((step["row"], step["action"]["after"]))
         if problem_at == len(built):
             return {"problem": "LTX 2.5 reads one reference image."}
-        after = step["action"]["after"]
-        kept = []
-        if after:
-            at = [c.get("chat_handle") for c in run["strip"]].index(after)
-            kept = run["strip"][:at + 1]
-        return {"prompt": {}, "piece": {"segments": kept + [{"prompt": step["action"]["prompt"]}]}}
+        return {"prompt": {}, "piece": {"segments": pieced(run, step)}}
     return build, built
 
 
@@ -346,3 +370,95 @@ refused("a chat runs one run at a time", lambda: begin(plan, prior=running), "st
 refused("a run is refused handles it does not have",
         lambda: run_mod.begin("chat1", plan, ledger=LEDGER, strip=[], piece={}, rail=ROOM_RAIL,
                               base=BASE, handles=["clip-1"]), "reserved 1")
+
+
+# ---- clips that carry straight on are one render ------------------------------------------
+#
+# s2 carries on from s1 (`pin`), so the two are queued as one piece and
+# sampled in one prompt; s3 is a cut and renders alone, after them.
+
+director.CHAIN_LIMIT = 4
+counter["clip"] = 20
+fake = Fake()
+chained = drive(begin(plan), fake)
+check("a clip is built with the clip that carries on from it, and a cut by itself",
+      [(b["row"], b["with"]) for b in fake.built], [("s1", ["s2"]), ("s3", [])])
+check("two prompts for three clips", fake.count, 2)
+check("the room is told of each shot, in order, though they were one render", fake.told,
+      [("state", "running"), ("queued", "s1"), ("queued", "s2"), ("landed", "s1"), ("landed", "s2"),
+       ("queued", "s3"), ("landed", "s3"), ("state", "done")])
+check("the shots of one render share its prompt id and keep their own handles",
+      [(st["row"], st["handle"], st["prompt_id"]) for st in chained["steps"]],
+      [("s1", "clip-21", "p1"), ("s2", "clip-22", "p1"), ("s3", "clip-23", "p2")])
+check("each lands as its own shot on the strip, held on its own take",
+      [(c["chat_handle"], c["hold"], c["take"]["filename"]) for c in chained["strip"]],
+      [("clip-21", True, "take_1.mp4 [output]"), ("clip-22", True, "take_1_2.mp4 [output]"),
+       ("clip-23", True, "take_2.mp4 [output]")])
+check("each step holds the piece up to its own shot, which is what the room lands it from",
+      [len(st["piece"]["segments"]) for st in chained["steps"]], [1, 2, 3])
+check("the second shot was written to continue from the handle reserved for the first",
+      chained["steps"][1]["action"]["after"], "clip-21")
+check("every clip is filed current under the mark it was queued with",
+      [director.state_of(chained["plan"], r) for r in ("s1", "s2", "s3")], ["approved"] * 3)
+check("the progress counts shots, not renders", run_mod.public(chained)["done"], 3)
+
+counter["clip"] = 30
+fake = Fake(fail_at=1)
+broken = drive(begin(plan), fake)
+check("a render of two shots that fails, fails both, and the run with them",
+      (broken["state"], broken["error"],
+       [director.state_of(broken["plan"], r) for r in ("s1", "s2", "s3")]),
+      ("failed", "clip 1 of 3 failed: CUDA out of memory", ["failed", "failed", "planned"]))
+check("...and the room hears it of each", [t for t in fake.told if t[0] == "failed"],
+      [("failed", "s1"), ("failed", "s2")])
+check("...so Run renders them again", director.run_steps(broken["plan"]), ["s1", "s2", "s3"])
+
+fake = Fake(stop_at=1)
+halted = drive(begin(plan), fake)
+check("Stop lets go of every shot on the queue",
+      (halted["state"], [st["state"] for st in halted["steps"]]), ("stopped", ["lost", "lost"]))
+
+fresh = begin(plan)
+build, built = rehearsal_build()
+check("a rehearsal builds the same renders the run will",
+      (run_mod.rehearse(fresh, build), built), (None, [("s1", None), ("s3", fresh["handles"][1])]))
+
+# ---- a cut that opens on the frame before it ------------------------------------------------
+#
+# The storyboard off: s3, a new angle, has no approved opening frame, so the
+# run makes one in front of it — the last frame of the clip before, turned to
+# the new angle on the edit path — and the cut opens on that.
+
+matched = director.edit(plan, director.HEADER, {"keyframes": False})
+check("the run's steps: the clips, and the frame the cut opens on",
+      director.run_steps(matched), ["s1", "s2", "cut.s3", "s3"])
+refused("a run is refused the picture handle it was not given",
+        lambda: run_mod.begin("chat1", matched, ledger=LEDGER, strip=[], piece={}, rail=ROOM_RAIL,
+                              base=BASE, handles=["clip-41", "clip-42", "clip-43"]),
+        "1 opening frames to render and the room reserved 0")
+
+
+def begin_matched(doc):
+    return run_mod.begin("chat1", doc, ledger=LEDGER, strip=[], piece={}, rail=ROOM_RAIL, base=BASE,
+                         handles=["clip-41", "clip-42", "pic-90", "clip-43"])
+
+
+fake = Fake()
+cut = drive(begin_matched(matched), fake)
+check("the frame is rendered between the clips, alone, from the clip before it",
+      [(b["row"], b["with"], b["from"]) for b in fake.built][1], ("cut.s3", [], ["clip-42"]))
+check("...as a still that says which frame of that clip it is",
+      (cut["steps"][2]["action"]["kind"], cut["steps"][2]["action"].get("grab"), cut["steps"][2]["handle"]),
+      ("still", "last", "pic-90"))
+check("...and joins the ledger as a picture, leaving the strip as it was",
+      ([(e["handle"], e["kind"]) for e in cut["ledger"] if e["handle"] == "pic-90"],
+       [c["chat_handle"] for c in cut["strip"]]),
+      ([("pic-90", "still")], ["clip-41", "clip-42", "clip-43"]))
+check("the cut opens on it", fake.built[2]["from"][0], "pic-90:start")
+check("the progress counts the three shots and not the frame",
+      {k: v for k, v in run_mod.public(cut).items() if k in ("state", "done", "total")},
+      {"state": "done", "done": 3, "total": 3})
+build, built = rehearsal_build()
+check("a rehearsal builds the clips and leaves the frame, which has no clip to be cut from yet",
+      (run_mod.rehearse(begin_matched(matched), build), [row for row, _after in built]),
+      (None, ["s1", "s3"]))

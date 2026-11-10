@@ -966,8 +966,14 @@ function land(card) {
     handle: card.run?.handle ?? null,
   }, where);
   if (card.isClip && last >= 0) {
+    // A shot in front of this one that landed after the piece was built (the
+    // shots of a Director chain land one after another off one piece) is on
+    // the strip with its take already, and that card is the one kept.
+    const have = new Map(where.strip.filter((held) => held.chat_handle && held.take)
+                                    .map((held) => [held.chat_handle, held]));
+    const front = segments.map((segment) => have.get(segment.chat_handle) ?? segment);
     where.strip.length = 0;
-    where.strip.push(...segments.map((segment, index) => index !== last ? segment : {
+    where.strip.push(...front.map((segment, index) => index !== last ? segment : {
       ...segment, chat_handle: card.entry.handle,
       ...(take ? { hold: true, take: {
         filename: shot, duration_s: Number(take.duration_s) || 0,
@@ -1063,7 +1069,10 @@ function prepState(card) {
 
 /** The card already in the transcript for a run step, or null. */
 function runCardFor(step) {
-  return state.messages.find((message) => message.card?.run?.ticket === step.prompt_id)?.card ?? null;
+  // By its row as well as its prompt: clips that carry straight on are one
+  // render (`director_run`), so several steps share a prompt id.
+  return state.messages.find((message) => message.card?.run?.ticket === step.prompt_id
+                                          && message.card.run.row === step.row)?.card ?? null;
 }
 
 /** A run step's message and card, hung on the end of the conversation as the
@@ -3329,7 +3338,7 @@ class Room {
     plan.starting = true;
     plan.error = null;
     notify();
-    const handles = todo.map(() => nextHandle("video", where));
+    const handles = D.runHandles(plan.doc).map((step) => nextHandle(step.media, where));
     const bar = railFor(this.sync);
     const base = renderBase(this.sync, "video");
     base.widgets.seed = Number(bar.seed) || 0;
