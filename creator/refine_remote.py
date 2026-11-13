@@ -496,7 +496,8 @@ def _content(body):
 
 
 def chat(model, system, message, images=(), temperature=0.7, seed=-1,
-         max_tokens=None, prefill=refine.PREFILL, eject=False, schema=None):
+         max_tokens=None, prefill=refine.PREFILL, eject=False, schema=None,
+         reasoning=None):
     """One generation -> the assistant's raw content string.
 
     The same signature as `refine_local.chat`, which is what lets the routes
@@ -514,13 +515,24 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     (`adapt`) and the reply rides on the prompt alone, as it does without one.
     The reader downstream is the same either way, so a schema is a help to a
     small model and never something the result depends on.
+
+    `reasoning` is whether the model may think — the refiner setting when not
+    given (`refine.reasoning`). On, nothing asks the server to suppress it, the
+    budget grows by `refine.REASONING_ALLOWANCE`, and the schema is not sent:
+    a grammar-constrained decode on llama.cpp constrains the trace too, and a
+    model large enough to reason does not need the help. A server with no
+    reasoning parser hands the trace back inside the content, and
+    `refine.answer` takes it off.
     """
+    think = refine.reasoning(reasoning)
     stored = _read()
     url, key = stored.get("url", ""), stored.get("key", "")
     if not url:
         raise refine.RefineError(
             "no refiner server is configured — set its URL in the refiner's settings")
     max_tokens = refine.reply_tokens(max_tokens) if max_tokens is not None else refine.NUM_PREDICT
+    if think:
+        max_tokens += refine.REASONING_ALLOWANCE
 
     payload = {
         "model": model,
@@ -531,7 +543,7 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     }
     if int(seed) >= 0:
         payload["seed"] = int(seed)
-    if schema:
+    if schema and not think:
         payload["response_format"] = {"type": "json_schema",
                                       "json_schema": {"name": "reply", "schema": schema}}
     # Reasoning off. The in-process path prefills an empty `<think>` block for
@@ -541,7 +553,12 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     # provider that rejects the value 400s and `adapt` sheds it. Not every
     # build listens — Ollama's Qwen3-VL template reasons whatever it is told,
     # and the empty-reply message below is where that is said.
-    payload["reasoning_effort"] = "none"
+    #
+    # With thinking on, the field is left out rather than set: the model's and
+    # the server's own default is what the person who picked a reasoning model
+    # chose, and a value like "high" is one more thing a server can refuse.
+    if not think:
+        payload["reasoning_effort"] = "none"
     # Asked for in the same breath as the generation, because LM Studio 0.3 has
     # no unload call and this is the only thing it will hear. Local servers
     # only: `ttl` is a word no hosted provider knows, and the ones that check
@@ -567,7 +584,15 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
         if eject:
             unload(model)
     content, finish, thought = _content(body)
+    if think:
+        content = refine.answer(content)
     if not content.strip():
+        if think and (thought or finish == "length"):
+            raise refine.RefineError(
+                f"'{model}' was still thinking when its {max_tokens} tokens ran "
+                f"out and never reached the answer. Raise the reply length in the "
+                f"refiner's settings."
+            )
         if thought:
             spent = (body.get("usage") or {}).get("completion_tokens")
             raise refine.RefineError(

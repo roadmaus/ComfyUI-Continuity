@@ -725,7 +725,9 @@ def clean_chat(raw):
 
 REFINER_BACKENDS = ("local", "remote")
 REFINER_NAMES = ("model", "remoteModel", "language", "skill")
-REFINER_FLAGS = ("eject",)
+# `reasoning` lets every LLM call think (`families/refine.reasoning`): off,
+# the suppression the small models need; on, room for the large ones.
+REFINER_FLAGS = ("eject", "reasoning")
 REFINER_TABLES = ("skillModes", "templates")
 
 

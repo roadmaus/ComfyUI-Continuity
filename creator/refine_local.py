@@ -254,7 +254,7 @@ def _progress_context():
 
 
 def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=None,
-         prefill=refine.PREFILL, device=""):
+         prefill=refine.PREFILL, device="", reasoning=None):
     """One generation -> the assistant's raw content string.
 
     The returned string carries the prefill back, because that is what the
@@ -267,11 +267,22 @@ def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=
     `refine.reply_tokens`. It is the output budget alone — the prompt is never
     truncated to fit anything, and `BaseGenerate.generate` reserves a KV cache of
     the prompt's length plus this.
+
+    `reasoning` is whether the model may think — the refiner setting when not
+    given (`refine.reasoning`). On, the turn is left open with no empty
+    `<think>` block and no prefill (a reply begun with `{` has skipped the
+    trace), the budget grows by `refine.REASONING_ALLOWANCE`, and what comes
+    back is the answer with the trace taken off. Readers find the brace
+    themselves (`refine.json_object`), as they do on the remote path.
     """
     clip = load(name, device=device)
     max_tokens = refine.reply_tokens(max_tokens) if max_tokens is not None else MAX_TOKENS
+    think = refine.reasoning(reasoning)
+    if think:
+        max_tokens += refine.REASONING_ALLOWANCE
+        prefill = ""
 
-    prompt = refine.chatml(system, message, images=len(images), prefill=prefill)
+    prompt = refine.chatml(system, message, images=len(images), prefill=prefill, think=think)
     tokens = clip.tokenize(prompt, images=list(images))
 
     # Its own clause below, not an `isinstance` inside one: ComfyUI's interrupt
@@ -320,6 +331,14 @@ def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=
         release()
 
     content = prefill + clip.decode(generated)
+    if think:
+        content = refine.answer(content)
+        if not content and len(generated) >= max_tokens:
+            raise refine.RefineError(
+                f"'{name}' was still thinking when its {max_tokens} tokens ran out "
+                f"and never reached the answer. Raise the reply length in the "
+                f"refiner's settings."
+            )
     if not content[len(prefill):].strip():
         raise refine.RefineError(
             f"'{name}' returned nothing. It may have hit the token limit before "

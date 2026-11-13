@@ -654,6 +654,8 @@ export const ko = {
  "The rewrite lands as one block, and a whole-timeline refine is refused — one reply is one document.": "리라이트는 하나의 블록으로 도착하며, 타임라인 전체 리파인은 거부됩니다 — 응답 하나가 문서 하나입니다.",
  "Your lines are read after the craft notes and before the reply format, which stays the node's.": "사용자의 문장은 작법 노트 뒤, 응답 형식 앞에서 읽힙니다. 형식은 노드의 것으로 남습니다.",
  "eject when done": "끝나면 언로드",
+ "let it think (experimental)": "생각하게 하기 (실험적)",
+ "Lift the reasoning suppression on every call — refine, stills, chat and Director — and give the reply 8k more tokens to think in. For large reasoning models; a small one will spend the reply thinking.": "모든 호출(정제, 스틸, 채팅, Director)에서 추론 억제를 해제하고, 생각할 수 있도록 답변에 8k 토큰을 더 줍니다. 대형 추론 모델용입니다. 작은 모델은 답변 전체를 생각하는 데 써 버립니다.",
  "Ask the server to unload the model as soon as the rewrite is in, so the sampler gets the memory back. LM Studio and Ollama can do this; a server that cannot is left alone. Leave it off if you keep the model loaded for other work.": "리라이트가 도착하는 즉시 모델을 언로드하도록 서버에 요청해, 메모리를 샘플러에 돌려줍니다. LM Studio와 Ollama는 이를 지원하며, 지원하지 않는 서버는 그대로 둡니다. 다른 작업을 위해 모델을 계속 올려둔다면 꺼 두세요.",
  "Looking for models…": "모델을 찾는 중…",
  "No text encoders found.": "텍스트 인코더를 찾지 못했습니다.",

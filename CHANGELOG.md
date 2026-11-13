@@ -6,6 +6,19 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The refiner can let the model think (experimental).** A "let it think"
+chip under the refiner's model list lifts the reasoning suppression every LLM
+call carried — the empty `<think>` block in-process, `reasoning_effort: "none"`
+on the wire — so the large reasoning models now within reach of a home server
+write with their trace instead of without it. One switch reaches refine,
+stills, the chat room, Director and the magic prompts, because all of them go
+through the two backends' `chat`, which read it off the settings file. While it
+is on, the reply gets 8k more tokens to think in, the in-process reply is no
+longer prefilled with `{`, no JSON schema constrains the decode (a grammar
+would constrain the trace too), and the trace is taken off before any reader
+sees the answer, whether the model opened it or the chat template did. Off is
+the default and behaves exactly as before.
+
 **MiniMax H3 Image reads saved references, the same files MiniMax H3 does.**
 Core's H3 Image VAE is the H3 video encoder with a 2D decoder after it, so an
 H3 RefMod is already the latent the image model's conditioning node would

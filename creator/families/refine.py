@@ -75,6 +75,68 @@ def reply_tokens(value):
         return NUM_PREDICT
 
 
+# ---- letting the model think (experimental) ----------------------------------
+#
+# Every call this pack makes switches reasoning off: the in-process prompt ends
+# in an empty `<think>` block and the wire asks for `reasoning_effort: "none"`.
+# That was right for the 2B–8B models the harness was written against, which
+# spend a whole budget on a trace and never answer. It is wrong for the large
+# open models that reason well — a 100B-class model told not to think is a
+# worse writer than the same model allowed to — so the refiner's settings carry
+# one switch, `reasoning`, that lifts the suppression on every call at once:
+# refine, stills, the chat room, Director and the magic prompts all reach a
+# model through `refine_local.chat` or `refine_remote.chat`, and both read it.
+#
+# Read off the settings file rather than off each request, because it is a
+# fact about the model this machine points at, not about one press — and
+# threading it through every caller is a dozen places to forget it. A caller
+# that knows better (a test) passes it explicitly.
+
+# What thinking is given on top of the reply budget. The budget was sized for
+# the answer alone; a trace runs into the thousands of tokens on a hard brief,
+# and a reply cut off inside its own reasoning returns nothing at all.
+REASONING_ALLOWANCE = 8192
+
+
+def reasoning(explicit=None):
+    """Whether this call may think: `explicit` when given, else the setting.
+
+    Off wherever the settings cannot be read — the pure suites, a broken file —
+    because off is what every call did before the switch existed.
+    """
+    if explicit is not None:
+        return bool(explicit)
+    try:
+        from .. import settings
+
+        return bool((settings.load().get("refiner") or {}).get("reasoning"))
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def answer(content):
+    """A reply with its reasoning trace taken off -> the answer alone.
+
+    Two shapes reach here. A trace the model opened itself, `<think>…</think>`,
+    which `THINK_RE` already strips. And a trace whose opening tag was in the
+    *prompt* — Qwen3's thinking templates and several servers without a
+    reasoning parser write `<think>` into the assistant turn, so the reply
+    begins mid-thought and only the closing tag arrives. Everything up to the
+    last `</think>` is trace either way.
+
+    Applied by both backends' `chat` while thinking is on, so every reader
+    downstream — the families' `parse_reply`, the chat room, Director, the
+    skill path — is handed an answer and never has to know a trace existed.
+
+    A trace that never closed — the budget ran out mid-thought — is trace to
+    the end, and comes back as nothing rather than as half a thought.
+    """
+    text = content or ""
+    if "</think>" in text:
+        text = text.rsplit("</think>", 1)[1]
+    return THINK_RE.sub("", text).split("<think>", 1)[0].strip()
+
+
 # ---- the two fields that are the pack's, not a family's ---------------------
 
 # The first thing the model writes when anything is attached, and the only field
@@ -239,7 +301,7 @@ VISION_BLOCK = "<|vision_start|><|image_pad|><|vision_end|>"
 PREFILL = "{"
 
 
-def chatml(system, message, images=0, prefill=PREFILL):
+def chatml(system, message, images=0, prefill=PREFILL, think=False):
     """system + user + an assistant turn already begun, as one Qwen prompt.
 
     `images` vision blocks are placed at the head of the user turn, in the order
@@ -251,12 +313,19 @@ def chatml(system, message, images=0, prefill=PREFILL):
     reasoning". It has to be written by hand here for the same reason the turns
     do: skipping the template skips that too, and a reasoning model with no
     suppression spends the whole token budget thinking and returns nothing.
+
+    `think` leaves the assistant turn open instead — no empty block and no
+    prefill, since a reply begun with `{` has already skipped the place a
+    trace would go. See `reasoning`.
     """
-    return (
+    turns = (
         "<|im_start|>system\n" + system + "<|im_end|>\n"
         "<|im_start|>user\n" + VISION_BLOCK * int(images) + message + "<|im_end|>\n"
-        "<|im_start|>assistant\n<think>\n\n</think>\n\n" + prefill
+        "<|im_start|>assistant\n"
     )
+    if think:
+        return turns
+    return turns + "<think>\n\n</think>\n\n" + prefill
 
 
 # ---- handles and labels -----------------------------------------------------

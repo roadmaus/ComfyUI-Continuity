@@ -654,6 +654,8 @@ export const ja = {
  "The rewrite lands as one block, and a whole-timeline refine is refused — one reply is one document.": "リライトは 1 ブロックとして届き、タイムライン全体のリファインは拒否されます — 1 つの返信は 1 つの文書です。",
  "Your lines are read after the craft notes and before the reply format, which stays the node's.": "あなたの文章は作法のノートの後、返信フォーマットの前に読まれます。フォーマットはノードのものです。",
  "eject when done": "終了後にアンロード",
+ "let it think (experimental)": "考えさせる（実験的）",
+ "Lift the reasoning suppression on every call — refine, stills, chat and Director — and give the reply 8k more tokens to think in. For large reasoning models; a small one will spend the reply thinking.": "すべての呼び出し（リファイン、静止画、チャット、Director）で推論の抑制を解除し、考えるための 8k トークンを返答に追加します。大型の推論モデル向けです。小さなモデルは返答をすべて思考に使ってしまいます。",
  "Ask the server to unload the model as soon as the rewrite is in, so the sampler gets the memory back. LM Studio and Ollama can do this; a server that cannot is left alone. Leave it off if you keep the model loaded for other work.": "リライトが届き次第、モデルをアンロードするようサーバーに依頼します。メモリはサンプラーに戻ります。LM Studio と Ollama は対応しており、対応しないサーバーはそのままです。他の作業のためにモデルを常駐させている場合はオフのままにしてください。",
  "Looking for models…": "モデルを探しています…",
  "No text encoders found.": "テキストエンコーダーが見つかりません。",

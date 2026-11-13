@@ -24,6 +24,11 @@ import layout
 pkg = layout.load("prompting", "refine_remote")
 remote, refine = pkg.refine_remote, pkg.prompting
 
+# The switch is read off this machine's settings file wherever ComfyUI can be
+# imported; the suite pins it off so a lab with thinking on runs the same tests.
+_reasoning = refine.reasoning
+refine.reasoning = lambda explicit=None: _reasoning(False if explicit is None else explicit)
+
 from harness import FAILURES, check, passed
 
 
@@ -335,6 +340,51 @@ except refine.RefineError as exc:
     check("an empty reply with no trace is not blamed on thinking",
           "returned nothing" in str(exc), True)
 remote._request = real_request
+
+
+# ---- letting it think (the experimental switch) ------------------------------
+#
+# On, nothing asks the server to suppress reasoning, the budget grows by the
+# allowance, no schema constrains the decode (a grammar would constrain the
+# trace too), and a trace returned inside the content is taken off.
+
+check("an explicit answer beats the setting", (refine.reasoning(True), refine.reasoning(False)),
+      (True, False))
+
+remote.configure("http://localhost:1234/v1", "")
+calls.clear()
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant",
+                             "content": "<think>The user wants rain.</think>\n{\"shots\": []}"},
+                 "finish_reason": "stop"}]}})
+check("a thinking reply comes back as its answer",
+      remote.chat("m", "sys", "hi", max_tokens=2048, schema={"type": "object"}, reasoning=True),
+      '{"shots": []}')
+sent = calls[-1][1]
+check("…with no reasoning_effort asked for", "reasoning_effort" in sent, False)
+check("…and no schema constraining the trace", "response_format" in sent, False)
+check("…and the allowance on top of the reply budget", sent["max_tokens"],
+      2048 + refine.REASONING_ALLOWANCE)
+
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant", "content": "",
+                             "reasoning": "Let me consider the shot…"},
+                 "finish_reason": "length"}]}})
+try:
+    remote.chat("m", "sys", "hi", reasoning=True)
+    check("a budget spent thinking is refused", False, True)
+except refine.RefineError as exc:
+    check("a budget spent thinking says to raise the length",
+          "still thinking" in str(exc) and "reply length" in str(exc), True)
+remote._request = real_request
+
+# The trace shapes `answer` is given.
+check("a closed trace is taken off", refine.answer("<think>a</think>\nB"), "B")
+check("a trace opened by the template is taken off", refine.answer("planning…</think>\n\nB"), "B")
+check("a trace that never closed is nothing", refine.answer("<think>still going"), "")
+check("an answer with no trace is itself", refine.answer("  B "), "B")
+check("chatml leaves the turn open to think",
+      refine.chatml("S", "M", prefill="{", think=True).endswith("<|im_start|>assistant\n"), True)
 
 
 # ---- the reply shapes --------------------------------------------------------

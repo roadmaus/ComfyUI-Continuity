@@ -655,6 +655,8 @@ export const zh = {
  "The rewrite lands as one block, and a whole-timeline refine is refused — one reply is one document.": "改写以一整块落地，整条时间线的精炼会被拒绝——一次回复就是一份文档。",
  "Your lines are read after the craft notes and before the reply format, which stays the node's.": "你的文本在写作要点之后、回复格式之前被读到；格式仍然是节点的。",
  "eject when done": "完成后卸载",
+ "let it think (experimental)": "让它思考（实验性）",
+ "Lift the reasoning suppression on every call — refine, stills, chat and Director — and give the reply 8k more tokens to think in. For large reasoning models; a small one will spend the reply thinking.": "在每次调用中解除对推理的抑制——精炼、静帧、聊天和 Director——并为回复额外提供 8k 个令牌用于思考。适用于大型推理模型；小模型会把整个回复都花在思考上。",
  "Ask the server to unload the model as soon as the rewrite is in, so the sampler gets the memory back. LM Studio and Ollama can do this; a server that cannot is left alone. Leave it off if you keep the model loaded for other work.": "改写一到手就请求服务器卸载模型，把显存还给采样器。LM Studio 和 Ollama 支持这样做；不支持的服务器会原样留下。如果你要让模型常驻用于其他工作，请保持关闭。",
  "Looking for models…": "正在查找模型…",
  "No text encoders found.": "未找到文本编码器。",

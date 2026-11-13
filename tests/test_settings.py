@@ -325,7 +325,7 @@ refuses("a planning profile this build has no calls for", {"chat": {"plan_steps"
 # way the rail is, and with a key from a newer build dropped rather than refused.
 
 REFINER = {"backend": "remote", "model": "qwen3vl_4b.safetensors",
-           "remoteModel": "qwen3-vl:4b", "eject": True, "temperature": 0.3,
+           "remoteModel": "qwen3-vl:4b", "eject": True, "reasoning": True, "temperature": 0.3,
            "seed": -1, "maxTokens": 6144, "language": "German", "skill": "noir",
            "skillModes": {"noir": "add"}, "templates": {"h3": "REF2VA"}}
 check("an empty refiner block is the default", settings.clean({})["refiner"], {})
@@ -338,6 +338,8 @@ refuses("a temperature that is not a number", {"refiner": {"temperature": "hot"}
 refuses("a boolean budget", {"refiner": {"maxTokens": True}}, "must be a number")
 refuses("a template table that is not names", {"refiner": {"templates": {"h3": 1}}}, "names to names")
 refuses("a refiner that is not an object", {"refiner": "local"}, "must be an object")
+refuses("a thinking switch that is not a switch", {"refiner": {"reasoning": "yes"}},
+        "true or false")
 
 # ---- the file -----------------------------------------------------------------
 

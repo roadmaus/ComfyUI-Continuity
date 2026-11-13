@@ -70,6 +70,12 @@ const DEFAULTS = {
   // about to want, which is why it is here. Remote only — the in-process
   // backend already hands its weights back after every generation.
   eject: false,
+  // Experimental: let the model think. Off, every call suppresses reasoning —
+  // what the small models need, or they spend the reply on a trace. On, the
+  // suppression lifts on every LLM call this pack makes (refine, stills, the
+  // chat room, Director), for the large models that write better for it. Read
+  // server-side off the settings file, so it rides in no request.
+  reasoning: false,
   // Cold by default: refining is a fidelity task, and at 0.7 a small model
   // paraphrases the very words it was told to keep. Raise it for variety.
   temperature: 0.3,
@@ -836,6 +842,7 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
       backendHost,
     ]),
     modelHost,
+    reasoningRow(changed),
     noteHost,
     skillHost,
     templateHost,
@@ -854,6 +861,27 @@ export function openSettings(anchor, onChange, family = DEFAULT_VIDEO_FAMILY) {
   drawSkills();
   drawTemplate();
   drawMore();
+}
+
+/** The experimental thinking switch. For both backends, so it sits under the
+ *  model list rather than inside the server's card, and toggles in place for
+ *  the same reason the eject chip does. */
+function reasoningRow(changed) {
+  return el("div", { class: "mmc-chips mmc-refine-eject" }, [
+    el("button", {
+      class: "mmc-chip", "aria-checked": settings().reasoning === true,
+      text: t("let it think (experimental)"),
+      title: t("Lift the reasoning suppression on every call — refine, stills, chat and "
+             + "Director — and give the reply 8k more tokens to think in. For large "
+             + "reasoning models; a small one will spend the reply thinking."),
+      onclick: (event) => {
+        const on = !(settings().reasoning === true);
+        saveSettings({ reasoning: on });
+        event.currentTarget.setAttribute("aria-checked", String(on));
+        changed();
+      },
+    }),
+  ]);
 }
 
 // ---- the panel --------------------------------------------------------------
