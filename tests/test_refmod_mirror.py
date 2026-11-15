@@ -391,7 +391,9 @@ check("...and compile.py reads them off the picture",
        bound_blob.ref_images[0].mod_for("flux2")), (False, "refmod:cast/anna", None))
 check("the families a member can be saved for, the piece's first",
       got["families"], [["h3", "h3_video", "h3_vae.safetensors", True],
-                        ["flux2klein", "flux2", "flux2-vae.safetensors", False]])
+                        ["flux2klein", "flux2", "flux2-vae.safetensors", False],
+                        # H3 Image saves in H3's latent space; with no H3 Image VAE picked it has none yet.
+                        ["h3image", "h3_video", "", False]])
 check("saving for Klein asks for that family and its VAE",
       got["madeKlein"], {"family": "flux2klein", "vae": "flux2-vae.safetensors", "mode": "full"})
 check("...and the picture carries both renditions",
@@ -399,7 +401,8 @@ check("...and the picture carries both renditions",
 check("the rows are per family, and a family with no VAE picked is offered disabled",
       got["sections"],
       [["MiniMax H3", [["Compressed — ≈576 tokens", False], ["Full — ≈1,024 tokens", False]]],
-       ["Flux 2 Klein", [["Compressed — ≈1,024 tokens", True], ["Full — ≈4,096 tokens", True]]]])
+       ["Flux 2 Klein", [["Compressed — ≈1,024 tokens", True], ["Full — ≈4,096 tokens", True]]],
+       ["MiniMax H3 Image", [["Compressed — ≈576 tokens", True], ["Full — ≈1,024 tokens", True]]]])
 check("every family a member can be sent to is listed, the piece's first, with what each reads",
       got["castFamilies"],
       [["h3", True, True, True, True, False, True], ["ltx25", False, True, True, False, False, False],
@@ -407,8 +410,8 @@ check("every family a member can be sent to is listed, the piece's first, with w
        ["qwenedit", False, False, True, False, False, False], ["flux2klein", False, False, True, False, False, True],
        ["qwen21", False, False, True, False, False, False],
        ["moss", False, False, False, False, False, False],
-       # MiniMax H3 Image takes pictures, keeps no saved references of its own.
-       ["h3image", False, False, True, False, False, False]])
+       # MiniMax H3 Image takes pictures and reads saved references the way H3 does.
+       ["h3image", False, False, True, False, False, True]])
 check("a new frame forgets the renditions", got["dropped"], None)
 check("with two families ready the menu leads with one row for all of them, per-picture modes only "
       "— H3's counting the clip it keeps first, Klein's the still alone",
@@ -417,7 +420,9 @@ check("with two families ready the menu leads with one row for all of them, per-
        ["MiniMax H3", ["One file — everything stacked — ≈448 tokens", "Compressed — ≈1,440 tokens",
                        "Full — ≈3,040 tokens", "Each clip — its own file — ≈2,016 tokens",
                        "Each clip — for its motion — ≈448 tokens"]],
-       ["Flux 2 Klein", ["Compressed — ≈1,024 tokens", "Full — ≈4,096 tokens"]]])
+       ["Flux 2 Klein", ["Compressed — ≈1,024 tokens", "Full — ≈4,096 tokens"]],
+       # H3 Image has no VAE picked, so it gets its own (disabled) row and stays out of "Every family".
+       ["MiniMax H3 Image", ["Compressed — ≈576 tokens", "Full — ≈1,024 tokens"]]])
 check("...and picking it names every ready family, the piece's first",
       got["everyPicked"], ["compressed", ["h3", "flux2klein"]])
 
