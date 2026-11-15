@@ -2150,6 +2150,13 @@ export class PreStageBody {
       scope: "prestage",
       label: t("this pre-stage"),
       arch: () => this.state.arch,
+      // What the library's member sheet encodes saved references through:
+      // this still family's VAE and every family beside it, the shelf's own
+      // pair. Without them the sheet offered no save and drew MiniMax H3 as
+      // the family being rendered.
+      vae: () => this.state.models?.[this.state.arch]?.vae ?? "",
+      families: () => castFamilies(S.preStageFamilyId(this.state.arch),
+                                  this.state.models?.[this.state.arch]?.vae ?? "", rememberedWeights()),
       capture: () => ({
         data: P.capturePreStage(this.state, this.widgetIO()),
         cover: P.coverFromResult(this.stage?.result),
