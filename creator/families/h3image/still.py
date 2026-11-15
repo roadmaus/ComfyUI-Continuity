@@ -85,13 +85,15 @@ REFS_NOUN = ("picture", "pictures")
 # angle brackets and all, the same one H3 video was trained on.
 REFS_CITATION = "<Picture {n}>"
 
-# Core's node grows to a hundred slots; the pack caps it where the reference bar
-# is built to go. Every picture is a reference latent at a 1-2k short edge that
-# the DiT attends over beside a 16 MP target, so the cap is about memory before
-# it is about the model.
-REFS_LIMIT = 4
-REFS_LIMIT_REASON = ("every picture is another reference latent the model "
-                     "attends over beside a canvas of up to 20 MP")
+# No cap of the pack's own: core's node grows to a hundred slots, and that is
+# the only number here. The pack used to stop at four, on the grounds that
+# every picture is a reference latent at a 1-2k short edge the DiT attends over
+# beside a 16 MP target — but how many the model can use, and how many a card
+# can hold, is something to find out by trying, not a rule to enforce. Past a
+# hundred the conditioning node has no socket to put the picture in.
+REFS_LIMIT = 100
+REFS_LIMIT_REASON = ("a hundred is as many image inputs as core's "
+                     "MiniMaxH3ImageConditioning node grows")
 
 # What the pictures go through on their way in: the Qwen3-VL vision tower. The
 # H3 text-only cut would read the sentence and quietly drop every picture.
@@ -105,13 +107,16 @@ REFS_NEED_VISION = True
 EDITS_FIRST_REF = True
 
 # The canvas. The model card's range is ~4-20 MP and best near 16; the template
-# starts at 4 MP "because it is cheaper", and so does the slider. The /32 grid
+# starts at 4 MP "because it is cheaper", and so does the slider's default. The
+# slider's floor is the shared one, not the card's: below 4 MP the pictures come
+# out soft, but whether soft is wrong for a given piece is the user's call, so
+# the range is the default slider's with this model's extended top. The /32 grid
 # is core's (`CANVAS_MULTIPLE` in `nodes_minimax_h3.py`), as is the ratio
 # envelope: 21:9 is the widest size the card lists. The long-edge ceiling is the
 # card's 21:9 entry, 6272, rounded to the grid.
 CANVAS = {
     "multiple": 32,
-    "min_short_edge": 1536,
+    "min_short_edge": 512,
     "max_short_edge": 4096,
     "max_long_edge": 6272,
     "default_short_edge": 2048,

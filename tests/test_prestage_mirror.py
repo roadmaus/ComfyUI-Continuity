@@ -199,7 +199,7 @@ for key, size in reflected["h3image"]["canvases"].items():
     check("h3image " + key, size, list(ci.resolve_canvas(ci.ASPECT_PRESETS[label], int(edge), H3I)))
 check("h3image edge held to its range, out-of-range to its default",
       reflected["h3image"]["edges"],
-      {"512": 2048, "1024": 2048, "1536": 1536, "4096": 4096, "5000": 2048})
+      {"512": 512, "1024": 1024, "1536": 1536, "4096": 4096, "5000": 2048})
 check("...and Krea's to the shared one", reflected["h3image"]["krea_edges"], [1024, 1024])
 _OLD = {"arch": "minimax", "prompt": "", "short_edge": 768, "minimax": {"frames": 22, "latent_index": 1, "request": {
     "prompt": "@img-1 at dusk", "aspect": "9:16", "refined": {"body": "x"},
@@ -212,7 +212,7 @@ check("an old H3 still migrates the same on both sides",
 check("...and so does another arch carrying the stale block",
       reflected["h3image"]["migrated_other"], h3i.migrate({**_OLD, "arch": "krea2", "prompt": "keep"}))
 check("...and the parsed blob is a MiniMax H3 Image still with no old block left",
-      reflected["h3image"]["parsed"], ["minimax", "@img-1 at dusk", ["a.png"], 2048, False, False])
+      reflected["h3image"]["parsed"], ["minimax", "@img-1 at dusk", ["a.png"], 768, False, False])
 check("a matte on MiniMax H3 Image is a mask over Picture 1, not a branch",
       reflected["h3image"]["mask"], [True, False, ["door.png"], True, None])
 check("aspect presets", reflected["presets"], sorted(ci.ASPECT_PRESETS))

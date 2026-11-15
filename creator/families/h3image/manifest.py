@@ -59,7 +59,7 @@ def manifest():
         "id": declare.ID,
         "label": declare.LABEL,
         "description": "MiniMax H3 Image — MiniMax's image model, at 4 to 20 MP. Draws from prose, edits from "
-                       "up to four pictures, and inpaints under a matte. Six distilled steps at cfg 1.",
+                       "any number of pictures, and inpaints under a matte. Six distilled steps at cfg 1.",
         "produces": sorted(declare.PRODUCES),
         # The pre-stage blob key the old H3 still kept its Creator-shaped
         # request under — the same word as this family's arch, frozen in saved
