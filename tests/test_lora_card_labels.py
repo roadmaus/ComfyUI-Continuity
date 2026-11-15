@@ -5,6 +5,7 @@ Runs standalone with synthetic files, without torch or ComfyUI:
 """
 
 import importlib.util
+import itertools
 import json
 import os
 import struct
@@ -70,11 +71,16 @@ def row_metadata(built):
             if key not in ("card_title", "card_subtitle")}
 
 
+STEPS = itertools.count(2)
+
+
 def changed_directory(path):
     """Make a create/delete observable even on coarse filesystem timestamps."""
     directory = os.path.dirname(path)
     stamp = os.stat(directory)
-    os.utime(directory, (stamp.st_atime, stamp.st_mtime + 2))
+    # A growing step: a create and a delete inside one clock tick would
+    # otherwise both land on the same stamp plus two.
+    os.utime(directory, (stamp.st_atime, stamp.st_mtime + next(STEPS)))
 
 
 def edit_in_place(path, payload):

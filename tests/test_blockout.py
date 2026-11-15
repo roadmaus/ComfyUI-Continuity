@@ -111,7 +111,7 @@ with tempfile.TemporaryDirectory() as temp_root, \
         with av.open(written) as clip:
             stream = clip.streams.video[0]
             check("four frames were encoded", stream.frames, 4)
-            check("the rate is what was asked", int(stream.average_rate), 24)
+            check("the rate is what was asked", float(stream.average_rate), 24.0)
 
         sidecar = os.path.splitext(written)[0] + ".json"
         check("the sidecar exists", os.path.isfile(sidecar), True)

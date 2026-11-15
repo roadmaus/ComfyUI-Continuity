@@ -626,8 +626,8 @@ try:
     # remembered to change — which is exactly how this check came to be here.
     from comfy_extras.nodes_minimax_h3 import video_latent_t
 
-    from Minimax_creator.creator import canvas as canvas_mod
-    from Minimax_creator.creator.families.h3 import declare as h3
+    canvas_mod = importlib.import_module(f"{PACKAGE}.creator.canvas")
+    h3 = importlib.import_module(f"{PACKAGE}.creator.families.h3.declare")
     longest = video_latent_t(max(canvas_mod.legal_frame_counts(h3.RULES)))
     check("and asks for enough to cover the longest generation's latent",
           models_mod.PREVIEW_FRAMES >= longest, True)
