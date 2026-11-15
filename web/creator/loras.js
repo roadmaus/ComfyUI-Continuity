@@ -27,7 +27,7 @@
 // a set of sections, and a LoRA stack is one of its sections; a second store for
 // the same data would be a second set of those answers to keep in step.
 
-import { el, ICONS, svg, drawFrame, mountOverlay } from "./dom.js";
+import { el, ICONS, svg, drawFrame, releaseVideo, mountOverlay } from "./dom.js";
 import { listLoras, listLorasNamed, loraPreviewUrl, loadLoraPrefs, loraPrefsNow, saveLoraPrefs,
          primeSettings, uiSetting } from "./api.js";
 import { openLoraDetail } from "./loradetail.js";
@@ -670,15 +670,6 @@ function loraTack(entry, { family = S.DEFAULT_VIDEO_FAMILY, targets = null, pinT
   tack.addEventListener("pointerenter", fit);
   tack.addEventListener("focusin", fit);
   return tack;
-}
-
-/** Give a <video>'s player back to the browser. Dropping the element is not
- *  enough: the player lives until the collector reaches it. */
-function releaseVideo(video) {
-  if (!video.hasAttribute("src")) return;
-  video.pause();
-  video.removeAttribute("src");
-  video.load();
 }
 
 /** The box an unfolded tack has to stay inside: the nearest ancestor that
