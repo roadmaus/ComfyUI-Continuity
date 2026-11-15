@@ -96,12 +96,8 @@ def _vae(name, space):
     label = refmod.space_label(space)
     if not name:
         raise jobs.JobError(f"pick the {label} VAE in the weights control first")
-    path = folder_paths.get_full_path("vae", name) or ""
     try:
-        # A VAE whose encoder writes this space is the space's VAE here,
-        # whatever it decodes with (`refmod.SPACES[...]["encoders"]`).
-        if vaekind.identify(path) not in refmod.SPACES[space].get("encoders", ()):
-            vaekind.check(path, space, name)
+        vaekind.check(folder_paths.get_full_path("vae", name) or "", space, name)
     except ValueError as exc:
         raise jobs.JobError(str(exc)) from exc
     loader = nodes.NODE_CLASS_MAPPINGS["VAELoader"]()
@@ -141,9 +137,23 @@ def _encode_flux2(vae, image, table, edge=None):
     return vae.encode(resized), resized
 
 
+def _encode_h3_image(vae, image, table, edge=None):
+    """One still -> the latent core's `MiniMaxH3ImageConditioning` anchors for
+    it: the node's own sizing (a short edge held between 1024 and `edge`,
+    2048 by default, on the /32 canvas grid) and its own resampler, through
+    the image VAE's seeded encode — so a full mod is that node's reference
+    block, byte for byte."""
+    from comfy_extras.nodes_minimax_h3 import IMAGE_REF_SHORT_EDGE, _resize_to, _size_short_edge
+
+    size = _size_short_edge(image.shape[2], image.shape[1], IMAGE_REF_SHORT_EDGE,
+                            edge or table["edge"])
+    resized = _resize_to(image[:1], size)
+    return vae.encode(resized), resized
+
+
 # The encoder per latent space: how a family's reference pipeline sizes and
 # encodes a picture, so a mod is the latent a render would have made.
-_ENCODE = {"h3_video": _encode_h3, "flux2": _encode_flux2}
+_ENCODE = {"h3_video": _encode_h3, "h3_image": _encode_h3_image, "flux2": _encode_flux2}
 
 
 def _encode(vae, image, table, edge=None):
@@ -465,7 +475,14 @@ def _still(latent, mode, grid, steps, tell):
     full_shape = "x".join(str(v) for v in latent.shape[2:])
     pool = _pool_of(latent)
     if mode == "training":
-        latent = refmod.compress(latent, grid, steps, tell=tell)
+        # Fitted on the render device. The latent is a few hundred thousand
+        # floats and the fit is 150 small steps, which on the CPU is every
+        # core woken and parked 150 times over — the load that reset a 5900X
+        # (a machine check on one core) each time a 128-grid still was saved.
+        import comfy.model_management
+
+        latent = refmod.compress(latent.to(comfy.model_management.get_torch_device()),
+                                 grid, steps, tell=tell).cpu()
         pool = _pool_of(latent)
     return latent, {
         "kind": "image", "mode": mode, "source": "image",

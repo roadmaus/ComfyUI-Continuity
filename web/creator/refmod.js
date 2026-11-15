@@ -221,6 +221,16 @@ const KLEIN_NOTES = {
   full: "The encode at 1 MP, as Klein reads a reference, saved so it is never redone.",
 };
 
+/** The mod table of the family that keeps `space` (`capabilities.refmod`),
+ *  or null — what a still's mod is sized by, and the notes a family words
+ *  its own modes in. */
+const tableOf = (space) =>
+  FAMILIES.map((manifest) => manifest.capabilities?.refmod).find((table) => table?.space === space) ?? null;
+
+/** What the menu says under a mode's row, in `space`. */
+const noteOf = (mode, space) => tableOf(space)?.notes?.[mode.key]
+  ?? (space === "flux2" ? KLEIN_NOTES[mode.key] : null) ?? mode.note;
+
 // A picture's aspect (long over short), measured off its thumbnail the first
 // time the ledger asks. The measure is asynchronous; the caller is told when it
 // lands and draws again.
@@ -255,15 +265,24 @@ export function modTokens(entry, mode, onKnown, space = DEFAULT_SPACE) {
     if (mode === "motion") return MOTION_FRAMES * MOTION_FRAME_TOKENS;
     return CLIP_FRAMES * (mode === "compressed" ? CLIP_COMPRESSED_FRAME_TOKENS : CLIP_FRAME_TOKENS);
   }
-  const aspect = aspectOf(entry.filename, onKnown) ?? 1;
+  return stillTokens(mode, space, aspectOf(entry.filename, onKnown) ?? 1);
+}
+
+/** A still's mod of `mode` in `space`, for a picture of `aspect` (long over short). */
+function stillTokens(mode, space, aspect) {
   if (space === "flux2") {
     // Sized to an area, so the aspect changes nothing but the grid's shape.
     return mode === "compressed" ? KLEIN_COMPRESSED_TOKENS : KLEIN_FULL_TOKENS;
   }
   // Full is sized on the short edge, so a wide picture costs more; the
   // compressed grid sits on the long edge, so a wide picture costs less.
-  if (mode === "compressed") return Math.round(COMPRESSED_TOKENS / aspect);
-  return Math.round(FULL_TOKENS * aspect);
+  // Both off the family's own table: a token is 2x2 cells of 16 px, so a
+  // square at `edge` is (edge / 32)² and one pooled to `grid` is (grid / 2)².
+  const table = tableOf(space);
+  if (mode === "compressed") {
+    return Math.round((table?.grid ? (table.grid / 2) ** 2 : COMPRESSED_TOKENS) / aspect);
+  }
+  return Math.round((table?.edge ? (table.edge / 32) ** 2 : FULL_TOKENS) * aspect);
 }
 
 // The listing of every mod on the machine, by path. `listAssets` caches it and
@@ -426,7 +445,7 @@ export function modeRows(entries, onPick, onKnown, family = null) {
         ? clipTokens
         : stills.reduce((sum, entry) => sum + modTokens(entry, mode.key, onKnown, space), 0) + clipTokens;
     const approx = mode.key !== "stack" || clips;
-    const note = space === "flux2" && KLEIN_NOTES[mode.key] ? KLEIN_NOTES[mode.key] : mode.note;
+    const note = noteOf(mode, space);
     return {
       label: t("{mode} — {tokens} tokens", {
         mode: t(mode.label), tokens: (approx ? "≈" : "") + long(tokens) }),
@@ -511,9 +530,8 @@ export function remakeRows(rows, onPick) {
     const targets = stills.filter(doable);
     const stuck = stills.length - targets.length;
     const again = targets.length > 0 && targets.every((row) => row.mode === current);
-    const tokens = targets.reduce((sum, row) => sum + (mode.key === "compressed"
-      ? Math.round(COMPRESSED_TOKENS / rowAspect(row))
-      : Math.round(FULL_TOKENS * rowAspect(row))), 0);
+    const tokens = targets.reduce((sum, row) =>
+      sum + stillTokens(mode.key, row.space ?? DEFAULT_SPACE, rowAspect(row)), 0);
     const from = !targets.length
       ? t("The picture it was made of is not in the input folder any more — attach it "
         + "again and save the member instead.")
@@ -529,7 +547,7 @@ export function remakeRows(rows, onPick) {
     return {
       label: t(again ? "{mode} again — {tokens} tokens" : "{mode} — {tokens} tokens",
                { mode: t(mode.label), tokens: `≈${long(tokens)}` }),
-      note: `${t(mode.note)} ${from}${skipped}`,
+      note: `${t(noteOf(mode, stills[0].space ?? DEFAULT_SPACE))} ${from}${skipped}`,
       disabled: !targets.length,
       onPick: () => onPick(mode.key, targets.map((row) => row.path)),
     };

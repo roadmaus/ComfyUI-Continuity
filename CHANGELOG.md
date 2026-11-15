@@ -19,16 +19,20 @@ would constrain the trace too), and the trace is taken off before any reader
 sees the answer, whether the model opened it or the chat template did. Off is
 the default and behaves exactly as before.
 
-**MiniMax H3 Image reads saved references, the same files MiniMax H3 does.**
-Core's H3 Image VAE is the H3 video encoder with a 2D decoder after it, so an
-H3 RefMod is already the latent the image model's conditioning node would
-anchor: the family now declares H3's latent space, the ledger counts a member
-saved on either tab as saved on both, and the pre-stage graph shows the
-encoder each mod's decode and puts the file's latent back in that picture's
-reference block (`ContinuityRefModLatent`, `ContinuityRefModH3ImageAnchor`).
-The picture an edit or inpaint changes is always read as itself, a clip or
-stack mod falls back to another look or the member's words, and mods can be
-made with the H3 Image VAE picked.
+**MiniMax H3 Image keeps saved references in a latent space of its own.**
+Its VAE has the H3 video encoder's weights, but an H3 mod is not this
+family's reference: core's image VAE samples its posterior where the video
+VAE takes the mean, and the conditioning node anchors a picture at a
+1024-2048 short edge where an H3 mod is made at 1024. So a mod for it is made
+the way that node makes a reference block (`h3_image`, saved as
+`<name>.h3_image`): a full one is that block, a compressed one is pooled to a
+64-grid. The text encoder is shown the picture a mod hangs on and only the
+anchor is read off the file (`ContinuityRefModH3ImageAnchor`); a mod with no
+picture behind it is decoded to be shown. The ledger counts the two families
+apart, the picture an edit or inpaint changes is always read as itself, and
+an H3 mod standing alone is not read here. A still's compressed fit runs on
+the render device rather than the CPU. The library opened from a pre-stage
+offers saving, and names the pre-stage's own family first.
 
 **A planned piece holds together from clip to clip.** Director's clips lost
 the thread in four places, and each is closed. Shots are grouped into

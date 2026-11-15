@@ -53,7 +53,7 @@ from . import declare
 
 ARCH = declare.STILL_ARCH
 
-# Saved references in this family's latent space — H3's own, see
+# Saved references in this family's own latent space — see
 # `declare.REFMOD`. Read by `compile_image.compile_prestage` to hand this
 # graph the rendition of a picture rather than the picture, where the slot
 # has one.
@@ -221,24 +221,24 @@ def require_control():
 def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
                filename_prefix):
     """The sampler branch over the shared prologue's loaders."""
-    from ... import render_image
+    from ... import refmod, render_image
 
-    # A slot read from a saved reference shows the encoder the mod's own
-    # decode — what H3 video's encode does (`encode._mod_tensors`): the mod
-    # is the member, a compressed one is the blur the DiT will attend to, and
-    # a mod standing alone has no other picture. The conditioning node then
-    # anchors that picture as usual, and `ContinuityRefModH3ImageAnchor`
-    # puts the file's latent back in the slot's place: one throwaway encode
-    # per mod, in exchange for core's node reading the prompt and sizing the
-    # canvas exactly as the template's does.
+    # A saved reference stands in for the DiT's anchor only. The text encoder
+    # is shown the picture the mod hangs on, exactly as it is without one: a
+    # compressed mod's decode is a blur, and the vision tower was never the
+    # cost a mod saves. Only a mod standing alone in a slot — imported, no
+    # picture behind it — is decoded to have something to show. Either way
+    # the conditioning node anchors what it was shown and
+    # `ContinuityRefModH3ImageAnchor` puts the file's latent in that block's
+    # place: one throwaway encode per mod, in exchange for core's node
+    # reading the prompt and sizing the canvas exactly as the template's does.
     images = {}
     for slot, name in enumerate(payload.refs):
-        mod = payload.mods.get(slot)
-        if mod is None:
+        if not refmod.is_mod(name):
             images[f"images.image_{slot + 1}"] = render_image.load_picture(
                 graph, payload, f"ref:{slot}", name)
             continue
-        latent = graph.node("ContinuityRefModLatent", name=mod,
+        latent = graph.node("ContinuityRefModLatent", name=name,
                             space=declare.REFMOD["space"]).out(0)
         images[f"images.image_{slot + 1}"] = graph.node(
             "VAEDecode", samples=latent, vae=vae).out(0)
@@ -248,7 +248,7 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
     positive = conditioning.out(0)
     for slot, mod in sorted(payload.mods.items()):
         positive = graph.node("ContinuityRefModH3ImageAnchor", conditioning=positive,
-                              name=mod, slot=slot).out(0)
+                              name=mod, space=declare.REFMOD["space"], slot=slot).out(0)
     # cfg 1 never evaluates the negative; the template zeroes it, and at real
     # cfg a zeroed copy is still the unconditional the model sees in training
     # more nearly than an empty prompt with the pictures stripped would be.
@@ -297,8 +297,7 @@ def compile_still(data, image_size_lookup=None):
 
     The picture an edit or an inpaint changes is read as itself, never as a
     saved reference hung on it: the render keeps that picture's pixels (all
-    of them outside a mask), and a mod pooled to a 48-grid is the wrong thing
-    to keep. Its mod stays on it for every other render. A mod standing alone
+    of them outside a mask), and a pooled mod is the wrong thing to keep. Its mod stays on it for every other render. A mod standing alone
     in Picture 1 has no pixels to draw a mask over, so an inpaint refuses it.
     """
     import dataclasses

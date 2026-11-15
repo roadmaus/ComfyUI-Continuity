@@ -1595,6 +1595,39 @@ for seed in (100, 2331284070, 32029067):
 check("a choice is made — the braces never reach the encoder",
       "{" in by_class(build(blob(prompt=varied_text)).expand)["CLIPTextEncode"][0][1]["text"], False)
 
+# ---- saved references -----------------------------------------------------------
+#
+# In the family's own space, not H3 video's: the image VAE samples its
+# posterior and the node anchors at up to a 2048 short edge, so an H3 mod on
+# the same picture is nothing to this family. The text encoder is shown the
+# picture a mod hangs on; the file only takes the anchor's place.
+
+_, h3m = h3i_build(h3i_blob(
+    prompt="@img-1 beside @img-2",
+    refs=[{"filename": "anna.png", "handle": "img-1",
+           "mods": {"h3_image": "refmod:cast/anna.h3_image", "h3_video": "refmod:cast/anna"}},
+          {"filename": "cup.png", "handle": "img-2", "mods": {"h3_video": "refmod:cast/cup"}}]))
+check("a picture carrying a mod is still what the encoder is shown",
+      (sorted(i["image"] for _, i in h3m["LoadImage"]), len(h3m["VAEDecode"]), "ContinuityRefModLatent" in h3m),
+      (["anna.png", "cup.png"], 1, False))
+check("only the rendition in the family's own space takes an anchor's place",
+      [(i["name"], i["space"], i["slot"]) for _, i in h3m["ContinuityRefModH3ImageAnchor"]],
+      [("refmod:cast/anna.h3_image", "h3_image", 0)])
+_, h3s = h3i_build(h3i_blob(
+    prompt="@img-1 at a window",
+    refs=[{"filename": "refmod:cast/anna.h3_image", "handle": "img-1"}]))
+check("a mod standing alone is decoded to be shown, and anchored as itself",
+      ([(i["name"], i["space"]) for _, i in h3s["ContinuityRefModLatent"]],
+       len(h3s["VAEDecode"]), "LoadImage" in h3s,
+       [(i["name"], i["slot"]) for _, i in h3s["ContinuityRefModH3ImageAnchor"]]),
+      ([("refmod:cast/anna.h3_image", "h3_image")], 2, False, [("refmod:cast/anna.h3_image", 0)]))
+h3e = h3i.compile_still(json.loads(h3i_blob(
+    prompt="make @img-1 smile", edit_first=True,
+    refs=[{"filename": "anna.png", "handle": "img-1",
+           "mods": {"h3_image": "refmod:cast/anna.h3_image"}}])), lambda name: (2048, 2048))
+check("the picture an edit changes is read as itself",
+      (h3e.init["filename"], h3e.mods), ("anna.png", {}))
+
 # ---- refusals ----------------------------------------------------------------
 
 expect_error("a MiniMax still with no VAE is refused, naming the folder",

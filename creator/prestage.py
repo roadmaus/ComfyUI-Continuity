@@ -104,13 +104,7 @@ def _cast_refmod_spaces(data, family):
                 continue
             if filename not in spaces:
                 try:
-                    meta = refmod.header(refmod.resolve(filename))
-                    # A clip or a stack is a look in H3's space that a still
-                    # family sharing that space cannot read (MiniMax H3
-                    # Image): treated as unreadable, so another look or the
-                    # member's words stand in.
-                    usable = meta["kind"] == "image" or family.REFMOD.get("clips")
-                    spaces[filename] = meta["space"] if usable else None
+                    spaces[filename] = refmod.header(refmod.resolve(filename))["space"]
                 except refmod.RefModError:
                     spaces[filename] = None
             # Never trust stale/browser-supplied metadata. Like the chat

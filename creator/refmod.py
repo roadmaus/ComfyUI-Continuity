@@ -86,12 +86,18 @@ LATENT_CHANNELS = 24
 # grid has to hold whole patches. `stride` is source pixels per latent cell,
 # which is what `media._source_size` reads a mod's picture size off.
 #
-# `encoders` are the other VAE kinds whose encoder writes this space: the H3
-# Image VAE is core's `H3ImageVAE`, the video VAE's encoder and latent
-# statistics with a 2D decoder after them, so it makes the same mod.
+# MiniMax H3 Image has a space of its own though its tensor has H3's shape:
+# core's `H3ImageVAE.encode` draws a seeded sample of the posterior where the
+# video VAE returns its mean, and the image model anchors a reference at a
+# 1024-2048 short edge where the video model's mods are made at 1024. A file
+# that is right for one is the wrong latent at the wrong size for the other.
+# H3's stays first: a file that names no space is told by its shape, and the
+# sibling pack's are H3's.
 SPACES = {
     "h3_video": {"channels": 24, "dims": 5, "patch": 2, "even": True, "stride": 16,
-                 "label": "MiniMax H3", "encoders": ("h3_image",)},
+                 "label": "MiniMax H3"},
+    "h3_image": {"channels": 24, "dims": 5, "patch": 2, "even": True, "stride": 16,
+                 "label": "MiniMax H3 Image"},
     "flux2": {"channels": 128, "dims": 4, "patch": 1, "even": False, "stride": 16,
               "label": "Flux 2"},
 }

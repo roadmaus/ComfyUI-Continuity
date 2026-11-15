@@ -79,10 +79,17 @@ def manifest():
                      "needs_lora": False, "edits_first": True,
                      "noun": list(still.REFS_NOUN),
                      "edit_first": compile_image.EDIT_FIRST_FIELD},
-            # Saved references in H3's own space — `declare.REFMOD`. The
-            # same files MiniMax H3 reads, so the ledger counts a member
-            # saved there as saved here.
-            "refmod": dict(declare.REFMOD),
+            # Saved references in this family's own space — `declare.REFMOD`.
+            # `notes` are the menu's words for this family's modes, where
+            # H3's own (a 48-grid, a 1024 edge) would be wrong.
+            "refmod": {**declare.REFMOD, "notes": {
+                "compressed": "Pooled to a 64-grid on the long edge and refined "
+                              "against the full encode — about a quarter of a 2048 "
+                              "picture's tokens. Unmeasured against the picture yet.",
+                "full": "The reference MiniMax H3 Image anchors for the picture, at "
+                        "up to a 2048 short edge. The same tokens as the picture: "
+                        "it only pins the encode.",
+            }},
             # The guide is a mask: the bench's matte, which the sampler reads
             # as its noise mask over Picture 1. `method: "mask"` tells the
             # pre-stage there is no branch file and no strength to show.

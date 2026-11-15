@@ -19,16 +19,15 @@ attending to a tensor of the wrong shape.
 H3 reads its mods on the render thread inside its own encode
 (`families/h3/encode._mod_of`) and never needs a node.
 
-MiniMax H3 Image reads the same files — its VAE is the H3 encoder with a 2D
-decoder — but through core's `MiniMaxH3ImageConditioning`, which takes
-pictures, not latents: it shows each to the vision tower and anchors its
-encode as a `minimax_refs` block. So a mod there is two steps:
-`ContinuityRefModLatent` hands back the file as a LATENT for a `VAEDecode` to
-turn into the picture the encoder is shown (what H3 video's own encode shows
-it too), and `ContinuityRefModH3ImageAnchor` puts the file's latent back in
-that slot's block after the node has encoded the decode. Replacing a block in
-place rather than appending one keeps the blocks in `<Picture N>` order, which
-is how the model pairs an anchor with its picture.
+MiniMax H3 Image reads mods in its own space (`refmod.SPACES`) through
+core's `MiniMaxH3ImageConditioning`, which takes pictures, not latents: it
+shows each to the vision tower and anchors its encode as a `minimax_refs`
+block. The node is shown the picture a mod hangs on, and
+`ContinuityRefModH3ImageAnchor` then puts the file's latent in that slot's
+block. Replacing a block in place rather than appending one keeps the blocks
+in `<Picture N>` order, which is how the model pairs an anchor with its
+picture. A mod with no picture behind it has to be shown as something, so
+`ContinuityRefModLatent` hands the file back as a LATENT for a `VAEDecode`.
 """
 
 import node_helpers
@@ -79,8 +78,8 @@ class ContinuityRefModReference(io.ComfyNode):
 
 
 def _one_still(name, space):
-    """`name` -> its one image latent, `[1, 24, 1, h, w]` for H3, refusing a
-    file in another space, a clip and a set by name."""
+    """`name` -> its one image latent, `[1, 24, 1, h, w]` for MiniMax H3
+    Image, refusing a file in another space, a clip and a set by name."""
     try:
         path = refmod.resolve(name)
         meta = refmod.header(path)
@@ -139,17 +138,18 @@ class ContinuityRefModH3ImageAnchor(io.ComfyNode):
                         "saved reference (models/refmods) instead of its encode.",
             inputs=[io.Conditioning.Input("conditioning"),
                     io.String.Input("name", default=""),
+                    io.String.Input("space", default="h3_image"),
                     io.Int.Input("slot", default=0, min=0, max=99)],
             outputs=[io.Conditioning.Output()],
         )
 
     @classmethod
-    def fingerprint_inputs(cls, conditioning, name, slot, **kwargs):
-        return (name, slot, _stamp(name))
+    def fingerprint_inputs(cls, conditioning, name, space, slot, **kwargs):
+        return (name, space, slot, _stamp(name))
 
     @classmethod
-    def execute(cls, conditioning, name, slot) -> io.NodeOutput:
-        latent = _one_still(name, refmod.DEFAULT_SPACE)
+    def execute(cls, conditioning, name, space, slot) -> io.NodeOutput:
+        latent = _one_still(name, space)
         out = []
         for embedding, extra in conditioning:
             refs = list(extra.get("minimax_refs") or [])
