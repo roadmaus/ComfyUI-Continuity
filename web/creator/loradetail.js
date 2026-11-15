@@ -15,7 +15,7 @@
 // because "where did this title come from" is a question only asked when the
 // title looks wrong.
 
-import { el, ICONS, svg, mountOverlay } from "./dom.js";
+import { el, ICONS, svg, releaseVideo, mountOverlay } from "./dom.js";
 import { loraDetail, loraShowcaseUrl } from "./api.js";
 import { t } from "./i18n.js";
 
@@ -253,7 +253,15 @@ class LoraDetailSheet {
     this.render();
   }
 
+  /** The strip's stills and the playing clip each hold one of the page's
+   *  media players, and a sheet per LoRA looked at adds up the way the grid
+   *  behind it did. */
+  releaseVideos() {
+    for (const video of this.sheet.querySelectorAll("video")) releaseVideo(video);
+  }
+
   close() {
+    this.releaseVideos();
     this.unmount();
     this.resolve();
   }
@@ -269,6 +277,7 @@ class LoraDetailSheet {
     }
     const showcase = detail.showcase || [];
     this.sheet.classList.toggle("bare", !showcase.length);
+    this.releaseVideos();
     this.sheet.replaceChildren(
       ...(showcase.length ? [this.stage(showcase)] : []),
       detail.meta ? this.metaInfo() : this.headerInfo(),
@@ -319,6 +328,7 @@ class LoraDetailSheet {
     this.current = index;
     this.stripCells.forEach((cell, at) => cell.setAttribute("aria-selected", String(at === index)));
     const source = loraShowcaseUrl(this.row.name, item.index);
+    for (const video of this.stageMedia.querySelectorAll("video")) releaseVideo(video);
     this.stageMedia.replaceChildren(item.kind === "video"
       ? el("video", { src: source, controls: true, loop: true, muted: true, autoplay: true, playsInline: true })
       : el("img", { src: source, alt: "" }));

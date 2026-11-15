@@ -48,6 +48,15 @@ export function dragsFiles(event) {
   return types ? Array.prototype.includes.call(types, "Files") : false;
 }
 
+/** Give a <video>'s player back to the browser. Dropping the element is not
+ *  enough: the player lives until the collector reaches it. */
+export function releaseVideo(video) {
+  if (!video.hasAttribute("src")) return;
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+}
+
 /**
  * Copy the frame a <video> is sitting on onto a canvas, sizing the backing
  * store to the clip's own aspect and capping it — neither a 230 px card nor a
