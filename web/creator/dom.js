@@ -224,6 +224,8 @@ export const ICONS = {
   // sphere with one soft meridian, flat is that sphere cut into facets.
   smooth: `<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5a4.5 8.5 0 000 17"/>`,
   flat: `<path d="M12 3.5l7.4 4.25v8.5L12 20.5l-7.4-4.25v-8.5z"/><path d="M12 3.5v8.5l7.4 4.25M12 12l-7.4 4.25"/>`,
+  // Lucide's clapperboard: Director's Plan switch and plan card.
+  clapperboard: `<path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>`,
   shuffle: `<path d="m18 14 4 4-4 4"/><path d="m18 2 4 4-4 4"/><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"/><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"/><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"/>`,
 };
 

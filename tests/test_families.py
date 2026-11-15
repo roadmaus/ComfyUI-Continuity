@@ -20,7 +20,7 @@ from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
-                   "still", "krea2_still", "ideogram4_still", "flux2klein_still",
+                   "h3image_still", "krea2_still", "ideogram4_still", "flux2klein_still",
                    "qwen21_still", "moss_still", "visionweights",
                    "grammar", "h3_declare", "h3_models", "h3_grammar",
                    "ltx25_declare",
@@ -35,7 +35,7 @@ registry = _pkg.registry
 manifest = _pkg.manifest
 grammar = _pkg.grammar
 ci = _pkg.compile_image
-h3s = _pkg.still
+h3i = _pkg.h3image_still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
 kl = _pkg.flux2klein_still
@@ -252,14 +252,10 @@ check("h3 turbo reset is sampling.DEFAULTS",
 check("h3 turbo lead max is settings.MAX_LEAD_IN",
       _turbo["lead_max"], _pkg.settings.MAX_LEAD_IN)
 
-# The served latent grid generates still.latent_frames — over every offered
-# length and one past the base, where the formula's branch flips.
-_grid = h3["still"]["latent"]
-for frames in list(h3["still"]["lengths"]) + [_grid["base_frames"] + _grid["frame_step"]]:
-    derived = (_grid["base_latent"] if frames <= _grid["base_frames"] else
-               (frames - _grid["base_frames"]) // _grid["frame_step"]
-               * _grid["latent_step"] + _grid["base_latent"])
-    check(f"latent grid at {frames} frames", derived, h3s.latent_frames(frames))
+# H3 renders video and nothing else: its stills are MiniMax H3 Image's.
+check("h3 serves no pre-stage still block", "still" in h3, False)
+check("h3 produces video only, and names no pill arch",
+      (sorted(registry.PRODUCES["h3"]), _pkg.h3_declare.STILL_ARCH), (["video"], None))
 
 frames = h3["canvas"]["frames"]
 legal = canvas.legal_frame_counts(H3)
@@ -273,10 +269,6 @@ check("h3 canvas carries the trained range and the snap",
        H3.trained_max_frames, {"value": H3.fps, "fixed": True}))
 check("h3 aspects are the presets", h3["canvas"]["aspects"],
       H3.aspects)
-check("h3 still block is families/h3/still.py's",
-      (h3["still"]["arch"], h3["still"]["lengths"],
-       h3["still"]["prompt_modes"]),
-      (h3s.ARCH, list(h3s.STILL_LENGTHS), list(h3s.PROMPT_MODES)))
 
 # ---- LTX 2.5 -----------------------------------------------------------------
 #
@@ -520,6 +512,88 @@ check("qwen21 cites pictures the way its tokenizer spells them",
 check("qwen21 canvas is the shared /16 grid",
       (qwen21["canvas"]["multiple"], qwen21["canvas"]["max_pixels"]),
       (ci.CANVAS_MULTIPLE, ci.MAX_PIXELS))
+
+# ---- MiniMax H3 Image --------------------------------------------------------
+
+h3img = manifest.describe("h3image")
+h3iwidgets = {w["id"]: w for w in h3img["widgets"]}
+for name in ("steps", "cfg", "sampler_name", "scheduler"):
+    check(f"h3image {name} default is the template's six-step row",
+          h3iwidgets[name]["default"], h3i.H3IMAGE_ROW[name])
+check("h3image samples the checkpoint's six PDD heads at cfg 1",
+      (h3i.H3IMAGE_ROW["steps"], h3i.H3IMAGE_ROW["cfg"]), (6, 1.0))
+check("h3image weight slots are one DiT, the encoder and the image VAE",
+      [w["id"] for w in h3img["weights"]], ["model", "clip", "vae"])
+check("h3image wants the image VAE and H3's own encoder type",
+      (h3i.VAE_KIND, h3i.CLIP_TYPE), ("h3_image", "minimax"))
+check("h3image is the pill's frozen \"minimax\" arch",
+      (registry.STILL_ARCHES.get("minimax"), h3i.ARCH, "h3image" in ci.ARCHES),
+      ("h3image", "minimax", True))
+check("h3image has no turbo — the distillation is the checkpoint",
+      "turbo" in h3img["capabilities"], False)
+check("h3image references are native and the first can be the one edited",
+      (h3img["capabilities"]["refs"]["needs_lora"],
+       h3img["capabilities"]["refs"]["edits_first"],
+       h3img["capabilities"]["refs"]["edit_first"]),
+      (False, True, ci.EDIT_FIRST_FIELD))
+check("h3image cites pictures the way MiniMax's prompts do",
+      (h3i.REFS_CITATION, h3img["prompt"]["ordinal"]), ("<Picture {n}>", "<Picture N>"))
+check("h3image's guide is a mask over Picture 1, with nothing to load",
+      (h3img["capabilities"]["control"]["method"],
+       h3img["capabilities"]["control"]["tracings"], h3i.CONTROL_WEIGHTS),
+      ("mask", ["matte"], False))
+check("h3image canvas is its own: /32, 4-20 MP",
+      {k: h3img["canvas"][k] for k in ("multiple", "min_short_edge", "max_short_edge",
+                                      "max_long_edge", "max_pixels")},
+      {"multiple": 32, "min_short_edge": 1536, "max_short_edge": 4096,
+       "max_long_edge": 6272, "max_pixels": 20 * 1024 * 1024})
+check("...and the canvas resolves the card's 16 MP sizes",
+      [ci.resolve_canvas(r, e, ci.canvas_of(h3i)) for r, e in
+       ((1.0, 4096), (4 / 3, 3552), (16 / 9, 3072), (21 / 9, 2688))],
+      [(4096, 4096), (4736, 3552), (5472, 3072), (6272, 2688)])
+check("every other family keeps the shared canvas, byte for byte",
+      [ci.resolve_canvas(r, e, ci.canvas_of(k2)) for r, e in ((16 / 9, 1024), (3.0, 2048))],
+      [ci.resolve_canvas(r, e) for r, e in ((16 / 9, 1024), (3.0, 2048))])
+
+# A pre-stage blob saved on the old H3 branch is lifted into the shared fields.
+_old = {"arch": "minimax", "prompt": "", "minimax": {
+    "frames": 22, "latent_index": 1,
+    "request": {"prompt": "@img-1 at dusk", "aspect": "9:16",
+                "assets": [{"handle": "img-1", "filename": "a.png", "kind": "image", "role": "reference"},
+                           {"handle": "aud-1", "filename": "s.wav", "kind": "audio"}],
+                "loras": [{"name": "x.safetensors", "strength": 0.5}]}}}
+_mig = h3i.migrate(_old)
+check("an old H3 still's request is lifted into the shared fields",
+      (_mig["prompt"], _mig["refs"], _mig["loras"], _mig["aspect"], "minimax" in _mig),
+      ("@img-1 at dusk", [{"filename": "a.png", "handle": "img-1"}],
+       [{"name": "x.safetensors", "strength": 0.5}], "9:16", False))
+check("...and another arch's blob only loses the stale block",
+      h3i.migrate({**_old, "arch": "krea2", "prompt": "keep"}),
+      {"arch": "krea2", "prompt": "keep"})
+check("...and a blob with nothing to migrate is returned as it is",
+      h3i.migrate({"arch": "minimax", "prompt": "x"}), {"arch": "minimax", "prompt": "x"})
+_plan = h3i.compile_still(_old, lambda name: (1000, 1500))
+check("the migrated blob compiles, its picture cited the MiniMax way",
+      (_plan.prompt, _plan.refs, _plan.width, _plan.height),
+      ("<Picture 1> at dusk", ["a.png"], 2048, 3648))
+
+# A mask is an inpaint over Picture 1: it makes Picture 1 the edited picture
+# and the canvas, and it needs Picture 1 to be there.
+_masked = h3i.compile_still({"arch": "minimax", "prompt": "a red door", "refs": [
+    {"handle": "img-1", "filename": "door.png"},
+    {"handle": "img-2", "filename": "door-matte.png", "role": "guide"}]},
+    lambda name: (3000, 2000))
+check("a mask lifts off the pictures and makes Picture 1 the edited one",
+      (_masked.refs, _masked.control["filename"], _masked.init["filename"],
+       (_masked.width, _masked.height)),
+      (["door.png"], "door-matte.png", "door.png", (3072, 2048)))
+try:
+    h3i.compile_still({"arch": "minimax", "prompt": "x", "refs": [
+        {"handle": "img-1", "filename": "m.png", "role": "guide"}]})
+    FAILURES.append("a mask with no picture under it was not refused")
+except _pkg.compile.CompileError as exc:
+    check("a mask with no picture under it is refused by name",
+          "Picture 1" in str(exc), True)
 
 # ---- MOSS-Image -------------------------------------------------------------
 

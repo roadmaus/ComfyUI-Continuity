@@ -163,9 +163,12 @@ export async function memberFromMod(mod, rows = null) {
   const base = modHandle(mod.name);
   let handle = base;
   for (let n = 2; taken.has(handle); n += 1) handle = `${base}_${n}`;
+  // A bundle of several arrives split (`routes/refmod.upload_refmod`), its
+  // members under `parts`: one character, so one member built of all of them.
+  const parts = Array.isArray(mod.parts) && mod.parts.length ? mod.parts : [mod];
   const body = { cast: {
     handle, takes: "person", description: mod.description ?? "",
-    files: [{ slot: "from", filename: mod.path, kind: mod.kind === "video" ? "video" : "image" }],
+    files: parts.map((part) => ({ slot: "from", filename: part.path, kind: part.kind === "video" ? "video" : "image" })),
     features: S.seedFeatures("person"), seeded: true,
   } };
   const row = await savePreset({ name: handle, scope: "cast", data: body });
@@ -429,16 +432,15 @@ export function crossable(key, from, to, { arch = null, targetArch = null,
   // other's. `setFamily` sets both aside per family on a piece for exactly this
   // reason — a preset is the same crossing arriving from outside.
   //
-  // A pre-stage has an arch rather than a family, and only its H3 branch has a
-  // family at all: that branch's `request` *is* a creator request, so its row
-  // and its files are H3's. The image arches answer `null` and are governed by
-  // the arch rule below instead, which is the one they have always been under.
-  const sideFamily = (scope, ownArch, ownFamily) =>
-    (scope === "prestage"
-      ? (ownArch === S.PRESTAGE_STILL_ARCH ? S.DEFAULT_VIDEO_FAMILY : null)
-      : (VIDEO_SCOPES.includes(scope) ? ownFamily : null));
-  const fromFamily = sideFamily(from, arch, family);
-  const toFamily = sideFamily(to, targetArch, targetFamily);
+  // A pre-stage has an arch rather than a family — every arch is an image
+  // family now that MiniMax's still is MiniMax H3 Image's — so it answers
+  // `null`, and the weights rule below is what keeps its files off a piece.
+  // (`arch` and `targetArch` are still passed by callers; nothing here needs
+  // them since the H3 branch, the one arch that shared a piece's files, went.)
+  const sideFamily = (scope, ownFamily) =>
+    (scope === "prestage" ? null : (VIDEO_SCOPES.includes(scope) ? ownFamily : null));
+  const fromFamily = sideFamily(from, family);
+  const toFamily = sideFamily(to, targetFamily);
   if ((key === "speed" || key === "weights")
       && fromFamily && toFamily && fromFamily !== toFamily) {
     return {
@@ -451,15 +453,12 @@ export function crossable(key, from, to, { arch = null, targetArch = null,
     };
   }
   if (from === to) return { ok: true };
-  // The one genuinely awkward crossing. The two node families name different
-  // files: a piece loads FL2VA/Ref2VA/CLIP/two VAEs, a pre-stage loads Krea 2 or
-  // Ideogram 4 — except on its H3 branch, whose `request` *is* a creator request
-  // and whose models block is the same block under the same keys.
+  // The one crossing that never works. The two node families name different
+  // files: a piece loads a video family's checkpoints, a pre-stage an image
+  // family's. The H3 still used to load the piece's own, which is the case
+  // this once let through; MiniMax H3 Image has files of its own.
   if (key === "weights") {
-    const stillBranch = (from === "prestage" ? arch : targetArch) === S.PRESTAGE_STILL_ARCH;
-    if (!stillBranch) {
-      return { ok: false, why: "These are different model families — only a pre-stage on the H3 branch loads the same files a piece does." };
-    }
+    return { ok: false, why: "These are different model families — a pre-stage loads an image model's files and a piece a video model's." };
   }
   return { ok: true };
 }
@@ -573,14 +572,6 @@ export function captureShot(timeline, index, io) {
 /**
  * A PreStage node as a preset body. `arch` and `quality` ride with the weights
  * because they are what chooses the model, which is what that section is.
- *
- * The H3 branch keeps its files somewhere else, and missing that is a silent way
- * to lose them: `serializePreStage` fills the top-level `models` block for the
- * two *image* architectures only (`PRESTAGE_IMAGE_ARCHES`), while the H3 branch's
- * checkpoints live in `minimax.request.models` — because that request *is* an
- * ordinary creator request. So the still's block is carried alongside its frame
- * settings, and `crossable`'s promise that an H3 pre-stage "loads the same files
- * a piece does" is one this can actually keep.
  */
 export function capturePreStage(state, io) {
   const blob = JSON.parse(S.serializePreStage(state));
@@ -590,12 +581,6 @@ export function capturePreStage(state, io) {
       arch: blob.arch,
       quality: blob.quality,
       models: blob.models ?? {},
-      ...(blob[S.PRESTAGE_STILL_ARCH] ? {
-        [S.PRESTAGE_STILL_ARCH]: {
-          ...pick(blob[S.PRESTAGE_STILL_ARCH], ["frames", "latent_index"]),
-          models: blob[S.PRESTAGE_STILL_ARCH].request?.models ?? {},
-        },
-      } : {}),
     },
     speed: { turbo: blob.turbo ?? null,
              row: readRow(io, stillSpeedNames(blob.arch)) },
@@ -1396,9 +1381,9 @@ export function addSubjectToPiece(stored, timeline, { pool = false } = {}) {
   if (!stored) return null;
   if (!Array.isArray(timeline.assets)) timeline.assets = [];
   if (!Array.isArray(timeline.subjects)) timeline.subjects = [];
-  // No segments at all is the pre-stage's H3 still — a lone generation whose
-  // assets *are* the shot's row — so it takes the one-shot treatment with the
-  // piece as its own host.
+  // No segments at all is a lone generation whose assets *are* the shot's row
+  // (the pre-stage's old H3 still was one), so it takes the one-shot
+  // treatment with the piece as its own host.
   const single = !pool && (timeline.segments ?? []).length <= 1;
   const host = single ? (timeline.segments?.[0] ?? timeline) : timeline;
   if (!Array.isArray(host.assets)) host.assets = [];
@@ -1511,21 +1496,11 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
   }
   if (chosen.has("weights")) {
     // Through `parseModels` rather than assigned: a stored block omits every
-    // field at its default, and the state wants a full one.
-    //
-    // From a pre-stage this reads the H3 branch's own block — the one inside its
-    // still request, which is where a creator-shaped set of weights lives on that
-    // node. `crossable` has already refused every other architecture.
-    //
-    // Read as the *target's* family, not as the default. The slot ids are the
-    // family's, so a block parsed through H3's table onto an LTX 2.5 piece
-    // comes back empty — every file the preset was keeping, dropped. From a
-    // pre-stage it is the H3 branch's block by construction, which `crossable`
-    // has already refused every other case of.
-    timeline.models = S.parseModels(from === "prestage"
-      ? (body.weights?.[S.PRESTAGE_STILL_ARCH]?.models ?? {})
-      : (body.weights ?? {}),
-      from === "prestage" ? S.DEFAULT_VIDEO_FAMILY : S.pieceFamily(timeline));
+    // field at its default, and the state wants a full one. Read as the
+    // *target's* family: the slot ids are the family's, so a block parsed
+    // through H3's table onto an LTX 2.5 piece comes back empty. A pre-stage's
+    // weights never reach here — `crossable` refuses the crossing.
+    timeline.models = S.parseModels(body.weights ?? {}, S.pieceFamily(timeline));
   }
   if (chosen.has("speed")) {
     timeline.turbo = S.parseTurbo(body.speed?.turbo ?? null);
@@ -1656,24 +1631,19 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
     if (body.look?.short_edge) state.short_edge = body.look.short_edge;
   }
   if (chosen.has("weights")) {
+    // A piece's weights never reach a pre-stage — `crossable` refuses it. A
+    // preset saved on the old H3 branch carries that branch's files under
+    // `weights.minimax`, which are video checkpoints and are not read.
     if (from === "prestage") {
       if (body.weights?.arch) state.arch = body.weights.arch;
       if (body.weights?.quality) state.quality = body.weights.quality;
       state.models = { ...state.models, ...(body.weights?.models ?? {}) };
-      const still = body.weights?.[S.PRESTAGE_STILL_ARCH];
-      if (still) {
-        if (still.frames !== undefined) state[S.PRESTAGE_STILL_ARCH].frames = still.frames;
-        if (still.latent_index !== undefined) state[S.PRESTAGE_STILL_ARCH].latent_index = still.latent_index;
-        // The H3 branch's checkpoints, which are not in the block above — see
-        // `capturePreStage`. Restored through `parseModels` like any other.
-        state[S.PRESTAGE_STILL_ARCH].request.models = S.parseModels(still.models ?? {});
-      }
-    } else {
-      // A piece's weights only reach the H3 branch, whose request is a creator
-      // request — `crossable` has already refused every other case.
-      state.arch = S.PRESTAGE_STILL_ARCH;
-      state[S.PRESTAGE_STILL_ARCH].request.models = S.parseModels(body.weights ?? {});
     }
+  }
+  // The edge is the arch's: a look saved on one arch and applied with
+  // another's weights lands on that arch's range (`preStageEdgeFor`).
+  if (chosen.has("look") || chosen.has("weights")) {
+    state.short_edge = S.preStageEdgeFor(state.arch, state.short_edge);
   }
   if (chosen.has("speed")) {
     // The pre-stage's switch is per arch and the piece's is not — see

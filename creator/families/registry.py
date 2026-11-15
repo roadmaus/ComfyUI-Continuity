@@ -140,12 +140,13 @@ IMAGE_FAMILIES = tuple(module.ID for module in DECLARED
 
 # What the pre-stage blob's `arch` pill calls each still-capable family, in the
 # order the pill offers them: the families that are *only* stills first, then
-# the still branch of a family that also renders video — which is a video
-# generation one latent frame of which is decoded, and belongs after the ones
-# that draw a picture outright.
+# the still branch of any family that also renders video. No family has one
+# today — H3's was a video generation one latent frame of which was decoded,
+# and MiniMax H3 Image replaced it — but the ordering stays for the next.
 #
 # "minimax" predates the family ids and is frozen in every saved blob, so that
-# alias is permanent — the id it maps to is the family's own declaration.
+# alias is permanent — the id it maps to is the family's own declaration
+# (MiniMax H3 Image's now; it was H3's).
 STILL_ARCHES = {
     module.STILL_ARCH: module.ID
     for module in sorted(DECLARED, key=lambda m: (len(m.PRODUCES), m.ORDER))

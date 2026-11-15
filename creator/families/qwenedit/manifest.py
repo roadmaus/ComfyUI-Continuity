@@ -48,21 +48,9 @@ _UI = {
 
 
 def _weights():
-    return [{
-        "id": name,
-        "folder": render_image.FOLDERS[name],
-        "label": render_image.LABEL[name],
-        "loads": True,
-        # One DiT and no second branch to route a generation between.
-        "routed": False,
-        "audio": False,
-        "gguf": name in ("model", "clip"),
-        "device": False,
-        "title": _UI[name]["title"],
-        "help": _UI[name]["help"],
-        "hints": _UI[name]["hints"],
-        "avoid": [],
-    } for name in still.FIELDS]
+    return [render_image.manifest_weight(name, _UI[name],
+                                        gguf=name in ("model", "clip"))
+            for name in still.FIELDS]
 
 
 def _canvas():

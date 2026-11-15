@@ -361,6 +361,24 @@ export const css = `
 .mmc-ch-tool { background: none; color: var(--mmc-dim); }
 .mmc-ch-tool:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
 .mmc-ch-tool svg { stroke: currentColor; fill: none; stroke-width: 2; }
+/* Director's switch: a tool that says its name, lit while the next message
+   is a brief. */
+.mmc-ch-tool.mmc-ch-plan {
+  width: auto; gap: 5px; padding: 0 10px 0 8px; border-radius: 16px;
+  font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
+}
+.mmc-ch-tool.mmc-ch-plan[aria-pressed="true"] {
+  color: var(--mmc-accent); background: color-mix(in srgb, var(--mmc-accent) 14%, transparent);
+}
+.mmc-ch-tool.mmc-ch-plan:disabled { opacity: .45; cursor: default; }
+/* ...and the mark on a message that was sent with it on. */
+.mmc-ch-briefmark {
+  align-self: flex-end; display: inline-flex; align-items: center; gap: 4px;
+  font-size: calc(11px * var(--mmc-type)); color: var(--mmc-faint);
+}
+.mmc-ch-briefmark svg { stroke: currentColor; fill: none; stroke-width: 2; }
+/* The way out of a plan the room made by itself: one clip after all. */
+.mmc-ch-oneclip { display: flex; justify-content: flex-start; }
 .mmc-ch-send { background: var(--mmc-accent); color: var(--mmc-on-accent); }
 .mmc-ch-send svg { stroke: currentColor; fill: none; stroke-width: 2.2; }
 .mmc-ch-send:disabled { background: var(--mmc-surface-2); color: var(--mmc-off); cursor: default; }

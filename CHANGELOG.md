@@ -6,6 +6,286 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The refiner can let the model think (experimental).** A "let it think"
+chip under the refiner's model list lifts the reasoning suppression every LLM
+call carried — the empty `<think>` block in-process, `reasoning_effort: "none"`
+on the wire — so the large reasoning models now within reach of a home server
+write with their trace instead of without it. One switch reaches refine,
+stills, the chat room, Director and the magic prompts, because all of them go
+through the two backends' `chat`, which read it off the settings file. While it
+is on, the reply gets 8k more tokens to think in, the in-process reply is no
+longer prefilled with `{`, no JSON schema constrains the decode (a grammar
+would constrain the trace too), and the trace is taken off before any reader
+sees the answer, whether the model opened it or the chat template did. Off is
+the default and behaves exactly as before.
+
+**MiniMax H3 Image keeps saved references in a latent space of its own.**
+Its VAE has the H3 video encoder's weights, but an H3 mod is not this
+family's reference: core's image VAE samples its posterior where the video
+VAE takes the mean, and the conditioning node anchors a picture at a
+1024-2048 short edge where an H3 mod is made at 1024. So a mod for it is made
+the way that node makes a reference block (`h3_image`, saved as
+`<name>.h3_image`): a full one is that block, a compressed one is pooled to a
+64-grid. The text encoder is shown the picture a mod hangs on and only the
+anchor is read off the file (`ContinuityRefModH3ImageAnchor`); a mod with no
+picture behind it is decoded to be shown. The ledger counts the two families
+apart, the picture an edit or inpaint changes is always read as itself, and
+an H3 mod standing alone is not read here. A still's compressed fit runs on
+the render device rather than the CPU. The library opened from a pre-stage
+offers saving, and names the pre-stage's own family first.
+
+**A planned piece holds together from clip to clip.** Director's clips lost
+the thread in four places, and each is closed. Shots are grouped into
+*scenes* — everything from one real cut to the next — and a scene's place is
+cited into every shot of it, with a one-line *setting* (place, time, light)
+written on the shot that opens the scene and appended to the rest, so a
+second angle is no longer sampled with no room to be in and the video model
+no longer builds another one. The setting is on the plan card under each
+shot that opens a scene, and can be changed there or by talking. A shot too
+long for one clip is written as its clips by a new planning call, one
+sentence each, instead of every clip being handed the whole shot's sentence
+to play again from its start; where that call fails the clips are told which
+part of the shot they are. A clip that carries on is told what the clip
+before it showed, and a new angle is told what must not change rather than
+about "the previous shot", which it was never shown.
+
+**Clips that carry straight on are rendered as one piece.** The run queued
+every clip as its own prompt, so each seam was a tail decoded back out of
+the saved file of the clip before. A clip and the clips that `pin` to it
+(up to four) are now one render of several shots, as the node renders a
+timeline: the seam is read off the pass in front, and on H3 takes that
+pass's latent by whichever seam handoff the machine is set to, instead of
+re-encoding decoded frames. Each shot still lands as its own clip, under its own
+handle and held on its own take, so a later "make shot 3 darker" is the turn
+it always was. Such a render lands or fails whole, and Run again starts it
+over.
+
+**A cut can open on the frame before it.** With the storyboard off and an
+edit model on the rail, a shot that is a new angle on the same moment opens
+on the last frame of the shot before it, turned to the new angle by the edit
+model during the run — the same room, light and clothes, from somewhere
+else. Nobody approves that frame first, since it does not exist until the
+clip before has rendered; *Match cuts* on the plan card turns it off, and a
+plan made before this renders as it did.
+
+**The planning model is told more.** The small profile's shots call is shown
+the beat on either side of the one it writes and the choices the piece was
+planned on, where it used to choose how a beat joins the one before without
+having read it; and a first shot that claims to carry on from a shot set in
+another place is made a real cut by code. Rendered clips of a plan made
+before this read as out of date where their prompt is now different — a shot
+in a scene whose place it did not name, or a shot cut into parts — and Run
+renders those again.
+
+
+**The pre-stage's weights can be pinned to a GPU, as the video node's can.**
+With ComfyUI-MultiGPU installed, the Creator's weights popover had a device
+pill on every checkpoint, encoder and VAE row, and the pre-stage's had none:
+its stills were built on a weights class of their own that had nowhere to keep
+a pin, every image family's manifest said `device: false` outright, and the
+render emitted each loader with no device, the VAE not even through
+`loader_for`. Both sides now read pins through one rule
+(`models.pinned_devices`) and emit through one swap (`loader_for`, by way of
+`render_image.emit_loader`), and the seven image manifests build their weight
+rows from one helper that derives which fields can move from the loader each
+one is emitted through. Pins are kept per arch, beside the files they name, so
+moving Krea 2's encoder to `cuda:1` leaves Ideogram's where it was; the
+popover's pill is the Creator's own control, and the weights pill reads
+`weights · cuda:1` the way the Creator's does. The headless render route
+takes `devices` for a picture now instead of refusing it, the chat room
+carries a still's remembered pins into its renders, and remembering a still
+family's files no longer forgets its pins.
+
+**The pre-stage's MiniMax stills are made by MiniMax H3 Image.** The
+MiniMax choice on the pre-stage used to run the H3 *video* model on the
+shortest legal clip and decode its first latent frame, because there was no
+other way to get a picture out of MiniMax weights; it cost a video pass at a
+video canvas for one frame, and its body was a whole Creator editor with a
+clip-length and a latent-frame pill. ComfyUI 0.45 ships MiniMax H3 Image
+natively, and it is now a still family like Klein or Qwen Image Edit: core's
+`MiniMaxH3ImageConditioning` reads the prompt and up to four pictures (cited
+`<Picture N>`, MiniMax's own spelling), the first of which can be edited in
+place, at the template's six distilled steps and cfg 1. It wants a large
+canvas — 4 to 20 MP, best near 16 — so a family can now declare its own
+canvas block, and this one's slider runs 1536 to 4096 on the short edge, /32,
+up to 6272 on the long one; every other family's canvas is unchanged. The
+pill keeps its `minimax` id, so a pre-stage saved on the old branch opens on
+the new model with its prompt, pictures, LoRAs and aspect lifted out of the
+old request and its frame settings dropped (`h3image.still.migrate`, mirrored
+in `state.js`). The image VAE is told apart from the video one by its header
+and refused by name when the wrong one is picked. `MiniMaxH3StillLatent` is
+gone, H3 renders video only, and a preset's weights no longer cross between
+a pre-stage and a piece on any arch. Whether an H3 video LoRA does anything
+useful on these weights is untested: the DiT is the same shape as the pruned
+video checkpoints, so the keys match, and that is all that is known.
+
+**MiniMax H3 Image inpaints under a matte.** The pre-stage grows a *Mask*
+tool on this family: pick a matte the ControlNet bench already wrote, or mask
+a picture now and send it back with *Inpaint under it*. The matte lands as a
+mask chip, not a picture; the white of it is repainted over Picture 1 and the
+rest is kept, through core's ordinary latent noise mask (the image model's
+single stream goes down the stock inpaint path). A mask always makes Picture
+1 the picture edited, so its canvas is Picture 1's, and a mask with no
+picture under it is refused by name.
+
+**A member's clips are saved with their stills, and a clip can be kept for
+its motion.** Compressed and Full were stills only, and the ledger counted a
+member as saved once their stills were — so a member saved that way showed
+*Saved*, lost the line that offers to save the rest, and kept encoding their
+clip every render; the only way through was to save the clip first. Both rows
+now save a member's clips first, each as its own file (pooled to a 32-grid
+for Compressed, the 768 encode for Full), then their stills, and the ledger
+reads *saved* only when every look is. A new row, *Each clip — for its
+motion*, keeps a clip the way the sibling pack's motion workflow does: 56
+frames over up to fifteen seconds on a 16-grid, around 450 tokens, with the
+fit weighted toward the cells that move. A plain loss on frame differences
+was the first idea and would have changed nothing, since the enlargement is
+linear and the same per frame; a weighted fit has a different optimum.
+
+**Clips are read whole to the end, and held frames are left out.** A clip
+was sampled at the count asked for and then cut down to the 17k+5 run from
+the end, so a count off that run — or a clip shorter than it — lost the end
+of the movement; the run is now chosen first and the picks span the whole
+stretch read, the fix the sibling pack made in 0.2.6. Latent frames that
+repeat the one kept before them are dropped before a clip is pooled or
+stacked (mean squared change over the clip's variance, threshold 0.02), and
+the log says what each clip kept and measured so the threshold can move on
+evidence; `thin: 0` keeps every frame.
+
+**RefMod bundles go both ways.** A ComfyUI-MiniMaxH3Mod bundle of several
+references was refused on import; it is now split into its members
+(`anna-1`, `anna-2`, …) and one cast member is made of all of them. A member
+with two or more H3 RefMods has *Download as one bundle* in their saved
+references' menu: one format-5 file built from the files' own bytes, for that
+pack's loader, never filed here.
+
+**A plan's shots can be added, taken out and moved, by talking and on the
+card.** A plan turn could change what a row said and plan the piece again,
+and nothing in between: "drop shot 2" was read as an edit of shot 2, and a
+shot wanted between two others meant a replan that rewrote every beat. The
+turn call now answers three more acts. *Add* runs the shots call once more,
+shown the beat the shot joins and that beat's shots, told where the new one
+goes and what it shows, and writes the one shot. *Remove* takes a shot out,
+or a beat with its shots, and *move* puts a shot somewhere else, into
+whatever beat that is; neither needs the model. Where a shot goes is said in
+words ("after shot 2", "before the last shot", "in beat 2", "first", "last")
+and read by code, off the person's own message first, so "move shot 3 before
+shot 1", "swap shots 2 and 3", "drop the second shot" and "another shot of
+the door" do what they say whatever a small model made of them. Ids go with
+the shots, so a moved shot keeps its render and what now follows it is stale
+on its own; a beat whose last shot goes is gone with it, and the plan's last
+shot stays. The card has the same three moves: up, down and out under each
+shot's seconds, faint until the pointer is on the row, and *Add a shot* under
+each beat, where the words typed go through the same reader as a model's.
+
+**The Chat card sits under Go to.** The dashboard filed the chat beside the
+upscaler, under Tools, on the rule that a Go-to card only rearranged the room
+while a tool opened a surface over it. The chat is where a piece is asked for
+in words and, with Director, planned and run, so it now sits beside Pre-stage
+and Shot as the third place a piece is made. It wears the drawn plate every
+dashboard card has now — a line said, and the frame it turns into.
+
+**Director can plan a piece in two calls for a model that can carry them.**
+A plan was made in one decision a call — the brief, the title, the beats,
+the cast, then one call per beat's shots, each shown only its own sliver —
+because that is the shape a 2B model holds. A capable model paid for it: the
+shot that opened one beat was joined to the beat before by a model that never
+read the beat before, no call ever saw the whole shot list, and a plan was ten
+round trips. The chat's model settings now have a *Planning* choice beside
+Verbosity. *Many small steps* stays the default and plans as before. *Two
+calls* shows the model the whole brief and asks for the structure in one
+reply (title, length, look, camera, beats and who and what is in it, told
+ranges rather than counts), then every beat with its seconds and asks for the
+whole shot list, with the beat each shot shows. The same readers check both
+shapes, the one re-ask names the beat it is about, an entity no shot cites
+is dropped rather than drawn, and a replan on this setting is the same two
+calls again. The plan that comes out is the same document, and a change to
+one row is still that row's own small call. A whole structure or shot list
+is a longer reply than a turn's, so on this setting the reply budget is at
+least 4096 tokens whatever the slider says. `tools/director_bench.py` takes
+`--steps large` so the two shapes can be run on one model and compared; the
+2B floor model does not carry them, which is why small steps stays the
+default.
+
+**The refiner stops inventing references.** Refining a bare prompt on the
+node, with nothing attached, could come back citing video and audio
+references nobody had added. The H3 refiner taught every request how handles
+work, with `@vid-2` and `@aud-1` as its examples and "a clip is @vid-N" as a
+rule, and a 27B model read that as references to write. The lesson is now
+given only when the request carries a file, the piece's pool or a cast.
+
+**A request longer than one shot offers a plan, and the plain chat stays a
+refiner.** A fresh clip longer than 15 seconds, longer than the video model
+renders at all, or a message naming several shots used to be planned as a
+Director brief by itself, which turned the plain chat — the Plan switch off,
+asked only to write and render a prompt — into a project it never asked for.
+Now the clip renders as asked (at the video model's ceiling when it asks for
+more), and the answer carries a *Plan it as a piece* button that sends the
+same message as a brief, with the reason on its tooltip. A clip after or in
+place of one on the strip is never offered, and the length the person said
+wins over the one the model wrote.
+
+**A piece filmed through somebody's eyes stays that way.** "Filmed entirely
+from the diver's POV through his helmet lens" was lost after the brief: the
+beats, the who-and-what list and the shots were written as if the diver stood
+in frame, and the diver got a reference sheet of his own. The plan now has a
+*Camera* line beside the look, written by the basics call when the brief says
+how the whole piece is filmed and editable on the card. The beats, entities
+and shots calls are shown it, the person whose eyes it is is not listed, and
+every clip and opening frame carries it in its prompt; sheets do not, and a
+plan without one renders exactly as before. The entities call also no longer
+lists light, beams, glow, smoke or open water as things with a picture of
+their own, and a shot writes "the floodlights of @ship_deck" rather than
+using a name as an adjective.
+
+**A plan made again can cast its people again.** Approving @diver on the
+second version of a brief was refused as "already somebody in this chat's
+cast": the first version's @diver was still there, and the check only knew
+the current plan's own earlier takes. A cast member made by approving any
+Director sheet in the chat — this plan's, a replaced plan's, or a version the
+person stepped away from — is now the plan's to replace; only somebody cast
+another way is refused.
+
+**A planned shot can be one long take.** Director splits shots over 15
+seconds into chained clips, and that stays the default. A shot can now be
+marked *One take* on the plan card, which runs it to what the video family
+can render before cutting; a brief asking for "one continuous shot" is
+planned as one beat of one take; and the card says beside a long take that
+one clip drifts more than chained shots.
+
+**The chat reads the small models' replies again.** On `lfm3-omni` every turn
+failed: the model writes a stray `{"act": "say"}` object before the fenced
+answer, and the reply was read as one value and refused. The reply reader now
+takes the fenced object first and the first complete object otherwise. A
+handle copied from the worked examples into "from" while nothing has been
+made yet is dropped instead of refused, and a message that plainly names a
+clip or a picture gets that kind when the model wrote the other.
+
+**A cast member a clip cites in the wrong case is in the clip again.** Director
+writes every name in its plan in lower case, so George from the chat's cast
+was cited as `@george` in every shot. The chat's check accepts a cast name in
+any case, but the compiler matches the cast's own spelling exactly, so the name
+reached the model as a bare word with no picture behind it, and no clip of the
+run had him in it. A cited cast name is now written in the cast's spelling
+before the render is built, which also covers storyboard stills and any chat
+turn where the model changes a name's case.
+
+**llama-swap is found, offered and ejected like LM Studio and Ollama.** It
+already worked as a server URL, being OpenAI-compatible, but the room's first
+run only knocked on LM Studio's and Ollama's ports, and "Eject when done" knew
+neither of llama-swap's unload calls, so its model held the VRAM until its own
+TTL ran out. The first run now also checks `localhost:8080`, where llama.cpp's
+server and llama-swap both answer; the refiner's settings have a llama-swap
+preset; and an eject ends with `POST /api/models/unload/<model>`, whose bare
+`OK` reply is read as the success it is.
+
+**A chat clip on LTX 2.5 can follow the one before it again.** The dry run
+every chat render goes through compiled each pass as MiniMax H3, so the seam an
+LTX 2.5 clip opens with "after" another was checked against H3's feather widths
+and refused ("a seam can inherit 1, 5, 22 … not 17"). The dry run now compiles
+each pass for the piece's own family, which also makes the editor's compiled
+prompt box right for LTX pieces.
+
 **Every card on the wordmark's dashboard is drawn now.** Image to 3D and Game
 Forge were line drawings and the five benches beside them were photographs,
 so the grid read as two surfaces. Presets, ControlNet, Blockout, Upscale and

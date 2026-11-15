@@ -127,12 +127,18 @@ export const FULL_TOKENS = 1024;
 export const KLEIN_FULL_TOKENS = 4096;
 export const KLEIN_COMPRESSED_TOKENS = 1024;
 /** Tokens a clip kept on its own costs per latent frame, at the 768 reference
- *  canvas: a 48x27 grid is 24x14 tokens for a 16:9 clip. Compressed to the
- *  family's grid it is what a stack frame is. */
+ *  canvas: a 48x27 grid is 24x14 tokens for a 16:9 clip. */
 export const CLIP_FRAME_TOKENS = 336;
+/** The same, compressed for its look: the 32-grid `routes/refmod.CLIP_USES`
+ *  pools a kept clip's look to, 16x9 tokens for a 16:9 clip. */
+export const CLIP_COMPRESSED_FRAME_TOKENS = 144;
 /** Latent frames a clip mod holds at the maker's defaults: 22 source frames
- *  read as six. */
+ *  read as six. Before held frames are dropped, so an upper bound. */
 export const CLIP_FRAMES = 6;
+/** A clip kept for its motion (`CLIP_USES.motion`): 56 source frames read as
+ *  fourteen, each pooled to a 16-grid — 8x4 tokens for a 16:9 clip. */
+export const MOTION_FRAMES = 14;
+export const MOTION_FRAME_TOKENS = 32;
 /** Where a member's mods are written, under models/refmods/. */
 export const SUBFOLDER = "cast";
 // The canvas assumed for a `match` estimate where no host can say — the
@@ -171,17 +177,59 @@ export const MODES = [
   },
   {
     key: "clip", label: "Each clip — its own file",
-    note: "A clip encoded whole at the 768 reference canvas, up to a minute of "
-        + "it, and kept as one video RefMod: long motion for a few hundred "
-        + "tokens a frame, read off the file instead of decoded every render.",
+    note: "A clip encoded whole at the 768 reference canvas and kept as one video "
+        + "RefMod, for how they look in it: six frames at full size, read off the "
+        + "file instead of decoded every render. Frames that repeat the one before "
+        + "are left out.",
+  },
+  {
+    key: "motion", label: "Each clip — for its motion",
+    note: "Fifty-six frames over up to fifteen seconds, each pooled to a 16-grid "
+        + "and fitted closest where things move: how they move, for a few hundred "
+        + "tokens. The look goes soft; their pictures carry that.",
   },
 ];
+
+/** The modes that keep clips, one file each. */
+const CLIP_MODES = ["clip", "motion"];
+
+/**
+ * The jobs one pick of the menu runs, in order: `[{mode, body}]`, `body`
+ * being what goes to `/continuity/refmod/make` beside the sources.
+ *
+ * Compressed and Full are per picture, and a member's looks are often a clip
+ * as well as stills: those rows keep the clips first, each as its own file in
+ * the same spirit (compressed for its look, or whole), and then the stills.
+ * Clips first because the stills were the part the ledger counted — saving
+ * them alone used to read as "saved" and leave the clip to be encoded every
+ * render with no button left to save it. Where the family keeps no clips the
+ * stills are all there is.
+ */
+export function keepSteps(mode, family = null) {
+  const clips = family?.clips ?? (family?.space ?? DEFAULT_SPACE) === DEFAULT_SPACE;
+  if (mode === "stack") return [{ mode, body: { mode: "stack" } }];
+  if (mode === "clip") return [{ mode, body: { mode: "clip", use: "look" } }];
+  if (mode === "motion") return [{ mode, body: { mode: "clip", use: "motion" } }];
+  const stills = { mode, body: { mode: mode === "full" ? "full" : "compressed" } };
+  if (!clips) return [stills];
+  return [{ mode: "clip", body: { mode: "clip", use: "look", compressed: mode !== "full" } }, stills];
+}
 // The notes above are H3's; Klein's numbers differ and the menu says so.
 const KLEIN_NOTES = {
   compressed: "Pooled to a 32-grid on the long edge and refined against the full "
             + "encode — a quarter of the tokens. Unmeasured against the picture yet.",
   full: "The encode at 1 MP, as Klein reads a reference, saved so it is never redone.",
 };
+
+/** The mod table of the family that keeps `space` (`capabilities.refmod`),
+ *  or null — what a still's mod is sized by, and the notes a family words
+ *  its own modes in. */
+const tableOf = (space) =>
+  FAMILIES.map((manifest) => manifest.capabilities?.refmod).find((table) => table?.space === space) ?? null;
+
+/** What the menu says under a mode's row, in `space`. */
+const noteOf = (mode, space) => tableOf(space)?.notes?.[mode.key]
+  ?? (space === "flux2" ? KLEIN_NOTES[mode.key] : null) ?? mode.note;
 
 // A picture's aspect (long over short), measured off its thumbnail the first
 // time the ledger asks. The measure is asynchronous; the caller is told when it
@@ -214,17 +262,27 @@ export function pictureTokens(entry, canvas, onKnown) {
 /** What one picture would cost as a mod of `mode`, in `space`. */
 export function modTokens(entry, mode, onKnown, space = DEFAULT_SPACE) {
   if (entry.kind === "video") {
-    return CLIP_FRAMES * (mode === "compressed" ? STACK_FRAME_TOKENS : CLIP_FRAME_TOKENS);
+    if (mode === "motion") return MOTION_FRAMES * MOTION_FRAME_TOKENS;
+    return CLIP_FRAMES * (mode === "compressed" ? CLIP_COMPRESSED_FRAME_TOKENS : CLIP_FRAME_TOKENS);
   }
-  const aspect = aspectOf(entry.filename, onKnown) ?? 1;
+  return stillTokens(mode, space, aspectOf(entry.filename, onKnown) ?? 1);
+}
+
+/** A still's mod of `mode` in `space`, for a picture of `aspect` (long over short). */
+function stillTokens(mode, space, aspect) {
   if (space === "flux2") {
     // Sized to an area, so the aspect changes nothing but the grid's shape.
     return mode === "compressed" ? KLEIN_COMPRESSED_TOKENS : KLEIN_FULL_TOKENS;
   }
   // Full is sized on the short edge, so a wide picture costs more; the
   // compressed grid sits on the long edge, so a wide picture costs less.
-  if (mode === "compressed") return Math.round(COMPRESSED_TOKENS / aspect);
-  return Math.round(FULL_TOKENS * aspect);
+  // Both off the family's own table: a token is 2x2 cells of 16 px, so a
+  // square at `edge` is (edge / 32)² and one pooled to `grid` is (grid / 2)².
+  const table = tableOf(space);
+  if (mode === "compressed") {
+    return Math.round((table?.grid ? (table.grid / 2) ** 2 : COMPRESSED_TOKENS) / aspect);
+  }
+  return Math.round((table?.edge ? (table.edge / 32) ** 2 : FULL_TOKENS) * aspect);
 }
 
 // The listing of every mod on the machine, by path. `listAssets` caches it and
@@ -375,20 +433,24 @@ export function modeRows(entries, onPick, onKnown, family = null) {
   // keeps them.
   const offered = MODES.filter((mode) =>
     (mode.key !== "stack" || (clipsTaken && (fresh.length > 1 || clips)))
-    && (mode.key !== "clip" || (clipsTaken && clips)));
+    && (!CLIP_MODES.includes(mode.key) || (clipsTaken && clips))
+    // A row that would only re-offer the clip rows above it: per-picture
+    // modes with no stills left and the family keeping no clips.
+    && (CLIP_MODES.includes(mode.key) || mode.key === "stack" || stills.length || (clipsTaken && clips)));
   return offered.map((mode) => {
+    const clipTokens = clipsTaken ? clips * modTokens({ kind: "video" }, mode.key, onKnown, space) : 0;
     const tokens = mode.key === "stack"
       ? (stills.length + clips * STACK_CLIP_FRAMES) * STACK_FRAME_TOKENS
-      : mode.key === "clip"
-        ? clips * modTokens({ kind: "video" }, "full", onKnown, space)
-        : stills.reduce((sum, entry) => sum + modTokens(entry, mode.key, onKnown, space), 0);
+      : CLIP_MODES.includes(mode.key)
+        ? clipTokens
+        : stills.reduce((sum, entry) => sum + modTokens(entry, mode.key, onKnown, space), 0) + clipTokens;
     const approx = mode.key !== "stack" || clips;
-    const note = space === "flux2" && KLEIN_NOTES[mode.key] ? KLEIN_NOTES[mode.key] : mode.note;
+    const note = noteOf(mode, space);
     return {
       label: t("{mode} — {tokens} tokens", {
         mode: t(mode.label), tokens: (approx ? "≈" : "") + long(tokens) }),
-      note: mode.key !== "stack" && mode.key !== "clip" && clips && clipsTaken
-        ? `${t(note)} ${t("Stills only — a clip is kept on its own, or stacked.")}`
+      note: mode.key !== "stack" && !CLIP_MODES.includes(mode.key) && clips && clipsTaken
+        ? `${t(note)} ${t("Their clips are kept first, each as its own file, then the stills.")}`
         : t(note),
       onPick: () => onPick(mode.key, family),
       key: mode.key,
@@ -405,10 +467,11 @@ export function everyFamilyRows(entries, families, onPick, onKnown) {
   if (ready.length < 2) return [];
   return ["compressed", "full"].map((key) => {
     const mode = MODES.find((m) => m.key === key);
-    const perFamily = ready.map((family) => {
-      const fresh = entries.filter((entry) => !modIn(entry, family.space) && entry.kind !== "video");
-      return fresh.reduce((sum, entry) => sum + modTokens(entry, key, onKnown, family.space), 0);
-    });
+    // Each family's own: its stills, and its clips where it keeps them —
+    // `keepSteps` saves those first.
+    const perFamily = ready.map((family) => entries
+      .filter((entry) => !modIn(entry, family.space) && (entry.kind !== "video" || family.clips))
+      .reduce((sum, entry) => sum + modTokens(entry, key, onKnown, family.space), 0));
     if (!perFamily.some(Boolean)) return null;
     return {
       label: t("{mode} — {tokens} tokens", {
@@ -467,9 +530,8 @@ export function remakeRows(rows, onPick) {
     const targets = stills.filter(doable);
     const stuck = stills.length - targets.length;
     const again = targets.length > 0 && targets.every((row) => row.mode === current);
-    const tokens = targets.reduce((sum, row) => sum + (mode.key === "compressed"
-      ? Math.round(COMPRESSED_TOKENS / rowAspect(row))
-      : Math.round(FULL_TOKENS * rowAspect(row))), 0);
+    const tokens = targets.reduce((sum, row) =>
+      sum + stillTokens(mode.key, row.space ?? DEFAULT_SPACE, rowAspect(row)), 0);
     const from = !targets.length
       ? t("The picture it was made of is not in the input folder any more — attach it "
         + "again and save the member instead.")
@@ -485,7 +547,7 @@ export function remakeRows(rows, onPick) {
     return {
       label: t(again ? "{mode} again — {tokens} tokens" : "{mode} — {tokens} tokens",
                { mode: t(mode.label), tokens: `≈${long(tokens)}` }),
-      note: `${t(mode.note)} ${from}${skipped}`,
+      note: `${t(noteOf(mode, stills[0].space ?? DEFAULT_SPACE))} ${from}${skipped}`,
       disabled: !targets.length,
       onPick: () => onPick(mode.key, targets.map((row) => row.path)),
     };
@@ -522,11 +584,20 @@ export function looks(subject, assets) {
 /** What a member can be saved out of, per mode and family. Never a mod
  *  already, never a picture carrying its rendition for that family already,
  *  never a cut-out sheet — that is a layout the encoder builds at render
- *  time. The per-picture modes take stills alone; `clip` takes clips alone; a
- *  stack takes both, which is the point of it. */
+ *  time. One job's sources: the per-picture modes take stills alone, `clip`
+ *  and `motion` take clips alone, a stack takes both, which is the point of
+ *  it. What one pick of the menu saves is `keepSteps` over these. */
 export function keepable(subject, assets, mode = "compressed", space = DEFAULT_SPACE) {
+  const kind = CLIP_MODES.includes(mode) ? "video" : "image";
   return looks(subject, assets).filter((a) => !modIn(a, space) && !S.isPlate(a)
-                                             && (mode === "stack" || a.kind === (mode === "clip" ? "video" : "image")));
+                                             && (mode === "stack" || a.kind === kind));
+}
+
+/** How many files one pick of the menu would encode for `family`. */
+export function keepCount(subject, assets, mode, family = null) {
+  const space = family?.space ?? DEFAULT_SPACE;
+  return keepSteps(mode, family).reduce((sum, step) =>
+    sum + keepable(subject, assets, step.mode, space).length, 0);
 }
 
 /**
@@ -549,12 +620,33 @@ export function keepable(subject, assets, mode = "compressed", space = DEFAULT_S
  */
 export async function keepAsMod(subject, assets, mode, host) {
   const family = host.family ?? { id: null, space: DEFAULT_SPACE, vae: host.vae ?? "" };
-  const stack = mode === "stack";
-  const sources = keepable(subject, assets, mode, family.space);
-  if (!sources.length) {
-    throw new Error(t(mode === "clip" ? "Nothing to save — hang a clip on them first."
-                                      : "Nothing to save — hang a picture on them first."));
+  // Each step's sources are read before any job runs: a step hangs its mods
+  // on its files, and the next step's `keepable` must not see a different
+  // member than the one the menu priced.
+  const steps = keepSteps(mode, family)
+    .map((step) => ({ ...step, sources: keepable(subject, assets, step.mode, family.space) }))
+    .filter((step) => step.sources.length);
+  if (!steps.length) {
+    throw new Error(t(CLIP_MODES.includes(mode) ? "Nothing to save — hang a clip on them first."
+                                               : "Nothing to save — hang a picture on them first."));
   }
+  const total = steps.reduce((sum, step) => sum + step.sources.length, 0);
+  const rows = [];
+  let done = 0;
+  for (const step of steps) {
+    const before = done;
+    const share = step.sources.length / total;
+    rows.push(...await keepStep(subject, step, family, host,
+      host.onProgress ? (fraction) => host.onProgress(before / total + fraction * share) : null));
+    done += step.sources.length;
+  }
+  return rows;
+}
+
+/** One job of `keepAsMod`: its sources encoded, and the result attached. */
+async function keepStep(subject, step, family, host, onProgress) {
+  const stack = step.mode === "stack";
+  const sources = step.sources;
   // The words on each file go into the stack's own description: one file
   // cannot carry a note per picture, and "her face, front-lit; the coat" is
   // worth keeping in its header.
@@ -567,12 +659,12 @@ export async function keepAsMod(subject, assets, mode, host) {
     // The framing on each chip, by position: a mod is the latent of what the
     // model would have read, and that is the window, not the file.
     crops: sources.map((a) => a.crop ?? null),
-    mode: stack ? "stack" : mode === "clip" ? "clip" : mode === "full" ? "full" : "compressed",
+    ...step.body,
     description: [subject.description ?? "", ...(stack ? noted : [])].filter(Boolean).join("; "),
     concept: CONCEPT[subject.takes ?? "person"] ?? "generic",
     vae: family.vae ?? "",
     ...(family.id ? { family: family.id } : {}),
-  }, { onProgress: host.onProgress });
+  }, { onProgress });
   const rows = answer?.mods ?? [];
   if (!rows.length) throw new Error(t("the server saved nothing"));
 

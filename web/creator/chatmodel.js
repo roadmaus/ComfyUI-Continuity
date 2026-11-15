@@ -271,8 +271,37 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
         });
         return el("div", { class: "mmc-ch-token-control" }, [slider, readout]);
       })(), t("The maximum tokens for this chat action, separate from Refiner reply length. It prevents cutoffs but does not force the model to use every token.")),
+      planningRow(bar),
       ...magicRows(bar),
     );
+  }
+
+  /** How many model calls Director plans a piece in (`director_calls.STEPS`).
+   *  Small steps is one decision a call — a brief, a title, the beats, the
+   *  cast, then one call per beat's shots — and holds on the smallest model
+   *  the room is tested against. Two calls shows a capable model the whole
+   *  brief at once and then the whole shot list, so a shot that opens one
+   *  beat is joined to the beat before by a model that read it. A choice,
+   *  not a guess off the model's name: the person knows what they pointed
+   *  the room at, and the bench says which shape their model carries. */
+  function planningRow(bar) {
+    const steps = bar.plan_steps === "large" ? "large" : "small";
+    const labels = { small: t("many small steps"), large: t("two calls") };
+    return line(t("Planning"), el("button", {
+      class: "mmc-pill mmc-ch-value", text: labels[steps],
+      onclick: (event) => openChoicePopover(event.currentTarget, {
+        title: t("How Director plans a piece"),
+        options: ["small", "large"],
+        value: steps,
+        label: (choice) => labels[choice],
+        onPick: (choice) => { setRail({ plan_steps: choice }); drawWrites(); },
+      }),
+    }), t("How many model calls a Director plan is made in. Many small steps asks "
+          + "one question at a time — the beats, the cast, then each beat's shots — "
+          + "and holds on a small model. Two calls shows the whole brief at once and "
+          + "then writes the whole shot list, which a capable model turns into a more "
+          + "coherent piece in a fraction of the time. The plan comes out the same "
+          + "shape either way."));
   }
 
   /** The magic prompt: a second reply that rewrites a still's prompt as the

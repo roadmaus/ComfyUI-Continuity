@@ -214,14 +214,11 @@ def _plan_still(body):
     if family_id is None:
         raise compiler.CompileError(f"unknown model architecture {arch!r}")
 
-    if family_id in registry.video_families():
-        block = data.get(arch)
-        request = block.get("request") if isinstance(block, dict) else None
-        if not isinstance(request, dict):
-            raise compiler.CompileError("this still has no request to refine")
-        return _plan({"kind": "segment", "index": 0, "data": request})
-
     family = registry.still(arch)
+    # A blob from before MiniMax H3 Image keeps its sentence in the old
+    # branch's request; lifted into the shared fields here as the compile does.
+    if getattr(family, "migrate", None) is not None:
+        data = family.migrate(data)
     prompting = refine.of(family_id)
     from .families import stillrefine
 
@@ -758,9 +755,13 @@ def _run(body):
     # and the reply is started mid-object.
     shape = prompting.reply_shape(mode, len(shots), cuts=cuts, shown=shown,
                                   piece=ask_piece, ref_shots=ref_shots, cast=cast)
+    # Whether anything at all rides with the request. Without it the family
+    # leaves out its lesson on handles, which a model otherwise reads as a
+    # cue to cite clips and sounds nobody attached.
+    attached = bool(pool or cast or any(shot.get("slots") for shot in shots))
     system = prompting.system_prompt(mode, body.get("language") or "English",
                                      shape=shape, cuts=cuts, extra=extra, cast=cast,
-                                     still=still)
+                                     still=still, attached=attached)
     message = prompting.user_message(
         shots,
         seconds=seconds,

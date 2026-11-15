@@ -12,12 +12,12 @@ import os
 import layout
 
 _pkg = layout.load("canvas", "h3_declare", "contextir", "subjects", "compile",
-                   "still", package="mmc")
+                   package="mmc")
 
 # The family whose arithmetic these cases are written in. Its own declaration,
 # not a default: every call below says which family it means.
 H3 = _pkg.h3_declare.RULES
-canvas, compiler, still = _pkg.canvas, _pkg.compile, _pkg.still
+canvas, compiler = _pkg.canvas, _pkg.compile
 
 from harness import FAILURES, check, passed
 
@@ -1613,14 +1613,6 @@ check("...and its sample_edge",
       single([segment("a shot")], short_edge=768, sample_edge=512).refine is not None, True)
 check("...and its direct choice",
       single([segment("a shot")], short_edge=1152, upscale="direct").refine, None)
-
-# The still branch pins "direct": it has one decode and its graph has no refine
-# pass — left unpinned, the slider above native would
-# quietly sample at 768 and change nothing.
-still_request = still._request({"request": {"prompt": "a poster", "short_edge": 2048}}, 5)
-check("a still compiles direct past native", still_request.get("upscale"), "direct")
-check("...and samples at the slider's own size",
-      compiler.compile_request({**still_request, "aspect": "16:9"}).refine, None)
 
 # --- the reference pool, one pass ---------------------------------------------
 #

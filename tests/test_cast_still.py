@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from harness import FAILURES, check, passed
 
-_pkg = layout.load("canvas", "registry", "contextir", "subjects", "compile", "compile_image", "still",
+_pkg = layout.load("canvas", "registry", "contextir", "subjects", "compile", "compile_image", "h3image_still",
                    "krea2_still", "ideogram4_still", "qwenedit_still", "flux2klein_still")
 ci, compiler = _pkg.compile_image, _pkg.compile
 krea, klein, qwen, ideogram = _pkg.krea2_still, _pkg.flux2klein_still, _pkg.qwenedit_still, _pkg.ideogram4_still

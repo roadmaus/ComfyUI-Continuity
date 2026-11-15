@@ -1,7 +1,8 @@
 // The PreStage node: stills for the pipeline, made on the left.
 //
-// Two classes. `PreStageEditor` is the body for the *image* architectures —
-// Krea 2, Ideogram 4 and Qwen Image Edit — same skeleton as CreatorEditor
+// Two classes. `PreStageEditor` is the body for every architecture — Krea 2,
+// Ideogram 4, the Qwen and Flux edit models, MiniMax H3 Image — same skeleton
+// as CreatorEditor
 // (rail, chips, panel, pills, sampler row) because it is driven the same way,
 // and the same prompt box for the same reason.
 //
@@ -14,10 +15,9 @@
 // much all along — they have worn `@ref-1` since they existed — and there was
 // no way to write what they were offering.
 //
-// `PreStageBody` below owns the node, and on the third architecture it mounts
-// `CreatorEditor` instead — MiniMax H3's still is a video generation with one
-// latent frame decoded, so the body that drives a shot drives it too, on a
-// request in the same shape. Its docstring says what that buys.
+// `PreStageBody` below owns the node. It used to mount `CreatorEditor` for
+// MiniMax, whose still was a video generation with one latent frame decoded;
+// MiniMax H3 Image is an image model like the rest, so there is one editor.
 //
 // The model pill is the one control the video nodes do not have, and it belongs
 // to the body rather than to either editor: it is the control that swaps them.
@@ -37,7 +37,6 @@ import { openContactSheet } from "./contact.js";
 import { openChoicePopover, stepperPill, aspectGlyph, aspectGrid, edgeSlider, PILL_GLYPH,
          neuralPill } from "./pills.js";
 import { revealPreStage } from "./fullscreen.js";
-import { CreatorEditor } from "./editor.js";
 import { CastShelf, castLook } from "./cast.js";
 import { castFamilies, keepAsMod } from "./refmod.js";
 import { openPresetLibrary } from "./presetlib.js";
@@ -51,7 +50,7 @@ import { STOP_TITLE } from "./guide.js";
 import { openControl } from "./control.js";
 import { Stage, stageSource } from "./stage.js";
 import { loadCatalog, refreshCatalog, catalogByFolder, rememberedWeights,
-         rememberStillWeights } from "./models.js";
+         rememberStillWeights, weightDevicePill, deviceSpread, catalogDevices } from "./models.js";
 import { viewUrl, primeSettings } from "./api.js";
 import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { t } from "./i18n.js";
@@ -635,8 +634,10 @@ export class PreStageEditor {
     // arrangement".
     // And on Qwen Image 2.1 the guide is a picture *slot* without being a
     // picture: the chip and the framing are the same, the compile hands it to
-    // the Fun ControlNet the weights pill loads instead of to the encoder.
-    if (S.preStageReadsGuides(this.state) || S.preStageLoadsBranch(this.state)) {
+    // the Fun ControlNet the weights pill loads instead of to the encoder. On
+    // MiniMax H3 Image it is the same slot read as an inpaint mask.
+    if (S.preStageReadsGuides(this.state) || S.preStageLoadsBranch(this.state)
+        || S.preStageMasks(this.state)) {
       return this.takeGuideAsPicture(path, opId);
     }
     this.state.init = {
@@ -661,8 +662,9 @@ export class PreStageEditor {
       S.dropMods(standing);
       standing.guide = opId;
     } else {
-      // A branch's guide takes no picture slot, so no cap refuses it.
-      const blocked = !S.preStageLoadsBranch(this.state) && this.refBlocked();
+      // A branch's guide or a mask takes no picture slot, so no cap refuses it.
+      const lifted = S.preStageLoadsBranch(this.state) || S.preStageMasks(this.state);
+      const blocked = !lifted && this.refBlocked();
       if (blocked) return this.flash(blocked);
       this.state.refs.push({
         handle: S.nextPreStageHandle(this.state), filename: path,
@@ -673,16 +675,20 @@ export class PreStageEditor {
     this.probeInit();
   }
 
-  /** The Guide tool: a tracing already made, or a picture to trace now. */
+  /** The Guide tool: a tracing already made, or a picture to trace now. On a
+   *  family that inpaints it is the Mask tool, and the tracing is a matte. */
   addGuide(anchor) {
-    const PICK = t("Pick a tracing");
-    const TRACE = t("Trace a picture");
+    const masks = S.preStageMasks(this.state);
+    const PICK = t(masks ? "Pick a matte" : "Pick a tracing");
+    const TRACE = t(masks ? "Mask a picture" : "Trace a picture");
     openChoicePopover(anchor, {
-      title: t("Guide"),
+      title: t(masks ? "Mask" : "Guide"),
       options: [PICK, TRACE],
       sub: (option) => (option === PICK
         ? t("One the ControlNet bench already wrote")
-        : t("Choose any picture, then its edges, lines, depth or pose")),
+        : masks
+          ? t("Choose the picture to change, then matte what changes")
+          : t("Choose any picture, then its edges, lines, depth or pose")),
       onPick: (option) => (option === PICK ? this.pickGuide() : this.traceGuide()),
     });
   }
@@ -710,12 +716,17 @@ export class PreStageEditor {
     });
     const row = chosen?.[0];
     if (!row) return;
+    const masks = S.preStageMasks(this.state);
     openControl({
       source: { path: row.path, kind: "image" },
+      // A mask is a matte, so the bench opens on the one tracing that makes one.
+      ...(masks ? { op: "matte" } : {}),
       targets: [{
         id: "pre", kinds: ["image"],
-        label: t("Aim the still at it"),
-        does: t("Loads the ControlNet branch that reads it."),
+        label: t(masks ? "Inpaint under it" : "Aim the still at it"),
+        does: masks
+          ? t("Repaints the white of the matte over Picture 1 and keeps the rest.")
+          : t("Loads the ControlNet branch that reads it."),
         closeOnSend: true,
         take: (result) => this.takeGuideAsPicture(result.path, result.opId ?? null),
       }],
@@ -732,10 +743,19 @@ export class PreStageEditor {
     const control = S.PRESTAGE_REFS[this.state.arch]?.control ?? {};
     const tracing = ref.guide ?? S.tracingOf(ref.filename);
     const untrained = tracing && !(control.tracings ?? []).includes(tracing);
-    const unloaded = !this.state.models[this.state.arch]?.control;
+    // A mask loads nothing, so there is no file to be missing — and what it
+    // is drawn over is Picture 1, which the chip says rather than "aimed".
+    const masks = S.preStageMasks(this.state);
+    const unloaded = !masks && !this.state.models[this.state.arch]?.control;
     return el("div", {
       class: `mmc-asset${unloaded || untrained ? " mmc-asset-offshape" : ""}`,
-      title: unloaded
+      title: masks
+        ? (untrained
+          ? t("This is not a matte. The white of it is repainted over Picture 1 all "
+            + "the same, whatever it is a picture of.")
+          : t("Picture 1 is repainted under the white of this matte; the rest of it "
+            + "is kept. The prompt says what goes there."))
+        : unloaded
         ? t("No ControlNet file is picked, so this guide cannot load. Click the label "
           + "to choose it in the weights.")
         : untrained
@@ -748,9 +768,10 @@ export class PreStageEditor {
       swappable(
         el("img", { class: "mmc-asset-thumb", alt: ref.filename,
                     src: viewUrl(ref.filename, { preview: true, crop: ref.crop ?? null }) }),
-        { title: t("Pick a different tracing"), onclick: () => this.pickGuide() },
+        { title: t(masks ? "Pick a different matte" : "Pick a different tracing"),
+          onclick: () => this.pickGuide() },
       ),
-      el("span", { class: "mmc-asset-handle", text: t("guide") }),
+      el("span", { class: "mmc-asset-handle", text: t(masks ? "mask" : "guide") }),
       this.cropMark(ref),
       unloaded
         ? el("button", {
@@ -760,7 +781,7 @@ export class PreStageEditor {
           })
         : el("span", { class: "mmc-asset-role", text: tracing ? t(tracing) : t("drawing") }),
       el("button", {
-        class: "mmc-asset-x", text: "✕", title: t("Remove the guide"),
+        class: "mmc-asset-x", text: "✕", title: t(masks ? "Remove the mask" : "Remove the guide"),
         onclick: () => {
           this.state.refs = this.state.refs.filter((r) => r !== ref);
           this.commit();
@@ -1136,6 +1157,12 @@ export class PreStageEditor {
              t("Aim the still at a tracing — its edges, lines, depth or pose. Pick one "
              + "you traced, or trace a picture now."),
              (event) => this.addGuide(event.currentTarget))] : []),
+        // The same door on a family that inpaints: the tracing is a matte, and
+        // what it is drawn over is Picture 1 (`preStageMasks`).
+        ...(S.preStageMasks(this.state) ? [tool(t("Mask"), "pen",
+             t("Inpaint: repaint the white of a matte over Picture 1 and keep the rest. "
+             + "Pick a matte you made, or mask a picture now."),
+             (event) => this.addGuide(event.currentTarget))] : []),
         tool(t("From video"), "video",
              t("Pull a single frame off a video's playhead — as the init image, saved as a PNG in the input folder."),
              () => this.setInit(true)),
@@ -1226,7 +1253,7 @@ export class PreStageEditor {
   }
 
   renderRefChip(ref, slot = 0) {
-    if (ref === S.preStageBranchGuide(this.state)) return this.renderGuideChip(ref);
+    if (ref === S.preStageLiftedGuide(this.state)) return this.renderGuideChip(ref);
     const refs = S.PRESTAGE_REFS[this.state.arch] ?? {};
     // What this picture is *for*, in the family's own words. On an edit family
     // nothing here is a style input: the first slot is the picture being
@@ -1538,21 +1565,33 @@ export class PreStageEditor {
   }
 
   openResolution(anchor) {
+    // The arch's own range: most share 512-2048, and MiniMax H3 Image runs
+    // 1536-4096 at up to 20 MP — `preStageCanvas`.
+    const canvas = S.preStageCanvas(this.state.arch);
     const body = edgeSlider({
-      min: S.PRESTAGE_MIN_EDGE, max: S.PRESTAGE_MAX_EDGE, step: S.PRESTAGE_CANVAS_MULTIPLE,
+      min: canvas.min_short_edge, max: canvas.max_short_edge, step: canvas.multiple,
       value: this.state.short_edge,
-      mark: S.PRESTAGE_DEFAULT_EDGE, markLabel: t("default"),
+      mark: canvas.default_short_edge, markLabel: t("default"),
       apply: (edge) => { this.state.short_edge = edge; },
       describe: () => {
         const geometry = S.resolvedPreStage(this.state, this.sourceSize());
+        const shared = canvas.max_short_edge === S.PRESTAGE_MAX_EDGE;
         return {
           size: `${geometry.width} × ${geometry.height}`,
-          note: this.state.short_edge >= S.PRESTAGE_MAX_EDGE
-            ? t("The models' 2048 ceiling — wide ratios trade the short edge down to hold the area.")
-            : t("{speed} {edge} is the comfortable default on every image model here.", {
-                speed: t(this.state.short_edge < S.PRESTAGE_DEFAULT_EDGE ? "Faster, softer." : "Sharper, slower."),
-                edge: S.PRESTAGE_DEFAULT_EDGE,
-              }),
+          note: this.state.short_edge >= canvas.max_short_edge
+            ? (shared
+              ? t("The models' 2048 ceiling — wide ratios trade the short edge down to hold the area.")
+              : t("This model's {edge} ceiling — wide ratios trade the short edge down to hold the area.",
+                  { edge: canvas.max_short_edge }))
+            : shared
+              ? t("{speed} {edge} is the comfortable default on every image model here.", {
+                  speed: t(this.state.short_edge < canvas.default_short_edge ? "Faster, softer." : "Sharper, slower."),
+                  edge: canvas.default_short_edge,
+                })
+              : t("{speed} {edge} is this model's cheap default; around 4096 is where it is best.", {
+                  speed: t(this.state.short_edge < canvas.default_short_edge ? "Faster, softer." : "Sharper, slower."),
+                  edge: canvas.default_short_edge,
+                }),
         };
       },
       commit: () => this.commit(),
@@ -1637,6 +1676,9 @@ export class PreStageRow {
     delete spare[arch];
     state.sampling_spare = spare;
     state.arch = arch;
+    // The canvas is the arch's too: an edge outside the arriving range lands
+    // on its default rather than on an end of it (`preStageEdgeFor`).
+    state.short_edge = S.preStageEdgeFor(arch, state.short_edge);
 
     // The arch's own row first, then whatever it had dialled over it — a stash
     // holds only what was picked, and the rest is the declaration's.
@@ -1870,19 +1912,23 @@ export class PreStageRow {
         sampler_name: S.PRESTAGE_IDEOGRAM_ROW.sampler_name,
       };
     }
-    return { ...(S.PRESTAGE_BASE_ROW[this.state.arch] ?? S.PRESTAGE_STILL_ROW) };
+    return { ...S.PRESTAGE_BASE_ROW[this.state.arch] };
   }
 
   // ---- weights ---------------------------------------------------------------
 
   renderWeightsPill() {
     const missing = S.missingPreStageModels(this.state);
+    // Pinned cards before precision, as the Creator's pill orders them
+    // (`models.weightsPill`): a still split over two cards is the bigger news.
+    const spread = deviceSpread(this.state.models[this.state.arch]?.devices,
+                                S.PRESTAGE_DEVICE_FIELDS[this.state.arch] ?? []);
     const label = missing.length
       ? (missing.length === 1
           ? t("no {field}", { field: t(S.PRESTAGE_FIELD_LABEL[missing[0]]).toLowerCase() })
           : t("{count} weights missing", { count: missing.length }))
-      : this.state.models.dtype === "default"
-        ? t("weights") : t("weights · {dtype}", { dtype: this.state.models.dtype.replace("fp8_", "fp8 ") });
+      : spread ?? (this.state.models.dtype === "default"
+        ? t("weights") : t("weights · {dtype}", { dtype: this.state.models.dtype.replace("fp8_", "fp8 ") }));
     return el("button", {
       class: `mmc-pill mmc-weights${missing.length ? " missing" : ""}`,
       title: missing.length
@@ -1901,7 +1947,10 @@ export class PreStageRow {
 
     const render = () => {
       const byFolder = catalogByFolder();
+      const devices = catalogDevices();
       const side = state.models[state.arch];
+      side.devices ??= {};
+      const pinnable = S.PRESTAGE_DEVICE_FIELDS[state.arch] ?? [];
       const missing = new Set(S.missingPreStageModels(state));
 
       const rows = S.PRESTAGE_FIELDS[state.arch].map((field) => el("div", {
@@ -1927,6 +1976,19 @@ export class PreStageRow {
             },
           }),
         }),
+        // The Creator's own device pill, over this side's pins: the same
+        // control, the same ComfyUI-MultiGPU swap at render
+        // (`render_image.emit_loader`).
+        pinnable.includes(field)
+          ? weightDevicePill({
+              pins: side.devices, field, label: t(S.PRESTAGE_FIELD_LABEL[field]), devices,
+              onChange: () => {
+                rememberStillWeights(S.preStageFamilyId(state.arch), side);
+                this.commit();
+                render();
+              },
+            })
+          : null,
       ]));
 
       rows.push(el("div", { class: "mmc-weight-row" }, [
@@ -1965,16 +2027,8 @@ export class PreStageRow {
  * The PreStage node's body: the blob, the stage, and whichever editor the
  * architecture calls for.
  *
- * Two of the three architectures are image models and are driven by the editor
- * above. The third is MiniMax H3, whose still is a *video generation* with one
- * latent frame decoded — so it is driven by `CreatorEditor`, the same body the
- * Creator node and every timeline segment use, on a request in the same shape.
- * That is not a saving of a few lines: the reference pipeline, the keyframe
- * pair, the slot arithmetic, the @-mention prompt, the routing badge and the
- * weights popover are one implementation, and a still gets all of them by
- * being what it is rather than by having them re-described.
- *
- * What this owns is what has to outlive a switch between the two: the blob, the
+ * Every architecture is an image model driven by the editor above. What this
+ * owns is what has to outlive a switch between them: the blob, the
  * stage floated beside the node (the satellite bound it once), and the arch
  * pill itself — the control that does the switching cannot belong to the thing
  * being switched.
@@ -2009,9 +2063,8 @@ export class PreStageBody {
     this.onRender?.();
   }
 
-  /** The still this node is about to make, from whichever editor is mounted —
-   *  the Krea branch's own, or the H3 branch's Creator body over the still's
-   *  request. For the fullscreen shell's frame; see `CreatorEditor.frame`. */
+  /** The still this node is about to make, off the mounted editor. For the
+   *  fullscreen shell's frame; see `CreatorEditor.frame`. */
   frame() {
     return this.editor?.frame?.() ?? null;
   }
@@ -2025,7 +2078,7 @@ export class PreStageBody {
 
   mount() {
     this.editor?.destroy();
-    this.editor = S.isStill(this.state) ? this.mountStill() : this.mountImage();
+    this.editor = this.mountImage();
     this.host.replaceChildren(this.editor.root);
     // The architecture decides the canvas, so swapping editors is exactly when
     // a host drawing the frame has to redraw it.
@@ -2047,10 +2100,8 @@ export class PreStageBody {
     });
   }
 
-  /** What the refine route is sent, on either branch: the whole pre-stage
-   *  blob, which the server reads by its arch — an image family's still
-   *  through the shared still prompting, the H3 branch's request as the one
-   *  card it is, with the still rule on top. */
+  /** What the refine route is sent: the whole pre-stage blob, which the
+   *  server reads by its arch through the shared still prompting. */
   refineTarget() {
     return {
       kind: "still",
@@ -2059,10 +2110,8 @@ export class PreStageBody {
     };
   }
 
-  /** The pre-stage's Clear, for either branch's rail. Remounts rather than
-   *  re-rendering: the H3 branch's editor holds the request it was built on,
-   *  and the request is emptied in place, but the image branch's chips and
-   *  the still's assets both come off state a mount reads once. */
+  /** The pre-stage's Clear. Remounts rather than re-rendering: the chips come
+   *  off state a mount reads once. */
   clearTool() {
     return clearButton({
       written: S.preStageWritten(this.state),
@@ -2070,79 +2119,6 @@ export class PreStageBody {
             + "for this still. The architecture, the canvas, the LoRAs and the sampler stay."),
       run: () => { S.clearPreStage(this.state); this.onCommit?.(); this.mount(); },
     });
-  }
-
-  /** The H3 branch: a Creator body on the still's own request.
-   *
-   *  Everything it is handed is what a Creator node hands it, minus three
-   *  things a still has no use for — the seconds pill (how much video gets
-   *  sampled to obtain the one frame is its own pill), the settings tool (it
-   *  holds the video rate control), and the pre-stage pill, because this *is*
-   *  the pre-stage.
-   */
-  mountStill() {
-    const still = this.state[S.PRESTAGE_STILL_ARCH];
-    const editor = new CreatorEditor({
-      state: still.request,
-      // The sampler row is the *node's*, not this request's: one row serves all
-      // three architectures, and `serializeStill` carries no row of its own.
-      samplingStore: {
-        read: () => this.state.sampling,
-        write: (block) => { this.state.sampling = block; },
-      },
-      // The body's commit, which redraws — as the piece's node does for its
-      // shot face. Forwarding to the node alone left the rail's Clear stale
-      // until something else redrew it.
-      onCommit: () => this.commit(),
-      // A still on H3 is H3's: what the family always wears, it wears here.
-      pinFamily: () => S.preStageFamilyId(S.PRESTAGE_STILL_ARCH),
-      samplingWidgets: this.samplingWidgets,
-      onWidgetChange: this.onWidgetChange,
-      nodeId: this.nodeId,
-      stage: this.stage,
-      durationPill: false,
-      // The settings page holds the video rate control and this node writes
-      // PNGs, so it would be a button over nothing.
-      settingsTool: false,
-      // The pre-stage's, not the request's: what you save from this node is
-      // this node, and on the H3 branch the request is only where it keeps its
-      // files. Same reasoning as the piece's face wearing its one shot.
-      presetTarget: () => this.presetTarget(),
-      // The arch pill takes the video family's slot at the head of the row —
-      // same question, a different list of answers. The still's own two pills
-      // stay where a video's duration would be, because that is what they say.
-      modelPill: () => [this.renderArchPill()],
-      extraPills: () => this.renderStillPills(),
-      extraTools: () => [this.renderFrameGrabTool()],
-      clearTool: () => [this.clearTool()],
-      // The `@` menu's roster, exactly as the video face wires it — a still on
-      // this branch is a video generation, and the request is the piece a
-      // member is cast into: its assets are the shot's row, its subjects the
-      // whole of the cast.
-      castFromLibrary: (member) => {
-        const subject = P.addSubjectToPiece(member, still.request);
-        if (!subject) return null;
-        this.commit();
-        return subject.handle;
-      },
-      setRoute: (route) => {
-        still.request.models.route = route;
-        this.commit();
-      },
-      // The still is one card, and a `{day|night}` on it chooses as card 1 on
-      // the node's seed — what `prestage.py` chooses before it compiles.
-      varies: () => ({ seed: Number(this.widgetIO().value("seed", 0)) || 0, card: 1 }),
-      // The request is a shot, but refining it as one would write a camera
-      // move into a picture: the route reads the arch off the pre-stage blob
-      // and refines the request with the still rule on.
-      refineTarget: () => this.refineTarget(),
-    });
-    // The box is the shot's and asks for a video; this one makes a picture.
-    // The openings stay — cast, files and looks are all wired on this branch.
-    editor.prompt.root.dataset.placeholder =
-      t("Describe the image — @ cites what is attached, / brings in cast, files and looks");
-    editor.prompt.root.dataset.ask = t("Describe the image");
-    return editor;
   }
 
   /** The sampler row's `{value, set}` pair, over the pre-stage's own blob.
@@ -2174,6 +2150,13 @@ export class PreStageBody {
       scope: "prestage",
       label: t("this pre-stage"),
       arch: () => this.state.arch,
+      // What the library's member sheet encodes saved references through:
+      // this still family's VAE and every family beside it, the shelf's own
+      // pair. Without them the sheet offered no save and drew MiniMax H3 as
+      // the family being rendered.
+      vae: () => this.state.models?.[this.state.arch]?.vae ?? "",
+      families: () => castFamilies(S.preStageFamilyId(this.state.arch),
+                                  this.state.models?.[this.state.arch]?.vae ?? "", rememberedWeights()),
       capture: () => ({
         data: P.capturePreStage(this.state, this.widgetIO()),
         cover: P.coverFromResult(this.stage?.result),
@@ -2210,18 +2193,17 @@ export class PreStageBody {
   }
 
   promptOf() {
-    return (S.isStill(this.state) ? this.state[S.PRESTAGE_STILL_ARCH].request.prompt : this.state.prompt) ?? "";
+    return this.state.prompt ?? "";
   }
 
   setPrompt(text) {
-    if (S.isStill(this.state)) this.state[S.PRESTAGE_STILL_ARCH].request.prompt = text;
-    else this.state.prompt = text;
+    this.state.prompt = text;
   }
 
   renderArchPill() {
     const state = this.state;
     return el("button", {
-      class: `mmc-pill mmc-pill-model mmc-prestage-arch${S.isStill(state) ? " mmc-experimental" : ""}`,
+      class: "mmc-pill mmc-pill-model mmc-prestage-arch",
       // The description is the family's own, off its manifest — a translation
       // key like any string written in source.
       title: t("{arch} Click to switch.", { arch: t(stillFamily(state.arch).description) }),
@@ -2237,127 +2219,6 @@ export class PreStageBody {
         el("span", { class: "mmc-model-name", text: S.PRESTAGE_ARCH_LABEL[state.arch] })]);
   }
 
-  // ---- the H3 branch's own pills ---------------------------------------------
-
-  /** What a still costs and which moment of it is kept — the two things H3 has
-   *  that a video render does not, because a video render keeps all of them.
-   *
-   *  Both are written in the artist's units rather than the VAE's. The length
-   *  is a cost against the cheapest pass, because a still is one picture at
-   *  every length and what the longer ones buy is distribution, not frames.
-   *  The index is a time, because "the same shot a moment later" is what
-   *  moving off the causal frame gets you — and it is only offered once there
-   *  is somewhere to move to. */
-  renderStillPills() {
-    const still = this.state[S.PRESTAGE_STILL_ARCH];
-    const lengths = S.PRESTAGE_STILL_LENGTHS;
-    const cheapest = lengths[0];
-    const longest = lengths[lengths.length - 1];
-    const latents = S.stillLatentFrames(still.frames);
-
-    // The list is a cost ladder whose top rung is named for what it buys.
-    const lengthLabel = (n) =>
-      (n === cheapest ? t("Draft")
-        : n === longest ? t("Trained range")
-        : t("≈{factor}× draft", { factor: S.stillCostFactor(n) }));
-    const lengthSub = (n) =>
-      (n === cheapest ? t("the cheapest pass — {frames} frames", { frames: n })
-        : n === longest ? t("{frames} frames, what the weights saw — ≈{factor}× draft",
-                            { frames: n, factor: S.stillCostFactor(n) })
-        : t("{frames} frames", { frames: n }));
-
-    const length = el("button", {
-      class: "mmc-pill",
-      title: t("How long a clip is sampled to get this one picture. Every length yields the "
-           + "same single frame; a longer one is more in-distribution — the weights were "
-           + "trained from {trained} frames up — and costs proportionally more. Sampling "
-           + "{frames} frames now, ≈{factor}× the cheapest pass.",
-           { trained: longest, frames: still.frames, factor: S.stillCostFactor(still.frames) }),
-      onclick: (event) => openChoicePopover(event.currentTarget, {
-        title: t("Sampled length"),
-        options: lengths,
-        value: still.frames,
-        label: lengthLabel,
-        sub: lengthSub,
-        onPick: (frames) => {
-          still.frames = frames;
-          // A shorter clip can leave the kept frame past the end of it.
-          const total = S.stillLatentFrames(frames);
-          if (still.latent_index >= total) still.latent_index = total - 1;
-          if (still.latent_index < -total) still.latent_index = 0;
-          this.commit();
-        },
-      }),
-    }, [icon("clock", 16), el("span", { text: `${still.frames}f` }),
-        el("span", { class: "mmc-pill-sub",
-                     text: still.frames === cheapest ? t("draft")
-                       : still.frames === longest ? t("trained")
-                       : t("≈{factor}×", { factor: S.stillCostFactor(still.frames) }) })]);
-
-    // At the cheapest length there are two frames and one of them is right, so
-    // the pill is noise until either the clip is long enough for the choice to
-    // be a choice or a saved graph already made one.
-    if (still.frames === cheapest && still.latent_index === 0) return [length];
-
-    const index = stepperPill({
-      value: still.latent_index, min: 0, max: latents - 1, step: 1, width: "64px",
-      title: t("Which moment of the sampled clip becomes the picture. The first frame is the "
-             + "causal one — a function of that video frame alone, and the only one the "
-             + "decode is exact for. Later frames are the same shot a moment on, blended "
-             + "from a few frames each and correspondingly softer."),
-      format: (n) => (n === 0 ? t("first frame")
-                        : t("+{seconds} s", { seconds: S.stillLatentSeconds(n, still.frames).toFixed(2) })),
-      onChange: (next) => { still.latent_index = Math.round(next); this.commit(); },
-    });
-
-    return [length, index];
-  }
-
-  // ---- the rest of the rail --------------------------------------------------
-
-  /** Not on the Creator's rail, because the Creator has this node. Here it is
-   *  the only way to turn a moment of a clip into a keyframe. */
-  renderFrameGrabTool() {
-    return el("button", {
-      class: "mmc-tool",
-      title: t("Pull a single frame off a video's playhead and open on it — saved as a PNG in "
-             + "the input folder."),
-      onclick: () => this.grabFrame(),
-    }, [el("span", { class: "mmc-tool-icon" }, [icon("video")]), el("span", { text: t("From video") })]);
-  }
-
-  async grabFrame() {
-    const request = this.state[S.PRESTAGE_STILL_ARCH].request;
-    const blocked = S.blockedReason(request, "first_frame");
-    if (blocked) return;
-    const clip = await openPicker({
-      kinds: ["video", "renders"], kind: "video", single: true,
-      aspect: this.pickerAspect(),
-      plate: this.plateSpec(),
-      capacity: () => ({ used: 0, max: 1, filesLeft: 1 }),
-    });
-    if (!clip) return;
-    const grabbed = await openFrameGrab({ path: clip[0].path });
-    if (!grabbed) return;
-    this.setStillFrame(grabbed.path);
-  }
-
-  /** The H3 branch's own "start from this picture": the request's first frame,
-   *  replaced rather than added to, because there is only one of them. */
-  setStillFrame(filename) {
-    const request = this.state[S.PRESTAGE_STILL_ARCH].request;
-    if (S.blockedReason(request, "first_frame")) return;
-    const existing = S.frameAsset(request, "first_frame");
-    if (existing) request.assets = request.assets.filter((a) => a.handle !== existing.handle);
-    request.assets.push({
-      handle: S.nextHandle(request, "image"),
-      kind: "image",
-      role: "first_frame",
-      filename,
-    });
-    this.commit();
-  }
-
   // ---- taking a picture in ---------------------------------------------------
 
   /**
@@ -2366,33 +2227,11 @@ export class PreStageBody {
    *
    * The body's, not the editor's, because the body is what a caller can reach:
    * `mmcBody` is a `PreStageBody`, and the door the bench looks for has to be on
-   * the object it is looking at. Which slot "built on" means is the arch's — an
-   * init image on the two that draw, the request's start frame on the H3 branch
-   * — and the editor already owns that answer for its own architecture.
+   * the object it is looking at. Which slot "built on" means is the arch's —
+   * the init image, a picture slot, a ControlNet's guide or an inpaint mask —
+   * and the editor already owns that answer for its own architecture.
    */
   takeGuide({ path, opId = null }) {
-    if (this.state.arch === S.PRESTAGE_STILL_ARCH) {
-      // **H3's still is a one-frame video generation, so it is aimed the way a
-      // shot is.** The Fun ControlNet branch loads beside the same checkpoint
-      // and reads the same drawing; the only difference is that one frame comes
-      // back instead of a hundred and forty. So a tracing goes to the request's
-      // guide slot, through the same door a shot's does.
-      //
-      // It used to go to the start frame, which is the worst available answer:
-      // the render *opens* on the edge map and develops away from it, so what
-      // comes back is a tidied edge map rather than a picture aimed at one.
-      // That was the fallback for a family with nothing to read a guide with,
-      // and this branch was reaching it because it had never been given the
-      // ControlNet the video path had.
-      const editor = this.editor;
-      if (editor?.takeGuide && S.controlOf(S.pieceFamily(editor.piece))) {
-        // A still, and said so: the pre-stage renders one frame, so the drawing
-        // it is aimed at is one drawing. `guide.read` holds it for the whole of
-        // a one-frame generation, which is the length of it.
-        return editor.takeGuide({ path, kind: "image", op: opId ?? "" });
-      }
-      return this.setStillFrame(path);
-    }
     this.editor?.takeGuide?.({ path, opId });
   }
 
@@ -2407,18 +2246,13 @@ export class PreStageBody {
    * own output among everything else in the folder.
    *
    * Where it lands is the arch's own answer to "the picture this render is
-   * about": the init image on a family that draws, or the request's start frame
-   * on H3. On an edit family, an explicit init is replaced in place and keeps
+   * about": the init image on a family that draws. On an edit family, an explicit init is replaced in place and keeps
    * its denoise setting. Otherwise the first editable plain reference is
    * replaced (or created if capacity allows), keeps its handle, moves before
    * guides, and enables `edit_first`. Cast and guide pictures are preserved;
    * a full pool with no editable reference is left unchanged with a notice.
    */
   takeBack(filename) {
-    if (this.state.arch === S.PRESTAGE_STILL_ARCH) {
-      this.setStillFrame(filename);
-      return this.reveal();
-    }
     if (!S.preStageEditable(this.state)) {
       this.editor?.takeGuide?.({ path: filename });
       return this.reveal();
@@ -2500,10 +2334,7 @@ export class PreStageBody {
     return el("button", {
       class: "mmc-stage-chip mmc-stage-send",
       text: t(edits ? "↻ edit" : "↻ again"),
-      title: this.state.arch === S.PRESTAGE_STILL_ARCH
-        ? t("Build the next still on this one — it becomes the start frame of the "
-          + "clip this branch samples.")
-        : edits
+      title: edits
           ? t("Edit this again. It replaces the picture in the first slot, so the next "
             + "instruction is about the render you are looking at.")
           : t("Start the next render from this one — it becomes the init image, at the "

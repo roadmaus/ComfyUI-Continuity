@@ -92,8 +92,10 @@ refuses("a clip over a pre-stage is refused", lambda: route._base({"piece": PRE}
 
 check("the rail names the piece's family", route._families_of(PIECE, False), {"video_family": "h3"})
 check("and the pre-stage's arch as its family", route._families_of(PRE, True), {"still_family": "krea2"})
-refuses("a pre-stage on the H3 branch cannot draw the room's picture",
-        lambda: route._families_of({**PRE, "arch": "minimax"}, True), "MiniMax H3", "image model")
+check("a pre-stage on MiniMax H3 Image draws the room's picture like any image arch",
+      route._families_of({**PRE, "arch": "minimax"}, True), {"still_family": "h3image"})
+refuses("an arch that is no image family is refused",
+        lambda: route._families_of({**PRE, "arch": "bogus"}, True), "image model")
 
 # ---- the widgets ------------------------------------------------------------
 
@@ -341,5 +343,47 @@ try:
             lambda: route._again({**body, "action": {"act": "say", "say": "hi"}}), "nothing to render")
 finally:
     route._stamp_rail = _real_stamp_rail
+
+# A fresh clip longer than one shot holds well is *offered* as a piece, by
+# code and on the model's own reading of the request (`director.wants_plan`):
+# the clip still renders, and the turn answers `plan` with why. With the Plan
+# switch off the chat is the refiner, and it never starts a project by itself.
+
+def turn_answering(reply, text, strip=()):
+    real = route._ask
+    route._ask = lambda *_args, **_kw: "```json\n" + json.dumps(reply) + "\n```"
+    try:
+        return route._run({"messages": [{"role": "user", "text": text}], "ledger": [],
+                           "settings": {}, "piece": {}, "strip": list(strip)})
+    finally:
+        route._ask = real
+
+
+SEA = {"act": "render", "kind": "video", "prompt": "the sea at dusk, waves rolling in", "say": "Here.",
+       "seconds": 40}
+ceiling = route._ceiling(route._rail({}))
+planned = turn_answering(SEA, "a 40 second video of the sea at dusk")
+check("a 40 s clip renders, and offers a plan",
+      (planned.get("plan"), planned.get("action", {}).get("seconds"), "held" in planned),
+      ("long", min(40, ceiling or 40), False))
+check("asked as one continuous shot, it renders as one, with no offer",
+      (turn_answering(SEA, "one continuous 40 second shot of the sea").get("action", {}).get("seconds"),
+       turn_answering(SEA, "one continuous 40 second shot of the sea").get("plan")),
+      (min(40, ceiling or 40), None))
+over = turn_answering({**SEA, "seconds": ceiling + 10}, "one continuous shot of the sea")
+check("past the family's ceiling it renders at the ceiling and offers a plan",
+      (over.get("plan"), over.get("action", {}).get("seconds"), over.get("ceiling")),
+      ("ceiling", ceiling, ceiling))
+three = turn_answering({**SEA, "seconds": 8}, "three shots of the sea at dusk")
+check("three shots named render as one clip and offer a plan",
+      (three.get("plan"), "action" in three), ("shots", True))
+short_said = turn_answering({**SEA, "seconds": 10}, "a 40 second video of the sea at dusk")
+check("the person's 40 s wins over the model's 10",
+      (short_said.get("plan"), short_said.get("action", {}).get("seconds")), ("long", min(40, ceiling or 40)))
+check("a clip after another keeps the model's length",
+      turn_answering({**SEA, "seconds": 6, "after": "clip-1"}, "now 40 seconds more",
+                     strip=[{"handle": "clip-1", "seconds": 6}]).get("action", {}).get("seconds"), 6)
+check("a short clip renders as it did", turn_answering({**SEA, "seconds": 8}, "the sea at dusk").get("plan"),
+      None)
 
 passed("the chat render route builds over the node on the canvas")

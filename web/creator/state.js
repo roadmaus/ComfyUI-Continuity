@@ -99,7 +99,6 @@ export const raylightOf = (id) => videoFamily(id).capabilities.raylight === true
  *  the family's apply node — see the manifest — so the pill is not drawn rather
  *  than drawn over a render that would fail at queue time. */
 export const controlOf = (id) => videoFamily(id).capabilities.control;
-export const stillOf = (id) => videoFamily(id).still;
 
 /** What a family lets a LoRA entry carry beyond its strength — the manifest's
  *  `capabilities.lora`. Looked up on the family itself, image families
@@ -3987,114 +3986,19 @@ export const PRESTAGE_ARCHES = Object.keys(STILL_ARCHES);
 export const PRESTAGE_ARCH_LABEL = Object.fromEntries(
   PRESTAGE_ARCHES.map((arch) => [arch, stillFamily(arch).label]));
 
-// The video family's arch is not an image model, and almost nothing below
-// applies to it. Its still is a *video generation* whose first latent frame is
-// decoded as a picture, so its request is an ordinary creator state — same
-// assets, same LoRAs, same weights block, same routing — and every rule for it
-// is the one already written for the video nodes. It lives in its own
-// sub-block (`state[PRESTAGE_STILL_ARCH].request`) and is driven by
-// CreatorEditor.
+/** Every arch is an image family. MiniMax's used to be the exception — a
+ *  video generation one latent frame of which was decoded, with a Creator
+ *  request of its own — until MiniMax H3 Image replaced it; `migratePreStage`
+ *  is where a blob from then is read. The name stays because the readers of
+ *  it mean "the arches with weights of their own", which is now every one. */
+export const PRESTAGE_IMAGE_ARCHES = PRESTAGE_ARCHES;
 
-export const PRESTAGE_STILL_ARCH = stillOf(DEFAULT_VIDEO_FAMILY).arch;
-export const isStill = (state) => state?.arch === PRESTAGE_STILL_ARCH;
-
-/** The canvas rules a still on this branch is counted on. A still made by the
- *  video model is a video generation one latent frame of which is decoded, so
- *  its frame counts land on that family's own grid and nowhere else. */
-const STILL_RULES = rulesFor(STILL_ARCHES[PRESTAGE_STILL_ARCH]);
-
-/** What the length pill offers, and what a fresh still samples: the family's
- *  declaration, from the cheapest legal clip up to the bottom of its trained
- *  range. */
-export const PRESTAGE_STILL_LENGTHS = stillOf(DEFAULT_VIDEO_FAMILY).lengths;
-export const PRESTAGE_STILL_FRAMES = stillOf(DEFAULT_VIDEO_FAMILY).default_frames;
-export const PRESTAGE_STILL_INDEX = stillOf(DEFAULT_VIDEO_FAMILY).default_index;
-export const PRESTAGE_PROMPT_MODES = stillOf(DEFAULT_VIDEO_FAMILY).prompt_modes;
-
-/** Frames -> latent frames, on the manifest's grid. Mirrors the family
- *  still.py's latent_frames, which mirrors core's causal VAE packing. */
-export const stillLatentFrames = (frames, grid = stillOf(DEFAULT_VIDEO_FAMILY).latent) =>
-  (frames <= grid.base_frames ? grid.base_latent
-    : Math.floor((frames - grid.base_frames) / grid.frame_step)
-      * grid.latent_step + grid.base_latent);
-
-/** Which moment of the sampled clip a latent index is, in seconds.
- *
- *  Latent 0 is pixel frame 0 exactly — the causal frame. The rest of the
- *  clip's pixels are spread evenly over the rest of its latent frames, so the
- *  nth one lands n/(latents-1) of the way through: on the 5-frame clip that is
- *  frame 4, and on every longer one it is the same 3.4-frame step the VAE
- *  packs at. Approximate on purpose — it is a label on a pill, and what it is
- *  there to say is "a moment later, and how much later". A negative index is
- *  resolved from the end first, the way the compiler resolves it. */
-export const stillLatentSeconds = (index, frames) => {
-  const latents = stillLatentFrames(frames);
-  const at = index < 0 ? latents + index : index;
-  if (!(at > 0) || latents < 2) return 0;
-  return Math.round(at * (frames - 1) / (latents - 1)) / STILL_RULES.fps;
-};
-
-/** What a length costs against the cheapest one. Sampling is per latent frame,
- *  so the ratio of latent frames is the ratio of the pass — which is the thing
- *  the length pill is actually choosing, the picture it yields being one frame
- *  either way. */
-export const stillCostFactor = (frames) => {
-  const base = stillLatentFrames(PRESTAGE_STILL_LENGTHS[0]);
-  return Math.round(stillLatentFrames(frames) / base * 2) / 2;
-};
-
-/** What the still branch writes into the sampler row: the Creator node's own
- *  defaults — the family's sampler widgets — because it is the Creator's
- *  sampler. */
-export const PRESTAGE_STILL_ROW = Object.fromEntries(
-  widgetsOf(DEFAULT_VIDEO_FAMILY).filter((w) => ["steps", "cfg", "sampler_name", "scheduler"].includes(w.id))
-               .map((w) => [w.id, w.default]));
-
-export function emptyStill() {
-  return {
-    frames: PRESTAGE_STILL_FRAMES,
-    latent_index: PRESTAGE_STILL_INDEX,
-    prompt_mode: "context-ir",
-    // The generation, in the Creator's own shape — because it is one.
-    request: emptyState(),
-  };
-}
-
-export function parseStill(raw) {
-  const out = emptyStill();
-  if (!raw || typeof raw !== "object") return out;
-  const frames = Number(raw.frames);
-  if (Number.isFinite(frames)) {
-    out.frames = framesForSeconds(Math.max(1, frames) / STILL_RULES.fps, STILL_RULES);
-  }
-  const index = Number(raw.latent_index);
-  if (Number.isFinite(index)) out.latent_index = Math.round(index);
-  if (PRESTAGE_PROMPT_MODES.includes(raw.prompt_mode)) out.prompt_mode = raw.prompt_mode;
-  out.request = parseState(JSON.stringify(raw.request ?? {}));
-  return out;
-}
-
-function serializeStill(still) {
-  const out = {
-    frames: still.frames,
-    latent_index: still.latent_index,
-    request: JSON.parse(serializeState(still.request)),
-  };
-  if (still.prompt_mode !== "context-ir") out.prompt_mode = still.prompt_mode;
-  return out;
-}
-
-/** The two image architectures. The video family's branch keeps its weights
- *  inside its own request, in `models.Weights`' shape, so it is not one of
- *  these. */
-export const PRESTAGE_IMAGE_ARCHES =
-  Object.keys(STILL_ARCHES).filter((arch) => arch !== PRESTAGE_STILL_ARCH);
-
-// The image families' shared canvas — every image family serves the same
-// block, built from compile_image.py, and compile_image stays authoritative
-// at queue time. Wider than the video envelope on purpose: a style sheet is a
-// legitimate still. The aspects are [label, ratio] pairs in the popover's
-// order, the declaration's own.
+// The image families' shared canvas — the block most families serve, built
+// from compile_image.py, which stays authoritative at queue time. Wider than
+// the video envelope on purpose: a style sheet is a legitimate still. The
+// aspects are [label, ratio] pairs in the popover's order, the declaration's
+// own. These constants are the default arch's; a family that declares its own
+// canvas (MiniMax H3 Image, at 4-20 MP) is read through `preStageCanvas`.
 const IMAGE_CANVAS = stillFamily(DEFAULT_STILL_ARCH).canvas;
 export const PRESTAGE_CANVAS_MULTIPLE = IMAGE_CANVAS.multiple;
 export const PRESTAGE_MIN_EDGE = IMAGE_CANVAS.min_short_edge;
@@ -4105,6 +4009,25 @@ export const PRESTAGE_MIN_RATIO = IMAGE_CANVAS.min_ratio;
 export const PRESTAGE_MAX_RATIO = IMAGE_CANVAS.max_ratio;
 export const PRESTAGE_ASPECTS = Object.entries(IMAGE_CANVAS.aspects);
 const PRESTAGE_DEFAULT_ASPECT = IMAGE_CANVAS.default_aspect;
+
+/** The canvas block `arch` renders on — `compile_image.canvas_of` as its
+ *  manifest serves it, with the per-axis ceiling falling back to the short
+ *  edge's on a manifest written before the two were separate. */
+export function preStageCanvas(arch) {
+  const canvas = (STILL_ARCHES[arch] ? stillFamily(arch) : stillFamily(DEFAULT_STILL_ARCH)).canvas;
+  return { ...canvas, max_long_edge: canvas.max_long_edge ?? canvas.max_short_edge };
+}
+
+/** `edge` held inside `arch`'s slider, or its default where it is outside —
+ *  what the arch pill writes on arrival, so a 1024 carried from Krea is not
+ *  silently read as MiniMax H3 Image's 1536 floor, and its 4096 not as Krea's
+ *  2048 ceiling. */
+export function preStageEdgeFor(arch, edge) {
+  const canvas = preStageCanvas(arch);
+  const value = Number(edge);
+  return Number.isFinite(value) && value >= canvas.min_short_edge && value <= canvas.max_short_edge
+    ? value : canvas.default_short_edge;
+}
 
 const IMAGE_FAMILY = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, stillFamily(arch)]));
@@ -4335,6 +4258,13 @@ export const PRESTAGE_MIN_DENOISE = KREA.capabilities.init_image.min_denoise;
  *  popover order — and what the popover calls each one. */
 export const PRESTAGE_FIELDS = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.map((arch) => [arch, IMAGE_FAMILY[arch].weights.map((w) => w.id)]));
+/** Which of each architecture's fields a device can be pinned for — the
+ *  manifest's `device` flag, which `render_image.manifest_weight` derives from
+ *  the field's loader exactly as the video families derive theirs from a slot.
+ *  `deviceFields` for a still. */
+export const PRESTAGE_DEVICE_FIELDS = Object.fromEntries(
+  PRESTAGE_IMAGE_ARCHES.map((arch) => [arch,
+    IMAGE_FAMILY[arch].weights.filter((w) => w.device).map((w) => w.id)]));
 export const PRESTAGE_FIELD_LABEL = Object.fromEntries(
   PRESTAGE_IMAGE_ARCHES.flatMap((arch) =>
     IMAGE_FAMILY[arch].weights.map((w) => [w.id, w.title])));
@@ -4371,7 +4301,7 @@ export function emptyPreStage() {
     prompt: "",
     // The refiner's rewrite of `prompt`, in the shape a shot keeps one (see
     // `emptyState`). Read by `compile_image.with_refined`, which stands it in
-    // for the sentence. The H3 branch keeps its own inside its request.
+    // for the sentence.
     refined: null,
     aspect: PRESTAGE_DEFAULT_ASPECT,
     short_edge: PRESTAGE_DEFAULT_EDGE,
@@ -4418,10 +4348,6 @@ export function emptyPreStage() {
     // The rows dialled for the arches this node is not on — `{arch: row}`,
     // the piece's `sampling_spare` on the still side. See `PreStageRow.setArch`.
     sampling_spare: {},
-    // The video family's branch: its own settings, and its generation in the
-    // Creator's shape. Nothing above it applies to that branch — see
-    // `emptyStill`. The key is the arch's frozen blob name.
-    [PRESTAGE_STILL_ARCH]: emptyStill(),
     // See the piece's: empty until a pill writes one, and an absent field falls
     // back to the widget it always used.
     sampling: {},
@@ -4434,32 +4360,20 @@ export function emptyPreStage() {
   };
 }
 
-/** What Clear takes off a pre-stage: the writing on either branch. The image
- *  branch writes a prompt, an init and its references; the H3 branch writes
- *  a Creator request, cleared by the same keys as a shot. The machine — arch,
- *  canvas, LoRAs, turbo, the checkpoints — stays, the line the piece's Clear
- *  draws. `ref_lora` names a LoRA in the stack, so it is machine and stays;
- *  with no references it reads nothing. */
+/** What Clear takes off a pre-stage: a prompt, an init and its references.
+ *  The machine — arch, canvas, LoRAs, turbo, the checkpoints — stays, the line
+ *  the piece's Clear draws. `ref_lora` names a LoRA in the stack, so it is
+ *  machine and stays; with no references it reads nothing. */
 const PRESTAGE_CLEARED_KEYS = ["prompt", "refined", "init", "refs", "subjects"];
-const STILL_CLEARED_KEYS = ["prompt", "soundscape", "music", "refined", "assets"];
 
 export function preStageWritten(state) {
-  if ((state.prompt || "").trim() || state.refined || state.init || state.refs?.length) return true;
-  const request = state[PRESTAGE_STILL_ARCH]?.request;
-  return Boolean(request && ((request.prompt || "").trim()
-    || (request.soundscape || "").trim() || (request.music || "").trim()
-    || request.refined || request.assets?.length));
+  return Boolean((state.prompt || "").trim() || state.refined || state.init || state.refs?.length);
 }
 
 /** Empty the pre-stage's writing in place — the body holds this object. */
 export function clearPreStage(state) {
   const blank = emptyPreStage();
   for (const key of PRESTAGE_CLEARED_KEYS) state[key] = blank[key];
-  const request = state[PRESTAGE_STILL_ARCH]?.request;
-  if (request) {
-    const empty = emptyState();
-    for (const key of STILL_CLEARED_KEYS) request[key] = empty[key];
-  }
 }
 
 export function emptyPreStageTurbo() {
@@ -4496,8 +4410,25 @@ export function parsePreStageTurbo(raw) {
 
 export function emptyPreStageModels() {
   const empty = { dtype: "default" };
-  for (const arch of PRESTAGE_IMAGE_ARCHES) empty[arch] = {};
+  // Each side carries its own `devices` — `{field: "cuda:1"}`, through
+  // ComfyUI-MultiGPU — for the reason its files are per side: a pin names a
+  // field, and `model` on Krea 2 is not the file it is on Ideogram.
+  for (const arch of PRESTAGE_IMAGE_ARCHES) empty[arch] = { devices: {} };
   return empty;
+}
+
+/** A side's device pins, as `parseModels` reads the video block's: only the
+ *  fields that can be pinned, and not checked against this machine's device
+ *  list, so a blob saved on a two-card box keeps its pin on a one-card one and
+ *  the render names the missing pack (`models.loader_for`). Mirrors
+ *  `models.pinned_devices`. */
+export function parsePreStageDevices(raw, arch) {
+  const out = {};
+  if (!raw || typeof raw !== "object") return out;
+  for (const field of PRESTAGE_DEVICE_FIELDS[arch] ?? []) {
+    if (typeof raw[field] === "string" && raw[field].trim()) out[field] = raw[field].trim();
+  }
+  return out;
 }
 
 /** The rows this node dialled for the arches it is not on — `{arch: row}`.
@@ -4515,11 +4446,51 @@ export function parsePreStageSamplingSpare(raw) {
   return out;
 }
 
+/** `[arch, blob key]` of the family that took over an old video-branch still
+ *  — the manifest's `legacy_still_block` — or null where none did. */
+const LEGACY_STILL = PRESTAGE_ARCHES
+  .map((arch) => [arch, stillFamily(arch).legacy_still_block])
+  .find(([, key]) => key) ?? null;
+
+/** A pre-stage blob from before MiniMax H3 Image -> one every family reads.
+ *  Mirrors `h3image.still.migrate`, which is authoritative: the old branch's
+ *  Creator-shaped request (`<block>.request`, the block named by the
+ *  manifest) is lifted into the shared fields where the arch is still the
+ *  family's — its sentence, its pictures, its
+ *  LoRAs, its aspect, its screens — and the block is dropped either way. The
+ *  clip length and the latent frame it decoded mean nothing to an image model
+ *  and go with it. */
+export function migratePreStage(data) {
+  if (!LEGACY_STILL) return data;
+  const [arch, key] = LEGACY_STILL;
+  const block = data?.[key];
+  const request = block && typeof block === "object" ? block.request : null;
+  if (!request || typeof request !== "object" || Array.isArray(request)) return data;
+  const out = { ...data };
+  delete out[key];
+  if (data.arch !== arch) return out;
+  out.prompt = request.prompt || "";
+  if (request.refined && typeof request.refined === "object") out.refined = request.refined;
+  else delete out.refined;
+  out.refs = (Array.isArray(request.assets) ? request.assets : [])
+    .filter((asset) => asset && typeof asset === "object" && (asset.kind ?? "image") === "image"
+      && asset.role !== "guide" && asset.filename)
+    .map((asset) => {
+      const ref = { filename: asset.filename };
+      for (const key of ["handle", "crop", "mods"]) if (asset[key]) ref[key] = asset[key];
+      return ref;
+    });
+  out.loras = Array.isArray(request.loras) ? [...request.loras] : [];
+  if (request.aspect) out.aspect = request.aspect;
+  if (request.screens) out.screens = request.screens;
+  return out;
+}
+
 export function parsePreStage(raw) {
   try {
     const parsed = JSON.parse(raw);
     if (parsed && typeof parsed === "object") {
-      const state = { ...emptyPreStage(), ...parsed };
+      const state = { ...emptyPreStage(), ...migratePreStage(parsed) };
       if (!PRESTAGE_ARCHES.includes(state.arch)) state.arch = DEFAULT_STILL_ARCH;
       // Blank is empty — see `parseState`.
       if (typeof state.prompt !== "string" || !state.prompt.trim()) state.prompt = "";
@@ -4564,7 +4535,10 @@ export function parsePreStage(raw) {
           ? Math.min(1, Math.max(PRESTAGE_MIN_DENOISE, denoise)) : PRESTAGE_DEFAULT_DENOISE;
       }
       if (!PRESTAGE_IDEOGRAM_QUALITIES.includes(state.quality)) state.quality = PRESTAGE_DEFAULT_QUALITY;
-      state[PRESTAGE_STILL_ARCH] = parseStill(state[PRESTAGE_STILL_ARCH]);
+      // The canvas slider is per arch: an edge outside this one's range
+      // (a blob saved before the arch had a canvas of its own) lands on its
+      // default rather than being clamped to an end of it.
+      state.short_edge = preStageEdgeFor(state.arch, state.short_edge);
       // The sampler row, on the same terms as the piece's — absent in every
       // blob saved before it moved off the widgets. See `sampling.py`.
       //
@@ -4593,8 +4567,6 @@ export function parsePreStage(raw) {
       }
       state.turbo = parsePreStageTurbo(state.turbo);
       state.neural = parseNeural(state.neural);
-      // The image arches keep a still's screens on the blob; the H3 branch
-      // keeps them in its request, which `parseState` reads.
       state.screens = parseScreens(state.screens);
       if (!state.screens.length) delete state.screens;
       // The branch's strength, clamped as `guide.Guide.of` clamps it.
@@ -4611,6 +4583,7 @@ export function parsePreStage(raw) {
             state.models[arch][field] = side[field].trim();
           }
         }
+        state.models[arch].devices = parsePreStageDevices(side.devices, arch);
       }
       if (MODEL_DTYPES.includes(models.dtype)) state.models.dtype = models.dtype;
       // Last, because both guesses read fields filled above — the LoRA stack
@@ -4649,6 +4622,8 @@ export function serializePreStage(state) {
     for (const field of PRESTAGE_FIELDS[arch]) {
       if (state.models?.[arch]?.[field]) side[field] = state.models[arch][field];
     }
+    const devices = parsePreStageDevices(state.models?.[arch]?.devices, arch);
+    if (Object.keys(devices).length) side.devices = devices;
     if (Object.keys(side).length) models[arch] = side;
   }
   if (state.models?.dtype && state.models.dtype !== "default") models.dtype = state.models.dtype;
@@ -4685,7 +4660,6 @@ export function serializePreStage(state) {
     ...(state.guide && state.guide.strength !== PRESTAGE_GUIDE_STRENGTH
       ? { guide: { strength: state.guide.strength } } : {}),
     ...(state.edition !== PRESTAGE_DEFAULT_EDITION ? { edition: state.edition } : {}),
-    [PRESTAGE_STILL_ARCH]: serializeStill(state[PRESTAGE_STILL_ARCH]),
     ...serializeSampling(state.sampling),
     ...(Object.keys(parsePreStageSamplingSpare(state.sampling_spare)).length
       ? { sampling_spare: parsePreStageSamplingSpare(state.sampling_spare) } : {}),
@@ -4736,10 +4710,8 @@ export function adoptRememberedPreStage(models, remembered) {
   return changed;
 }
 
-/** The family an arch's picks are remembered under. Every arch, not only the
- *  image ones: the video family's own still is filed under that family, which
- *  `IMAGE_FAMILY` leaves out by construction — reading it there threw on
- *  every H3 still and took the whole extension down with it. */
+/** The family an arch's picks are remembered under — "minimax" is filed under
+ *  MiniMax H3 Image's id, not its own. */
 export const preStageFamilyId = (arch) => stillFamily(arch).id;
 
 export function guessPreStageModels(models, byFolder) {
@@ -4809,27 +4781,39 @@ export function preStageReadsGuides(state) {
 /** Whether this pre-stage aims its still through a *loaded* ControlNet branch,
  *  as against reading a tracing natively out of a picture slot.
  *
- *  The two are not interchangeable and the difference is a file on disk. H3's
- *  still branch is a one-frame video generation, so it takes the same Fun
- *  ControlNet the video path does — a drawing attaches as a guide and the pill
- *  loads the branch. Qwen-Image-Edit 2509 and 2511 were post-trained to follow
- *  a tracing that simply arrives as `Picture 1`, so there is nothing to load.
- *  Qwen Image 2.1 is the first kind again on an image arch: its Fun ControlNet
- *  is a file the guide loads (`capabilities.control`), there only on a core
- *  that can load it. Everywhere else a drawing has no reader at all and belongs in the init slot,
- *  the way every guide went before either of these existed. */
+ *  The two are not interchangeable and the difference is a file on disk.
+ *  Qwen-Image-Edit 2509 and 2511 were post-trained to follow a tracing that
+ *  simply arrives as `Picture 1`, so there is nothing to load. Qwen Image 2.1
+ *  is the other kind: its Fun ControlNet is a file the guide loads
+ *  (`capabilities.control`), there only on a core that can load it. Everywhere
+ *  else a drawing has no reader at all and belongs in the init slot, the way
+ *  every guide went before either of these existed — except on MiniMax H3
+ *  Image, where it is a mask (`preStageMasks`). */
 export function preStageLoadsBranch(state) {
-  if (state?.arch !== PRESTAGE_STILL_ARCH) return PRESTAGE_REFS[state?.arch]?.control?.method === "branch";
-  return Boolean(controlOf(pieceFamily(state?.[PRESTAGE_STILL_ARCH]?.request)));
+  return PRESTAGE_REFS[state?.arch]?.control?.method === "branch";
+}
+
+/** Whether this pre-stage reads a guide as an inpaint mask: the bench's matte
+ *  over Picture 1, white where the picture is repainted. MiniMax H3 Image's
+ *  (`capabilities.control.method` "mask") — nothing to load and no strength,
+ *  because the sampler's noise mask is the whole control. */
+export function preStageMasks(state) {
+  return PRESTAGE_REFS[state?.arch]?.control?.method === "mask";
+}
+
+/** The guide the compile lifts off the pictures, or null: a branch's drawing
+ *  or a mask. Either way it never reaches the encoder, takes no `Picture N`
+ *  and counts against no cap — `compile_image._take_guide`. */
+export function preStageLiftedGuide(state) {
+  if (!preStageLoadsBranch(state) && !preStageMasks(state)) return null;
+  return (state.refs ?? []).find((ref) => ref.role === "guide") ?? null;
 }
 
 /** The attached pictures that are pictures to the render: every one, less a
- *  guide a loaded branch reads. On Qwen Image 2.1 the drawing goes to the
- *  ControlNet and never to the encoder, so it takes no `<imageN>` and counts
- *  against no cap — `compile_image._take_guide`. */
+ *  guide the compile lifts off them. */
 export function preStageCountedRefs(state) {
   const refs = state?.refs ?? [];
-  return preStageBranchGuide(state) ? refs.filter((ref) => ref.role !== "guide") : refs;
+  return preStageLiftedGuide(state) ? refs.filter((ref) => ref.role !== "guide") : refs;
 }
 
 /** The bench's tracing ids — `control.TRACINGS`, less "as_shot", which
@@ -4850,7 +4834,7 @@ export function tracingOf(path) {
 
 /** The guide a loaded branch reads on an image arch, or null. */
 export function preStageBranchGuide(state) {
-  if (state?.arch === PRESTAGE_STILL_ARCH || !preStageLoadsBranch(state)) return null;
+  if (!preStageLoadsBranch(state)) return null;
   return (state.refs ?? []).find((ref) => ref.role === "guide") ?? null;
 }
 
@@ -4862,46 +4846,54 @@ export function preStageBranchGuide(state) {
  *  the attached pictures are references beside a new picture on the aspect
  *  pill's canvas, which is what a render with no init already does. */
 export function preStageEditsFirst(state) {
-  if (!preStageEditable(state) || !state?.edit_first || state.init) return false;
+  // A mask is drawn over Picture 1, so with one on the still Picture 1 is the
+  // picture edited whether or not the switch is — `h3image.still.compile_still`.
+  const masked = preStageMasks(state) && preStageLiftedGuide(state);
+  if (!preStageEditable(state) || !(state?.edit_first || masked) || state.init) return false;
   return preStagePlainRefs(state).length > 0;
 }
 
-/** The resolved image canvas, mirroring compile_image.resolve_canvas: /16 grid,
- *  2048² area cap, and the aspect taken from the source picture when the caller
- *  measured one — `preStageSource` is which picture that is — then refitted to
- *  the encoder on a family that asks (`PRESTAGE_ENCODER_FIT`). */
+/** The resolved image canvas, mirroring compile_image.resolve_canvas on the
+ *  arch's own canvas block (`preStageCanvas`) — the shared /16 grid and 2048²
+ *  cap on most, MiniMax H3 Image's /32 and 20 MP on that one — with the aspect
+ *  taken from the source picture when the caller measured one
+ *  (`preStageSource` is which picture that is), then refitted to the encoder
+ *  on a family that asks (`PRESTAGE_ENCODER_FIT`). */
 export function resolvedPreStage(state, initSize = null) {
+  const canvas = preStageCanvas(state?.arch);
+  const step16 = canvas.multiple;
+  const maxPixels = canvas.max_pixels;
   let ratio = PRESTAGE_ASPECTS.find(([label]) => label === state.aspect)?.[1] ?? 16 / 9;
   let fromImage = false;
   if (initSize?.width && initSize?.height) {
     ratio = initSize.width / initSize.height;
     fromImage = true;
   }
-  ratio = Math.min(PRESTAGE_MAX_RATIO, Math.max(PRESTAGE_MIN_RATIO, ratio));
-  const edge = Math.max(PRESTAGE_MIN_EDGE, Math.min(PRESTAGE_MAX_EDGE, Math.round(state.short_edge)));
+  ratio = Math.min(canvas.max_ratio, Math.max(canvas.min_ratio, ratio));
+  const edge = Math.max(canvas.min_short_edge, Math.min(canvas.max_short_edge, Math.round(state.short_edge)));
 
   let width, height;
   if (ratio >= 1) { width = edge * ratio; height = edge; }
   else { width = edge; height = edge / ratio; }
-  if (width * height > PRESTAGE_MAX_PIXELS) {
-    const scale = Math.sqrt(PRESTAGE_MAX_PIXELS / (width * height));
+  if (width * height > maxPixels) {
+    const scale = Math.sqrt(maxPixels / (width * height));
     width *= scale;
     height *= scale;
   }
-  // The long side is capped too — 2048 is the models' per-axis ceiling, and a
-  // 3:1 sheet at a big short edge would sail past it inside the area cap.
-  if (Math.max(width, height) > PRESTAGE_MAX_EDGE) {
-    const scale = PRESTAGE_MAX_EDGE / Math.max(width, height);
+  // The long side is capped too — 2048 is the shared models' per-axis
+  // ceiling, and a 3:1 sheet at a big short edge would sail past it inside the
+  // area cap.
+  if (Math.max(width, height) > canvas.max_long_edge) {
+    const scale = canvas.max_long_edge / Math.max(width, height);
     width *= scale;
     height *= scale;
   }
-  const snap16 = (v) => Math.max(PRESTAGE_CANVAS_MULTIPLE,
-    Math.floor(v / PRESTAGE_CANVAS_MULTIPLE + 0.5) * PRESTAGE_CANVAS_MULTIPLE);
+  const snap16 = (v) => Math.max(step16, Math.floor(v / step16 + 0.5) * step16);
   width = snap16(width);
   height = snap16(height);
-  while (width * height > PRESTAGE_MAX_PIXELS && Math.max(width, height) > PRESTAGE_CANVAS_MULTIPLE) {
-    if (width >= height) width -= PRESTAGE_CANVAS_MULTIPLE;
-    else height -= PRESTAGE_CANVAS_MULTIPLE;
+  while (width * height > maxPixels && Math.max(width, height) > step16) {
+    if (width >= height) width -= step16;
+    else height -= step16;
   }
   // On a family that fits the canvas to its encoder, a canvas taken off a
   // picture is that encoder's resize of the picture at the canvas's own pixel
@@ -4913,7 +4905,7 @@ export function resolvedPreStage(state, initSize = null) {
     for (;;) {
       const fitW = Math.max(step, Math.round(Math.sqrt(resolution * resolution * ratio) / step) * step);
       const fitH = Math.max(step, Math.round(Math.sqrt(resolution * resolution / ratio) / step) * step);
-      if (Math.max(fitW, fitH) <= PRESTAGE_MAX_EDGE || resolution <= step) {
+      if (Math.max(fitW, fitH) <= canvas.max_long_edge || resolution <= step) {
         width = fitW;
         height = fitH;
         break;

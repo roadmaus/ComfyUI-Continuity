@@ -75,6 +75,68 @@ def reply_tokens(value):
         return NUM_PREDICT
 
 
+# ---- letting the model think (experimental) ----------------------------------
+#
+# Every call this pack makes switches reasoning off: the in-process prompt ends
+# in an empty `<think>` block and the wire asks for `reasoning_effort: "none"`.
+# That was right for the 2B–8B models the harness was written against, which
+# spend a whole budget on a trace and never answer. It is wrong for the large
+# open models that reason well — a 100B-class model told not to think is a
+# worse writer than the same model allowed to — so the refiner's settings carry
+# one switch, `reasoning`, that lifts the suppression on every call at once:
+# refine, stills, the chat room, Director and the magic prompts all reach a
+# model through `refine_local.chat` or `refine_remote.chat`, and both read it.
+#
+# Read off the settings file rather than off each request, because it is a
+# fact about the model this machine points at, not about one press — and
+# threading it through every caller is a dozen places to forget it. A caller
+# that knows better (a test) passes it explicitly.
+
+# What thinking is given on top of the reply budget. The budget was sized for
+# the answer alone; a trace runs into the thousands of tokens on a hard brief,
+# and a reply cut off inside its own reasoning returns nothing at all.
+REASONING_ALLOWANCE = 8192
+
+
+def reasoning(explicit=None):
+    """Whether this call may think: `explicit` when given, else the setting.
+
+    Off wherever the settings cannot be read — the pure suites, a broken file —
+    because off is what every call did before the switch existed.
+    """
+    if explicit is not None:
+        return bool(explicit)
+    try:
+        from .. import settings
+
+        return bool((settings.load().get("refiner") or {}).get("reasoning"))
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def answer(content):
+    """A reply with its reasoning trace taken off -> the answer alone.
+
+    Two shapes reach here. A trace the model opened itself, `<think>…</think>`,
+    which `THINK_RE` already strips. And a trace whose opening tag was in the
+    *prompt* — Qwen3's thinking templates and several servers without a
+    reasoning parser write `<think>` into the assistant turn, so the reply
+    begins mid-thought and only the closing tag arrives. Everything up to the
+    last `</think>` is trace either way.
+
+    Applied by both backends' `chat` while thinking is on, so every reader
+    downstream — the families' `parse_reply`, the chat room, Director, the
+    skill path — is handed an answer and never has to know a trace existed.
+
+    A trace that never closed — the budget ran out mid-thought — is trace to
+    the end, and comes back as nothing rather than as half a thought.
+    """
+    text = content or ""
+    if "</think>" in text:
+        text = text.rsplit("</think>", 1)[1]
+    return THINK_RE.sub("", text).split("<think>", 1)[0].strip()
+
+
 # ---- the two fields that are the pack's, not a family's ---------------------
 
 # The first thing the model writes when anything is attached, and the only field
@@ -239,7 +301,7 @@ VISION_BLOCK = "<|vision_start|><|image_pad|><|vision_end|>"
 PREFILL = "{"
 
 
-def chatml(system, message, images=0, prefill=PREFILL):
+def chatml(system, message, images=0, prefill=PREFILL, think=False):
     """system + user + an assistant turn already begun, as one Qwen prompt.
 
     `images` vision blocks are placed at the head of the user turn, in the order
@@ -251,12 +313,19 @@ def chatml(system, message, images=0, prefill=PREFILL):
     reasoning". It has to be written by hand here for the same reason the turns
     do: skipping the template skips that too, and a reasoning model with no
     suppression spends the whole token budget thinking and returns nothing.
+
+    `think` leaves the assistant turn open instead — no empty block and no
+    prefill, since a reply begun with `{` has already skipped the place a
+    trace would go. See `reasoning`.
     """
-    return (
+    turns = (
         "<|im_start|>system\n" + system + "<|im_end|>\n"
         "<|im_start|>user\n" + VISION_BLOCK * int(images) + message + "<|im_end|>\n"
-        "<|im_start|>assistant\n<think>\n\n</think>\n\n" + prefill
+        "<|im_start|>assistant\n"
     )
+    if think:
+        return turns
+    return turns + "<think>\n\n</think>\n\n" + prefill
 
 
 # ---- handles and labels -----------------------------------------------------
@@ -455,25 +524,66 @@ def json_object(content):
     sentence in front of it. What the object *holds* is each family's own
     `parse_reply` to judge, and that half is strict.
     """
+    import json
+
     text = THINK_RE.sub("", content).strip()
     fenced = _FENCE_RE.match(text)
     if fenced:
         text = fenced.group(1).strip()
-    if not text.startswith("{"):
-        at = text.find("{")
-        if at < 0:
-            raise RefineError(f"the model did not return JSON: {content[:300]}")
-        text = text[at:text.rfind("}") + 1]
-
-    import json
-
+    if text.find("{") < 0:
+        raise RefineError(f"the model did not return JSON: {content[:300]}")
     try:
         data = json.loads(text)
     except ValueError as exc:
-        raise RefineError(f"the model's JSON could not be read ({exc}): {text[:300]}") from exc
+        data = _first_object(text)
+        if data is None:
+            raise RefineError(f"the model's JSON could not be read ({exc}): {text[:300]}") from exc
     if not isinstance(data, dict):
         raise RefineError("the model returned JSON, but not an object")
     return data
+
+
+# A fenced block anywhere in a reply, closed or not. The prompts ask for the
+# object in a fence, so a fence is where the answer is looked for first.
+_FENCES_RE = re.compile(r"```(?:\w+)?\s*(.*?)\s*(?:```|$)", re.DOTALL)
+
+
+def _first_object(text):
+    """The object a reply that is not one clean object meant -> a dict, or None.
+
+    Two shapes the small models write, both seen on the 2B floor: an object
+    and then the real answer in a fence (`{"act": "say", …}` followed by the
+    render, fenced — the fence is what was asked for, and the last fence is
+    the answer the model settled on), and one object with something after it
+    (a stray closing brace, a second sentence). Each is read with
+    `raw_decode`, which takes one object and ignores what follows, rather
+    than handing everything between the first `{` and the last `}` to a
+    parser that wants exactly one value.
+
+    Only from the first `{` of each block. An object that does not decode
+    from there is broken or unclosed, and every later brace is inside it: a
+    shot from an unclosed shot list is not the answer, and is left for the
+    caller's own repair (`director_calls._closed`).
+    """
+    import json
+
+    decoder = json.JSONDecoder()
+
+    def first_in(chunk):
+        at = chunk.find("{")
+        if at < 0:
+            return None
+        try:
+            value, _end = decoder.raw_decode(chunk, at)
+        except ValueError:
+            return None
+        return value if isinstance(value, dict) else None
+
+    for block in reversed(_FENCES_RE.findall(text)):
+        found = first_in(block)
+        if found is not None:
+            return found
+    return first_in(text)
 
 
 # ---- what a family says a prompt looks like ---------------------------------
@@ -575,8 +685,12 @@ class Prompting:
         raise NotImplementedError(f"{self.id}.reply_shape")
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=(), still=False):
+                      cast=(), still=False, attached=True):
         """The whole instruction: rules, craft, the mode's template, the contract.
+
+        `attached` is whether the request carries anything at all — a file
+        on a shot, the piece's pool, a cast. A family that teaches handles
+        leaves that lesson out without one (H3's `_REFS_RULE`).
 
         `extra` is the user's own instructions, from a prompt file they put in
         the node's skills/ folder and set to add to the built-in prompting

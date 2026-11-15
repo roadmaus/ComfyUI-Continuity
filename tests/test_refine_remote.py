@@ -24,6 +24,11 @@ import layout
 pkg = layout.load("prompting", "refine_remote")
 remote, refine = pkg.refine_remote, pkg.prompting
 
+# The switch is read off this machine's settings file wherever ComfyUI can be
+# imported; the suite pins it off so a lab with thinking on runs the same tests.
+_reasoning = refine.reasoning
+refine.reasoning = lambda explicit=None: _reasoning(False if explicit is None else explicit)
+
 from harness import FAILURES, check, passed
 
 
@@ -186,7 +191,7 @@ real_request = remote._request
 
 def _fake(answers):
     """Record every call and answer from `answers`, keyed by the whole URL."""
-    def request(url, key, payload=None, timeout=None):
+    def request(url, key, payload=None, timeout=None, parse=True):
         calls.append((url, payload))
         answer = answers.get(url)
         if isinstance(answer, Exception):
@@ -217,14 +222,33 @@ check("a server without the newer endpoint gets the keep_alive call",
 check("…which says zero seconds, which is Ollama for now",
       calls[-1][1], {"model": "qwen3:8b", "keep_alive": 0})
 
-# llama.cpp, vLLM, KoboldCpp: neither call exists, and that is not an error.
+# llama-swap names the model in the path, POSTs (so a body, even an empty
+# one) and answers a bare `OK` that must not read as a failed call.
+calls.clear()
+seen = []
+def _swap(url, key, payload=None, timeout=None, parse=True):
+    calls.append((url, payload))
+    if url != "http://localhost:1234/api/models/unload/org/qwen%203":
+        raise remote.ServerError("404", 404, "")
+    seen.append(parse)
+    return None
+remote._request = _swap
+check("llama-swap is asked last, with the model in the path",
+      remote.unload("org/qwen 3"), "/api/models/unload/org/qwen%203")
+check("…a slash kept for its wildcard route, a space escaped", calls[-1][0],
+      "http://localhost:1234/api/models/unload/org/qwen%203")
+check("…with a body, which is what makes it a POST", calls[-1][1], {})
+check("…and its plain-text reply is not parsed as JSON", seen, [False])
+
+# A lone llama.cpp, vLLM, KoboldCpp: no call exists, and that is not an error.
 calls.clear()
 remote._request = _fake({
     "http://localhost:1234/api/v1/models/unload": remote.ServerError("404", 404, ""),
     "http://localhost:1234/api/generate": refine.RefineError("could not reach"),
+    "http://localhost:1234/api/models/unload/m": remote.ServerError("404", 404, ""),
 })
-check("a server that can do neither is left alone, silently", remote.unload("m"), "")
-check("…after asking both ways", len(calls), 2)
+check("a server that can do none of them is left alone, silently", remote.unload("m"), "")
+check("…after asking every way", len(calls), 3)
 
 remote.configure("https://api.openai.com/v1", "sk-hosted")
 calls.clear()
@@ -246,14 +270,16 @@ calls.clear()
 remote._request = _fake({
     "http://localhost:11434/v1/models": {"data": [{"id": "qwen3-vl:4b"}, {"id": "gemma3"}]},
     "http://localhost:1234/v1/models": refine.RefineError("could not reach"),
+    "http://localhost:8080/v1/models": refine.RefineError("could not reach"),
 })
 found = remote.probe_local()
 check("the servers that answered are listed with their models",
       found, [{"name": "Ollama", "url": "http://localhost:11434/v1",
                "models": ["gemma3", "qwen3-vl:4b"]}])
-check("both loopback ports were knocked on and nothing else",
+check("the loopback ports were knocked on and nothing else",
       sorted(url for url, _ in calls),
-      ["http://localhost:11434/v1/models", "http://localhost:1234/v1/models"])
+      ["http://localhost:11434/v1/models", "http://localhost:1234/v1/models",
+       "http://localhost:8080/v1/models"])
 check("every probed address is loopback",
       all(remote._loopback(urllib.parse.urlparse(url).hostname)
           for _, url in remote.LOCAL_SERVERS), True)
@@ -281,6 +307,17 @@ remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
                  "finish_reason": "stop"}]}})
 check("the request asks for no reasoning", remote.chat("m", "sys", "hi"), '{"shots": []}')
 check("…in the OpenAI spelling", calls[-1][1].get("reasoning_effort"), "none")
+check("no schema, no response_format", "response_format" in calls[-1][1], False)
+
+# A schema rides as `response_format`, and a server that refuses the word
+# sheds it rather than failing the call: the reply is read the same way
+# with or without it.
+remote.chat("m", "sys", "hi", schema={"type": "object"})
+check("a schema is sent as response_format", calls[-1][1].get("response_format"),
+      {"type": "json_schema", "json_schema": {"name": "reply", "schema": {"type": "object"}}})
+check("response_format is negotiable",
+      remote.adapt("Unsupported parameter: 'response_format'",
+                   {"model": "m", "response_format": {}}), "response_format")
 
 remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
     "choices": [{"message": {"role": "assistant", "content": "",
@@ -303,6 +340,51 @@ except refine.RefineError as exc:
     check("an empty reply with no trace is not blamed on thinking",
           "returned nothing" in str(exc), True)
 remote._request = real_request
+
+
+# ---- letting it think (the experimental switch) ------------------------------
+#
+# On, nothing asks the server to suppress reasoning, the budget grows by the
+# allowance, no schema constrains the decode (a grammar would constrain the
+# trace too), and a trace returned inside the content is taken off.
+
+check("an explicit answer beats the setting", (refine.reasoning(True), refine.reasoning(False)),
+      (True, False))
+
+remote.configure("http://localhost:1234/v1", "")
+calls.clear()
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant",
+                             "content": "<think>The user wants rain.</think>\n{\"shots\": []}"},
+                 "finish_reason": "stop"}]}})
+check("a thinking reply comes back as its answer",
+      remote.chat("m", "sys", "hi", max_tokens=2048, schema={"type": "object"}, reasoning=True),
+      '{"shots": []}')
+sent = calls[-1][1]
+check("…with no reasoning_effort asked for", "reasoning_effort" in sent, False)
+check("…and no schema constraining the trace", "response_format" in sent, False)
+check("…and the allowance on top of the reply budget", sent["max_tokens"],
+      2048 + refine.REASONING_ALLOWANCE)
+
+remote._request = _fake({"http://localhost:1234/v1/chat/completions": {
+    "choices": [{"message": {"role": "assistant", "content": "",
+                             "reasoning": "Let me consider the shot…"},
+                 "finish_reason": "length"}]}})
+try:
+    remote.chat("m", "sys", "hi", reasoning=True)
+    check("a budget spent thinking is refused", False, True)
+except refine.RefineError as exc:
+    check("a budget spent thinking says to raise the length",
+          "still thinking" in str(exc) and "reply length" in str(exc), True)
+remote._request = real_request
+
+# The trace shapes `answer` is given.
+check("a closed trace is taken off", refine.answer("<think>a</think>\nB"), "B")
+check("a trace opened by the template is taken off", refine.answer("planning…</think>\n\nB"), "B")
+check("a trace that never closed is nothing", refine.answer("<think>still going"), "")
+check("an answer with no trace is itself", refine.answer("  B "), "B")
+check("chatml leaves the turn open to think",
+      refine.chatml("S", "M", prefill="{", think=True).endswith("<|im_start|>assistant\n"), True)
 
 
 # ---- the reply shapes --------------------------------------------------------

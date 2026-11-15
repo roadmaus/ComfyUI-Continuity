@@ -50,7 +50,7 @@ from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, jobs, media, models as core_models, refine_local, refine_remote, refmod
+from .. import chat, director, jobs, media, models as core_models, refine_local, refine_remote, refmod
 from .. import refine_routes, refine_skill, server_routes, settings
 from ..families import manifest, refine, registry
 from ..guard import same_origin
@@ -131,7 +131,7 @@ def machine(still_family, video_family, weights, turbo=False, edit=None):
 def _arch_of(family):
     """The pre-stage pill's name for a family, or None where it makes no stills.
 
-    "minimax" is H3's and is frozen in every saved blob, which is why the pill's
+    "minimax" is MiniMax H3 Image's and is frozen in every saved blob, which is why the pill's
     vocabulary and the registry's ids are not the same words — see
     `registry.STILL_ARCHES`. The rail arrives naming families, because that is
     what the machine card and the settings block are keyed by, so the mapping
@@ -157,13 +157,11 @@ def _rail(raw):
     can make. The room reads both families off the nodes on the canvas (the
     piece's family, the pre-stage's arch) and sends them here by name.
 
-    The still side is the *image* families and not every family that makes a
-    still. H3's still branch is a video generation with one latent frame decoded
-    as a picture, and its pre-stage blob is the Creator's own request under a
-    `minimax` block rather than the shared image shape — a second blob for this
-    room to patch, for a picture the video family can already be asked for
-    directly. So the rail offers the families that draw a picture outright, and
-    the room's own pill offers the same set.
+    The still side is the *image* families — every family that makes a still,
+    now that MiniMax's is MiniMax H3 Image's rather than a video generation
+    with one latent frame decoded under a blob of its own. The rail checks
+    against `IMAGE_FAMILIES` all the same, so a family that ever answers for
+    stills off a video render again stays out of a room that cannot patch it.
 
     `edit_family` is the room's *Edits* choice: the image family a cited
     picture is changed on when the still family cannot read one, or nothing
@@ -220,16 +218,16 @@ def _families_of(piece, still):
     for the node that was sent and not for whatever the rail last said.
 
     A pre-stage names an arch, and the room can only draw a picture through
-    an image arch: H3's still branch is a video generation under its own blob
-    (`_rail` says why), so a pre-stage left on it is refused here, in the
-    room's words, rather than built into the wrong compiler.
+    an image arch (`_rail` says why), so an arch that is not one is refused
+    here, in the room's words, rather than built into the wrong compiler.
+    "minimax" is MiniMax H3 Image's, and an image arch like the rest.
     """
     if not still:
         return {"video_family": piece.get("family")}
     family = registry.STILL_ARCHES.get(piece.get("arch"))
     if family not in registry.IMAGE_FAMILIES:
         raise chat.ActionError(
-            "the pre-stage is on MiniMax H3, whose still the room cannot ask "
+            "the pre-stage is on a model whose still the room cannot ask "
             "for. Pick an image model on it and ask again.")
     return {"still_family": family}
 
@@ -332,7 +330,7 @@ def _nodes():
             "MiniMaxH3Creator": creator_node.MiniMaxH3Creator}
 
 
-def _build(action, ledger, rail, stored, base, strip=None, cast=None):
+def _build(action, ledger, rail, stored, base, strip=None, cast=None, more=(), first=None):
     """The blocking half of a render: patch, fill, dry run, build the prompt.
 
     -> `{"piece": blob, "prompt": one-node prompt}`, or `{"problem": sentence}`.
@@ -353,6 +351,9 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
     canvas, and nothing here re-derives any of them. The room's gear is the
     node's own row over the same blob, so there is no second place they could
     have been set.
+
+    `more` and `first` are a Director run's: the shots rendered in the same
+    piece behind this one, and this shot's own handle (`chat.video_piece`).
 
     The patched blob goes back with the prompt id so the browser can hold it
     without patching a second copy of its own. Two implementations of the same
@@ -381,7 +382,8 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
     if still:
         rail = {**rail, "still_pictures": chat.still_pictures(family, manifest.catalog(),
                                                               _loras())}
-    node_id, field, piece = chat.piece_of(action, ledger, rail, piece_in, strip, cast)
+    node_id, field, piece = chat.piece_of(action, ledger, rail, piece_in, strip, cast,
+                                          more, first)
 
     if still:
         # Per-arch sub-blocks with one shared precision, which is the shape
@@ -392,6 +394,13 @@ def _build(action, ledger, rail, stored, base, strip=None, cast=None):
                            "dtype": (piece.get("models") or {}).get("dtype")
                                     or ((stored or {}).get(family["id"]) or {}).get("dtype")
                                     or "default"}
+        # The side's device pins, merged slot by slot over the machine's the way
+        # the video branch below merges them: `_picked` keeps filenames only.
+        # `own` is the node's side as it arrived, before `picked` replaced it.
+        devices = {**(((stored or {}).get(family["id"]) or {}).get("devices") or {}),
+                   **((own or {}).get("devices") or {})}
+        if devices:
+            piece["models"][piece["arch"]] = {**picked, "devices": devices}
     else:
         # Flat, and the whole block rather than the filenames alone:
         # `models.Weights.from_blob` reads the precision, the route and the
@@ -506,6 +515,8 @@ async def chat_render(request):
         base = _base(body.get("base"), still)
         rail = _rail({**(body.get("rail") or {}), **_families_of(base[0], still)})
         action = _with_caption(action, (body.get("action") or {}).get("caption"), base[0], still)
+        # A run clip made again from its card keeps its hard cut.
+        action = chat.with_seam(action, body.get("action"))
     except chat.ActionError as problem:
         return web.json_response({"error": str(problem)}, status=400)
 
@@ -560,8 +571,13 @@ def _skill(block):
     return refine_skill.instructions(skill)
 
 
-def _ask(block, system, message):
+def _ask(block, system, message, schema=None):
     """One generation on whichever backend the room is pointed at.
+
+    `schema` is a JSON Schema the reply should be an object of — Director's
+    planning calls send one (`routes/director.py`). Only the remote backend
+    can constrain decoding to it (`refine_remote.chat`); the in-process one
+    is never handed it, and the reader downstream is the same either way.
 
     The one place a reply is produced, which is where a native tool call will
     land when the runtime reports it: the same schema as the one tool, with
@@ -583,6 +599,8 @@ def _ask(block, system, message):
                 f"the selected local LLM device '{device}' is no longer available"
             )
         options["device"] = device
+    if schema and block.get("backend") == "remote":
+        options["schema"] = schema
     return ask(
         block.get("model") or "",
         system, message, [],
@@ -771,7 +789,40 @@ def _run(body):
         out["reask"] = quoted
     if verdict["act"] == chat.ACT_RENDER:
         out["action"] = _stamp(block, verdict["action"], ledger, rail, cast)
+        # A fresh clip longer than one shot holds well, or a request for
+        # several shots, is *offered* as a piece (§5.1 of the spec): the clip
+        # renders as asked, and the turn says why a plan might serve better.
+        # It used to be planned instead, by itself, and that made the plain
+        # chat — the refiner, with the Plan switch off — start a project when
+        # the person only wanted their prompt written and rendered. The Plan
+        # switch is the way in; this is a door beside the clip, not a turn
+        # taken for them. Code decides, on the model's own reading of the
+        # request, so "make it 20 seconds" about a clip stays that clip.
+        ceiling = _ceiling(rail)
+        why = director.wants_plan(out["action"], asked, ceiling)
+        # A fresh clip is as long as the person said, where they said, over
+        # what the model wrote — the same rule a brief's length follows. A
+        # small model asked for "one continuous 40 second shot" writes ten.
+        said = director.asked_seconds(asked)
+        fresh = not (out["action"].get("after") or out["action"].get("replaces"))
+        if out["action"]["kind"] == chat.KIND_VIDEO and fresh and said:
+            out["action"] = {**out["action"], "seconds": said}
+        # Past what the family renders, the clip is as long as it can be, and
+        # the offer says so.
+        seconds = out["action"].get("seconds")
+        if out["action"]["kind"] == chat.KIND_VIDEO and ceiling and seconds and seconds > ceiling:
+            out["action"] = {**out["action"], "seconds": ceiling}
+        if why:
+            out["plan"] = why
+            if ceiling:
+                out["ceiling"] = ceiling
     return out
+
+
+def _ceiling(rail):
+    """The longest clip the rail's video family renders, in seconds, or None."""
+    described = manifest.describe(rail.get("video_family")) or {}
+    return ((described.get("canvas") or {}).get("frames") or {}).get("max_seconds")
 
 
 def _stamp_rail(block):

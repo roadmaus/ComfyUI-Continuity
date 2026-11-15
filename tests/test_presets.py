@@ -274,10 +274,11 @@ try {
   }
   out.refusals = reasons;
   out.crossings = {
-    // The one weights crossing that is legal: a pre-stage on the H3 branch runs
-    // a creator request, under the same keys.
-    weightsToH3: P.crossable("weights", "piece", "prestage", { targetArch: "minimax" }).ok,
-    weightsFromH3: P.crossable("weights", "prestage", "piece", { arch: "minimax" }).ok,
+    // The crossing the H3 branch used to make legal: a MiniMax pre-stage ran a
+    // creator request under the piece's keys. MiniMax H3 Image has files of
+    // its own, so weights cross between a piece and a pre-stage on no arch.
+    weightsToMiniMax: P.crossable("weights", "piece", "prestage", { targetArch: "minimax" }).ok,
+    weightsFromMiniMax: P.crossable("weights", "prestage", "piece", { arch: "minimax" }).ok,
     promptEverywhere: ["piece", "shot", "prestage"].every((to) =>
       P.crossable("prompt", "piece", to).ok),
     lorasEverywhere: ["piece", "shot", "prestage"].every((to) =>
@@ -309,12 +310,10 @@ try {
     // Sections that are not the family's are untouched by any of it.
     others: ["prompt", "loras", "refs", "look"].every((key) =>
       P.crossable(key, "piece", "piece", { family: "h3", targetFamily: "ltx25" }).ok),
-    // A pre-stage on the H3 branch *is* a creator request, so its weights are
-    // H3's and land on an H3 piece and on no other.
-    stillBranchToH3: P.crossable("weights", "prestage", "piece",
-                                 { arch: "minimax", targetFamily: "h3" }).ok,
-    stillBranchToLtx: P.crossable("weights", "prestage", "piece",
-                                  { arch: "minimax", targetFamily: "ltx25" }).ok === false,
+    // A MiniMax pre-stage's weights are MiniMax H3 Image's, which no piece
+    // loads — not even an H3 one.
+    miniMaxToH3: P.crossable("weights", "prestage", "piece",
+                             { arch: "minimax", targetFamily: "h3" }).ok === false,
   };
 } catch (error) {
   out.errors.push(`cross: ${error.stack}`);
@@ -382,47 +381,29 @@ try {
   out.errors.push(`prestage -> shot: ${error.stack}`);
 }
 
-// The H3 branch keeps its checkpoints in `minimax.request.models`, not in the
-// top-level `models` block — that one is filled for the two image architectures
-// only. A capture that read the wrong one looked fine and quietly carried no
-// weights at all, which on apply *blanked* the target's.
+// A preset saved on the old H3 branch carried that branch's video checkpoints
+// under `weights.minimax`. Applied now, it sets the arch and leaves those
+// files alone — they are not MiniMax H3 Image's — and the old blob it was
+// captured from opens as a MiniMax H3 Image still.
 try {
-  const h3 = S.parsePreStage(JSON.stringify({
-    version: 1, arch: "minimax", prompt: "a still",
-    aspect: "16:9", short_edge: 720,
-    models: { krea2: {}, ideogram4: {}, minimax: {} },
-    minimax: {
-      frames: 5, latent_index: 0,
-      request: { prompt: "a still", assets: [], loras: [], aspect: "16:9", short_edge: 720,
-                 models: { fl2va: "fl2va.safetensors", ref2va: "ref2va.safetensors",
-                           clip: "clip.safetensors", vae: "vae.safetensors",
-                           audio_vae: "audio.safetensors", route: "ref2va" } },
-    },
+  const old = S.parsePreStage(JSON.stringify({
+    version: 1, arch: "minimax", prompt: "",
+    minimax: { frames: 5, latent_index: 0,
+               request: { prompt: "a still", assets: [], loras: [], aspect: "16:9",
+                          models: { fl2va: "fl2va.safetensors" } } },
   }));
-  const body = P.capturePreStage(h3, fakeIO({}));
-
-  // Onto a piece: the crossing `crossable` exists to allow.
-  const piece = S.parseTimeline(JSON.stringify({
-    version: 2, prompt: "", models: { fl2va: "wrong.safetensors" },
-    segments: [{ prompt: "", assets: [], loras: [], duration_s: 6 }],
-  }));
-  P.applyToPiece(body, ["weights"], piece, fakeIO({}), { from: "prestage" });
-
-  // …and back onto a pre-stage of its own kind.
-  const back = S.parsePreStage(JSON.stringify({ version: 1, arch: "krea2" }));
-  P.applyToPreStage(body, ["weights"], back, fakeIO({}), { from: "prestage" });
-
-  out.h3Weights = {
-    captured: (body.weights?.minimax?.models ?? {}).fl2va === "fl2va.safetensors",
-    toPiece: piece.models.fl2va === "fl2va.safetensors"
-          && piece.models.clip === "clip.safetensors"
-          && piece.models.route === "ref2va",
-    toPreStage: back.minimax.request.models.fl2va === "fl2va.safetensors"
-             && back.minimax.request.models.audio_vae === "audio.safetensors",
-    framesKept: back.minimax.frames === 5,
+  const back = S.parsePreStage(JSON.stringify({ version: 1, arch: "krea2", short_edge: 1024 }));
+  P.applyToPreStage({ weights: { arch: "minimax", models: {},
+                                 minimax: { models: { fl2va: "fl2va.safetensors" } } } },
+                    ["weights"], back, fakeIO({}), { from: "prestage" });
+  out.oldH3Preset = {
+    opened: old.arch === "minimax" && old.prompt === "a still" && !("minimax" in old),
+    arch: back.arch,
+    noVideoFiles: !JSON.stringify(back.models).includes("fl2va"),
+    edge: back.short_edge,
   };
 } catch (error) {
-  out.errors.push(`h3 weights: ${error.stack}`);
+  out.errors.push(`old h3 preset: ${error.stack}`);
 }
 
 // References crossing *into* a pre-stage have to be re-handled. A ref with no
@@ -975,8 +956,9 @@ check("...and kept where there is something in front of it", shot.get("seamKept"
 # ---- cross-scope ------------------------------------------------------------
 
 crossings = report.get("crossings", {})
-check("a piece's weights reach a pre-stage on the H3 branch", crossings.get("weightsToH3"), True)
-check("...and come back from one", crossings.get("weightsFromH3"), True)
+check("a piece's weights reach no pre-stage, MiniMax's included",
+      crossings.get("weightsToMiniMax"), False)
+check("...and come back from none", crossings.get("weightsFromMiniMax"), False)
 check("a prompt crosses to everything", crossings.get("promptEverywhere"), True)
 check("so do LoRAs", crossings.get("lorasEverywhere"), True)
 
@@ -995,12 +977,12 @@ check("...its style refs become references", pre_to_shot.get("ref"), True)
 check("...with handles that cannot collide", pre_to_shot.get("handlesUnique"), True)
 check("...and its LoRAs come along", pre_to_shot.get("lora"), True)
 
-h3 = report.get("h3Weights", {})
-check("an H3 pre-stage's checkpoints are captured from the still's own request",
-      h3.get("captured"), True)
-check("...and reach a piece rather than blanking its weights", h3.get("toPiece"), True)
-check("...and come back onto a pre-stage", h3.get("toPreStage"), True)
-check("...without losing the still's frame settings", h3.get("framesKept"), True)
+old_h3 = report.get("oldH3Preset", {})
+check("an old H3 still opens as a MiniMax H3 Image still, its sentence kept",
+      old_h3.get("opened"), True)
+check("an old H3 preset's weights set the arch", old_h3.get("arch"), "minimax")
+check("...without carrying the video checkpoints onto it", old_h3.get("noVideoFiles"), True)
+check("...and with the canvas moved into MiniMax H3 Image's range", old_h3.get("edge"), 2048)
 
 into = report.get("refsIntoPreStage", {})
 check("a card's start frame becomes the pre-stage's init", into.get("init"), True)
@@ -1025,9 +1007,8 @@ check("...and the reason names both families", families.get("named"), True)
 check("...while the same family crosses as it always did", families.get("same"), True)
 check("...a card's row is the piece's, and refuses the same way", families.get("shot"), True)
 check("...and nothing else on the preset is narrowed", families.get("others"), True)
-check("an H3 pre-stage's weights reach an H3 piece",
-      families.get("stillBranchToH3"), True)
-check("...and not one on another family", families.get("stillBranchToLtx"), True)
+check("a MiniMax pre-stage's weights reach no piece, an H3 one included",
+      families.get("miniMaxToH3"), True)
 
 ltx_row = report.get("ltxRow", {})
 check("a preset off an LTX 2.5 piece says whose row it holds",

@@ -604,7 +604,7 @@ class LTX25Prompting(harness.Prompting):
                            sheet=mode == self.modes_reference())
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=(), still=False):
+                      cast=(), still=False, attached=True):
         return system_prompt(mode, language, shape=shape, extra=extra, still=still)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,

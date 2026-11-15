@@ -724,4 +724,12 @@ check("writing the member cites the files behind them",
       prompting.uncited("@wren walks in", {"img-3", "vid-1"}, {}, cast), [])
 
 
+# Nothing attached, no lesson on handles: shown to a bare request, the
+# REFERENCES section's @vid-2 and @aud-1 read as references to write, and a
+# 27B model cited clips nobody had added.
+check("a request with nothing attached is not taught handles",
+      "@vid-" in refine.system_prompt("T2VA", attached=False), False)
+check("one with something attached is",
+      "REFERENCES" in refine.system_prompt("T2VA", attached=True), True)
+
 passed("all refiner tests passed")

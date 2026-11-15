@@ -304,4 +304,131 @@ if remake_routes is not None:
         refused = str(exc)
     check("a stack is refused by name", "stack" in refused, True)
 
+# ---- a clip: thinned, weighted toward motion ------------------------------------
+
+# A held pose: four frames, the middle two copies of the first. Thinning keeps
+# the first, drops the copies, keeps the one that moved.
+still = torch.randn(1, 24, 1, 8, 8)
+moved = torch.randn(1, 24, 1, 8, 8)
+held = torch.cat([still, still, still + 1e-4, moved], dim=2)
+kept_latent, kept, changes = refmod.thin(held)
+check("thinning drops the frames that repeat the one kept before",
+      (kept, list(kept_latent.shape)), ([0, 3], [1, 24, 2, 8, 8]))
+check("...and measures every frame against the last one kept", len(changes), 3)
+check("threshold 0 keeps every frame", refmod.thin(held, 0)[1], [0, 1, 2, 3])
+check("a still has nothing to thin", refmod.thin(full)[1], [0])
+
+# Motion weights: flat where nothing moves, heavier where something does.
+check("a clip that never changes is weighed evenly (no weights)",
+      refmod.motion_weights(torch.cat([still, still, still], dim=2), 1.0), None)
+arm = torch.zeros(1, 24, 3, 8, 8)
+arm[:, :, 1, :4, :4] = 1.0
+weights = refmod.motion_weights(arm, 1.0)
+check("...and a moving corner outweighs the still rest",
+      (list(weights.shape), float(weights[0, 0, 1, 0, 0]) > float(weights[0, 0, 1, 7, 7])),
+      ([1, 1, 3, 8, 8], True))
+check("strength 0 is the plain fit", refmod.motion_weights(arm, 0), None)
+torch.manual_seed(0)
+noisy = arm + torch.randn_like(arm) * 0.1
+weighted = refmod.compress(noisy, 4, steps=30, motion=4.0)
+check("a weighted fit lands somewhere else than the plain one",
+      torch.allclose(weighted, refmod.compress(noisy, 4, steps=30), atol=1e-4), False)
+
+# ---- bundles ----------------------------------------------------------------------
+# Two of ours out as one version-5 bundle, the way the sibling pack writes one,
+# and back in through the import, split into the members it holds.
+
+bundled = os.path.join(tempfile.mkdtemp(prefix="mmc-bundle-"), "anna.safetensors")
+refmod.write_bundle([refmod.resolve("refmod:cast/anna"), refmod.resolve("refmod:walk")], "anna", bundled)
+members = refmod.bundle_members(bundled)
+check("a bundle holds both, in order, as version-4 members",
+      [(m["kind"], m["_format_version"], m["latent_t"]) for _, m in members],
+      [("image", 4, 1), ("video", 4, 3)])
+try:
+    refmod.header(bundled)
+    whole = ""
+except refmod.RefModError as exc:
+    whole = str(exc)
+check("...which this pack refuses to cite whole", "bundle of 2" in whole, True)
+upload = os.path.join(ROOT, ".upload.tmp")
+import shutil  # noqa: E402
+shutil.copy(bundled, upload)
+first, meta = refmod.adopt(upload, "imported/anna")
+check("imported, it is split into its members", [os.path.relpath(p, ROOT) for p in meta["parts"]],
+      [os.path.join("imported", "anna-1.safetensors"), os.path.join("imported", "anna-2.safetensors")])
+check("...each the latent it was",
+      (torch.allclose(refmod.load_latent(meta["parts"][0]), refmod.load_latent(refmod.resolve("refmod:cast/anna"))),
+       refmod.header(meta["parts"][1])["latent_t"]), (True, 3))
+check("...and the upload is consumed", os.path.exists(upload), False)
+shutil.copy(bundled, upload)
+try:
+    refmod.adopt(upload, "imported/anna")
+    again = ""
+except refmod.RefModError as exc:
+    again = str(exc)
+check("importing it twice refuses rather than writes over", "already there" in again, True)
+try:
+    refmod.write_bundle([refmod.resolve("refmod:cast/anna")] * 1 + [bundled], "x",
+                        os.path.join(tempfile.mkdtemp(), "x.safetensors"))
+    nested = ""
+except refmod.RefModError as exc:
+    nested = str(exc)
+check("a bundle is not bundled again", bool(nested), True)
+
+if remake_routes is not None:
+    # ---- the frames a clip is read as -------------------------------------------
+    check("the run is the longest 17k+5 that fits",
+          [remake_routes.causal_count(n) for n in (4, 5, 21, 22, 30, 56, 60)], [0, 5, 5, 22, 22, 56, 56])
+    clip_frames = torch.arange(40, dtype=torch.float32).view(40, 1, 1, 1).expand(40, 2, 2, 3).clone()
+    media.load_video = lambda filename, max_seconds=None, crop=None: (clip_frames, None)
+    picked = remake_routes._frames("walk.mp4", 30)
+    check("a count off the grid is snapped before the picks, which span first frame to last",
+          (picked.shape[0], float(picked[0, 0, 0, 0]), float(picked[-1, 0, 0, 0])), (22, 0.0, 39.0))
+    short = remake_routes._frames("walk.mp4", 56)
+    check("a clip shorter than the count gives its longest whole run, end included",
+          (short.shape[0], float(short[-1, 0, 0, 0])), (39, 39.0))
+    motion_run = remake_routes._frames("walk.mp4", 22, capture="motion")
+    check("a motion capture picks one more and keeps a whole run", motion_run.shape[0], 22)
+
+    # ---- kept for its motion -----------------------------------------------------
+    class ClipVAE(FakeVAE):
+        """An encode with something in it: each latent frame is its first
+        source frame's level, so the run keeps its movement."""
+        def encode(self, pixels):
+            self.encoded += 1
+            frames, height, width = pixels.shape[0], pixels.shape[1], pixels.shape[2]
+            t = 1 + (frames - 1) // 4
+            levels = pixels[::4, 0, 0, 0][:t].float()
+            return levels.view(1, 1, t, 1, 1).expand(1, 24, t, height // 16, width // 16).clone()
+
+    remake_routes._vae = lambda name, space=None: ClipVAE()
+    clip_frames = torch.rand(120, 432, 768, 3)
+    media.load_video = lambda filename, max_seconds=None, crop=None: (clip_frames, None)
+    made = remake_routes._run_job({"name": "mia", "subfolder": "cast", "sources": ["walk.mp4"],
+                                   "mode": "clip", "use": "motion", "steps": 2, "vae": "x"})
+    motion_meta = refmod.header(refmod.resolve(made["mods"][0]["path"]))
+    check("a clip kept for its motion is fifty-six frames on a 16-grid, compressed",
+          (motion_meta["mode"], motion_meta["latent_w"], motion_meta["concept_type"],
+           "56 frames" in motion_meta["tags"], "motion" in motion_meta["tags"]),
+          ("training", 16, "pose_motion", True, True))
+    look = remake_routes._run_job({"name": "mia-look", "subfolder": "cast", "sources": ["walk.mp4"],
+                                   "mode": "clip", "vae": "x"})
+    look_meta = refmod.header(refmod.resolve(look["mods"][0]["path"]))
+    check("one kept for its look is the full encode of twenty-two",
+          (look_meta["mode"], look_meta["latent_w"], "22 frames" in look_meta["tags"]),
+          ("encode", 48, True))
+    squeezed = remake_routes._run_job({"name": "mia-small", "subfolder": "cast", "sources": ["walk.mp4"],
+                                       "mode": "clip", "compressed": True, "steps": 0, "vae": "x"})
+    check("...and compressed for its look, a 32-grid",
+          refmod.header(refmod.resolve(squeezed["mods"][0]["path"]))["latent_w"], 32)
+    clip_frames = torch.full((120, 432, 768, 3), 0.5)
+    frozen = remake_routes._run_job({"name": "mia-still", "subfolder": "cast", "sources": ["walk.mp4"],
+                                     "mode": "clip", "vae": "x"})
+    check("a clip that never moves is thinned to one frame",
+          refmod.header(refmod.resolve(frozen["mods"][0]["path"]))["latent_t"], 1)
+    kept_all = remake_routes._run_job({"name": "mia-all", "subfolder": "cast", "sources": ["walk.mp4"],
+                                       "mode": "clip", "thin": 0, "vae": "x"})
+    check("...unless thinning is off",
+          refmod.header(refmod.resolve(kept_all["mods"][0]["path"]))["latent_t"], 6)
+
 passed("all RefMod encode tests passed")

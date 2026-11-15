@@ -189,14 +189,6 @@ taken. You may expand an alternative into fuller detail inside its own slot. \
 Never pick one, never merge them into a single description, and never write \
 the group twice. Groups may nest; keep the nesting as it is.
 
-REFERENCES
-Attached media is named by handles such as @img-1, @vid-2, @aud-1. The user \
-message lists every handle, what it holds, and the H3 label it will be given. \
-Write handles in your prose wherever you mean that asset — the labels are \
-substituted in afterwards. Every handle you write is one from that list, \
-whatever kind of file it names: a clip is @vid-N and a sound is @aud-N, and \
-where the list holds those, those are the ones your prose carries.
-
 SPEECH
 Whenever the request has anyone speak, talk, say something, ask, answer, shout, \
 whisper, narrate, sing, argue or read aloud, write the words they actually say. \
@@ -229,6 +221,20 @@ Write densely. Each shot body is a paragraph that establishes composition, \
 subject appearance, environment and light, the action and how it changes, \
 camera movement in the craft section's vocabulary, and the sound occurring in \
 that moment. Prefer what is visible and audible over what is felt or meant.
+"""
+
+# Only when something is attached. Shown to a T2VA request — nothing attached,
+# no cast — the handle examples (@vid-2, @aud-1) and "a clip is @vid-N" read to
+# a 27B model as references it should be writing, and the rewrite came back
+# citing clips and sounds nobody added.
+_REFS_RULE = """\
+REFERENCES
+Attached media is named by handles such as @img-1, @vid-2, @aud-1. The user \
+message lists every handle, what it holds, and the H3 label it will be given. \
+Write handles in your prose wherever you mean that asset — the labels are \
+substituted in afterwards. Every handle you write is one from that list, \
+whatever kind of file it names: a clip is @vid-N and a sound is @aud-N, and \
+where the list holds those, those are the ones your prose carries.
 """
 
 _CUTS_RULE = """\
@@ -473,7 +479,7 @@ def reply_shape(mode, shots, cuts=0, shown=(), piece=False, ref_shots=(), cast=(
 
 
 def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=(),
-                  still=False):
+                  still=False, attached=True):
     """The whole instruction: rules, craft, the mode's template, the contract.
 
     With a `cast`, the reference form's template and mode note are the cast
@@ -487,6 +493,11 @@ def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=(
     An example of the transformation followed immediately by the shape it must
     take is the strongest anti-chat pairing the prompt has.
 
+    `attached` is whether the request carries any file, pool or cast at all;
+    without one the REFERENCES lesson is left out (`_REFS_RULE`). Said by the
+    route, which knows, rather than read off `mode`: a strip whose first card
+    is T2VA can hold a picture on its second.
+
     `shape` is the JSON contract in words, from `reply_shape`, and it goes last
     of all. `cuts` is the shot ceiling when this request lets the model divide
     the video itself, from `shot_limit`. Below 2 there is nothing to divide and
@@ -494,6 +505,8 @@ def system_prompt(mode, language="English", shape=None, cuts=0, extra="", cast=(
     cards'.
     """
     parts = [_RULES]
+    if attached or cast:
+        parts.append(_REFS_RULE)
     if int(cuts) >= 2:
         parts.append(_CUTS_RULE.format(limit=int(cuts), floor=MIN_SHOT_S))
     if language and language != "English":
@@ -1172,9 +1185,9 @@ class H3Prompting(harness.Prompting):
                            ref_shots=ref_shots, cast=cast)
 
     def system_prompt(self, mode, language="English", shape=None, cuts=0, extra="",
-                      cast=(), still=False):
+                      cast=(), still=False, attached=True):
         return system_prompt(mode, language, shape=shape, cuts=cuts, extra=extra,
-                             cast=cast, still=still)
+                             cast=cast, still=still, attached=attached)
 
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):

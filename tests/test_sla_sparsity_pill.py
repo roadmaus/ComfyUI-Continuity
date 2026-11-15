@@ -21,7 +21,7 @@ passed("the attention pill carries SLA's sparsity under sla and nothing otherwis
 
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
-                   "still", "krea2_still", "ideogram4_still", "grammar",
+                   "h3image_still", "krea2_still", "ideogram4_still", "grammar",
                    "h3_declare", "h3_models", "h3_grammar", "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
 h3 = _pkg.manifest.describe("h3")

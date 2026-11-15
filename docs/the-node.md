@@ -189,8 +189,12 @@ offers *Save as RefMod*. A RefMod is a reference encoded once and kept as a
 file: the saved-latent format
 [ComfyUI-MiniMaxH3Mod](https://github.com/Luisacaotica/ComfyUI-MiniMaxH3Mod)
 reads and writes, so a character made or downloaded there works here and one
-saved here loads in their nodes (their newer one-reference *bundles* read
-too; a bundle of several is refused by count).
+saved here loads in their nodes. Their newer *bundles* (format 5) read too:
+a one-reference bundle is a RefMod like any other, and a bundle of several
+is split into its members when it is imported — `anna-1`, `anna-2`, … — and
+one member is cast out of all of them. Going the other way, a member with two
+or more H3 RefMods has *Download as one bundle* in their saved references'
+menu, which hands out the one file that pack's loader takes for a character.
 
 **A mod is for one family.** A latent belongs to one VAE: an H3 mod is a
 tensor in the H3 video VAE's space and means nothing to Flux 2 Klein, whose
@@ -234,19 +238,39 @@ The menu's shapes, and what each costs:
   against it, a few hundred tokens — 432 for a 3:4 portrait. Renders like
   Full at under half the cost. Pooled any further a face comes back with
   colour stains (the sibling pack's 16-grid is 48 tokens for that portrait,
-  and unusable for a person), which is why the grid is where it is. Stills
-  only.
+  and unusable for a person), which is why the grid is where it is.
 * **Full**, per picture: the encode at a 1024 short edge, about a thousand
-  tokens. Stills only. On Flux 2 Klein the same two rows are the family's
-  own numbers — a 1 MP picture is a 64×64 grid there and every cell is a
-  token, so Full is 4,096 and Compressed (a 32-grid) a quarter of it.
-* **Each clip — its own file.** A clip encoded whole at the 768 reference
-  canvas, up to a minute of it, kept as one *video* RefMod and cited as one
-  `<Video n>`: long motion for a few hundred tokens a frame, read off the
-  file instead of decoded every render — the shape the sibling pack's own
-  motion references take (issue #53). The route also takes `capture:
-  "motion"`, their frame-difference capture, which nothing in the UI offers
-  yet. H3 only: a still family has no time axis.
+  tokens. On Flux 2 Klein the same two rows are the family's own numbers — a
+  1 MP picture is a 64×64 grid there and every cell is a token, so Full is
+  4,096 and Compressed (a 32-grid) a quarter of it.
+
+  On H3, both rows keep a member's **clips first**, each as its own file —
+  Compressed pools a clip's frames to a 32-grid (about 860 tokens for six
+  frames of a 16:9 clip), Full keeps the 768 encode — and then their stills,
+  so one pick saves every look. The row's count includes the clips.
+* **Each clip — its own file.** A clip kept for how they look in it: 22
+  frames over its first eight seconds, encoded whole at the 768 reference
+  canvas and kept as one *video* RefMod, cited as one `<Video n>` and read
+  off the file instead of decoded every render. About two thousand tokens
+  for a 16:9 clip.
+* **Each clip — for its motion.** A clip kept for how they move: 56 frames
+  over up to fifteen seconds, each pooled to a 16-grid, the fit leaning
+  toward the cells that move (a moving cell weighs up to about twice a still
+  one). Around 450 tokens for a 16:9 clip; the look goes soft, which their
+  pictures make up for. This is the sibling pack's own motion recipe (56
+  frames, 16×16) and the shape issue #53 asked for. H3 only, like the row
+  above: a still family has no time axis.
+
+Every clip, whichever row keeps it and in a stack too, is read as a whole
+run H3's reference path takes (5, 22, 39, 56 … frames) chosen *before* the
+frames are picked, so the picks run from the first frame read to the last
+and a clip shorter than the count gives its longest whole run instead of
+losing its end. Latent frames that repeat the one kept before them — a
+held pose — are left out of the file before it is pooled, since each costs
+a whole grid of tokens; the render log says how many a clip kept and what
+it measured. The route takes `thin: 0` to keep every frame, and `capture:
+"motion"` for the sibling pack's frame-difference capture, which nothing in
+the UI offers yet.
 
 Either way the render reads the latent off the file and shows the model a
 picture decoded from it as the label it cites.
@@ -325,8 +349,8 @@ person walking by) stays in front of it. H3's own dynamic island stays on top
 of a phone screen; its home bar is covered.
 
 Screens work on MiniMax H3 and on every still model that takes reference
-pictures (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, and Krea 2 with a
-Krea 2 Edit LoRA). Each screen takes one reference slot. They are not
+pictures (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, MiniMax H3 Image,
+and Krea 2 with a Krea 2 Edit LoRA). Each screen takes one reference slot. They are not
 available on LTX 2.5, whose references ride as one sheet, or on a pass that
 merges several cards.
 
@@ -399,11 +423,12 @@ Two ways to run it, chosen in the refiner's settings:
 - **This ComfyUI**: a small Qwen3-VL text encoder loaded in-process, evicted
   like any other model when the sampler needs the VRAM. See
   [models.md](models.md#the-refine-button) for the file.
-- **A server**: any OpenAI-compatible endpoint - LM Studio, Ollama, llama.cpp,
-  vLLM, or a hosted API with a key. The key is stored server-side on your
+- **A server**: any OpenAI-compatible endpoint - LM Studio, Ollama, llama.cpp
+  (alone or behind llama-swap), vLLM, or a hosted API with a key. The key is stored server-side on your
   machine, never in the browser or a workflow file. "Eject when done" asks a
   local server to unload the model as soon as the rewrite is in, so the
-  sampler gets the memory back. Reasoning is asked off; a build that thinks
+  sampler gets the memory back (LM Studio, Ollama and llama-swap know how; a
+  lone llama.cpp server or vLLM keeps it). Reasoning is asked off; a build that thinks
   anyway (Ollama's Qwen3-VL tags do) needs a larger reply length than the
   default, or it spends the whole reply on the trace and returns nothing.
 

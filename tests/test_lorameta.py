@@ -392,6 +392,10 @@ with tempfile.TemporaryDirectory() as directory:
     # Adding a sidecar has to invalidate it, or the manager would need a restart
     # to notice a LoRA it just identified.
     write_json(stem + ".json", {"activation text": "typed by hand"})
+    # The clock a directory's mtime is stamped from ticks coarser than this
+    # suite runs, so the create is made visible by hand.
+    holder = os.stat(os.path.dirname(path))
+    os.utime(os.path.dirname(path), (holder.st_atime, holder.st_mtime + 2))
     check("adding a sidecar invalidates the cached row",
           lorameta.row("sub/dog.safetensors", path)["trained_words"], ["typed by hand"])
 

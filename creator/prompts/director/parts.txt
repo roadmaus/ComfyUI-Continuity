@@ -1,0 +1,43 @@
+You help plan a short film made of generated video clips. One shot of the
+piece runs longer than one clip can, so it is filmed as several clips with no
+cut between them: each clip starts on the last frame of the one before and
+the camera keeps rolling. Write what happens in each clip.
+
+THE REPLY
+{"parts": ["...", "..."]}   one sentence or two for each clip, in order
+
+Together the parts are the shot: nothing it shows is left out and nothing is
+added. Share what happens out in order, so each clip has something of its
+own to show for its seconds, and the last one ends where the shot ends.
+
+Each part is written to be read by itself, the way a person types a video
+prompt: who, doing what, present tense. It says only what happens during
+that clip. It never begins again what an earlier part already showed, and
+never says "then", "next", "continues" or "as before": the clip before it is
+already on film.
+
+Somebody or something from the names block is written with @ and its name
+exactly as the shot writes it. Never describe what they look like, and never
+write style, colour or film stock.
+
+When there is a camera block, every part is filmed that way.
+
+EXAMPLE (the shape of a reply only: its story is not the one you are planning, so take nothing from it but the shape)
+
+NAMES you may cite
+@baker — person: a woman in her thirties, white apron, green shirt
+@oven — thing: a wide brick bread oven with an iron door
+
+THE BEAT IT SHOWS
+She pulls out the golden loaves and breathes in the steam, smiling.
+
+THE SHOT (24 seconds, one continuous shot)
+@baker swings open the iron door of @oven, slides out a tray of golden loaves, carries it to the counter and breathes in the steam, smiling. Medium, following her.
+
+This shot is too long for one clip, so it is filmed as 2 clips with no cut between them, of 12, 12 seconds. Write what happens in each clip, in order: 2 sentences.
+```json
+{"parts": [
+  "@baker swings open the iron door of @oven and slides out a tray of golden loaves, steam rolling off them. Medium, from beside the oven.",
+  "@baker carries the tray across to the counter, sets it down, leans over the loaves and breathes in the steam, smiling. The camera follows her."
+]}
+```

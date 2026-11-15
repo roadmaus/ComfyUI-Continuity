@@ -64,6 +64,14 @@ def _time_kernel(header, key):
 # Ordered: an entry's test may assume the ones above it said no, the way core's
 # `elif` chain does. The keys are quoted from `comfy/sd.py`'s VAE branches.
 KINDS = (
+    # The H3 encoder with a single-frame decoder: `sd.py` tells it by a 768-row
+    # `decoder.proj_out` and, for MiniMax H3 Image as against p-h3-image, a
+    # 1024-wide `decoder.x_embedder`. First, because it carries the video
+    # VAE's `transformer_blocks` and encoder too and `h3_video` would claim it;
+    # the video decoder's `proj_out` is 3072 rows (four frames per token).
+    Kind("h3_image", "the MiniMax H3 Image VAE",
+         lambda h: (h.get("decoder.proj_out.weight", {}).get("shape") or [0])[0] == 768
+         and (h.get("decoder.x_embedder.weight", {}).get("shape") or [0])[0] == 1024),
     Kind("h3_video", "the MiniMax H3 video VAE",
          lambda h: "decoder.transformer_blocks.0.scale1" in h
          and "encoder.down.5.block.0.conv1.weight" in h),

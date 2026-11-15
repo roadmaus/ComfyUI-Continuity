@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import harness  # noqa: E402
 
 if shutil.which("node") is None:
-    harness.skipped("node is not installed")
+    harness.skip("node is not installed")
 
 from domshim import DOM  # noqa: E402
 

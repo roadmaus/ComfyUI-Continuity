@@ -830,7 +830,11 @@ def compiled_passes(blob, seed=None):
             passes.append({"index": index, "clip": True, "prompt": "",
                            "mode": "", "checkpoint": ""})
             continue
-        compiled = compiler.compile_segment(payload, media.image_size)
+        # The piece's family, as the render loop compiles it: without it a
+        # pass compiles as H3, and an LTX 2.5 seam was checked against H3's
+        # feather grid and refused (a chat clip "after" another, every time).
+        compiled = compiler.compile_segment(payload, media.image_size,
+                                            family=compiler.piece_family(piece))
         passes.append({
             "index": index,
             "clip": False,

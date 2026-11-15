@@ -47,7 +47,8 @@ python3 skills/continuity-render/render.py krea2 "a tabby cat, studio portrait" 
   (ComfyUI-MultiGPU). With nothing pinned everything shares ComfyUI's default
   card, which on a two-card box means the text encoder and the video model swap
   in and out of one GPU. `--device SLOT=DEVICE` pins a slot for one render
-  (`--device clip=cuda:1`). The queued line says where each slot loads.
+  (`--device clip=cuda:1`), for a clip or a picture alike. The queued line says
+  where each slot loads.
 - **Attention and memory.** A clip samples with the attention kernel, low VRAM
   and fast math you last set on a node's sampler row for that family; the
   machine remembers them the way it remembers the weights. Before you have set

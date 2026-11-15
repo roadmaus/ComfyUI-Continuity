@@ -908,9 +908,16 @@ export async function remakeRefMod(body, options) {
   return answer;
 }
 
-/** Where a mod's own file is handed out. A plain URL rather than a fetch: it
- *  goes on an anchor with `download`, so the browser saves it under the mod's
- *  name and the page never holds the bytes. */
+/** Where several mods are handed out as one of the sibling pack's bundles. A
+ *  plain URL rather than a fetch: it goes on an anchor with `download`, so the
+ *  browser saves it under the bundle's name and the page never holds the
+ *  bytes. */
+export function refmodBundleUrl(paths, name) {
+  return api.apiURL(`/continuity/refmod/bundle?mods=${encodeURIComponent(paths.join(","))}`
+                    + `&name=${encodeURIComponent(name || "bundle")}`);
+}
+
+/** One mod's own file, the same way. */
 export function refmodFileUrl(path) {
   return api.apiURL(`/continuity/refmod/file?filename=${encodeURIComponent(path)}`);
 }

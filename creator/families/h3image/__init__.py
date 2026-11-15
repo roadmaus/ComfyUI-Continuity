@@ -1,0 +1,5 @@
+"""MiniMax H3 Image — MiniMax's image model, as a still-image family.
+
+Deliberately empty: `declare.py` must be importable without pulling anything
+of the family's in, and the registry imports submodules by name.
+"""

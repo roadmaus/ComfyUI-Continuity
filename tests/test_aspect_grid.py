@@ -25,7 +25,7 @@ from harness import FAILURES, check, passed
 layout.skip_without_node()
 passed("the aspect grid holds every listed ratio and the switch turns it")
 
-_pkg = layout.load("canvas", "compile", "compile_image", "still", "krea2_still",
+_pkg = layout.load("canvas", "compile", "compile_image", "h3image_still", "krea2_still",
                    "ideogram4_still", "qwenedit_still", "flux2klein_still",
                    "h3_declare")
 H3 = _pkg.h3_declare.RULES.aspects

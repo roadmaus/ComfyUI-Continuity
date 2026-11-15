@@ -61,7 +61,7 @@ MODULES = {
     "truncate": "families.h3.truncate",
     "refine": "families.h3.refine",
     "ltx25_refine": "families.ltx25.refine",
-    "still": "families.h3.still",
+    "h3image_still": "families.h3image.still",
     "ltx25_models": "families.ltx25.models",
     "ltx25_sampling": "families.ltx25.sampling",
     "krea2_still": "families.krea2.still",

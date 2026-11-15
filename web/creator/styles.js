@@ -28,6 +28,7 @@ import { css as screens } from "./styles/screens.js";
 import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
 import { css as chat } from "./styles/chat.js";
+import { css as director } from "./styles/director.js";
 import { css as lift } from "./styles/lift.js";
 import { css as forge } from "./styles/forge.js";
 
@@ -69,6 +70,9 @@ const CSS = [
   // other side, so the two rules it turns round have to win over the ones they
   // are turning round.
   chat,
+  // The plan card is a chat message, so after the chat's own rules: it turns
+  // the message's row into a column.
+  director,
   // The image-to-3D room borrows the benches' bar and overlay, so it comes
   // after them; nothing later reaches into it.
   lift,

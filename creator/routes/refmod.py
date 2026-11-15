@@ -9,8 +9,10 @@ still and clip handed in as one `video`-kind file, which is what the sibling
 pack means by a character (see `refmod.stack`).
 
 The rest are the file itself, and none of them touch a tensor: `file` hands
-the .safetensors out, `upload` takes one in, `move` renames it, `delete`
-removes it, `describe` rewrites the one header field worth editing. They exist
+the .safetensors out, `bundle` hands several out as one of the sibling pack's
+version-5 bundles, `upload` takes one in (a bundle of several split into its
+members), `move` renames it, `delete` removes it, `describe` rewrites the one
+header field worth editing. They exist
 because a RefMod is a character somebody carries between machines and packs —
 the sibling pack's README ships one as a download — and a folder you can only
 reach over ssh is not a library.
@@ -135,9 +137,23 @@ def _encode_flux2(vae, image, table, edge=None):
     return vae.encode(resized), resized
 
 
+def _encode_h3_image(vae, image, table, edge=None):
+    """One still -> the latent core's `MiniMaxH3ImageConditioning` anchors for
+    it: the node's own sizing (a short edge held between 1024 and `edge`,
+    2048 by default, on the /32 canvas grid) and its own resampler, through
+    the image VAE's seeded encode — so a full mod is that node's reference
+    block, byte for byte."""
+    from comfy_extras.nodes_minimax_h3 import IMAGE_REF_SHORT_EDGE, _resize_to, _size_short_edge
+
+    size = _size_short_edge(image.shape[2], image.shape[1], IMAGE_REF_SHORT_EDGE,
+                            edge or table["edge"])
+    resized = _resize_to(image[:1], size)
+    return vae.encode(resized), resized
+
+
 # The encoder per latent space: how a family's reference pipeline sizes and
 # encodes a picture, so a mod is the latent a render would have made.
-_ENCODE = {"h3_video": _encode_h3, "flux2": _encode_flux2}
+_ENCODE = {"h3_video": _encode_h3, "h3_image": _encode_h3_image, "flux2": _encode_flux2}
 
 
 def _encode(vae, image, table, edge=None):
@@ -193,6 +209,55 @@ CLIP_FRAMES_MAX = 200
 # live clip never exceeds either (`encode.video_canvas`).
 CLIP_EDGE = 768
 CAPTURES = ("full", "motion")
+# What a clip is kept *for*, and the defaults each purpose starts from; any
+# field the body names wins. The sibling pack's guides split it the same way:
+# a clip kept for how somebody looks wants few frames at the full reference
+# canvas, one kept for how they move wants many frames on a small grid —
+# their motion workflow is 56 source frames pooled to 16. 56 is on core's
+# 17k+5 run, and lands as fourteen latent frames of a 16-grid, a few hundred
+# tokens where the look's six full frames are a couple of thousand.
+CLIP_USES = {
+    # `grid` matters only when the look is compressed — the save-everything
+    # rows keep a member's clips that way, before their stills. The family's
+    # still grid (48) on a 768-canvas clip is barely a pooling at all; 32 is
+    # about the ratio a 48-grid still is to its 1024 encode.
+    "look": {"frames": STACK_FRAMES, "seconds": STACK_SECONDS, "compressed": False, "grid": 32},
+    "motion": {"frames": 56, "seconds": 15, "compressed": True, "grid": 16},
+}
+# How hard a compressed clip's fit leans toward what moves (`refmod.motion_weights`):
+# a moving cell weighs up to about twice a still one at 1. Clips only; a
+# still's fit is the sibling pack's, measured and left alone (`DEFAULT_GRID`).
+CLIP_MOTION_WEIGHT = 1.0
+
+
+def causal_count(count):
+    """The longest run of at most `count` frames core's reference path encodes
+    whole (n % 17 == 5), or 0 where `count` is under five."""
+    count = int(count)
+    if count < 5:
+        return 0
+    return count - (count - 5) % 17
+
+
+def _thin_setting(body):
+    """`body["thin"]`: the near-duplicate threshold (`refmod.thin`), where 0 is
+    a real answer — keep every frame — and only an absent field means the
+    default."""
+    value = body.get("thin")
+    return refmod.THIN if value in (None, "") else max(0.0, float(value))
+
+
+def _thinned(latent, threshold, source):
+    """`refmod.thin`, logged: how many frames the clip kept and the spread of
+    what it saw, so the threshold can be moved on evidence."""
+    kept_latent, kept, changes = refmod.thin(latent, threshold)
+    if changes:
+        ordered = sorted(changes)
+        log.info("[Continuity] %s: kept %d of %d latent frames (change over variance: "
+                 "min %.4f, median %.4f, max %.4f; threshold %.4f)",
+                 source, len(kept), latent.shape[2], ordered[0], ordered[len(ordered) // 2],
+                 ordered[-1], threshold)
+    return kept_latent
 
 
 def _crops(body, sources):
@@ -218,31 +283,34 @@ def _crops(body, sources):
 
 
 def _frames(source, count, crop=None, seconds=STACK_SECONDS, capture="full"):
-    """`count` frames of a clip, spread evenly over its first `seconds`,
-    trimmed to a run core's reference path encodes whole (n % 17 == 5).
+    """`count` frames of a clip, spread evenly over its first `seconds`, as a
+    run core's reference path encodes whole (n % 17 == 5).
+
+    The run's length is chosen *before* the frames are picked, and the picks
+    span the whole stretch read, first frame to last. The first version picked
+    `count` and then cut the run down to the grid from the end, so any count
+    off the grid — or a clip shorter than it — lost the end of the movement;
+    the sibling pack fixed the same thing in their 0.2.6.
 
     `capture` is what of the clip is kept: the frames, or — `motion` — what
-    moved between them (`refmod.motion_of`), taken before the trim so the
-    run that reaches the VAE is still a whole one.
+    moved between them (`refmod.motion_of`), which is one frame fewer, so one
+    more is picked and the run that reaches the VAE is still a whole one.
     """
+    import torch
+
     frames, _ = media.load_video(source, max_seconds=seconds, crop=crop)
-    if capture == "motion":
-        count += 1
-    if frames.shape[0] > count:
-        import torch
-        picks = torch.linspace(0, frames.shape[0] - 1, count).round().long()
-        frames = frames[picks]
+    extra = 1 if capture == "motion" else 0
+    run = causal_count(min(count, frames.shape[0] - extra))
+    if run < 5:
+        raise jobs.JobError(f"{source} is too short — five frames at least")
+    picks = torch.linspace(0, frames.shape[0] - 1, run + extra).round().long()
+    frames = frames[picks]
     if capture == "motion":
         try:
             frames = refmod.motion_of(frames)
         except refmod.RefModError as exc:
             raise jobs.JobError(f"{source}: {exc}") from exc
-    n = frames.shape[0]
-    while n >= 5 and n % 17 != 5:
-        n -= 1
-    if n < 5:
-        raise jobs.JobError(f"{source} is too short — five frames at least")
-    return frames[:n]
+    return frames
 
 
 def _run_clips(body, sources, family, table):
@@ -252,22 +320,30 @@ def _run_clips(body, sources, family, table):
     latent frames, pooled small — so fifteen seconds of movement ride into a
     shot for a fraction of what the clip encoded live would cost, and cited as
     one `<Video n>`. Full keeps the encode at the 768 reference canvas;
-    compressed pools each frame to `grid` on its long edge. Video families
-    only: a still space has no time axis to lay frames along.
+    compressed pools each frame to `grid` on its long edge, with the fit
+    leaning toward what moves. `use` picks the defaults (`CLIP_USES`). Frames
+    that repeat the one before are dropped either way (`refmod.thin`). Video
+    families only: a still space has no time axis to lay frames along.
     """
     if not table.get("clips"):
         raise jobs.JobError(f"{family} keeps no clips as saved references")
     space = table["space"]
     name = refmod.name_of(refmod.SCHEME + str(body.get("name") or ""))
     subfolder = str(body.get("subfolder") or "").strip().strip("/")
-    seconds = max(1, min(CLIP_SECONDS_MAX, int(body.get("seconds") or STACK_SECONDS)))
-    frames = max(5, min(CLIP_FRAMES_MAX, int(body.get("frames") or STACK_FRAMES)))
+    use = str(body.get("use") or "look")
+    if use not in CLIP_USES:
+        raise jobs.JobError(f"use is {' or '.join(CLIP_USES)}")
+    preset = CLIP_USES[use]
+    seconds = max(1, min(CLIP_SECONDS_MAX, int(body.get("seconds") or preset["seconds"])))
+    frames = max(5, min(CLIP_FRAMES_MAX, int(body.get("frames") or preset["frames"])))
     capture = str(body.get("capture") or "full")
     if capture not in CAPTURES:
         raise jobs.JobError(f"capture is {' or '.join(CAPTURES)}")
-    compressed = body.get("compressed") in (True, 1, "1", "true")
-    grid = max(4, min(64, int(body.get("grid") or table["grid"])))
+    compressed = preset["compressed"] if body.get("compressed") in (None, "") \
+        else body.get("compressed") in (True, 1, "1", "true")
+    grid = max(4, min(64, int(body.get("grid") or preset["grid"] or table["grid"])))
     steps = max(0, min(MAX_STEPS, _steps(body)))
+    threshold = _thin_setting(body)
     description = str(body.get("description") or "")
     tell = jobs.progress()
 
@@ -282,9 +358,14 @@ def _run_clips(body, sources, family, table):
         latent, resized = _encode(vae, run, table, edge=CLIP_EDGE)
         latent = latent.detach().float().cpu()
         full_shape = "x".join(str(v) for v in latent.shape[2:])
+        encoded_t = latent.shape[2]
+        # Thinned before the fit: the refinement is per frame, so a dropped
+        # frame is work not done, and the fit's motion weights are measured
+        # between the frames that stay.
+        latent = _thinned(latent, threshold, source)
         progress(0.3)
         if compressed:
-            latent = refmod.compress(latent, grid, steps,
+            latent = refmod.compress(latent, grid, steps, motion=CLIP_MOTION_WEIGHT,
                                      tell=lambda f, p=progress: p(0.3 + 0.7 * f))
         pool = "x".join(str(v) for v in latent.shape[2:])
         target = targets[index]
@@ -292,18 +373,22 @@ def _run_clips(body, sources, family, table):
             "kind": "video", "mode": "training" if compressed else "encode",
             "source": "video", "source_shape": full_shape, "pool": pool,
             "optimize_steps": steps if compressed else 0,
-            "tags": [capture, f"{run.shape[0]} frames", f"{seconds} s"],
+            "tags": [use, capture, f"{run.shape[0]} frames", f"{seconds} s",
+                     f"{latent.shape[2]} of {encoded_t} latent frames"],
             "description": description,
-            "concept_type": "pose_motion" if capture == "motion" else str(body.get("concept") or "generic"),
+            "concept_type": "pose_motion" if capture == "motion" or use == "motion"
+            else str(body.get("concept") or "generic"),
             "source_file": source,
         }, preview=resized[0], space=space)
         row = refmod.row_for(path, target)
         row["source"] = source
         row["capture"] = capture
+        row["use"] = use
         rows.append(row)
         progress(1.0)
-        log.info("[Continuity] kept %s as a %s clip RefMod (%d frames, %d tokens)",
-                 source, capture, run.shape[0], row["tokens"])
+        log.info("[Continuity] kept %s as a %s clip RefMod for its %s (%d frames, %d of %d "
+                 "latent frames, %d tokens)", source, capture, use, run.shape[0],
+                 latent.shape[2], encoded_t, row["tokens"])
     return {"mods": rows}
 
 
@@ -317,6 +402,7 @@ def _run_stack(body, sources):
     steps = max(0, min(MAX_STEPS, _steps(body)))
     max_tokens = max(0, int(body.get("max_tokens", STACK_MAX_TOKENS) or 0))
     frames = max(5, min(200, int(body.get("frames") or STACK_FRAMES)))
+    threshold = _thin_setting(body)
     tell = jobs.progress()
 
     family, table = _family(body)
@@ -339,13 +425,16 @@ def _run_stack(body, sources):
             stills += 1
         latent, resized = _encode(vae, image, table, min(edge, 768) if image.shape[0] > 1 else edge)
         latent = latent.detach().float().cpu()
+        # A clip's held frames go before the cap shares out the room, so the
+        # frames it thins away for budget are ones that moved.
+        latent = _thinned(latent, threshold, source)
         latents.append(latent)
         shapes.append("x".join(str(v) for v in latent.shape[2:]))
         if first is None:
             first = resized[0]
         tell(0.3 * (index + 1) / len(sources))
     stacked, kept = refmod.stack(latents, grid, steps, max_tokens=max_tokens,
-                                 tell=lambda f: tell(0.3 + 0.7 * f))
+                                 motion=CLIP_MOTION_WEIGHT, tell=lambda f: tell(0.3 + 0.7 * f))
     [target] = _targets(name, subfolder, space, 1)
     path = refmod.save(target, stacked, {
         "kind": "video", "mode": "training", "source": "stack",
@@ -386,7 +475,14 @@ def _still(latent, mode, grid, steps, tell):
     full_shape = "x".join(str(v) for v in latent.shape[2:])
     pool = _pool_of(latent)
     if mode == "training":
-        latent = refmod.compress(latent, grid, steps, tell=tell)
+        # Fitted on the render device. The latent is a few hundred thousand
+        # floats and the fit is 150 small steps, which on the CPU is every
+        # core woken and parked 150 times over — the load that reset a 5900X
+        # (a machine check on one core) each time a 128-grid still was saved.
+        import comfy.model_management
+
+        latent = refmod.compress(latent.to(comfy.model_management.get_torch_device()),
+                                 grid, steps, tell=tell).cpu()
         pool = _pool_of(latent)
     return latent, {
         "kind": "image", "mode": mode, "source": "image",
@@ -580,7 +676,7 @@ async def make_refmod(request):
             key: body.get(key) for key in
             ("name", "subfolder", "sources", "crops", "mode", "edge", "grid", "steps",
              "description", "concept", "vae", "max_tokens", "frames", "family",
-             "seconds", "capture", "compressed")
+             "seconds", "capture", "compressed", "use", "thin")
         }, body.get("client_id"))
     except jobs.JobError as exc:
         return web.json_response({"error": str(exc)}, status=500)
@@ -614,6 +710,40 @@ async def refmod_file(request):
     return web.FileResponse(path, headers={
         "Content-Type": "application/octet-stream",
         "Content-Disposition": f'attachment; filename="{stem}"',
+    })
+
+
+def _name_in_root(path):
+    """A mod's path on disk -> its name, relative to the root it is in."""
+    root = refmod.home()
+    stem = os.path.relpath(path, root)[:-len(refmod.EXT)]
+    return stem.replace(os.sep, "/")
+
+
+@PromptServer.instance.routes.get("/continuity/refmod/bundle")
+async def refmod_bundle(request):
+    """Several mods as one version-5 bundle, handed out as a download:
+    `?mods=refmod:a,refmod:b&name=anna`. Built in the temp folder from the
+    files' own bytes (`refmod.write_bundle`) and never filed in
+    models/refmods — a bundle of several is not something this pack cites, it
+    is how a character travels to the sibling pack's loader."""
+    mods = [m for m in (request.query.get("mods") or "").split(",") if m]
+    if len(mods) < 2:
+        return _refused("name two RefMods or more to bundle")
+    try:
+        name = refmod.name_of(refmod.SCHEME + (request.query.get("name") or "bundle")).rsplit("/", 1)[-1]
+        paths = [refmod.resolve(m) for m in mods]
+    except refmod.RefModError as exc:
+        return _refused(exc, 404)
+    target = os.path.join(tempfile.mkdtemp(prefix="continuity-bundle-"), name + refmod.EXT)
+    try:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, refmod.write_bundle, paths, name, target)
+    except refmod.RefModError as exc:
+        return _refused(exc)
+    return web.FileResponse(target, headers={
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition": f'attachment; filename="{name}{refmod.EXT}"',
     })
 
 
@@ -653,6 +783,12 @@ async def upload_refmod(request):
         loop = asyncio.get_running_loop()
         path, meta = await loop.run_in_executor(None, refmod.adopt, temporary, name)
         temporary = None
+        parts = meta.pop("parts", None)
+        if parts:
+            # A bundle of several, filed as its members: the first is the row,
+            # and every member rides along so the import can cast all of them.
+            rows = [refmod.row_for(part, _name_in_root(part)) for part in parts]
+            return web.json_response({**rows[0], "parts": rows})
         return web.json_response(refmod.row_for(path, refmod.name_of(name), meta=meta))
     except refmod.RefModError as exc:
         return _refused(exc)

@@ -15,13 +15,18 @@ A few notes that apply everywhere:
 - GGUF files work if [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) is
   installed. Drop the `.gguf` in the same folder and pick it like any other
   file.
+- With [ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU)
+  installed, each checkpoint, text encoder and VAE row in the weights popover
+  gets a device pill, on the video node and the pre-stage alike. Putting the
+  text encoder on a second card leaves the first one to the DiT. With nothing
+  pinned, everything loads where ComfyUI would put it.
 - If a long render dies with a `HostBuffer.read_file_slice` CUDA OOM, start
   ComfyUI with `--disable-dynamic-vram`
   ([ComfyUI#15255](https://github.com/Comfy-Org/ComfyUI/issues/15255)).
 
 All folders below are under `ComfyUI/models/`.
 
-## MiniMax H3 (video with sound, and stills)
+## MiniMax H3 (video with sound)
 
 From [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):
 
@@ -36,6 +41,9 @@ From [Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3):
 You need both checkpoints: H3 routes between them based on what you attach.
 The same repo carries the turbo distillation LoRAs under `loras/`; the turbo
 switch on the sampler row finds them there.
+
+The pre-stage's MiniMax stills are a different model: see
+[MiniMax H3 Image](#minimax-h3-image-stills-drawn-edited-or-inpainted).
 
 Optional: [`taeh3.safetensors`](https://github.com/madebyollin/taehv/blob/main/safetensors/taeh3.safetensors)
 in `vae_approx`, together with
@@ -216,6 +224,23 @@ The text encoder is the same Qwen3-VL 8B file Ideogram 4.0 loads. The VAE is
 with, which sits one row away in the picker and is refused by name. One
 checkpoint draws and edits; the turbo pill takes a Lightning LoRA when one is
 published for 2.1, and refuses to engage until then.
+
+## MiniMax H3 Image (stills, drawn, edited or inpainted)
+
+Published by [Comfy-Org/MiniMax-H3-Image](https://huggingface.co/Comfy-Org/MiniMax-H3-Image).
+Needs ComfyUI 0.45 or newer.
+
+| Slot | File | Folder |
+|---|---|---|
+| Checkpoint | `minimax_h3_image_pruned_bf16.safetensors`, `..._int8_convrot` or `..._w4a8` | `diffusion_models` |
+| Text encoder | `qwen3vl_32b_minimax_h3_*.safetensors` | `text_encoders` |
+| VAE | `minimax_h3_image_vae_fp16.safetensors` | `vae` |
+
+The text encoder is the same file MiniMax H3 video loads, from
+[Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3). The VAE is
+the image model's own: H3's video VAE will not decode these latents, and is
+refused by name if picked. The checkpoints are about 40 GB (bf16), 21 GB
+(int8) and 12.5 GB (w4a8).
 
 ## MOSS-Image (stills)
 

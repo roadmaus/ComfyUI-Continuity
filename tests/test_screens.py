@@ -18,7 +18,7 @@ passed("screens are validated, stamped, compiled to a tracker reference cited "
        "uncited, and absent change nothing")
 
 _pkg = layout.load("canvas", "registry", "h3_declare", "contextir", "subjects", "compile",
-                   "compile_image", "still", "krea2_still", "ideogram4_still", "qwenedit_still",
+                   "compile_image", "h3image_still", "krea2_still", "ideogram4_still", "qwenedit_still",
                    "flux2klein_still", "screen_spec", "grammar")
 spec, compiler, ci = _pkg.screen_spec, _pkg.compile, _pkg.compile_image
 klein, ideogram = _pkg.flux2klein_still, _pkg.ideogram4_still

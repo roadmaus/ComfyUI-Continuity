@@ -672,6 +672,15 @@ function loraTack(entry, { family = S.DEFAULT_VIDEO_FAMILY, targets = null, pinT
   return tack;
 }
 
+/** Give a <video>'s player back to the browser. Dropping the element is not
+ *  enough: the player lives until the collector reaches it. */
+function releaseVideo(video) {
+  if (!video.hasAttribute("src")) return;
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+}
+
 /** The box an unfolded tack has to stay inside: the nearest ancestor that
  *  clips, else the window. */
 function clipBox(node) {
@@ -1492,13 +1501,14 @@ class LoraManager {
    * the CiviMeta browser in roadmaus-utils has already proven on every
    * machine this runs on.
    *
-   * Lazy through an IntersectionObserver, for the reason hoverClip tears its
-   * decoder down: a folder of hundreds of cards each opening a connection at
-   * once is the media-element cap and the six-per-host budget both blown in
-   * one scroll. Only cards that reach the viewport ever get a src, and the
-   * grid already appends in viewport-sized chunks. The observer is the
-   * manager's own and is disconnected with it — a shared one would keep every
-   * dead card of every closed modal alive.
+   * Held only while on screen, for the reason hoverClip tears its decoder
+   * down: browsers cap how many media elements a page may have open, and the
+   * cap is the page's, not the grid's — a scroll through a few hundred video
+   * cards used to spend all of it, after which a finished render's own player
+   * came up black until a reload. A card gets its src on reaching the viewport
+   * and gives it back on leaving, and a card dropped from the grid is reported
+   * as having left. The observer is the manager's own and is disconnected with
+   * it — a shared one would keep every dead card of every closed modal alive.
    */
   still(source) {
     const video = el("video");
@@ -1513,12 +1523,12 @@ class LoraManager {
   watchStills() {
     return new IntersectionObserver((entries) => {
       for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
         const video = entry.target;
-        this.stillWatch.unobserve(video);
-        if (video.dataset.src) {
-          video.src = video.dataset.src;
-          delete video.dataset.src;
+        if (entry.isIntersecting) {
+          if (!video.hasAttribute("src")) video.src = video.dataset.src;
+        } else {
+          releaseVideo(video);
+          if (!video.isConnected) this.stillWatch.unobserve(video);
         }
       }
     }, { rootMargin: "300px" });
@@ -1538,9 +1548,23 @@ class LoraManager {
     let stage = null;
     let timer = null;
 
+    const drop = () => {
+      if (timer) cancelAnimationFrame(timer);
+      timer = null;
+      // Stop the download too: leaving the src on a dropped element keeps a
+      // connection out of the browser's six-per-host budget until it finishes.
+      if (video) releaseVideo(video);
+      video = null;
+      stage?.remove();
+      stage = null;
+    };
+
     const follow = () => {
       timer = null;
       if (!video || video.paused) return;
+      // A click rebuilds the card under the pointer, and no pointerleave ever
+      // arrives on the one it replaced.
+      if (!art.isConnected) return drop();
       // 480 rather than the default cap: the card is 230 px wide and the canvas
       // is a hover preview nobody inspects closely.
       drawFrame(stage, video, 480);
@@ -1563,20 +1587,7 @@ class LoraManager {
       video.play().then(follow, () => {});
     });
 
-    art.addEventListener("pointerleave", () => {
-      if (timer) cancelAnimationFrame(timer);
-      timer = null;
-      if (video) {
-        video.pause();
-        // Stop the download too: leaving the src on a dropped element keeps a
-        // connection out of the browser's six-per-host budget until it finishes.
-        video.removeAttribute("src");
-        video.load();
-        video = null;
-      }
-      stage?.remove();
-      stage = null;
-    });
+    art.addEventListener("pointerleave", drop);
   }
 
   card(group) {
@@ -2218,8 +2229,10 @@ class LoraManager {
   close() {
     if (this.closed) return;
     this.closed = true;
-    // The observer holds strong references to every card it still watches.
+    // The observer holds strong references to every card it still watches, and
+    // a still left loaded holds its player until the collector gets to it.
     this.stillWatch.disconnect();
+    for (const video of this.grid.querySelectorAll("video")) releaseVideo(video);
     this.unmount();
     this.resolve();
   }

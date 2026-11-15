@@ -389,11 +389,18 @@ def _handles(raw, known):
                 f'"from" must hold handles from the ledger, like "img-1" or '
                 f'"img-1:style"; it holds {_shown(item)}.')
         handle, scope = match.group(1), match.group(2)
+        if not known:
+            # Nothing has been made, so nothing can be cited, and a handle
+            # here is the worked examples' `pic-1` copied, not a picture
+            # meant. The 2B floor model does it on most first turns, and as
+            # often again on the re-ask; refusing it turned the opening
+            # request of a chat into prose. With a ledger to cite from, an
+            # unknown handle may be a slip for a real one, and is refused.
+            continue
         if handle not in known:
-            where = ", ".join(known) if known else "nothing has been made yet"
             raise ActionError(
                 f'"from" names @{handle}, which is not in the ledger. The '
-                f"handles you may cite are: {where}.")
+                f"handles you may cite are: {', '.join(known)}.")
         if scope:
             media = known.get(handle) or _media_kind(handle)
             allowed = scopes_for(media)
@@ -558,6 +565,16 @@ def validate(raw, ledger, strip=(), cast=()):
                 f"the prompt cites @{word}, who is not in the cast. The cast is: "
                 f"{where}. Write only names the cast block lists, or write the "
                 f"person out in words.")
+    # A name is accepted in any case, so it must also leave here in the
+    # cast's own spelling: the compiler's `subjects.citation_re` matches the
+    # declared handle exactly, and `@george` against a member called George
+    # reaches the model as the bare word, with no picture behind it. Director
+    # writes every name it plans in lower case (`director.name_of`), so every
+    # clip it ran with a capitalised cast member lost them this way.
+    spelled = {str(n).lower(): str(n) for n in cast or ()}
+    prompt = CITE_RE.sub(
+        lambda m: "@" + spelled.get(m.group(1).lower(), m.group(1))
+        if "-" not in m.group(1) else m.group(0), prompt)
 
     after = _on_strip(raw, "after", strip)
     replaces = _on_strip(raw, "replaces", strip)
@@ -612,6 +629,47 @@ def bind(action, user_text, known):
             continue
         out.append(f"{handle}:{scope}" if scope else handle)
     return {**action, "from": out}
+
+
+# The words that say which kind was asked for, when only one kind is named.
+# "Shot" is in neither: a shot of a fox is as often a photograph as a clip.
+VIDEO_WORDS = ("clip", "video", "film", "footage", "animation", "animate")
+STILL_WORDS = ("picture", "image", "photo", "photograph", "still", "portrait", "poster",
+               "drawing", "illustration", "painting", "frame")
+
+
+def _names_any(text, words):
+    return any(re.search(rf"(?<![a-z]){re.escape(w)}s?(?![a-z])", text) for w in words)
+
+
+def said_kind(action, user_text, ledger=(), strip=(), cast=()):
+    """A render of the other kind than the person plainly asked for -> the
+    kind they asked for.
+
+    "A clip of rain on a window" came back as a still from the 2B floor model
+    on one seed in two. When the message names one kind and not the other,
+    that is the person's decision, as a handle they typed is (`bind`), so it
+    is written in rather than re-asked. A message naming both ("a picture
+    for the clip") or neither is left to the model, and so is a render on the
+    strip, which is a clip by what it is. The changed action must validate as
+    the new kind, or the model's stands.
+    """
+    if action.get("act") != ACT_RENDER or action.get("after") or action.get("replaces"):
+        return action
+    text = (user_text or "").lower()
+    video, still = _names_any(text, VIDEO_WORDS), _names_any(text, STILL_WORDS)
+    if video == still:
+        return action
+    kind = KIND_VIDEO if video else KIND_STILL
+    if action["kind"] == kind:
+        return action
+    changed = {**action, "kind": kind}
+    if kind == KIND_STILL:
+        changed["seconds"] = None
+    try:
+        return validate(changed, ledger, strip, cast)
+    except ActionError:
+        return action
 
 
 def known_handles(ledger):
@@ -693,6 +751,7 @@ def judge(reply, ledger, user_text, second=False, strip=(), cast=()):
             return {"act": ACT_SAY, "say": spoken(reply)}
         return {"act": "reask", "sentence": str(problem)}
     action = bind(action, user_text, known_handles(ledger))
+    action = said_kind(action, user_text, ledger, strip, cast)
 
     if action["act"] == ACT_SAY:
         if not second and asks_for_render(user_text):
@@ -1573,10 +1632,22 @@ def cites_plain_picture(action, ledger):
 
 def cites_member_picture(action, ledger, cast=()):
     """A cast member named in the prompt who has a picture: who they are."""
-    known = known_handles(ledger)
-    return any(known.get(str(handle)) == "image"
+    return any(kind == "image"
                for member in _cited_members(action.get("prompt") or "", cast)
-               for handle in member.get("from") or [])
+               for _handle, kind, _filename, _scope in _member_files(member, ledger))
+
+
+def _member_files(member, ledger):
+    """A member's sources -> `_cited`'s tuples: off the ledger where the room
+    holds the handle, else off the piece's shelf, which `cast_entries` read
+    onto the member as `files`. Refuses, as `_cited` does, a handle neither
+    holds."""
+    files = member.get("files") or {}
+    shelf = [{"handle": h, "kind": f.get("kind"), "filename": f.get("filename")}
+             for h, f in files.items() if isinstance(f, dict)]
+    known = {str(e.get("handle")) for e in ledger or [] if isinstance(e, dict)}
+    return _cited(None, [*(ledger or []), *(e for e in shelf if e["handle"] not in known)],
+                  member.get("from") or [])
 
 
 def still_arch_for(action, ledger, rail, cast=()):
@@ -1691,7 +1762,7 @@ def _cast_still(action, ledger, rail, base=None, cast=None):
         spaces = member.get("spaces") or {}
         mods = member.get("mods") or {}
         sources = []
-        for handle, kind, filename, _ in _cited(None, ledger, member.get("from") or []):
+        for handle, kind, filename, _ in _member_files(member, ledger):
             if kind != "image":
                 continue
             sources.append(handle)
@@ -1913,6 +1984,32 @@ def default_feather(family):
 # the three, and it is what lets "after vid-2" find the card.
 STRIP_KEY = "chat_handle"
 
+# A clip put on the strip after another *without* carrying on from it: a hard
+# cut, the kept shots in front and this one sampled fresh, opening on its own
+# picture or on nothing. Never the model's — a turn's `after` always carries on,
+# which is what "the next shot" means in a conversation — but Director's: a
+# planned `cut` or `new` shot belongs to the piece's strip and must not open on
+# the last frame of the shot before (`director.action_for`). Carried beside the
+# action the way a caption is, and read back on by `with_seam`.
+SEAM_KEY, SEAM_CUT = "seam", "cut"
+
+# A still made from a frame of a clip rather than from a picture: Director's
+# again (`director.rows`, the angle rows), for the picture a planned `cut`
+# opens on. The action cites the clip's handle plain, as a change to a picture
+# cites the picture, and this key beside it says which frame of the clip that
+# is. The run cuts the frame out of the clip's take and stands it in for the
+# handle before the action is read (`routes/director._grabbed`), so everything
+# from `validate` down sees a picture changed in place.
+GRAB_KEY, GRAB_LAST = "grab", "last"
+
+
+def with_seam(action, raw):
+    """The validated `action` with the harness's hard cut from `raw` put back
+    on it, where it has a shot to cut from."""
+    if isinstance(raw, dict) and raw.get(SEAM_KEY) == SEAM_CUT and action.get("after"):
+        return {**action, SEAM_KEY: SEAM_CUT}
+    return action
+
 
 def _kept(strip, action):
     """The cards of the strip that stay in front of this shot, held.
@@ -1966,10 +2063,18 @@ def cast_entries(piece):
     # handle, off the pool and every card: what a still family reads a
     # member's picture from when it has one in the family's own space.
     renditions = {}
+    # And the files themselves, by handle: a member's pictures sit on the
+    # piece's shelf (`ref-N`), which is not the room's ledger — the model is
+    # never told the shelf — so a still that names them resolves them here
+    # (`_member_files`).
+    shelf = {}
     for owner in [piece or {}, *((piece or {}).get("segments") or [])]:
         for asset in (owner.get("assets") or []) if isinstance(owner, dict) else []:
             if isinstance(asset, dict) and asset.get("handle") and isinstance(asset.get("mods"), dict):
                 renditions[str(asset["handle"])] = dict(asset["mods"])
+            if isinstance(asset, dict) and asset.get("handle") and asset.get("filename"):
+                shelf.setdefault(str(asset["handle"]), {"kind": str(asset.get("kind") or "image"),
+                                                        "filename": str(asset["filename"])})
     out = []
     for subject in (piece or {}).get("subjects") or []:
         if not isinstance(subject, dict) or not subject.get("handle"):
@@ -1982,6 +2087,7 @@ def cast_entries(piece):
             files.append(subject["voice"])
         handles = [str(h) for h in files if h]
         mods = {h: renditions[h] for h in handles if renditions.get(h)}
+        files = {h: shelf[h] for h in handles if h in shelf}
         # What they wear and what each family is sent, by family id
         # (`subjects.Subject.wears`). A blob written before the rows existed
         # carries a flat `loras` list, which was the piece's family's.
@@ -1995,11 +2101,12 @@ def cast_entries(piece):
                     "from": handles,
                     "description": subject.get("description") or "",
                     **({"mods": mods} if mods else {}),
+                    **({"files": files} if files else {}),
                     **({"wears": wears} if wears else {})})
     return out
 
 
-def video_piece(action, ledger, rail, base=None, strip=None):
+def video_piece(action, ledger, rail, base=None, strip=None, more=(), first=None):
     """A `render` of a clip -> the `creator_data` piece the Creator node runs.
 
     Over `base`, the chat's own piece: its cast and the pool their files are
@@ -2024,6 +2131,14 @@ def video_piece(action, ledger, rail, base=None, strip=None):
     every scope (`:style`, `:person`, …) make a reference; a picture cited
     plain opens the shot if nothing else does, and rides as a reference
     otherwise. A clip or a sound is a reference whatever it wears.
+
+    `more` is Director's: the shots that carry straight on from this one and
+    are rendered with it, `[(action, handle, seed)]`, each the next card of
+    the same piece with a live seam in front of it — a strip of several shots
+    sampled in one render, which is what the node's timeline is. `first` is
+    this shot's own handle then: every card of such a piece is stamped with
+    the handle it will land as (`STRIP_KEY`), since each lands as its own
+    shot on the strip and the ones behind it are found by that name.
     """
     rail = rail or {}
     family = rail.get("video_family")
@@ -2031,6 +2146,54 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         raise ActionError("this room has no video model set up yet.")
 
     piece = json.loads(json.dumps(base)) if isinstance(base, dict) else {}
+    kept = _kept(strip, action)
+    card = _card(action, ledger, rail)
+    if kept and action.get(SEAM_KEY) != SEAM_CUT:
+        card.update(_seam(family))
+    cards = [card]
+    # The shots that carry straight on from this one, sampled in the same
+    # render: each opens on a live seam off the card in front of it, which
+    # here is a pass of this render and not a held take.
+    for follower, handle, seed in more or ():
+        behind = {**_card(follower, ledger, rail), **_seam(family), STRIP_KEY: handle}
+        if seed is not None:
+            behind["seed"] = int(seed)
+        cards.append(behind)
+    if more and first:
+        cards[0][STRIP_KEY] = first
+
+    piece.update({
+        "version": piece.get("version") or 2,
+        # The piece's standing description is the node's and stays; a bare
+        # piece has nothing to put in it, since everything written is on the card.
+        "prompt": piece.get("prompt") or "",
+        "family": family,
+        "models": piece.get("models") or {},
+        "loras": piece.get("loras") or [],
+        "turbo": piece.get("turbo") or {"on": False, "lora": None},
+        "subjects": [s for s in piece.get("subjects") or [] if isinstance(s, dict)],
+        "assets": _pool(piece),
+        # The room's aspect pill is the fallback for a fresh clip. Its input
+        # is the geometry anchor, though: a first or last frame, or footage
+        # carried forward by `after`, must keep its own canvas just as it does
+        # on the Creator node. Do not inherit a node blob's explicit pin (for
+        # example, "pill"), which would suppress that automatic selection.
+        "aspect_source": "auto",
+        **_canvas(action, rail, "video"),
+        "segments": kept + cards,
+    })
+    return piece
+
+
+def _seam(family):
+    """A live seam as a card added on the node opens one: both tracks, the
+    family's medium blend."""
+    return {"continue": True, "continue_audio": True, "feather": default_feather(family)}
+
+
+def _card(action, ledger, rail):
+    """One shot's card: its prompt as written, and what it cites, each in the
+    role its handle says or the one rule gives it (`video_piece`)."""
     assets, opened, closed = [], False, False
     for handle, kind, filename, scope in _cited(action, ledger):
         role, takes = "reference", None
@@ -2058,43 +2221,16 @@ def video_piece(action, ledger, rail, base=None, strip=None):
         if takes:
             asset["takes"] = takes
         assets.append(asset)
-
-    kept = _kept(strip, action)
-    card = {
+    return {
         "prompt": action["prompt"],
         "assets": assets,
         "loras": [],
         "duration_s": action.get("seconds") or rail.get("seconds") or DEFAULT_SECONDS,
         "checkpoint": "auto",
     }
-    if kept:
-        card.update({"continue": True, "continue_audio": True,
-                     "feather": default_feather(family)})
-
-    piece.update({
-        "version": piece.get("version") or 2,
-        # The piece's standing description is the node's and stays; a bare
-        # piece has nothing to put in it, since everything written is on the card.
-        "prompt": piece.get("prompt") or "",
-        "family": family,
-        "models": piece.get("models") or {},
-        "loras": piece.get("loras") or [],
-        "turbo": piece.get("turbo") or {"on": False, "lora": None},
-        "subjects": [s for s in piece.get("subjects") or [] if isinstance(s, dict)],
-        "assets": _pool(piece),
-        # The room's aspect pill is the fallback for a fresh clip. Its input
-        # is the geometry anchor, though: a first or last frame, or footage
-        # carried forward by `after`, must keep its own canvas just as it does
-        # on the Creator node. Do not inherit a node blob's explicit pin (for
-        # example, "pill"), which would suppress that automatic selection.
-        "aspect_source": "auto",
-        **_canvas(action, rail, "video"),
-        "segments": kept + [card],
-    })
-    return piece
 
 
-def piece_of(action, ledger, rail, base=None, strip=None, cast=None):
+def piece_of(action, ledger, rail, base=None, strip=None, cast=None, more=(), first=None):
     """The blob for whichever kind the action asked for, with its node's name.
 
     `(node id, the blob's widget name, the blob)` — the three things the route
@@ -2105,7 +2241,7 @@ def piece_of(action, ledger, rail, base=None, strip=None, cast=None):
         return ("MiniMaxH3PreStage", "prestage_data",
                 still_piece(action, ledger, rail, base, cast))
     return ("MiniMaxH3Creator", "creator_data",
-            video_piece(action, ledger, rail, base, strip))
+            video_piece(action, ledger, rail, base, strip, more, first))
 
 
 def still_turbo_checkpoint(piece):

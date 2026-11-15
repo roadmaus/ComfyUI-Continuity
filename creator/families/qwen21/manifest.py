@@ -63,24 +63,12 @@ _UI = {
 
 
 def _weights():
-    return [{
-        "id": name,
-        "folder": render_image.FOLDERS[name],
-        "label": render_image.LABEL[name],
-        "loads": True,
-        # One DiT and no second branch to route a generation between.
-        "routed": False,
-        "audio": False,
-        # The branch is a pass, not a component: a still without a guide
-        # renders without it (`render_image.check`).
-        "required": name != "control",
-        "gguf": name in ("model", "clip"),
-        "device": False,
-        "title": _UI[name]["title"],
-        "help": _UI[name]["help"],
-        "hints": _UI[name]["hints"],
-        "avoid": _UI[name]["avoid"],
-    } for name in still.FIELDS]
+    # The branch is a pass, not a component: a still without a guide
+    # renders without it (`render_image.check`).
+    return [render_image.manifest_weight(name, _UI[name],
+                                        gguf=name in ("model", "clip"),
+                                        required=name != "control")
+            for name in still.FIELDS]
 
 
 def _canvas():

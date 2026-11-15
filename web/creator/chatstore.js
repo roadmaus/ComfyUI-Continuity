@@ -136,6 +136,15 @@ function packCard(card) {
     seed: card.seed ?? null,
     took: card.took ?? null,
     landedAt: card.landedAt ?? null,
+    // A Director prep render: the plan row it is for, the fingerprint it
+    // lands under and its ticket (`chat.js filePrep`), so a sheet left
+    // rendering when the room closed is still filed on the plan.
+    ...(card.prep ? { prep: card.prep } : {}),
+    // A clip a Director run made: its row, fingerprint, ticket (the prompt
+    // id), reserved handle and the plan it was run from, so a chat reopened
+    // later lands it from the run file rather than from the queue's history
+    // (`chat.js catchUp`).
+    ...(card.run ? { run: card.run } : {}),
   };
 }
 
@@ -144,7 +153,8 @@ function packMessage(message) {
     // The turn it was said on, so a reopened chat can be cut back to it —
     // the ledger's lines carry the same number.
     return { role: "user", text: message.text ?? "", attached: message.attached ?? [],
-             ...(message.turn ? { turn: message.turn } : {}) };
+             ...(message.turn ? { turn: message.turn } : {}),
+             ...(message.brief ? { brief: true } : {}) };
   }
   return {
     role: "assistant",
@@ -152,7 +162,19 @@ function packMessage(message) {
     ...(message.bad ? { bad: true } : {}),
     ...(message.action ? { action: message.action } : {}),
     ...(message.card ? { card: packCard(message.card) } : {}),
+    ...(message.plan?.doc ? { plan: packPlan(message.plan) } : {}),
+    ...(message.planAsk ? { planAsk: { brief: String(message.planAsk.brief ?? "") } } : {}),
+    ...(message.prep ? { prep: message.prep } : {}),
+    ...(message.runRow ? { runRow: message.runRow } : {}),
+    ...(message.runDone ? { runDone: true } : {}),
   };
+}
+
+/** A plan card's fields worth keeping: the document and the doubts planning
+ *  left on it. An edit on its way to the server is the moment's, and the
+ *  sentence a refused one was said in is about a change that never landed. */
+function packPlan(plan) {
+  return { doc: plan.doc, warnings: Array.isArray(plan.warnings) ? plan.warnings : [] };
 }
 
 /** A split, with every version it keeps (`chat.js`, "versions"). The one on
@@ -193,7 +215,8 @@ function unpackForks(forks) {
 
 function unpackMessages(messages) {
   return (Array.isArray(messages) ? messages : [])
-    .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined }));
+    .map((message) => ({ ...message, card: message.card ? { ...message.card } : undefined,
+                         plan: message.plan?.doc ? packPlan(message.plan) : undefined }));
 }
 
 /**

@@ -58,22 +58,9 @@ _UI = {
 
 
 def _weights():
-    return [{
-        "id": name,
-        "folder": render_image.FOLDERS[name],
-        "label": render_image.LABEL[name],
-        "loads": True,
-        # The distilled checkpoint is picked by the turbo pill, not routed by
-        # the payload the way H3's pair is.
-        "routed": False,
-        "audio": False,
-        "gguf": name in ("model", "turbo_model", "clip"),
-        "device": False,
-        "title": _UI[name]["title"],
-        "help": _UI[name]["help"],
-        "hints": _UI[name]["hints"],
-        "avoid": _UI[name]["avoid"],
-    } for name in still.FIELDS]
+    return [render_image.manifest_weight(name, _UI[name],
+                                        gguf=name in ("model", "turbo_model", "clip"))
+            for name in still.FIELDS]
 
 
 def _canvas():
