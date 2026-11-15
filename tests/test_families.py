@@ -542,10 +542,10 @@ check("h3image's guide is a mask over Picture 1, with nothing to load",
       (h3img["capabilities"]["control"]["method"],
        h3img["capabilities"]["control"]["tracings"], h3i.CONTROL_WEIGHTS),
       ("mask", ["matte"], False))
-check("h3image canvas is its own: /32, 4-20 MP",
+check("h3image canvas is its own: /32, the shared floor, up to 20 MP",
       {k: h3img["canvas"][k] for k in ("multiple", "min_short_edge", "max_short_edge",
                                       "max_long_edge", "max_pixels")},
-      {"multiple": 32, "min_short_edge": 1536, "max_short_edge": 4096,
+      {"multiple": 32, "min_short_edge": 512, "max_short_edge": 4096,
        "max_long_edge": 6272, "max_pixels": 20 * 1024 * 1024})
 check("...and the canvas resolves the card's 16 MP sizes",
       [ci.resolve_canvas(r, e, ci.canvas_of(h3i)) for r, e in

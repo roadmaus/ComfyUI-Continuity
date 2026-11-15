@@ -15,7 +15,7 @@ same node on all of them; the model pill picks which one a render lands on.
 | Flux 2 Klein | stills | up to three; click the first to edit it in place |
 | Qwen Image 2.1 | stills | up to ten; click the first to edit it in place |
 | MOSS-Image | stills | none, prose only |
-| MiniMax H3 Image | stills | up to four; click the first to edit it in place, or mask it to inpaint |
+| MiniMax H3 Image | stills | as many as you like (core's ceiling is 100); click the first to edit it in place, or mask it to inpaint |
 
 Every render files into a folder named after its family
 (`output/continuity/renders/ltx25/`, `output/continuity/stills/krea2/`) and
@@ -203,12 +203,13 @@ Stills drawn from prose, edited from pictures, or inpainted under a mask.
   pictures and LoRAs carried over. (That choice used to run the H3 *video*
   model on a short clip and keep one frame; this replaces it.)
 - **It wants a big canvas.** The working range is about 4 to 20 megapixels and
-  it is best near 16; the resolution slider runs 1536 to 4096 on the short
+  it is best near 16; the resolution slider runs 512 to 4096 on the short
   edge, starting at 2048 (4 MP) because that is the cheap end. Below 4 MP the
-  pictures come out soft.
+  pictures come out soft, but the slider goes there if you want to try.
 - Same arrangement as Qwen Image Edit and Flux 2 Klein: pictures are
   references, and the first one's label switches it to being edited in place,
-  with the canvas following it. Up to four pictures. In the prompt they are
+  with the canvas following it. No cap on the pictures beyond core's hundred
+  inputs — every one costs memory, so experiment. In the prompt they are
   `<Picture 1>`, `<Picture 2>`, MiniMax's own spelling.
 - **Inpainting.** Press **Mask** in the pre-stage's tool row: *Pick a matte*
   takes one the ControlNet bench already wrote, *Mask a picture* opens the

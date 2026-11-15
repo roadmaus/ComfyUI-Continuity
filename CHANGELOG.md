@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**MiniMax H3 Image takes as many reference pictures as you attach, at any
+resolution the shared slider offers.** The pack stopped the model at four
+pictures, a cap of its own guessed from memory cost rather than anything the
+weights or core ask for; it now goes as far as core's
+`MiniMaxH3ImageConditioning` node does, a hundred image inputs. The resolution
+slider likewise started at the model card's 1536 floor; it now runs from the
+shared 512 up to this model's 4096, still opening at 2048. How many pictures
+help, and how small a canvas is still worth having, is the user's to find out.
+
 **The refiner can let the model think (experimental).** A "let it think"
 chip under the refiner's model list lifts the reasoning suppression every LLM
 call carried — the empty `<think>` block in-process, `reasoning_effort: "none"`

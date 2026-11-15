@@ -4019,9 +4019,8 @@ export function preStageCanvas(arch) {
 }
 
 /** `edge` held inside `arch`'s slider, or its default where it is outside —
- *  what the arch pill writes on arrival, so a 1024 carried from Krea is not
- *  silently read as MiniMax H3 Image's 1536 floor, and its 4096 not as Krea's
- *  2048 ceiling. */
+ *  what the arch pill writes on arrival, so MiniMax H3 Image's 4096 is not
+ *  silently read as Krea's 2048 ceiling. */
 export function preStageEdgeFor(arch, edge) {
   const canvas = preStageCanvas(arch);
   const value = Number(edge);

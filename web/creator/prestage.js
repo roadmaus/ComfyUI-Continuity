@@ -1566,7 +1566,7 @@ export class PreStageEditor {
 
   openResolution(anchor) {
     // The arch's own range: most share 512-2048, and MiniMax H3 Image runs
-    // 1536-4096 at up to 20 MP — `preStageCanvas`.
+    // 512-4096 at up to 20 MP — `preStageCanvas`.
     const canvas = S.preStageCanvas(this.state.arch);
     const body = edgeSlider({
       min: canvas.min_short_edge, max: canvas.max_short_edge, step: canvas.multiple,
