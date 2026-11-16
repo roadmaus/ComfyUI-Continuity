@@ -58,13 +58,14 @@ until it was read here every headless render ran plain attention.
 """
 
 import asyncio
+import json
 import os
 
 from aiohttp import web
 
 from server import PromptServer
 
-from .. import chat, headless, jobs, models as core_models, outputs, sampling, server_routes, settings
+from .. import castlib, chat, headless, jobs, models as core_models, outputs, sampling, server_routes, settings
 from ..families import manifest, registry
 from ..guard import same_origin
 from . import chat as room
@@ -106,10 +107,89 @@ async def describe(request):
     return web.json_response(await loop.run_in_executor(None, _machine))
 
 
-def _request(body, accel=None):
-    """The body -> `(action, ledger, rail, base, family manifest, still)`.
+# The cast library's files in a user's userdata, as `web/creator/presets.js`
+# writes them: one index, and a body per kept member.
+CAST_INDEX = "continuity.presets.json"
+CAST_BODY = "continuity.preset.{id}.json"
+
+
+def _userdata(request):
+    """A reader of the asking user's userdata files -> `read(name)`, which
+    answers the parsed JSON or None. The library is the page's and is only
+    ever read here: a file that is missing or will not parse is an empty
+    library, not an error."""
+    manager = getattr(PromptServer.instance, "user_manager", None)
+
+    def read(name):
+        path = None
+        if manager is not None and request is not None:
+            try:
+                path = manager.get_request_user_filepath(request, name)
+            except KeyError:
+                path = None
+        if not path:
+            import folder_paths
+
+            path = os.path.join(folder_paths.get_user_directory(), "default", name)
+        try:
+            with open(path, encoding="utf-8") as handle:
+                return json.load(handle)
+        except (OSError, ValueError):
+            return None
+
+    return read
+
+
+def _roster(read):
+    """Everybody kept in the cast library, as a script is told them."""
+    out = []
+    for row in castlib.roster(read(CAST_INDEX)):
+        stored = castlib.member(read(CAST_BODY.format(id=row["id"])))
+        if stored is not None:
+            out.append(castlib.summary(row, stored))
+    return {"cast": out}
+
+
+@PromptServer.instance.routes.get("/continuity/cast")
+async def cast(request):
+    """Who a prompt sent to `/continuity/render` may cite with `@`."""
+    loop = asyncio.get_running_loop()
+    return web.json_response(await loop.run_in_executor(None, _roster, _userdata(request)))
+
+
+def _cast(prompt, read):
+    """The kept members a prompt cites, landed -> `{"assets", "subjects"}`.
+
+    A name the library does not hold is refused here with the names it does:
+    a script cannot open the shelf to see who is kept, and `@ana` rendered as
+    a stranger is a render nobody asked for.
+    """
+    landed = {"assets": [], "subjects": []}
+    rows = castlib.roster(read(CAST_INDEX)) if read else []
+    for row in castlib.cited(prompt, rows):
+        stored = castlib.member(read(CAST_BODY.format(id=row["id"])))
+        if stored is None:
+            raise headless.HeadlessError(
+                f"@{row['name']} is in the cast library, but their card could not be read.")
+        castlib.land({**stored, "handle": str(row["name"]).strip()}, landed)
+    names = {s["handle"].lower() for s in landed["subjects"]}
+    for word in chat.CITE_RE.findall(prompt):
+        if "-" not in word and word.lower() not in names:
+            kept = ", ".join("@" + str(row["name"]).strip() for row in rows[:20])
+            raise headless.HeadlessError(
+                f"the prompt cites @{word}, who is not in the cast library on this machine"
+                + (f" — it holds {kept}." if kept else ", which is empty."))
+    return landed
+
+
+def _request(body, accel=None, read=None):
+    """The body -> `(action, ledger, rail, base, family manifest, still, cast)`.
 
     `accel` is the machine's remembered rows, by family (`settings.accel`).
+    `read` reads the asking user's userdata (`_userdata`): a name the prompt
+    cites with `@` is somebody from the cast library, landed on the piece the
+    way the node's *From the library* lands them, so their pictures, their
+    saved references and what they wear ride with the name.
     """
     family_id = str(body.get("family") or "").strip()
     if family_id not in registry.FAMILIES:
@@ -147,7 +227,8 @@ def _request(body, accel=None):
     raw = {"act": chat.ACT_RENDER, "kind": chat.KIND_STILL if still else chat.KIND_VIDEO,
            "prompt": body.get("prompt"), "from": cited,
            "seconds": body.get("seconds"), "aspect": body.get("aspect")}
-    action = chat.validate(raw, ledger)
+    landed = _cast(str(body.get("prompt") or ""), read)
+    action = chat.validate(raw, ledger, cast=[s["handle"] for s in landed["subjects"]])
 
     edge = body.get("short_edge")
     rail = room._rail({("still_family" if still else "video_family"): family_id,
@@ -192,9 +273,14 @@ def _request(body, accel=None):
                  "models": {**overrides, **({"devices": devices} if devices else {})},
                  **({"sampling": row} if row else {})}
     piece["loras"] = _loras(body.get("loras"))
+    if landed["subjects"] and not still:
+        # On the piece, where a clip's compiler reads them. A still has no cast
+        # of its own: it is handed them as the room reads them (`still_piece`).
+        piece.update(landed)
+    cast = room._with_piece({"piece": landed})[1]
     seed = body.get("seed")
     widgets = {"seed": int(seed)} if isinstance(seed, int) and not isinstance(seed, bool) else {}
-    return action, ledger, rail, (piece, widgets), family, still
+    return action, ledger, rail, (piece, widgets), family, still, cast
 
 
 def _loras(raw):
@@ -249,12 +335,12 @@ def _guide(family, still, prefix, filename):
     return {"handle": "guide", "filename": filename, "role": "guide"}
 
 
-def _render(body):
+def _render(body, read=None):
     """The blocking half: build, throw the switch, build again. -> the answer."""
     machine = settings.load()
-    action, ledger, rail, base, family, still = _request(body, machine.get("accel"))
+    action, ledger, rail, base, family, still, cast = _request(body, machine.get("accel"), read)
     stored = machine.get("weights") or {}
-    built = room._build(action, ledger, rail, stored, base)
+    built = room._build(action, ledger, rail, stored, base, cast=cast)
     if "problem" in built or not body.get("fast", True):
         return {**built, "speed": "native"}
 
@@ -280,7 +366,7 @@ def _render(body):
         # Nothing to throw: the family has no switch, and its native row is its
         # only row. Said, so nobody reads a long render as a fast one.
         return {**built, "speed": f"native ({family['label']} has no turbo switch)"}
-    built = room._build(action, ledger, rail, stored, (piece, widgets))
+    built = room._build(action, ledger, rail, stored, (piece, widgets), cast=cast)
     return {**built, "speed": {"turbo": thrown}}
 
 
@@ -297,7 +383,7 @@ async def render(request):
 
     loop = asyncio.get_running_loop()
     try:
-        built = await loop.run_in_executor(None, _render, body)
+        built = await loop.run_in_executor(None, _render, body, _userdata(request))
     except (headless.HeadlessError, chat.ActionError) as problem:
         return web.json_response({"problem": str(problem)}, status=400)
     except server_routes.COMPILE_FAILURES as problem:
