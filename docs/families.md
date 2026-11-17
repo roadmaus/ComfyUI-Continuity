@@ -260,10 +260,13 @@ your shots.
   first one's label fits the canvas to it. The render always starts from
   noise.
 - The prompt is written to the model in H3's own structured form, the same
-  way a shot's is. Saved references made for MiniMax H3 are read here too.
+  way a shot's is.
+- **The cast is MiniMax H3's.** It is the same model, so a member's LoRAs,
+  their saved references and how they are sent are shared with MiniMax H3:
+  set once, used by shots and stills alike. On the cast card this model has
+  no tab of its own; its settings are the MiniMax H3 tab.
 - **Not here yet:** starting from an init image at partial denoise, and a
-  ControlNet guide. Both are refused with a message. A cast member's LoRA is
-  kept per family, so one hung on MiniMax H3 has to be hung here as well.
+  ControlNet guide. Both are refused with a message.
 
 ## Editing a picture you just rendered
 

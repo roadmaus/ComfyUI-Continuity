@@ -61,6 +61,8 @@ def manifest():
         "description": "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every "
                        "MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.",
         "produces": sorted(declare.PRODUCES),
+        # Whose cast rows this family reads — `declare.CAST_AS`.
+        "cast_as": declare.CAST_AS,
         "widgets": _widgets(),
         "weights": _weights(),
         "canvas": compile_image.manifest_canvas(still),
@@ -83,9 +85,9 @@ def manifest():
                      "noun": list(still.REFS_NOUN),
                      "edit_first": compile_image.EDIT_FIRST_FIELD},
             # No `refmod` row of its own: saved references here are H3's
-            # files in H3's space (`declare.REFMOD`), read wherever a picture
-            # carries one, and a second ledger row would offer to make the
-            # same file twice. A member is saved for MiniMax H3.
+            # files in H3's space (`declare.REFMOD`), and the cast is H3's
+            # (`cast_as`), so a member on this family is drawn on MiniMax H3's
+            # tab and saved, sent and dressed there.
         },
         "prompt": {
             "pipeline": declare.PROMPT_PIPELINE,

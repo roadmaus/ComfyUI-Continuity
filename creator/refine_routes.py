@@ -238,7 +238,7 @@ def _plan_still(body):
                 if isinstance(s, dict) and s.get("handle")]
     if raw_cast:
         try:
-            cast = subjects.parse(raw_cast, family_id)
+            cast = subjects.parse(raw_cast, registry.cast_family(family_id))
         except subjects.SubjectError as exc:
             raise compiler.CompileError(str(exc)) from exc
     try:

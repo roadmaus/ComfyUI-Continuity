@@ -6,7 +6,7 @@ import { VIDEO_RULES, featherGrid, framesForSeconds, secondsForFrames,
          matchSeconds, resolveCanvas, rulesFor } from "./canvas.js";
 import { resolve as resolveVariations } from "./variations.js";
 import { DEFAULT_STILL_ARCH, DEFAULT_VIDEO_FAMILY, STILL_ARCHES,
-         UPSCALERS, VIDEO_FAMILIES, family as anyFamily, stillFamily, upscaler, videoFamily } from "./manifest.js";
+         UPSCALERS, VIDEO_FAMILIES, castFamily, family as anyFamily, stillFamily, upscaler, videoFamily } from "./manifest.js";
 import { t } from "./i18n.js";
 import { parseScreens, serializeScreens } from "./screenspec.js";
 // Where files land is not in the blob any more — it is a preference of this
@@ -1780,6 +1780,7 @@ function parseSubjects(raw, family = DEFAULT_VIDEO_FAMILY) {
  *  existed carries — which was the piece's family's all along, and is read as
  *  that family's row. Mirrors `subjects.parse`. */
 function parseWears(s, family) {
+  family = castFamily(family);
   const wears = { ...subjectWears(s) };
   const legacy = Array.isArray(s.loras) ? s.loras.filter((e) => e && typeof e.name === "string" && e.name.trim()) : [];
   if (legacy.length && !wears[family]) wears[family] = { loras: legacy };
@@ -5681,6 +5682,7 @@ function tidyLoraEntries(list) {
 /** The subject's row for `family`, made where there is none — what the LoRA
  *  manager is handed as its `state`, so it pushes onto the row's own list. */
 export function wearOn(subject, family) {
+  family = castFamily(family);
   const wears = subjectWears(subject);
   if (!subject.wears) subject.wears = wears;
   const row = (subject.wears[family] ??= {});
@@ -5702,7 +5704,7 @@ export function tidyWears(subject) {
 /** The LoRAs a subject wears *on this family*, as the live stack entries the
  *  manager edits in place and `compile.merge_loras` reads. */
 export function subjectLoras(subject, family = DEFAULT_VIDEO_FAMILY) {
-  const row = subjectWears(subject)[family];
+  const row = subjectWears(subject)[castFamily(family)];
   return Array.isArray(row?.loras) ? row.loras : [];
 }
 
@@ -5713,7 +5715,7 @@ export function allSubjectLoras(subject) {
 }
 
 /** What this family is sent for their looks, or null to decide. */
-export const sendFor = (subject, family) => subjectWears(subject)[family]?.send ?? null;
+export const sendFor = (subject, family) => subjectWears(subject)[castFamily(family)]?.send ?? null;
 
 /** The LoRAs the members `state` cites wear, in cast order — what rides into
  *  this shot's stack beside its own. Mirrors `compile.cast_loras`. */

@@ -33,7 +33,7 @@
 
 import { isRefMod, listAssets, makeRefMod, remakeRefMod, viewUrl } from "./api.js";
 import { t } from "./i18n.js";
-import { FAMILIES, VIDEO_FAMILIES, family as familyManifest } from "./manifest.js";
+import { FAMILIES, VIDEO_FAMILIES, castFamily, family as familyManifest } from "./manifest.js";
 import * as S from "./state.js";
 
 // ---- which families keep mods ---------------------------------------------------
@@ -66,7 +66,12 @@ export const refmodOf = (id) => familyManifest(id)?.capabilities?.refmod ?? null
  */
 export function castFamilies(pieceId, pieceVae, remembered = {}) {
   const out = [];
+  // A family that is another's weights reads that family's rows
+  // (`manifest.castFamily`), so it has no entry of its own: a piece on it is
+  // drawn as the family it reads, with the piece's own VAE — the same file.
+  pieceId = castFamily(pieceId);
   for (const manifest of FAMILIES) {
+    if (castFamily(manifest.id) !== manifest.id) continue;
     const own = manifest.id === pieceId;
     const video = VIDEO_FAMILIES.includes(manifest.id);
     const max = manifest.reference?.max ?? {};

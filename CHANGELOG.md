@@ -20,7 +20,10 @@ copies with one frame kept (`ContinuityH3StillLatent`,
 The conditioning is H3's segment node, so the prompt is composed as
 Context-IR, references (up to nine, `<Picture N>`) are encoded and cached as a
 shot's are, saved references in H3's space are read, and LoRAs go on through
-H3's stack. The row is 50 steps of er_sde at cfg 1; turbo is the Turbo LoRA at
+H3's stack. The cast is shared with MiniMax H3 as well, since it is the same
+model: what a member wears, their saved references and how they are sent are
+one row read by both, and the cast card draws no separate tab for it
+(`declare.CAST_AS`, `manifest.castFamily`). The row is 50 steps of er_sde at cfg 1; turbo is the Turbo LoRA at
 0.38 and 20 steps. An init image at partial denoise and a ControlNet guide are
 not supported yet and are refused. Not yet rendered on a GPU: the graph was
 built against the pack's own compilers and the method's published code.

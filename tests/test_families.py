@@ -717,6 +717,26 @@ check("a still with pictures is a reference generation, each picture defined",
        "<Picture 1> beside the car from <Picture 2>" in _refshot.prompt),
       ("REF2VA", ["pic-1", "pic-2"], True, True))
 
+check("h3still reads MiniMax H3's cast rows, and every other family its own",
+      ({f: registry.cast_family(f) for f in registry.FAMILIES if registry.cast_family(f) != f},
+       h3st.get("cast_as"), registry.cast_family("somebody-elses")),
+      ({"h3still": "h3"}, "h3", "somebody-elses"))
+_worn = h3s.compile_still({
+    "arch": "h3still", "prompt": "@anna in the snow",
+    "subjects": [{"handle": "anna", "from": ["img-1"], "description": "a woman in red",
+                  "wears": {"h3": {"loras": [{"name": "anna_v3.safetensors", "strength": 0.85,
+                                             "triggers": ["ohwx anna"]}]},
+                            "krea2": {"loras": [{"name": "anna_krea.safetensors"}]}}}],
+    "refs": [{"handle": "img-1", "filename": "anna.png",
+              "mods": {"h3_video": "refmod:cast/anna"}}]}, _size)
+check("a member on h3still wears what they wear on MiniMax H3, and nothing of another family's",
+      _worn.loras, [{"name": "anna_v3.safetensors", "strength": 0.85, "uncond": 0.85}])
+check("...their trigger words lead the sentence and their picture stands for their name",
+      _worn.prompt, "ohwx anna, <Picture 1> (a woman in red) in the snow")
+check("...and the reference saved for MiniMax H3 is the one read",
+      (_worn.mods, h3s.request_of(_worn)["assets"][0]["mods"]),
+      ({0: "refmod:cast/anna"}, {"h3_video": "refmod:cast/anna"}))
+
 _edit = h3s.compile_still({"arch": "h3still", "prompt": "make the dress red in @img-1",
                            "edit_first": True,
                            "refs": [{"handle": "img-1", "filename": "anna.png"}]}, _size)

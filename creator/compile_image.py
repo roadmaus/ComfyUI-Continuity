@@ -497,7 +497,9 @@ def cast_into_still(data, family_id, space=None, takes_pictures=True):
     if not raw:
         return data
     try:
-        cast = subjects.parse(raw, family_id)
+        # A family that is another's weights reads that family's row: MiniMax
+        # H3 Still wears what the member wears on MiniMax H3.
+        cast = subjects.parse(raw, registry.cast_family(family_id))
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
     prompt = str(data.get("prompt") or "")

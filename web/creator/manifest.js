@@ -54,6 +54,12 @@ export function family(id) {
   return found;
 }
 
+/** The family whose cast rows `id` reads: its own, unless it is the same
+ *  weights as another family and says so (`cast_as` — MiniMax H3 Still is
+ *  MiniMax H3's video model, so what a member wears and is sent on H3 is what
+ *  they wear and are sent there). Mirrors `registry.cast_family`. */
+export const castFamily = (id) => FAMILIES.find((entry) => entry.id === id)?.cast_as ?? id;
+
 /** The family a pre-stage arch resolves to. */
 export const stillFamily = (arch) => family(STILL_ARCHES[arch]);
 

@@ -27,6 +27,12 @@ OUTPUT_STEM = "H3Still"
 # there. This branch is picked, not migrated to.
 STILL_ARCH = "h3still"
 
+# The cast is H3's. These are H3's weights, so what a member wears on MiniMax
+# H3 — their LoRAs — and what they are sent as there is what they wear and
+# are sent here: one row, read by both (`registry.cast_family`). A separate
+# row would ask for the same LoRA to be hung twice on the same model.
+CAST_AS = "h3"
+
 # Saved references in H3's own space, because this *is* H3's VAE and H3's
 # reference path: a member saved for a shot is read here from the same file,
 # and one saved here serves the shot. No clips — a still's references are
