@@ -411,7 +411,10 @@ check("every family a member can be sent to is listed, the piece's first, with w
        ["qwen21", False, False, True, False, False, False],
        ["moss", False, False, False, False, False, False],
        # MiniMax H3 Image takes pictures and keeps saved references in its own space.
-       ["h3image", False, False, True, False, False, True]])
+       ["h3image", False, False, True, False, False, True],
+       # MiniMax H3 Still takes pictures and has no ledger row of its own:
+       # its saved references are MiniMax H3's files.
+       ["h3still", False, False, True, False, False, False]])
 check("a new frame forgets the renditions", got["dropped"], None)
 check("with two families ready the menu leads with one row for all of them, per-picture modes only "
       "— H3's counting the clip it keeps first, Klein's the still alone",

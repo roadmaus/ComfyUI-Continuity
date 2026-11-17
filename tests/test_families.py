@@ -20,7 +20,7 @@ from harness import FAILURES, check, passed
 
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
-                   "h3image_still", "krea2_still", "ideogram4_still", "flux2klein_still",
+                   "h3image_still", "h3still_still", "krea2_still", "ideogram4_still", "flux2klein_still",
                    "qwen21_still", "moss_still", "visionweights",
                    "grammar", "h3_declare", "h3_models", "h3_grammar",
                    "ltx25_declare",
@@ -36,6 +36,7 @@ manifest = _pkg.manifest
 grammar = _pkg.grammar
 ci = _pkg.compile_image
 h3i = _pkg.h3image_still
+h3s = _pkg.h3still_still
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
 kl = _pkg.flux2klein_still
@@ -640,5 +641,106 @@ check("...and refuses one saved without the model. prefix, by name",
       (_clip_refusal([ms.QWEN35_KEY_BARE]) or ""), True)
 check("...and leaves an encoder it cannot place to the loader",
       _clip_refusal(["text_model.encoder.layers.0.mlp.fc1.weight"]), None)
+
+# ---- MiniMax H3 Still --------------------------------------------------------
+#
+# The video model drawing one frame: the shared pre-stage blob in, H3's own
+# request out, compiled by H3's compiler for its prompt and its refusals.
+
+h3st = manifest.describe("h3still")
+h3swidgets = {w["id"]: w for w in h3st["widgets"]}
+for name in ("steps", "cfg", "sampler_name", "scheduler"):
+    check(f"h3still {name} default is the still row", h3swidgets[name]["default"],
+          h3s.H3STILL_ROW[name])
+check("h3still is its own arch beside the pill's frozen \"minimax\"",
+      (registry.STILL_ARCHES.get("h3still"), registry.STILL_ARCHES.get("minimax"),
+       "h3still" in ci.ARCHES, "h3still" in registry.video_families()),
+      ("h3still", "h3image", True, False))
+check("h3still loads one H3 checkpoint, H3's encoder and the *video* VAE",
+      ([w["id"] for w in h3st["weights"]], h3s.VAE_KIND, h3s.CLIP_TYPE),
+      (["model", "clip", "vae"], "h3_video", h3slots.CLIP_TYPE))
+check("h3still reads as many pictures as H3 does, cited H3's way",
+      (h3s.REFS_LIMIT, h3s.REFS_CITATION, h3st["prompt"]["max_refs"]),
+      (grammar.of("h3").max_images, "<Picture {n}>", grammar.of("h3").max_images))
+check("h3still keeps saved references in H3's space, with no ledger row of its own",
+      (registry.REFMOD["h3still"]["space"], registry.REFMOD["h3"]["space"],
+       "refmod" in h3st["capabilities"]), ("h3_video", "h3_video", False))
+check("h3still's LoRAs go on through H3's stack",
+      (registry.LORA_STACK["h3still"], registry.LORA_STACK["h3"]), ("h3lora", "h3lora"))
+check("h3still's turbo is a LoRA at the still recipe's strength",
+      (h3st["capabilities"]["turbo"]["lora"], h3st["capabilities"]["turbo"]["checkpoint"],
+       h3st["capabilities"]["turbo"]["default_strength"], h3s.TURBO_STEPS["good"]),
+      (True, False, 0.38, 20))
+check("h3still offers no init image and no guide",
+      ("init_image" in h3st["capabilities"], "control" in h3st["capabilities"]),
+      (False, False))
+check("h3still canvas runs to 8 MP on the DiT's /32 grid",
+      [ci.resolve_canvas(r, e, ci.canvas_of(h3s)) for r, e in
+       ((16 / 9, 1280), (16 / 9, 2176), (1.0, 2176), (9 / 16, 4096))],
+      [(2272, 1280), (3872, 2176), (2176, 2176), (2176, 3872)])
+
+_size = lambda name: (1200, 1600)
+_still = h3s.compile_still({"arch": "h3still", "prompt": "a red fox in snow",
+                            "aspect": "16:9"}, _size)
+_seg = h3s.segment_payload(_still)
+_shot = _pkg.compile.compile_segment(_seg, _size)
+check("a text still is one T2VA generation on the still flow's canvas",
+      (_shot.mode, _shot.checkpoint, _shot.width, _shot.height, _shot.frames),
+      ("T2VA", "fl2va", 2272, 1280, h3s.REQUEST_FRAMES))
+check("...its sentence composed as Context-IR by H3's grammar",
+      "integrated_multimodal_description: [Shot 1] a red fox in snow" in _shot.prompt, True)
+check("...and the canvas pinned past the video rules' own ceiling",
+      _pkg.compile.compile_segment(h3s.segment_payload(h3s.compile_still(
+          {"arch": "h3still", "prompt": "x", "short_edge": 2176}, _size)), _size).height,
+      2176)
+
+_refd = h3s.compile_still({
+    "arch": "h3still", "prompt": "@img-1 beside the car from @img-2, <Picture 7> as typed",
+    "refs": [{"handle": "img-1", "filename": "anna.png", "mods": {"h3_video": "refmod:cast/anna"}},
+             {"handle": "img-2", "filename": "car.png"}],
+    "loras": [{"name": "photo.safetensors", "strength": 1.5, "triggers": ["ph0t0r34l"]},
+              {"name": "off.safetensors", "enabled": False}]}, _size)
+_req = h3s.request_of(_refd)
+check("the pictures become H3 reference assets in slot order",
+      [(a["handle"], a["kind"], a["role"], a["filename"]) for a in _req["assets"]],
+      [("pic-1", "image", "reference", "anna.png"), ("pic-2", "image", "reference", "car.png")])
+check("...a saved reference in H3's space rides on its picture",
+      [a.get("mods") for a in _req["assets"]], [{"h3_video": "refmod:cast/anna"}, None])
+check("...every citation is handed back to H3's compiler as a handle, a typed one left alone",
+      _req["prompt"], "ph0t0r34l, @pic-1 beside the car from @pic-2, <Picture 7> as typed")
+check("...and only the LoRAs in the run reach H3's stack, by name and strength",
+      _req["loras"], [{"name": "photo.safetensors", "strength": 1.5}])
+_refshot = _pkg.compile.compile_segment(h3s.segment_payload(_refd), _size)
+check("a still with pictures is a reference generation, each picture defined",
+      (_refshot.mode, [a.handle for a in _refshot.ref_images],
+       "<Picture 2> is a reference picture" in _refshot.prompt,
+       "<Picture 1> beside the car from <Picture 2>" in _refshot.prompt),
+      ("REF2VA", ["pic-1", "pic-2"], True, True))
+
+_edit = h3s.compile_still({"arch": "h3still", "prompt": "make the dress red in @img-1",
+                           "edit_first": True,
+                           "refs": [{"handle": "img-1", "filename": "anna.png"}]}, _size)
+check("edit_first fits the canvas to Picture 1 and still starts from noise",
+      (_edit.width, _edit.height, _edit.init["denoise"]), (1280, 1696, 1.0))
+
+
+def _h3s_refusal(data):
+    try:
+        h3s.compile_still({"arch": "h3still", "prompt": "x", **data}, _size)
+    except _pkg.compile.CompileError as err:
+        return str(err)
+    return None
+
+
+check("an init image at partial denoise is refused, with the way that works",
+      _h3s_refusal({"init": {"filename": "a.png", "denoise": 0.5}}), h3s.INIT_REFUSAL)
+check("the turbo pill refuses to engage without its LoRA",
+      _h3s_refusal({"turbo": {"h3still": {"on": True}}}), h3s.TURBO_NEEDS_LORA)
+check("...and engages with one", _h3s_refusal(
+    {"turbo": {"h3still": {"on": True, "lora": "minimax_h3_turbo_v4_step600_ema.safetensors"}}}),
+    None)
+check("a tenth picture is refused in the family's words",
+      h3s.REFS_LIMIT_REASON in (_h3s_refusal(
+          {"refs": [{"filename": f"{n}.png"} for n in range(10)]}) or ""), True)
 
 passed("the registry serves every family and the manifests hold their sources")

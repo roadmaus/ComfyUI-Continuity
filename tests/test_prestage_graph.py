@@ -1829,3 +1829,99 @@ check("a pin on a field no MultiGPU loader wraps is dropped on read",
                                 "devices": {"clip": "cuda:1", "nonsense": "cuda:0"}}}},
           k2_still).devices,
       {"clip": "cuda:1"})
+
+# ---- MiniMax H3 Still ---------------------------------------------------------
+#
+# The video model drawing one frame. The conditioning is H3's own segment node,
+# fed the still as one of H3's requests; the latent is one frame, built by this
+# family's node rather than taken off the segment; and the decode is the
+# family's too, through the *video* VAE. Nothing of MiniMax H3 Image's is in it.
+
+h3s = importlib.import_module(f"{PACKAGE}.creator.families.h3still.still")
+
+MODELS["h3still"] = {
+    "model": "minimax_h3_fl2va_pruned_int8_convrot.safetensors",
+    "clip": "qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+    "vae": "minimax_h3_video_vae_fp16.safetensors",
+}
+
+
+def h3s_blob(**overrides):
+    data = {"version": 1, "arch": "h3still", "prompt": "a red room", "aspect": "16:9",
+            "short_edge": 1280, "refs": [], "loras": [], "models": dict(MODELS)}
+    data.update(overrides)
+    return json.dumps(data)
+
+
+def h3s_build(data=None, **row):
+    settings = dict(seed=7, steps=50, cfg=1.0, sampler_name="er_sde", scheduler="simple")
+    settings.update(row)
+    graph = build(data if data is not None else h3s_blob(), **settings).expand
+    return graph, by_class(graph)
+
+
+st_graph, st = h3s_build()
+segment = st["MiniMaxH3TimelineSegment"]
+check("it samples once, conditioned by H3's segment node",
+      (len(st["KSampler"]), len(segment)), (1, 1))
+check("nothing of the image model's is in the graph, and no stock decode",
+      ("MiniMaxH3ImageConditioning" in st, "VAEDecode" in st), (False, False))
+check("one checkpoint loads, on both of the segment's sockets",
+      (len(st["UNETLoader"]), st["UNETLoader"][0][1]["unet_name"],
+       segment[0][1]["model_fl2va"] == segment[0][1]["model_ref2va"]),
+      (1, MODELS["h3still"]["model"], True))
+check("the encoder is typed minimax and the VAE is the video one",
+      (st["CLIPLoader"][0][1]["type"], st["VAELoader"][0][1]["vae_name"]),
+      ("minimax", MODELS["h3still"]["vae"]))
+check("a text still leaves the VAE off the encoder", "vae" in segment[0][1], False)
+st_payload = json.loads(segment[0][1]["segment_data"])
+check("the segment is handed one request, its canvas pinned to the still's",
+      (st_payload["request"]["prompt"], st_payload["canvas"]["width"],
+       st_payload["canvas"]["height"], st_payload["continue"]),
+      ("a red room", 2272, 1280, False))
+sampler = st["KSampler"][0][1]
+latent_node = st_graph[sampler["latent_image"][0]]
+check("the sampler starts from the one-frame latent, not the segment's clip",
+      (latent_node["class_type"], latent_node["inputs"]["width"],
+       latent_node["inputs"]["height"]), ("ContinuityH3StillLatent", 2272, 1280))
+check("the positive is the segment's, the negative it zeroed",
+      (st_graph[sampler["positive"][0]]["class_type"], sampler["positive"][1],
+       st_graph[sampler["negative"][0]]["class_type"]),
+      ("MiniMaxH3TimelineSegment", 1, "ConditioningZeroOut"))
+check("the row arrives verbatim — fifty steps of er_sde at cfg 1, full denoise",
+      (sampler["seed"], sampler["steps"], sampler["cfg"], sampler["sampler_name"],
+       sampler["scheduler"], sampler["denoise"]), (7, 50, 1.0, "er_sde", "simple", 1.0))
+decode = st["ContinuityH3StillDecode"]
+check("decoded once by the still decode, off the sampler and the video VAE",
+      (len(decode), st_graph[decode[0][1]["samples"][0]]["class_type"],
+       st_graph[decode[0][1]["vae"][0]]["class_type"]), (1, "KSampler", "VAELoader"))
+check("saved once, into MiniMax H3 Still's stills folder",
+      (len(st["MiniMaxH3SaveImage"]), st["MiniMaxH3SaveImage"][0][1]["filename_prefix"]),
+      (1, outputs.default_image("h3still", "H3Still")))
+
+# With pictures: a reference generation on the same weights, the VAE wired
+# into the encoder and named for the reference cache, and the LoRAs handed to
+# the segment's stack rather than patched on by core's loader.
+media.image_size = lambda filename: (3000, 2000)
+try:
+    ref_graph, ref = h3s_build(h3s_blob(
+        prompt="@img-1 in the room from @img-2",
+        refs=[{"handle": "img-1", "filename": "anna.png"},
+              {"handle": "img-2", "filename": "room.png"}],
+        loras=[{"name": "photo.safetensors", "strength": 1.5, "triggers": ["ph0t0r34l"]}]))
+    expect_error("an init image at partial denoise is refused before anything loads",
+                 lambda: h3s_build(h3s_blob(init={"filename": "a.png", "denoise": 0.5})),
+                 "starts from noise")
+finally:
+    media.image_size = real_image_size
+ref_segment = ref["MiniMaxH3TimelineSegment"][0][1]
+ref_request = json.loads(ref_segment["segment_data"])["request"]
+check("the pictures ride in the request as H3 references, cited by handle",
+      ([a["filename"] for a in ref_request["assets"]], ref_request["prompt"]),
+      (["anna.png", "room.png"], "ph0t0r34l, @pic-1 in the room from @pic-2"))
+check("...with the VAE on the encoder and its name beside it",
+      (ref_graph[ref_segment["vae"][0]]["class_type"], ref_segment["vae_name"]),
+      ("VAELoader", MODELS["h3still"]["vae"]))
+check("the LoRAs go to the segment's stack, not through core's loader",
+      (ref_request["loras"], "LoraLoaderModelOnly" in ref),
+      ([{"name": "photo.safetensors", "strength": 1.5}], False))

@@ -3780,7 +3780,8 @@ check("the folders carry a field per family, renders then stills",
        "continuity/stills/krea2/Krea2",
        "continuity/stills/ideogram4/Ideogram4", "continuity/stills/qwenedit/QwenEdit",
        "continuity/stills/flux2klein/Flux2Klein", "continuity/stills/qwen21/Qwen21",
-       "continuity/stills/moss/MOSS", "continuity/stills/h3image/H3Image"])
+       "continuity/stills/moss/MOSS", "continuity/stills/h3image/H3Image",
+       "continuity/stills/h3still/H3Still"])
 # The token is one object or it is nothing: it went in as eight characters and
 # came back as a tile wearing the plain word, with the stored string untouched.
 check("a typed token becomes one tile, and the stored string keeps its spelling",
@@ -3790,7 +3791,7 @@ check("no `%` reaches the screen on a folder row", settings.get("folderPercent")
 # Only the row that has left its default offers the way back — H3's, edited
 # above. A button that would do nothing is worse than no button.
 check("the reset is offered on the edited row and no other",
-      settings.get("folderResets"), ["", "none", "none", "none", "none", "none", "none", "none", "none"])
+      settings.get("folderResets"), ["", "none", "none", "none", "none", "none", "none", "none", "none", "none"])
 # And it posts the whole block, the same way an edit does: the shipped folder
 # for this family and this shelf, with every other family's left as it was.
 check("resetting posts the family's shipped folder back",

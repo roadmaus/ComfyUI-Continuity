@@ -18,10 +18,12 @@ layout.skip_without_node()
 MIRROR = layout.js("state.js")
 
 _pkg = layout.load("canvas", "contextir", "compile", "compile_image", "h3image_still",
+                   "h3still_still",
                    "krea2_still", "ideogram4_still", "qwenedit_still",
                    "flux2klein_still", "qwen21_still", "registry")
 ci = _pkg.compile_image
 h3i = _pkg.h3image_still
+h3s = _pkg.h3still_still
 registry = _pkg.registry
 k2 = _pkg.krea2_still
 i4 = _pkg.ideogram4_still
@@ -336,7 +338,17 @@ check("what a reference is on each arch", reflected["refs"],
                    "editionHints": [], "max": h3i.REFS_LIMIT,
                    "control": {"method": "mask", "slot": None,
                                "tracings": list(h3i.CONTROL_TRACINGS),
-                               "kind": "image", "stops": {}}}})
+                               "kind": "image", "stops": {}}},
+       # MiniMax H3 Still: the video model's references, Picture 1 the one an
+       # instruction changes, and no guide.
+       "h3still": {"reads": True, "methods": [],
+                   "needsLora": False, "editsFirst": True,
+                   "noun": list(h3s.REFS_NOUN),
+                   "editFirst": ci.EDIT_FIRST_FIELD,
+                   "nativeControl": [], "controlEditions": [],
+                   "adapter": None, "adapterHints": [], "edit": None,
+                   "editions": None, "defaultEdition": None,
+                   "editionHints": [], "max": h3s.REFS_LIMIT, "control": None}})
 
 # The cap is the render's, not a constant: the encoder has three image slots on
 # every family, and what the checkpoint was post-trained to read is its own
@@ -375,11 +387,12 @@ check("which routes each arch offers",
       reflected["turbo_routes"], {"krea2": [True, True], "ideogram4": [False, True],
                                   "qwenedit": [False, True],
                                   "flux2klein": [True, False],
-                                  "qwen21": [False, True]})
+                                  "qwen21": [False, True],
+                                  "h3still": [False, True]})
 check("the step ladders are the families' own", reflected["turbo_steps"],
       {"krea2": k2.TURBO_STEPS, "ideogram4": i4.TURBO_STEPS,
        "qwenedit": qe.TURBO_STEPS, "flux2klein": kl.TURBO_STEPS,
-       "qwen21": q21.TURBO_STEPS})
+       "qwen21": q21.TURBO_STEPS, "h3still": h3s.TURBO_STEPS})
 check("a blob from before the split reads as Krea 2's",
       (reflected["legacy_turbo"]["krea2"]["on"],
        reflected["legacy_turbo"]["krea2"]["quality"],
