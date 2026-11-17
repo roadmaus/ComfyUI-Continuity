@@ -3382,4 +3382,7 @@ export const ja = {
  "Pick a different matte": "別のマットを選ぶ",
  "Remove the mask": "マスクを外す",
  "Inpaint: repaint the white of a matte over Picture 1 and keep the rest. Pick a matte you made, or mask a picture now.": "インペイント: Picture 1 のうちマットの白い部分を描き直し、残りは保ちます。作成済みのマットを選ぶか、今画像をマスクします。",
+  "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.": "MiniMax H3 Still — H3 の動画モデルで 1 フレームを描きます。独自の画作りで、MiniMax H3 用の LoRA はすべて使えます。約 3 MP 以上が最適。50 ステップ、Turbo LoRA を使えば 20 ステップ。",
+  "A MiniMax H3 video checkpoint — FL2VA, the one a shot renders on. It reads reference pictures too; Ref2VA also works here.": "MiniMax H3 の動画チェックポイント — ショットのレンダリングに使う FL2VA。参照画像も読み取ります。Ref2VA もここで使えます。",
+  "The MiniMax H3 video VAE — the file a shot is decoded with. Not the MiniMax H3 Image VAE.": "MiniMax H3 の動画 VAE — ショットのデコードに使うファイルです。MiniMax H3 Image の VAE ではありません。",
 };

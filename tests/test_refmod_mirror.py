@@ -134,6 +134,14 @@ everyFamilyRows([{ filename: "c.png", kind: "image", ref_size: "max" }],
                 modFamilies("h3", "h3_vae.safetensors", { flux2klein: { vae: "flux2-vae.safetensors" } }),
                 (mode, family) => { out.everyPicked = [mode, family.map((f) => f.id)]; }, () => {})[0].onPick();
 // Every family a member can be sent to, not only the ones that keep mods.
+{
+  // A pre-stage on MiniMax H3 Still: drawn as MiniMax H3, with the still's VAE.
+  const own = castFamilies("h3still", "still_vae.safetensors", {})[0];
+  const anna = { handle: "anna", wears: { h3: { send: "saved", loras: [{ name: "anna_v3.safetensors" }] } } };
+  out.stillCast = [own.id, own.here, own.refmod, own.vae,
+                   S.subjectLoras(anna, "h3still").map((e) => e.name), S.sendFor(anna, "h3still"),
+                   S.wearOn(anna, "h3still") === anna.wears.h3, Object.keys(anna.wears)];
+}
 out.castFamilies = castFamilies("h3", "h3_vae.safetensors", {}).map((f) => [
   f.id, f.here, f.video, f.reads.pictures, f.reads.clips, f.adapter, f.refmod]);
 // A new frame forgets the renditions: they were latents of the old window.
@@ -411,7 +419,12 @@ check("every family a member can be sent to is listed, the piece's first, with w
        ["qwen21", False, False, True, False, False, False],
        ["moss", False, False, False, False, False, False],
        # MiniMax H3 Image takes pictures and keeps saved references in its own space.
+       # MiniMax H3 Still has no entry: it is MiniMax H3's weights and reads
+       # H3's rows (`manifest.castFamily`).
        ["h3image", False, False, True, False, False, True]])
+check("a pre-stage on MiniMax H3 Still is drawn as MiniMax H3 and reads and writes H3's row",
+      got["stillCast"],
+      ["h3", True, True, "still_vae.safetensors", ["anna_v3.safetensors"], "saved", True, ["h3"]])
 check("a new frame forgets the renditions", got["dropped"], None)
 check("with two families ready the menu leads with one row for all of them, per-picture modes only "
       "— H3's counting the clip it keeps first, Klein's the still alone",

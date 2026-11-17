@@ -86,7 +86,7 @@ def _cast_refmod_spaces(data, family):
         return data
     family_id = registry.STILL_ARCHES.get(getattr(family, "ARCH", None))
     try:
-        cast = subjects.parse(raw, family_id)
+        cast = subjects.parse(raw, registry.cast_family(family_id))
     except subjects.SubjectError as exc:
         raise CompileError(str(exc)) from exc
     refs = [dict(r) if isinstance(r, dict) else r for r in data.get("refs") or []]

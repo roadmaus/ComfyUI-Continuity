@@ -42,7 +42,9 @@ You need both checkpoints: H3 routes between them based on what you attach.
 The same repo carries the turbo distillation LoRAs under `loras/`; the turbo
 switch on the sampler row finds them there.
 
-The pre-stage's MiniMax stills are a different model: see
+The pre-stage has two MiniMax choices. **MiniMax H3 Still** draws one frame
+with these same files (one checkpoint, the encoder and the video VAE) and
+needs nothing else. **MiniMax H3 Image** is a different model: see
 [MiniMax H3 Image](#minimax-h3-image-stills-drawn-edited-or-inpainted).
 
 Optional: [`taeh3.safetensors`](https://github.com/madebyollin/taehv/blob/main/safetensors/taeh3.safetensors)
@@ -241,6 +243,24 @@ The text encoder is the same file MiniMax H3 video loads, from
 the image model's own: H3's video VAE will not decode these latents, and is
 refused by name if picked. The checkpoints are about 40 GB (bf16), 21 GB
 (int8) and 12.5 GB (w4a8).
+
+## MiniMax H3 Still (stills from the video model)
+
+The files MiniMax H3 already uses, from
+[Comfy-Org/MiniMax-H3](https://huggingface.co/Comfy-Org/MiniMax-H3).
+
+| Slot | File | Folder |
+|---|---|---|
+| Checkpoint | `minimax_h3_fl2va_pruned_*.safetensors` (a Ref2VA file also works) | `diffusion_models` |
+| Text encoder | `qwen3vl_32b_minimax_h3_*.safetensors` | `text_encoders` |
+| VAE | `minimax_h3_video_vae_fp16.safetensors` or `..._int8_convrot` | `vae` |
+
+The VAE is the *video* one. The MiniMax H3 Image VAE and the experimental
+single-image VAE are the wrong files here and are refused by name. For turbo,
+`minimax_h3_turbo_v4_step600_ema.safetensors` from
+[larryvrh/MiniMax-H3-Turbo-Lora](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora)
+goes in `loras`; a turbo-merged H3 checkpoint goes in the checkpoint slot and
+needs no LoRA.
 
 ## MOSS-Image (stills)
 

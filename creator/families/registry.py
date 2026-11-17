@@ -129,6 +129,12 @@ STORYBOARD = {module.ID: bool(getattr(module, "STORYBOARD", False))
 # `capabilities.refmod` so the cast ledger knows which families to offer.
 REFMOD = {module.ID: getattr(module, "REFMOD", None) for module in DECLARED}
 
+# Whose cast rows each family reads (`subjects.Subject.wears`): its own, unless
+# it declares `CAST_AS` — a family that is another's weights under a second
+# name, where a member's LoRAs and what they are sent are one answer and not
+# two. MiniMax H3 Still is the one that does, and reads H3's.
+CAST_AS = {module.ID: getattr(module, "CAST_AS", module.ID) for module in DECLARED}
+
 # What each family's files are called. The folder they land in is the family id
 # and the tree is `outputs.py`'s; this is the stem every file in it is numbered
 # off. See `h3/declare.py` for why it is declared rather than lowercased off ID.
@@ -173,6 +179,12 @@ DEFAULT_VIDEO = "h3"
 # and only a preference: `chat.pick_edit_family` takes the rail's own choice
 # first, this second where it is ready, and whatever is ready otherwise.
 DEFAULT_EDIT = "flux2klein"
+
+
+def cast_family(family):
+    """The family whose cast rows `family` reads — see `CAST_AS`. An id this
+    install does not know is its own, as `subjects._parse_wears` keeps it."""
+    return CAST_AS.get(family, family)
 
 
 def rules(family):

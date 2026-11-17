@@ -6,6 +6,32 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**MiniMax H3 Still: stills from the H3 video model are back, as a model of
+their own beside MiniMax H3 Image.** The image model replaced the old
+one-frame branch, but the video model draws a different picture and is the
+weights every MiniMax H3 LoRA was trained on. It is a new choice on the
+pre-stage's model pill (`h3still`); the pill's "minimax" stays MiniMax H3
+Image's, so saved pre-stages open where they did. It loads H3's own files —
+one video checkpoint, the Qwen3-VL encoder, the video VAE — and is made a new
+way, after shootthesound's Fizgig H3 Still: a single latent frame is sampled
+instead of a five-frame clip, and the video VAE decodes it as a group of five
+copies with one frame kept (`ContinuityH3StillLatent`,
+`ContinuityH3StillDecode`), which is faster and holds pictures to about 8 MP.
+The conditioning is H3's segment node, so the prompt is composed as
+Context-IR, references (up to nine, `<Picture N>`) are encoded and cached as a
+shot's are, saved references in H3's space are read, and LoRAs go on through
+H3's stack. The cast is shared with MiniMax H3 as well, since it is the same
+model: what a member wears, their saved references and how they are sent are
+one row read by both, and the cast card draws no separate tab for it
+(`declare.CAST_AS`, `manifest.castFamily`). The row is 50 steps of er_sde at cfg 1; turbo is the Turbo LoRA at
+0.38 and 20 steps, or a checkpoint with the distillation merged in (a hybrid
+H3 merge): the switch's "no LoRA · merged checkpoint" choice drops the row and
+adds nothing to the stack. An init image at partial denoise and a ControlNet
+guide are not supported yet and are refused. Rendered on a 3090: a merged
+checkpoint at 8 steps and 5.6 MP leaves crosshatched texture in busy distant
+detail, and decoding the saved latent every other way showed it is in the
+latent, not the decode; at 2.5 MP and 20 steps it is gone.
+
 **MiniMax H3 Image takes as many reference pictures as you attach, at any
 resolution the shared slider offers.** The pack stopped the model at four
 pictures, a cap of its own guessed from memory cost rather than anything the

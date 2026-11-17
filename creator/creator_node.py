@@ -61,6 +61,7 @@ from .core import emit as loop
 from .screens import node as screen_node, spec as screen_spec
 from .families import registry
 from .families.h3 import declare as h3, facepass, guidepass, hires, motionfix, seamrestore
+from .families.h3still import nodes as h3still_nodes
 from .families.krea2 import edit as krea2edit
 
 DEFAULT_DATA = json.dumps({
@@ -429,6 +430,7 @@ class MiniMaxCreatorExtension(ComfyExtension):
                 *motionfix.NODES, *guidepass.NODES,
                 *redetailpass.NODES, *neuralpass.NODES, *screen_node.NODES, *vdn.NODES,
                 *refmodnode.NODES, *liftnode.NODES, *krea2edit.NODES,
+                *h3still_nodes.NODES,
                 *livepreview.NODES]
 
 

@@ -3383,4 +3383,7 @@ export const ko = {
  "Pick a different matte": "다른 매트 고르기",
  "Remove the mask": "마스크 제거",
  "Inpaint: repaint the white of a matte over Picture 1 and keep the rest. Pick a matte you made, or mask a picture now.": "인페인팅: Picture 1에서 매트의 흰 부분을 다시 그리고 나머지는 유지합니다. 만들어 둔 매트를 고르거나 지금 그림을 마스크하세요.",
+  "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.": "MiniMax H3 Still — H3 비디오 모델로 한 프레임을 그립니다. 고유한 화풍이 있고, MiniMax H3용 LoRA가 모두 작동합니다. 약 3 MP 이상에서 가장 좋습니다. 50스텝, Turbo LoRA를 쓰면 20스텝.",
+  "A MiniMax H3 video checkpoint — FL2VA, the one a shot renders on. It reads reference pictures too; Ref2VA also works here.": "MiniMax H3 비디오 체크포인트 — 샷을 렌더링하는 FL2VA. 참조 이미지도 읽습니다. Ref2VA도 여기서 작동합니다.",
+  "The MiniMax H3 video VAE — the file a shot is decoded with. Not the MiniMax H3 Image VAE.": "MiniMax H3 비디오 VAE — 샷을 디코딩하는 파일입니다. MiniMax H3 Image VAE가 아닙니다.",
 };

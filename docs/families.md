@@ -16,6 +16,7 @@ same node on all of them; the model pill picks which one a render lands on.
 | Qwen Image 2.1 | stills | up to ten; click the first to edit it in place |
 | MOSS-Image | stills | none, prose only |
 | MiniMax H3 Image | stills | as many as you like (core's ceiling is 100); click the first to edit it in place, or mask it to inpaint |
+| MiniMax H3 Still | stills | up to nine; click the first to fit the canvas to it |
 
 Every render files into a folder named after its family
 (`output/continuity/renders/ltx25/`, `output/continuity/stills/krea2/`) and
@@ -23,7 +24,9 @@ carries the family name on the file.
 
 ## MiniMax H3
 
-Video with synchronized sound. Its stills are MiniMax H3 Image's (below).
+Video with synchronized sound. For stills there are two MiniMax families
+below: MiniMax H3 Image, the image model, and MiniMax H3 Still, which draws
+one frame with these video weights.
 
 - **Two checkpoints, routed for you.** Nothing attached runs text-to-video,
   frames run FL2VA, references run Ref2VA, and frames plus references run
@@ -226,10 +229,51 @@ Stills drawn from prose, edited from pictures, or inpainted under a mask.
   untested.
 - Detailed, complete descriptions work best (it reads up to 4,096 tokens).
 
+## MiniMax H3 Still
+
+Stills from the H3 *video* model: one frame, drawn by the weights that render
+your shots.
+
+- **Why it exists beside MiniMax H3 Image.** The video model has a look of its
+  own, and every LoRA made for MiniMax H3 was trained on it. Here those LoRAs
+  go onto the weights they were made for, through the same loader a shot uses.
+  On MiniMax H3 Image they only fit structurally.
+- It is the pre-stage's **MiniMax H3 Still** choice. A still saved on the old
+  one-frame branch still opens on MiniMax H3 Image; pick this one to come back.
+- **It loads H3's own files**: one video checkpoint (FL2VA is the one to pick;
+  it reads reference pictures too), the Qwen3-VL encoder and the H3 *video*
+  VAE. Nothing extra to download if H3 already renders for you.
+- **One frame is sampled, not a clip.** The old branch sampled a five-frame
+  clip and kept one frame. This samples a single latent frame and decodes it
+  through the video VAE as a repeated group, the method from
+  [Fizgig H3 Still](https://github.com/shootthesound/ComfyUI-Fizgig-H3-Still).
+  It is several times faster and holds much larger pictures.
+- **Best from about 3 MP up.** The slider runs 512 to 2176 on the short edge
+  (up to about 8 MP, 3872x2176), starting at 1280. Small pictures come out
+  noticeably weaker.
+- The row is 50 steps at cfg 1, er_sde/simple. **Turbo is a LoRA**: pick
+  `minimax_h3_turbo_v4_step600_ema` and the switch sets it to 0.38 strength
+  and 20 steps, the recipe the still workflows use. A checkpoint with the
+  distillation merged in (a hybrid H3 merge) takes the switch's "no LoRA ·
+  merged checkpoint" choice instead: same steps and row, nothing added to the
+  stack. The lower stops (12, 16) are for drafts.
+- **Pictures are references**, up to nine, `<Picture 1>`, `<Picture 2>` in the
+  prompt. To change a picture, attach it and say what changes; clicking the
+  first one's label fits the canvas to it. The render always starts from
+  noise.
+- The prompt is written to the model in H3's own structured form, the same
+  way a shot's is.
+- **The cast is MiniMax H3's.** It is the same model, so a member's LoRAs,
+  their saved references and how they are sent are shared with MiniMax H3:
+  set once, used by shots and stills alike. On the cast card this model has
+  no tab of its own; its settings are the MiniMax H3 tab.
+- **Not here yet:** starting from an init image at partial denoise, and a
+  ControlNet guide. Both are refused with a message.
+
 ## Editing a picture you just rendered
 
 On the edit families (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, MiniMax
-H3 Image) the
+H3 Image, MiniMax H3 Still) the
 seed the sampler uses is derived from the seed widget *and* the attached
 pictures. Reusing the seed that made a picture would otherwise start the edit
 from that picture's own noise, and the model then reproduces the picture

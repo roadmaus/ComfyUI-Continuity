@@ -45,7 +45,7 @@ import { PromptBox, focusEnd, openEditorSheet } from "./prompt.js";
 import { RefinePanel, refineButton, refine } from "./refine.js";
 import { blobIO, samplingBar, seedPill } from "./sampling.js";
 import { clearButton } from "./clear.js";
-import { loadLoraNames, loraNames, refreshLoraNames } from "./turbo.js";
+import { loadLoraNames, loraNames, refreshLoraNames, NO_LORA } from "./turbo.js";
 import { STOP_TITLE } from "./guide.js";
 import { openControl } from "./control.js";
 import { Stage, stageSource } from "./stage.js";
@@ -90,6 +90,11 @@ const TURBO_TITLE = {
     draft: "4 steps — what the 4-step Lightning LoRA was distilled for.",
     medium: "6 steps — a little more than the short LoRA's own number.",
     good: "8 steps — what the 8-step Lightning LoRA was distilled for.",
+  },
+  h3still: {
+    draft: "12 steps — for framing, not for finals.",
+    medium: "16 steps — quick and usable.",
+    good: "20 steps — the still recipe's number.",
   },
 };
 
@@ -1742,7 +1747,7 @@ export class PreStageRow {
           // Nothing to throw yet on a LoRA-only arch: the first press is the
           // picking, on the spot — the pill was pressed to go faster, not to
           // go configure something.
-          if (!spec.checkpoint && !turbo.lora) {
+          if (!spec.checkpoint && !turbo.lora && !turbo.merged) {
             this.openTurboSource(event.currentTarget, spec, turbo,
                                  () => this.throwTurbo(true));
             return;
@@ -1773,10 +1778,12 @@ export class PreStageRow {
     if (turbo.on) {
       // Which of the two the run is on, and the way to the other. Only where
       // there are two: an arch with one route has nothing to say here.
-      if (spec.lora && spec.checkpoint) {
+      if (spec.lora && (spec.checkpoint || spec.merged)) {
         pills.push(el("button", {
           class: "mmc-pill",
-          title: turbo.lora
+          title: turbo.merged
+            ? t("Running the checkpoint as a merged distill, with no LoRA. Press to pick a turbo LoRA instead.")
+            : turbo.lora
             ? t("Running the distillation as a LoRA over RAW — the base checkpoint stays "
               + "loaded and the rest of the stack rides along. Press to swap to the "
               + "distilled checkpoint.", {})
@@ -1786,7 +1793,7 @@ export class PreStageRow {
           onclick: (event) => this.openTurboSource(event.currentTarget, spec, turbo,
                                                    () => this.retrowTurbo()),
         }, [icon("model", 16), el("span", {
-          text: turbo.lora ? shortLora(turbo.lora) : t("checkpoint"),
+          text: turbo.lora ? shortLora(turbo.lora) : t(turbo.merged ? "merged" : "checkpoint"),
         })]));
       }
     }
@@ -1796,6 +1803,10 @@ export class PreStageRow {
 
   /** What the switch says it will do, per arch and per route. */
   turboTitle(spec, turbo, io) {
+    if (turbo.on && turbo.merged) {
+      return t("Turbo — {steps} steps, cfg 1, no LoRA: the checkpoint is taken to be a merged "
+        + "distill. Switching off puts the sampler row back.", { steps: io.value("steps", "?") });
+    }
     if (turbo.on) {
       return turbo.lora
         ? t("Turbo — {lora} over the ordinary checkpoint at {steps} steps, cfg 1. "
@@ -1804,6 +1815,10 @@ export class PreStageRow {
         : t("Turbo — running the Turbo checkpoint at {steps} steps, cfg 1. "
           + "Switching off loads RAW again and puts the sampler row back.",
           { steps: io.value("steps", "?") });
+    }
+    if (spec.merged) {
+      return t("Turbo off. The first press picks the distillation LoRA it engages — or none, "
+        + "for a checkpoint with the distillation already merged in.");
     }
     return spec.checkpoint
       ? t("Turbo off — running RAW. On, the distillation is loaded — the Turbo checkpoint, "
@@ -1834,11 +1849,13 @@ export class PreStageRow {
       title: t("Turbo source"),
       options: [
         ...(spec.checkpoint ? [t(TURBO_CHECKPOINT)] : []),
+        ...(spec.merged ? [t(NO_LORA)] : []),
         ...listed,
       ],
-      value: turbo.lora ?? (spec.checkpoint ? t(TURBO_CHECKPOINT) : ""),
+      value: turbo.lora ?? (spec.checkpoint ? t(TURBO_CHECKPOINT) : turbo.merged ? t(NO_LORA) : ""),
       onPick: (picked) => {
-        turbo.lora = picked === t(TURBO_CHECKPOINT) ? null : picked;
+        turbo.merged = picked === t(NO_LORA);
+        turbo.lora = picked === t(TURBO_CHECKPOINT) || turbo.merged ? null : picked;
         after();
       },
     });

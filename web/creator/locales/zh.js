@@ -3383,4 +3383,7 @@ export const zh = {
  "Pick a different matte": "换一个抠像",
  "Remove the mask": "移除遮罩",
  "Inpaint: repaint the white of a matte over Picture 1 and keep the rest. Pick a matte you made, or mask a picture now.": "局部重绘：重绘 Picture 1 中抠像白色的部分，其余保留。选择已做好的抠像，或现在给图片做遮罩。",
+  "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.": "MiniMax H3 Still — 用 H3 视频模型绘制单帧。有自己的画面风格，所有 MiniMax H3 LoRA 都可用。约 3 MP 以上效果最佳；50 步，使用 Turbo LoRA 时 20 步。",
+  "A MiniMax H3 video checkpoint — FL2VA, the one a shot renders on. It reads reference pictures too; Ref2VA also works here.": "MiniMax H3 视频检查点 — 即渲染镜头所用的 FL2VA。它也能读取参考图片；Ref2VA 在这里同样可用。",
+  "The MiniMax H3 video VAE — the file a shot is decoded with. Not the MiniMax H3 Image VAE.": "MiniMax H3 视频 VAE — 解码镜头所用的文件。不是 MiniMax H3 Image 的 VAE。",
 };
