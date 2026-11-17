@@ -253,8 +253,10 @@ your shots.
   noticeably weaker.
 - The row is 50 steps at cfg 1, er_sde/simple. **Turbo is a LoRA**: pick
   `minimax_h3_turbo_v4_step600_ema` and the switch sets it to 0.38 strength
-  and 20 steps, the recipe the still workflows use. The lower stops (12, 16)
-  are for drafts.
+  and 20 steps, the recipe the still workflows use. A checkpoint with the
+  distillation merged in (a hybrid H3 merge) takes the switch's "no LoRA ·
+  merged checkpoint" choice instead: same steps and row, nothing added to the
+  stack. The lower stops (12, 16) are for drafts.
 - **Pictures are references**, up to nine, `<Picture 1>`, `<Picture 2>` in the
   prompt. To change a picture, attach it and say what changes; clicking the
   first one's label fits the canvas to it. The render always starts from

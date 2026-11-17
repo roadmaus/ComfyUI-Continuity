@@ -24,9 +24,13 @@ H3's stack. The cast is shared with MiniMax H3 as well, since it is the same
 model: what a member wears, their saved references and how they are sent are
 one row read by both, and the cast card draws no separate tab for it
 (`declare.CAST_AS`, `manifest.castFamily`). The row is 50 steps of er_sde at cfg 1; turbo is the Turbo LoRA at
-0.38 and 20 steps. An init image at partial denoise and a ControlNet guide are
-not supported yet and are refused. Not yet rendered on a GPU: the graph was
-built against the pack's own compilers and the method's published code.
+0.38 and 20 steps, or a checkpoint with the distillation merged in (a hybrid
+H3 merge): the switch's "no LoRA · merged checkpoint" choice drops the row and
+adds nothing to the stack. An init image at partial denoise and a ControlNet
+guide are not supported yet and are refused. Rendered on a 3090: a merged
+checkpoint at 8 steps and 5.6 MP leaves crosshatched texture in busy distant
+detail, and decoding the saved latent every other way showed it is in the
+latent, not the decode; at 2.5 MP and 20 steps it is gone.
 
 **MiniMax H3 Image takes as many reference pictures as you attach, at any
 resolution the shared slider offers.** The pack stopped the model at four

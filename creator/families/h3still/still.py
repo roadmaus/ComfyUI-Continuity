@@ -111,16 +111,18 @@ CANVAS = {
 # steps on the bare checkpoint, 20 under the Turbo LoRA at a strength of 0.38.
 # That last number is the still recipe's and not the LoRA's own (strength 1,
 # 4-8 steps, for video); the lower stops are for drafts and are not anybody's
-# published row.
+# published row. A checkpoint with the distillation merged in (a hybrid H3
+# merge) throws the same switch with no LoRA: the step table and the row, and
+# nothing in the stack.
 H3STILL_ROW = {"steps": 50, "cfg": 1.0, "sampler_name": "er_sde", "scheduler": "simple"}
 TURBO_STEPS = {"draft": 12, "medium": 16, "good": 20}
 DEFAULT_TURBO_QUALITY = "good"
 DEFAULT_TURBO_STRENGTH = 0.38
 TURBO_ROW = {"cfg": 1.0, "sampler_name": "er_sde", "scheduler": "simple"}
 TURBO_NEEDS_LORA = (
-    "MiniMax H3 has no distilled checkpoint for stills — the turbo pill is a "
-    "Turbo LoRA over the ordinary one. Pick the LoRA, or leave the switch off "
-    "and sample the full row"
+    "MiniMax H3 Still's turbo is a Turbo LoRA over the checkpoint, or a "
+    "checkpoint with the distillation merged in — pick the LoRA or the merged "
+    "choice, or leave the switch off and sample the full row"
 )
 
 # No guide: H3's Fun ControlNet branch is a video family's hook, and nothing
@@ -156,12 +158,13 @@ def _handle(slot):
 
 
 def plan(data):
-    """-> (checkpoint field, schedule). One file; the turbo pill is a LoRA."""
+    """-> (checkpoint field, schedule). One file either way: the turbo pill is
+    a LoRA on it, or says the file carries the distillation itself (`merged`)."""
     from ...compile import CompileError
     from ...compile_image import turbo_block
 
     turbo = turbo_block(data, ARCH)
-    if turbo.get("on") and not turbo.get("lora"):
+    if turbo.get("on") and not turbo.get("lora") and not turbo.get("merged"):
         raise CompileError(TURBO_NEEDS_LORA)
     return "model", {}
 

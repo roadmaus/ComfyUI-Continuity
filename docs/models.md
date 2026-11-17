@@ -259,7 +259,8 @@ The VAE is the *video* one. The MiniMax H3 Image VAE and the experimental
 single-image VAE are the wrong files here and are refused by name. For turbo,
 `minimax_h3_turbo_v4_step600_ema.safetensors` from
 [larryvrh/MiniMax-H3-Turbo-Lora](https://huggingface.co/larryvrh/MiniMax-H3-Turbo-Lora)
-goes in `loras`.
+goes in `loras`; a turbo-merged H3 checkpoint goes in the checkpoint slot and
+needs no LoRA.
 
 ## MOSS-Image (stills)
 

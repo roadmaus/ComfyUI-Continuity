@@ -4379,7 +4379,7 @@ export function clearPreStage(state) {
 export function emptyPreStageTurbo() {
   const empty = {};
   for (const [arch, turbo] of Object.entries(PRESTAGE_TURBO)) {
-    empty[arch] = { on: false, quality: turbo.default_quality, saved: null, lora: null };
+    empty[arch] = { on: false, quality: turbo.default_quality, saved: null, lora: null, merged: false };
   }
   return empty;
 }
@@ -4400,10 +4400,13 @@ export function parsePreStageTurbo(raw) {
     if (Object.keys(PRESTAGE_TURBO[arch].steps).includes(side.quality)) empty.quality = side.quality;
     if (side.saved && typeof side.saved === "object") empty.saved = { ...side.saved };
     if (typeof side.lora === "string" && side.lora.trim()) empty.lora = side.lora.trim();
+    // Said, not guessed: only an arch whose checkpoint can carry the
+    // distillation (`merged` in its manifest) keeps the choice.
+    else if (side.merged === true && PRESTAGE_TURBO[arch].merged) empty.merged = true;
     // A LoRA-only arch cannot be on without one: Ideogram ships no distilled
     // checkpoint, so an `on` with no file is a compile refusal waiting to
     // happen. Read as off, which is what it will render as either way.
-    if (empty.on && !empty.lora && !PRESTAGE_TURBO[arch].checkpoint) empty.on = false;
+    if (empty.on && !empty.lora && !empty.merged && !PRESTAGE_TURBO[arch].checkpoint) empty.on = false;
   }
   return out;
 }
@@ -4677,6 +4680,7 @@ function serializePreStageTurbo(turbo) {
     out[arch] = {
       on: side.on, quality: side.quality,
       ...(side.lora ? { lora: side.lora } : {}),
+      ...(side.merged ? { merged: true } : {}),
       ...(side.saved ? { saved: { ...side.saved } } : {}),
     };
   }
@@ -4933,7 +4937,7 @@ export function missingPreStageModels(state) {
   // Per arch, and only the checkpoint route loads the Turbo file: with a LoRA
   // picked the DiT stays RAW (`krea2/still.py`).
   const turbo = state.turbo[state.arch];
-  const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo && turbo?.on && !turbo.lora
+  const dit = IMAGE_FAMILY[state.arch]?.capabilities.turbo?.checkpoint && turbo?.on && !turbo.lora
     ? "turbo_model" : "model";
   // The branch only where a guide will load it — `render_image.check`.
   const control = preStageBranchGuide(state) ? ["control"] : [];

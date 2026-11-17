@@ -59,7 +59,7 @@ def manifest():
         "id": declare.ID,
         "label": declare.LABEL,
         "description": "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every "
-                       "MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.",
+                       "MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 under turbo — the Turbo LoRA or a merged turbo checkpoint.",
         "produces": sorted(declare.PRODUCES),
         # Whose cast rows this family reads — `declare.CAST_AS`.
         "cast_as": declare.CAST_AS,
@@ -69,13 +69,15 @@ def manifest():
         "capabilities": {
             "refine": False, "face": False, "audio": False, "seams": False,
             # No `init_image`: the render starts from noise (`still.INIT_REFUSAL`).
-            # A LoRA and only a LoRA, at the still recipe's strength rather
-            # than the LoRA's own.
+            # A LoRA at the still recipe's strength rather than the LoRA's
+            # own, or none: `merged` is a checkpoint with the distillation in
+            # its weights, the same file in the same field and only the row
+            # thrown.
             "turbo": {"steps": dict(still.TURBO_STEPS),
                       "row": dict(still.TURBO_ROW),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": True, "default_strength": still.DEFAULT_TURBO_STRENGTH,
-                      "checkpoint": False,
+                      "checkpoint": False, "merged": True,
                       # The LoRA names a headless render takes for it (`creator/headless.py`).
                       "hints": {"family": r"h3.*turbo|turbo.*h3"}},
             # References on the base weights, Picture 1 the one an instruction

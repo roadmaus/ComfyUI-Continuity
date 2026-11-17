@@ -754,8 +754,10 @@ def _h3s_refusal(data):
 
 check("an init image at partial denoise is refused, with the way that works",
       _h3s_refusal({"init": {"filename": "a.png", "denoise": 0.5}}), h3s.INIT_REFUSAL)
-check("the turbo pill refuses to engage without its LoRA",
+check("the turbo pill refuses to engage with neither a LoRA nor a merged checkpoint",
       _h3s_refusal({"turbo": {"h3still": {"on": True}}}), h3s.TURBO_NEEDS_LORA)
+check("...engages on a merged checkpoint with no LoRA",
+      _h3s_refusal({"turbo": {"h3still": {"on": True, "merged": True}}}), None)
 check("...and engages with one", _h3s_refusal(
     {"turbo": {"h3still": {"on": True, "lora": "minimax_h3_turbo_v4_step600_ema.safetensors"}}}),
     None)
