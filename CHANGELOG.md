@@ -6,6 +6,14 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Refine on Flux 3 Klein keeps the cast's names.** BFL's upsampler cannot
+know that `@anna` is somebody, so it described her and dropped the name, and
+the queued render lost her pictures and her LoRAs with it, since the compile
+swaps the name for both. The named subjects now go under the request with
+their descriptions and the images that show them, and the one rule that
+the name is written where they appear. A caption that drops a name anyway is
+reported, by name.
+
 **Flux 3 Klein's Refine is BFL's own prompt upsampler, and so is the chat's
 magic prompt on it.** Klein was trained on full scene captions and BFL runs an
 upsampler in front of every request. They publish the system prompts for

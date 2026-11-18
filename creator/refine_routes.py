@@ -939,6 +939,14 @@ def _run(body):
                 f"but nothing in the prompt will point at it. Refine again, or write "
                 f"it in yourself."
             )
+    elif not ref_shots:
+        asked = " ".join(s.get("text") or "" for s in shots)
+        for subject in cast:
+            if refine.names(asked, subject.handle) and not refine.names(everything, subject.handle):
+                problems.append(
+                    f"the rewrite never names @{subject.handle} — without the name "
+                    f"they are not in the render. Refine again, or write it in."
+                )
 
     # Quoted request text is the user dictating exact words, and it is the one
     # fidelity promise that can be checked mechanically rather than trusted to

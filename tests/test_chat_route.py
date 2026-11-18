@@ -364,6 +364,35 @@ try:
     check("...and a still with nothing attached through t2i, the request as typed",
           ("text-to-image model" in refined_calls[0]["system"], refined_calls[0]["message"]),
           (True, "a fox"))
+
+    # A cast member is the pack's, and BFL's instruction cannot know her: the
+    # request lists her under it with the one rule kept — write the name — and
+    # a caption that only describes her is said, because the name is what puts
+    # her pictures and her LoRAs in the render.
+    replies = ["@anna, a woman in a red coat, sits at the cafe counter in the first image.",
+               "A woman in a red coat sits at the cafe counter."]
+
+    def cast_backend(block):
+        def ask(model, system, message, images, **kw):
+            refined_calls.append({"message": message})
+            return replies.pop(0)
+        return ask, lambda image: image
+    route.refine_routes._backend = cast_backend
+    refined_calls.clear()
+    cast_blob = {**klein3_blob, "prompt": "@anna at the counter in @img-1", "edit_first": False,
+                 "refs": [{"handle": "img-1", "filename": "cafe.png"},
+                          {"handle": "img-2", "filename": "anna.png"}],
+                 "subjects": [{"handle": "anna", "from": ["img-2"], "description": "a woman in a red coat"}]}
+    named = route.refine_routes._run({"kind": "still", "data": cast_blob, "model": "m"})
+    check("the cast is listed under BFL's request, with the images that show them",
+          ("User request: @anna at the counter in image 1" in refined_calls[0]["message"],
+           "@anna: a woman in a red coat (shown in image 2)" in refined_calls[0]["message"],
+           named["problems"]), (True, True, []))
+    unnamed = route.refine_routes._run({"kind": "still", "data": cast_blob, "model": "m"})
+    check("...and a caption that drops the name is said, by name",
+          [p for p in unnamed["problems"] if "@anna" in p],
+          ["the rewrite never names @anna — without the name they are not in the render. "
+           "Refine again, or write it in."])
 finally:
     route.refine_routes._picture = _real_picture
     route.refine_routes._backend = _real_backend

@@ -25,7 +25,8 @@ class Flux3KleinPrompting(stillrefine.StillPrompting):
 
     # BFL's caption is plain prose that names no picture by handle — "this
     # image", "the first image" — and Klein reads every attached picture as a
-    # reference whether the caption names it or not.
+    # reference whether the caption names it or not. Cast names are another
+    # matter, and the route still holds the rewrite to them.
     prefill = ""
     reports_seen = False
     cites_pictures = False
@@ -44,7 +45,7 @@ class Flux3KleinPrompting(stillrefine.StillPrompting):
     def user_message(self, shots, seconds=None, shown=(), mode=None, piece=None,
                      pool=None, footage=(), cast=()):
         pictures = tuple(shown) if mode in READS_PICTURES else ()
-        return upsample.user_message(shots[0].get("text"), pictures)
+        return upsample.user_message(shots[0].get("text"), pictures, cast)
 
     def parse_reply(self, content, mode, shots, cuts=0, piece=False, ref_shots=()):
         text = upsample.caption(content)

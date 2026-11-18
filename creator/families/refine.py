@@ -409,6 +409,11 @@ def check(text, handles, labels):
     return problems
 
 
+def names(text, handle):
+    """Whether `text` names the cast member `handle` — `@anna`, not `@annabel`."""
+    return re.search(rf"@{re.escape(handle)}(?![A-Za-z0-9_])", text or "") is not None
+
+
 def uncited(text, handles, labels, cast=()):
     """Attached references the rewrite never cites, as handles. Empty means none.
 
@@ -635,7 +640,8 @@ class Prompting:
     reports_seen = True
 
     #: whether the rewrite points at each picture by its handle, so that one it
-    #: never names is worth reporting.
+    #: never names is worth reporting. Off, only a cast member the request
+    #: named and the rewrite dropped is.
     cites_pictures = True
 
     def choose_template(self, choice, mode):
