@@ -1621,6 +1621,22 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
 /** Apply to one card of a strip, in place. The caller commits. */
 export function applyToShot(body, keys, segment, io, { from = "shot", piece } = {}) {
   const chosen = new Set(keys);
+  // A piece of one shot keeps its sentence, its files and its LoRAs on that
+  // shot — the piece's own fields are the standing ones a strip shares, and on
+  // a lone shot they are empty. Landing on a card, the lone shot is what the
+  // piece *was*, so its fields stand in wherever the piece's say nothing;
+  // without this a render taken back onto a card blanked the card's prompt.
+  const lone = from === "piece" && body.strip?.segments?.length === 1 ? body.strip.segments[0] : null;
+  if (lone) {
+    const said = (text) => Boolean((text?.prompt ?? "").trim() || text?.refined?.body);
+    body = {
+      ...body,
+      prompt: said(body.prompt) ? body.prompt
+        : { prompt: lone.prompt ?? "", soundscape: lone.soundscape, music: lone.music, refined: lone.refined },
+      refs: (body.refs ?? []).length ? body.refs : (lone.assets ?? []),
+      loras: [...(body.loras ?? []), ...(lone.loras ?? [])],
+    };
+  }
 
   if (chosen.has("prompt")) {
     const text = body.prompt ?? {};

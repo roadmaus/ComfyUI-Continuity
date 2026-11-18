@@ -16,6 +16,7 @@ import { CastShelf, castLook } from "./cast.js";
 import { isVisualReference, previewable, openReferencePreview } from "./reference-preview.js";
 import { castFamilies, keepAsMod } from "./refmod.js";
 import { t } from "./i18n.js";
+import { settingsHome } from "./slate.js";
 import { openPicker } from "./picker.js";
 import { screenChips, screenTool, screenMentions, uncitedScreens } from "./screens.js";
 import { openLoras, loraBlock, settlePins, watchPins } from "./loras.js";
@@ -903,6 +904,18 @@ export class CreatorEditor {
     this.commit();
   }
 
+  /** Where a render's settings land when its card is turned over in the
+   *  gallery: a clip's on this shot's own preset target, a still's on the
+   *  pre-stage paired with this node. See `slate.settingsHome`. */
+  settingsHome() {
+    return settingsHome({
+      kind: "video",
+      nodeId: () => this.nodeId?.() ?? null,
+      target: () => this.presetTarget?.() ?? null,
+      io: () => this.widgetIO(),
+    });
+  }
+
   /**
    * The gallery: the same picker, opened on the renders tab. No capacity
    * precheck, unlike addReferences — looking at finished renders is legal with
@@ -920,6 +933,7 @@ export class CreatorEditor {
       kind: "renders",
       capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
       cardSeconds: this.cardSeconds(),
+      home: this.settingsHome(),
       plate: spec ? { ...spec,
         panels: sheet
           ? (sheet.panels?.length
