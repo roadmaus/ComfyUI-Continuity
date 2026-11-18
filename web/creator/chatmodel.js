@@ -305,19 +305,21 @@ export function openThinker(anchor, { rail, setRail, skills, onChange }) {
   }
 
   /** The magic prompt: a second reply that rewrites a still's prompt as the
-   *  structured caption its family was trained on, in that family's own
-   *  published instruction. Only Ideogram 4.0 has one, and the switch says
-   *  so rather than hiding when the room is on another family — it is a
+   *  caption its family was trained on, in that family's own published
+   *  instruction: Ideogram 4.0's magic prompt and Flux 3 Klein's upsampler.
+   *  The switch says which rather than hiding when the room is on another
+   *  family — it is a
    *  standing choice, read whenever a still lands on one. The boxes only
    *  mean something with it on. */
   function magicRows(bar) {
     const rows = [line(t("Magic prompt"), neuralSwitch({
       on: bar.magic === true, label: t("Magic prompt"),
       onChange: (on) => { setRail({ magic: on }); drawWrites(); },
-    }), t("For a picture on Ideogram 4.0, which reads a structured caption rather "
-          + "than a sentence: Ideogram's own magic prompt turns the model's words "
-          + "into that caption. A second reply, and a long one — it runs to the "
-          + "refiner's reply length, not this one."))];
+    }), t("For a picture on Ideogram 4.0 or Flux 3 Klein, which were trained on "
+          + "captions rather than sentences: the family's own published prompt — "
+          + "Ideogram's magic prompt, BFL's upsampler — turns the model's words into "
+          + "that caption. A second reply, and a long one — it runs to the refiner's "
+          + "reply length, not this one."))];
     if (bar.magic === true) {
       rows.push(line(t("Keep boxes"), neuralSwitch({
         on: bar.magic_bboxes === true, label: t("Keep boxes"),

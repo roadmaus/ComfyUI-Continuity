@@ -74,7 +74,7 @@ def manifest():
         "label": declare.LABEL,
         "description": "FLUX 3 Image Klein — BFL's 5.6B image editor (FLUX Kommunity License). "
                        "Edits from an instruction, draws from prose, and combines up to ten "
-                       "pictures. Write full scene captions: a short prompt gives generic output.",
+                       "pictures. Wants full scene captions: Refine runs BFL's own upsampler.",
         "produces": sorted(declare.PRODUCES),
         "widgets": _widgets(),
         "weights": _weights(),
@@ -93,6 +93,9 @@ def manifest():
         },
         "prompt": {
             "pipeline": "plain",
+            # BFL's upsampler writes the caption in the chat when the magic
+            # switch is on (`magic.py`), as the refine button does here.
+            "magic": True,
             "ordinal": "Picture N",
             "max_refs": still.REFS_LIMIT,
         },

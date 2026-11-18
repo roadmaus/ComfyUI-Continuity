@@ -600,6 +600,10 @@ What is the room's own is in the composer's foot and behind the gear:
   reply length rather than the room's, and Ideogram's own notes say the
   instruction was only tried on a large model. **Keep boxes** keeps where
   it placed each element in the frame, which Ideogram drops by default.
+  On Flux 3 Klein the same switch runs BFL's prompt upsampler instead: the
+  sentence becomes the full scene caption Klein was trained on, and with
+  pictures in the still the upsampler sees them and writes the edit against
+  them. Its caption is plain prose, and Keep boxes does nothing there.
 
 The families, the shape, the seed, the sizes and any pinned row are
 remembered per machine; the cast and everything made are the chat's, saved

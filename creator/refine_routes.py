@@ -781,6 +781,7 @@ def _run(body):
         temperature=body.get("temperature", 0.3),
         seed=body.get("seed", -1),
         max_tokens=body.get("max_tokens"),
+        prefill=prompting.prefill,
     )
     parsed = prompting.parse_reply(content, mode, len(shots), cuts=cuts,
                                    piece=ask_piece, ref_shots=ref_shots)
@@ -806,7 +807,7 @@ def _run(body):
     # Asked for whenever a picture rides along, so its absence is a model that
     # wrote the rewrite without ever attending to the images — which is exactly
     # the failure the field was added to make visible.
-    if pictures and not parsed.get("seen"):
+    if pictures and prompting.reports_seen and not parsed.get("seen"):
         problems.append(
             "the model did not say what it saw in the attached images, so it may "
             "have written past them — check the rewrite against your frames"
@@ -931,7 +932,7 @@ def _run(body):
                               for text in (entry.get("sections") or {}).values()]
                            + list((sections or {}).values())
                            + [parsed["soundscape"], parsed["music"], piece_out or ""])
-    if not ref_shots:
+    if not ref_shots and prompting.cites_pictures:
         for handle in refine.uncited(everything, refs, labels, cast):
             problems.append(
                 f"the rewrite never mentions @{handle} — the file is still attached, "

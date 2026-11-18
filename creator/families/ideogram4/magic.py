@@ -91,7 +91,8 @@ def _read():
     return _sections
 
 
-def system_prompt():
+def system_prompt(pictures):
+    """The instruction. `pictures` is always empty: Ideogram reads none."""
     return _read()["system"]
 
 
@@ -116,8 +117,9 @@ GROUPS_NOTE = (
 )
 
 
-def user_message(prose, aspect):
-    """The instruction's own `[USER]` turn, filled in."""
+def user_message(prose, aspect, pictures):
+    """The instruction's own `[USER]` turn, filled in. `pictures` is always
+    empty, as for `system_prompt`."""
     template = _read().get("user") or "TARGET IMAGE ASPECT RATIO: {{aspect_ratio}} (width:height)."
     message = template.replace("{{aspect_ratio}}", aspect_ratio(aspect))
     if "{{original_prompt}}" in message:

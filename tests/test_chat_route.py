@@ -293,7 +293,80 @@ check("an action with none is left as it was",
 refuses("a caption over a base that reads prose is refused",
         lambda: route._with_caption(still_action, GOOD, PRE, True), "does not read one")
 refuses("a caption that is not JSON is refused",
-        lambda: route._with_caption(still_action, "a fox", IDEO_PRE, True), "not a JSON object")
+        lambda: route._with_caption(still_action, "a fox", IDEO_PRE, True), "not one its family reads")
+
+# Flux 3 Klein's magic prompt is BFL's upsampler: the still's pictures go with
+# it in the order the render cites them, the request cites them as `image N`,
+# and the caption is the reply as written.
+KLEIN3_RAIL = {**route._rail({"still_family": "flux3klein", "aspect": "1:1"}),
+               "still_pictures": {"takes": True, "edits": True}}
+KLEIN3_LEDGER = [{"handle": "pic-1", "kind": "image", "filename": "dog.png"}]
+klein3_action = {**chat.validate({"act": "render", "kind": "still",
+                                  "prompt": "put a red bandana on the dog in @pic-1",
+                                  "from": ["pic-1"]}, KLEIN3_LEDGER), "arch": "flux3klein"}
+_real_open, _real_resolve = route.Image.open, route.media.resolve
+seen_images = []
+try:
+    route.Image.open = lambda path: __import__("PIL.Image").Image.new("RGB", (8, 8))
+    route.media.resolve = lambda name: name
+    asked.clear()
+
+    def klein3_backend(block):
+        def ask(model, system, message, images, **kw):
+            asked.append({"system": system, "message": message, **kw})
+            seen_images.extend(images)
+            return '"A red bandana is tied around the dog\'s neck."'
+        return ask, lambda image: "looked"
+    route.refine_routes._backend = klein3_backend
+    caption = route._magic(block, klein3_action, KLEIN3_LEDGER, KLEIN3_RAIL, [])
+    check("a Flux 3 Klein still is captioned by BFL's i2i upsampler, with its picture",
+          (asked[0]["system"].startswith("Your name is FLUX 3") and "image-editing model" in asked[0]["system"],
+           "User request: put a red bandana on the dog in image 1" in asked[0]["message"],
+           seen_images, asked[0]["temperature"]),
+          (True, True, ["looked"], 0.0))
+    check("...and the caption is the reply, unquoted",
+          caption, "A red bandana is tied around the dog's neck.")
+    KLEIN3_PRE = {**PRE, "arch": "flux3klein", "models": {"flux3klein": {}, "dtype": "default"}}
+    check("the room's caption comes back as the prose it is",
+          route._with_caption(klein3_action, " a dog ", KLEIN3_PRE, True)["caption"], "a dog")
+finally:
+    route.Image.open, route.media.resolve = _real_open, _real_resolve
+    route.refine_routes._backend = _real_backend
+    asked.clear()
+
+# ...and the refine button on a Flux 3 Klein still is the same upsampler, by
+# the family's own prompting: BFL's instruction for the mode, no JSON prefill,
+# and no complaint that a caption did not say what it saw.
+_real_picture = route.refine_routes._picture
+refined_calls = []
+try:
+    route.refine_routes._picture = lambda asset: __import__("PIL.Image").Image.new("RGB", (8, 8))
+
+    def refine_backend(block):
+        def ask(model, system, message, images, **kw):
+            refined_calls.append({"system": system, "message": message, "images": len(images), **kw})
+            return "Tie a red bandana around the dog's neck."
+        return ask, lambda image: image
+    route.refine_routes._backend = refine_backend
+    klein3_blob = {"arch": "flux3klein", "prompt": "put a bandana on @img-1", "aspect": "1:1",
+                   "short_edge": 1024, "refs": [{"handle": "img-1", "filename": "dog.png"}],
+                   "edit_first": True, "loras": []}
+    edited = route.refine_routes._run({"kind": "still", "data": klein3_blob, "model": "m"})
+    check("a Flux 3 Klein edit refines through BFL's i2i, plain, with its picture",
+          ("image-editing model" in refined_calls[0]["system"],
+           "User request: put a bandana on image 1" in refined_calls[0]["message"],
+           refined_calls[0]["images"], refined_calls[0]["prefill"],
+           edited["shots"][0]["body"], edited["problems"]),
+          (True, True, 1, "", "Tie a red bandana around the dog's neck.", []))
+    refined_calls.clear()
+    route.refine_routes._run({"kind": "still", "model": "m",
+                              "data": {**klein3_blob, "prompt": "a fox", "refs": [], "edit_first": False}})
+    check("...and a still with nothing attached through t2i, the request as typed",
+          ("text-to-image model" in refined_calls[0]["system"], refined_calls[0]["message"]),
+          (True, "a fox"))
+finally:
+    route.refine_routes._picture = _real_picture
+    route.refine_routes._backend = _real_backend
 
 # ---- a render asked for again -----------------------------------------------
 #

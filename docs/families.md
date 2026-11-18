@@ -136,9 +136,13 @@ Stills, drawn from prose or edited from pictures, natively.
 - The checkpoint is the distilled one: 16 steps at cfg 1, euler/simple. There
   is no turbo pill, because it is already the fast model. Klein Base loads in
   the same slot if you raise the row to about 50 steps and cfg 3.5.
-- **Write full scene captions.** The model was trained on them, and a short
-  prompt or a one-line edit instruction gives generic output. BFL's prompt
-  upsampler is not wired in yet.
+- **Write full scene captions, or let BFL's upsampler write them.** The model
+  was trained on them, and a short prompt or a one-line edit instruction gives
+  generic output. **Refine** on a Flux 3 Klein still runs BFL's own upsampler
+  instruction on your refiner model: a full caption from a short request, or,
+  with pictures attached, an edit instruction written against them. In the
+  chat, the *Magic prompt* switch does the same for every still it draws on
+  Flux 3 Klein.
 - Needs a ComfyUI from 15 October 2026 or newer.
 
 ## Qwen Image 2.1

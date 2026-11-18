@@ -625,6 +625,19 @@ class Prompting:
     #: also carry. Empty on a family with no subject grammar.
     cast_sections = ()
 
+    #: what the reply is begun with. The harness's opening brace on a family
+    #: whose reply is the JSON contract; empty on one whose reply is the
+    #: prompt itself.
+    prefill = PREFILL
+
+    #: whether the reply says what the model saw in the attached pictures, so
+    #: that its absence is worth reporting.
+    reports_seen = True
+
+    #: whether the rewrite points at each picture by its handle, so that one it
+    #: never names is worth reporting.
+    cites_pictures = True
+
     def choose_template(self, choice, mode):
         """Which template the rewrite is written in -> `(template, forced)`.
 

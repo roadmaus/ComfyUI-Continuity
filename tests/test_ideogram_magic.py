@@ -40,17 +40,17 @@ def raises(label, call, error, *fragments):
 
 # ---- the request ------------------------------------------------------------
 
-system = magic.system_prompt()
+system = magic.system_prompt(())
 check("the system prompt is the vendored [SYSTEM] block",
       (system.startswith("You convert a natural-language user idea"), "[USER]" in system),
       (True, False))
-message = magic.user_message("a fox on a ridge", "16:9")
+message = magic.user_message("a fox on a ridge", "16:9", ())
 check("the user turn is upstream's template, filled in",
       message, "TARGET IMAGE ASPECT RATIO: 16:9 (width:height).\nUser idea: a fox on a ridge")
 check("a bare ratio is written as W:H", magic.aspect_ratio("1.5"), "3:2")
 check("the groups note is said only when there is a group",
       (magic.GROUPS_NOTE in message,
-       magic.GROUPS_NOTE in magic.user_message("a fox at {dawn|dusk}", "1:1")),
+       magic.GROUPS_NOTE in magic.user_message("a fox at {dawn|dusk}", "1:1", ())),
       (False, True))
 
 

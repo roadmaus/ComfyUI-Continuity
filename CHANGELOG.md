@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Flux 3 Klein's Refine is BFL's own prompt upsampler, and so is the chat's
+magic prompt on it.** Klein was trained on full scene captions and BFL runs an
+upsampler in front of every request. They publish the system prompts for
+running any vision model in its place, vendored here under Apache-2.0. Refine
+on a Flux 3 Klein still now runs them on the refiner's model: `t2i` for a
+still from words, `i2i` with the pictures in view for an edit or a
+reference render, the request's `@handles` written as BFL's `image N`. The
+reply is the caption as written, with no JSON contract around it. In the chat,
+the *Magic prompt* switch runs the same pass on every still drawn on Flux 3
+Klein, and the still's pictures go with it, which the magic pass never sent
+before.
+
 **Krea 2 Raw renders a picture again instead of coloured grain.** A
 text-to-image render's negative was the prompt zeroed out on both checkpoints.
 That is what Turbo's template does, and at cfg 1 it is never read. Raw runs

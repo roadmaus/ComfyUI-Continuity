@@ -47,6 +47,7 @@ import json
 import logging
 
 from aiohttp import web
+from PIL import Image, ImageOps
 
 from server import PromptServer
 
@@ -468,7 +469,7 @@ def _with_caption(action, caption, piece, still):
                                "would render on does not read one.")
     tidied = module.tidy(caption) if isinstance(caption, str) else None
     if tidied is None:
-        raise chat.ActionError("that action's caption is not a JSON object.")
+        raise chat.ActionError("that action's caption is not one its family reads.")
     return {**action, "caption": tidied}
 
 
@@ -644,25 +645,30 @@ def _magic(block, action, ledger, rail, cast):
     A second failure refuses the turn in that sentence rather than rendering
     the plain wrap the switch was thrown to replace.
 
-    The rail is the turn's own. A family with a magic prompt is sent no
-    picture and is never an edit family, so a still drawn on one is drawn on
-    the rail's still family and the rail already describes it.
+    The still's pictures go with it, in the order the render cites them —
+    on Ideogram there never are any; on Flux 3 Klein the caption is written
+    against them, as BFL's upsampler is.
     """
     module = _magic_module(action.get("arch"))
     if module is None:
         return None
     try:
         prose = chat.still_prose(action, ledger, rail, cast)
+        refs = chat.still_piece(action, ledger, rail, None, cast)["refs"]
     except chat.ActionError:
         # The render refuses this still in these same words, under the
         # model's own line; there is no caption to write for it.
         return None
-    ask, _look = refine_routes._backend(block)
+    ask, look = refine_routes._backend(block)
     keep = bool(block.get("magic_bboxes"))
-    message = module.user_message(prose, chat.still_aspect(action, rail))
+    pictures = tuple(ref["handle"] for ref in refs)
+    images = [look(ImageOps.exif_transpose(Image.open(media.resolve(ref["filename"]))))
+              for ref in refs]
+    system = module.system_prompt(pictures)
+    message = module.user_message(prose, chat.still_aspect(action, rail), pictures)
 
     def once(text):
-        return ask(block.get("model") or "", module.system_prompt(), text, [],
+        return ask(block.get("model") or "", system, text, images,
                    temperature=module.TEMPERATURE, seed=block.get("seed", -1),
                    max_tokens=refine.reply_tokens(block.get("max_tokens")))
 
