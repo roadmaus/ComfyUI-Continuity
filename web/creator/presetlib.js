@@ -1188,10 +1188,14 @@ class PresetLibrary {
     // is still selected.
     if (this.selected?.id !== row.id) return;
     this.body = body;
-    // Everything applicable, ticked. "Everything" is the right default; being
-    // able to take part of it is what stops the library going unused the moment
-    // you have a prompt worth keeping.
-    this.keys = new Set(Object.keys(body ?? {}).filter((key) => this.crossable(key, row).ok));
+    // Everything applicable, ticked — less whatever was last unticked, on any
+    // preset: the ticks are remembered across the library rather than per
+    // card (`P.sectionsOff`). "Everything" is the right default; being able to
+    // take part of it is what stops the library going unused the moment you
+    // have a prompt worth keeping.
+    const off = P.sectionsOff();
+    this.keys = new Set(Object.keys(body ?? {})
+      .filter((key) => this.crossable(key, row).ok && !off.has(key)));
     this.renderInspector();
   }
 
@@ -2349,6 +2353,7 @@ class PresetLibrary {
         title: cross.ok ? "" : t(cross.why, cross.params),
         onclick: () => {
           if (on) this.keys.delete(key); else this.keys.add(key);
+          P.rememberSection(key, !on);
           this.renderInspector();
         },
       }, [
@@ -2389,7 +2394,9 @@ class PresetLibrary {
       }
       case "prompt": {
         const text = (body.prompt?.prompt ?? "").trim();
-        return text ? text.slice(0, 90) : t("empty");
+        const shown = text ? text.slice(0, 90) : t("empty");
+        // The rewrite is part of what lands, so the row says it is there.
+        return body.prompt?.refined?.body ? `${shown} · ${t("refined")}` : shown;
       }
       case "loras": {
         const count = (body.loras ?? []).length;
