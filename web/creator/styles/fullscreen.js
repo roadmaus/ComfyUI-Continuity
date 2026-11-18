@@ -723,6 +723,15 @@ export const css = `
 }
 .mmc-fs-slate-door:hover { background: var(--mmc-scrim-3); border-color: var(--mmc-accent); }
 .mmc-fs-slate-door:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+/* Under each text, quiet until wanted: the words are what the back is for. */
+.mmc-fs-slate-copies { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.mmc-fs-slate-copy {
+  font: inherit; font-size: calc(11px * var(--mmc-type)); cursor: pointer;
+  padding: 3px 9px; border-radius: 999px; background: none;
+  color: var(--mmc-dim); border: 1px solid var(--mmc-line);
+}
+.mmc-fs-slate-copy:hover { color: var(--mmc-accent); border-color: var(--mmc-accent); }
+.mmc-fs-slate-copy:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-fs-slate-note {
   min-width: 0; color: var(--mmc-off); font-size: calc(11px * var(--mmc-type));
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;

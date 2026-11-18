@@ -154,6 +154,39 @@ const REVIEW_FADE = { duration: 160, easing: "ease-out" };
 const reduced = () =>
   globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
 
+/** Put text on the clipboard. -> whether it got there.
+ *
+ *  `navigator.clipboard` only exists on a secure origin, and a ComfyUI reached
+ *  over the LAN by address is not one — so the old selection-based copy stands
+ *  behind it, which is what still works there. */
+async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch { /* no clipboard API here, or it was refused; try the other way */ }
+  const field = el("textarea", { style: { position: "fixed", opacity: "0", top: "0", left: "0" } });
+  field.value = text;
+  document.body.appendChild(field);
+  field.select();
+  let done = false;
+  try { done = document.execCommand("copy"); } catch { /* refused as well */ }
+  field.remove();
+  return done;
+}
+
+/** A button that copies one text and says, on its own face, that it did. */
+function copyDoor(label, text) {
+  const button = el("button", {
+    class: "mmc-fs-slate-copy", text: label,
+    onclick: async () => {
+      const done = await copyText(text);
+      button.textContent = done ? t("Copied") : t("Could not copy");
+      setTimeout(() => { button.textContent = label; }, 1400);
+    },
+  });
+  return button;
+}
+
 /** The transform that puts a box laid out at `to` over the rectangle `from`.
  *  Both boxes hold the same picture at the same aspect, so the two scales agree
  *  to within a border and nothing is stretched on the way. */
@@ -1518,6 +1551,12 @@ class Fullscreen {
           el("summary", { text: t("Refined") }),
           el("pre", { text: rewrite }),
         ])] : []),
+        // Each text on its own button, named for which one it is: the typed
+        // prompt goes back in a prompt box, the rewrite goes anywhere else.
+        el("div", { class: "mmc-fs-slate-copies" }, [
+          ...(typed ? [copyDoor(t("Copy prompt"), typed)] : []),
+          ...(rewrite ? [copyDoor(t("Copy refined"), rewrite)] : []),
+        ]),
       ];
     }).flat();
     const prompt = el("div", { class: "mmc-ch-prompt" },
