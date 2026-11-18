@@ -155,6 +155,7 @@ for a render in plain words.
 | Ideogram 4.0 | stills | [Comfy-Org/Ideogram-4](https://huggingface.co/Comfy-Org/Ideogram-4) |
 | Qwen Image Edit | stills, edited from a picture | [Comfy-Org/Qwen-Image-Edit_ComfyUI](https://huggingface.co/Comfy-Org/Qwen-Image-Edit_ComfyUI) |
 | Flux 2 Klein | stills, edited from a picture | [Black Forest Labs](https://huggingface.co/black-forest-labs) |
+| Flux 3 Klein | stills, drawn or edited from pictures | [black-forest-labs/flux-3-image-klein](https://huggingface.co/black-forest-labs/flux-3-image-klein) |
 | Qwen Image 2.1 | stills, drawn or edited from pictures | [Comfy-Org/Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1) |
 | MOSS-Image | stills, from prose only | [Comfy-Org/MOSS-Image](https://huggingface.co/Comfy-Org/MOSS-Image) |
 | MiniMax H3 Image | stills, drawn, edited or inpainted | [Comfy-Org/MiniMax-H3-Image](https://huggingface.co/Comfy-Org/MiniMax-H3-Image) |

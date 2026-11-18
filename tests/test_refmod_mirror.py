@@ -416,6 +416,7 @@ check("every family a member can be sent to is listed, the piece's first, with w
       [["h3", True, True, True, True, False, True], ["ltx25", False, True, True, False, False, False],
        ["krea2", False, False, True, False, True, False], ["ideogram4", False, False, False, False, False, False],
        ["qwenedit", False, False, True, False, False, False], ["flux2klein", False, False, True, False, False, True],
+       ["flux3klein", False, False, True, False, False, False],
        ["qwen21", False, False, True, False, False, False],
        ["moss", False, False, False, False, False, False],
        # MiniMax H3 Image takes pictures and keeps saved references in its own space.

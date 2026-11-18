@@ -13,6 +13,7 @@ same node on all of them; the model pill picks which one a render lands on.
 | Ideogram 4.0 | stills | none, prose only |
 | Qwen Image Edit | stills | up to three; click the first to edit it in place |
 | Flux 2 Klein | stills | up to three; click the first to edit it in place |
+| Flux 3 Klein | stills | up to ten; click the first to edit it in place |
 | Qwen Image 2.1 | stills | up to ten; click the first to edit it in place |
 | MOSS-Image | stills | none, prose only |
 | MiniMax H3 Image | stills | as many as you like (core's ceiling is 100); click the first to edit it in place, or mask it to inpaint |
@@ -122,6 +123,23 @@ Stills, drawn from prose or edited from a picture, natively.
   this family.
 - The base checkpoint runs around 20 steps at cfg 5. There is no scheduler
   control: the schedule is a function of the step count and the canvas.
+
+## Flux 3 Klein
+
+Stills, drawn from prose or edited from pictures, natively.
+
+- Black Forest Labs' FLUX 3 Image Klein: a 5.6B DiT behind a Qwen3-VL 4B
+  text encoder and the Flux 2 VAE, under the FLUX Kommunity License
+  (non-commercial, with a commercial-output exception for small users; read it).
+- Same arrangement as Flux 2 Klein: pictures are references, and the first
+  one's label switches it to being edited in place. Up to ten pictures.
+- The checkpoint is the distilled one: 16 steps at cfg 1, euler/simple. There
+  is no turbo pill, because it is already the fast model. Klein Base loads in
+  the same slot if you raise the row to about 50 steps and cfg 3.5.
+- **Write full scene captions.** The model was trained on them, and a short
+  prompt or a one-line edit instruction gives generic output. BFL's prompt
+  upsampler is not wired in yet.
+- Needs a ComfyUI from 15 October 2026 or newer.
 
 ## Qwen Image 2.1
 
@@ -272,7 +290,7 @@ your shots.
 
 ## Editing a picture you just rendered
 
-On the edit families (Qwen Image Edit, Flux 2 Klein, Qwen Image 2.1, MiniMax
+On the edit families (Qwen Image Edit, Flux 2 Klein, Flux 3 Klein, Qwen Image 2.1, MiniMax
 H3 Image, MiniMax H3 Still) the
 seed the sampler uses is derived from the seed widget *and* the attached
 pictures. Reusing the seed that made a picture would otherwise start the edit

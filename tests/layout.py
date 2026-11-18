@@ -72,6 +72,7 @@ MODULES = {
     "flux2klein_still": "families.flux2klein.still",
     "qwen21_still": "families.qwen21.still",
     "moss_still": "families.moss.still",
+    "flux3klein_still": "families.flux3klein.still",
     "h3_declare": "families.h3.declare",
     "guidelora": "families.h3.guidelora",
     "h3_models": "families.h3.models",

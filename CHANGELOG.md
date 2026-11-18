@@ -6,6 +6,19 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Flux 3 Klein arrives as a still family: edits from an instruction, draws
+from prose, and combines up to ten pictures.** BFL's FLUX 3 Image Klein on the
+pre-stage's model pill as `flux3klein`, built on core's native support
+(Comfy-Org/ComfyUI#17064): the 5.6B distilled flow map, Qwen3-VL 4B read as
+text through CLIPLoader type `flux3`, and the Flux 2 VAE. Pictures are
+reference latents chained onto both conditionings, as on Flux 2 Klein, and
+the first can be the one edited in place. The row is the flow map's own: 16
+steps at cfg 1 on euler/simple. There is no shift or scheduler node, because
+core carries the shift and the flow map reads each step's target off the
+sampler's sigmas. There is one checkpoint and no turbo pill; Klein Base loads
+in the same slot with the row raised by hand. BFL's prompt upsampler is not
+wired in yet, so prompts reach the model as written.
+
 **MiniMax H3 Still: stills from the H3 video model are back, as a model of
 their own beside MiniMax H3 Image.** The image model replaced the old
 one-frame branch, but the video model draws a different picture and is the

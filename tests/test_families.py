@@ -21,7 +21,7 @@ from harness import FAILURES, check, passed
 _pkg = layout.load("canvas", "accel", "sampling", "contextir", "compile",
                    "compile_image", "models", "registry", "manifest",
                    "h3image_still", "h3still_still", "krea2_still", "ideogram4_still", "flux2klein_still",
-                   "qwen21_still", "moss_still", "visionweights",
+                   "qwen21_still", "moss_still", "flux3klein_still", "visionweights",
                    "grammar", "h3_declare", "h3_models", "h3_grammar",
                    "ltx25_declare",
                    "ltx25_models", "ltx25_sampling")
@@ -42,6 +42,7 @@ i4 = _pkg.ideogram4_still
 kl = _pkg.flux2klein_still
 q21 = _pkg.qwen21_still
 ms = _pkg.moss_still
+f3 = _pkg.flux3klein_still
 lx = _pkg.ltx25_models
 lxs = _pkg.ltx25_sampling
 
@@ -764,5 +765,25 @@ check("...and engages with one", _h3s_refusal(
 check("a tenth picture is refused in the family's words",
       h3s.REFS_LIMIT_REASON in (_h3s_refusal(
           {"refs": [{"filename": f"{n}.png"} for n in range(10)]}) or ""), True)
+
+# ---- Flux 3 Klein -------------------------------------------------------------
+
+klein3 = manifest.describe("flux3klein")
+k3widgets = {w["id"]: w for w in klein3["widgets"]}
+for name in ("steps", "cfg", "sampler_name", "scheduler"):
+    check(f"flux3klein {name} default is the flow map's row",
+          k3widgets[name]["default"], f3.KLEIN3[name])
+check("flux3klein weight slots are the family's fields — one DiT, no turbo file",
+      [w["id"] for w in klein3["weights"]], ["model", "clip", "vae"])
+check("flux3klein decodes with the Flux 2 VAE and loads its encoder as flux3",
+      (f3.VAE_KIND, f3.CLIP_TYPE), ("flux2", "flux3"))
+check("flux3klein has no turbo pill and reads up to ten pictures natively",
+      ("turbo" in klein3["capabilities"], klein3["capabilities"]["refs"]["needs_lora"],
+       klein3["capabilities"]["refs"]["edits_first"], klein3["prompt"]["max_refs"],
+       f3.REFS_NEED_VISION), (False, False, True, 10, False))
+check("flux3klein is a still family on the pill, beside Flux 2 Klein",
+      (registry.STILL_ARCHES.get("flux3klein"), "flux3klein" in ci.ARCHES,
+       registry.FAMILIES.index("flux3klein") - registry.FAMILIES.index("flux2klein")),
+      ("flux3klein", True, 1))
 
 passed("the registry serves every family and the manifests hold their sources")

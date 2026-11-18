@@ -1925,3 +1925,81 @@ check("...with the VAE on the encoder and its name beside it",
 check("the LoRAs go to the segment's stack, not through core's loader",
       (ref_request["loras"], "LoraLoaderModelOnly" in ref),
       ([{"name": "photo.safetensors", "strength": 1.5}], False))
+
+# ---- Flux 3 Klein -------------------------------------------------------------
+#
+# The distilled flow map on stock nodes: an encode, a zeroed negative at cfg 1,
+# references chained onto both conditionings the way Flux 2 Klein's are, and
+# `KSampler` on euler/simple — core carries the shift, and the flow map reads
+# each step's target off the sampler's sigmas, so no scheduler or shift node.
+# Only on a core that has the model (Comfy-Org/ComfyUI#17064).
+
+f3 = importlib.import_module(f"{PACKAGE}.creator.families.flux3klein.still")
+MODELS["flux3klein"] = {
+    "model": "flux-3-image-klein-fp8.safetensors",
+    "clip": "qwen3vl_4b_bf16.safetensors",
+    "vae": "flux2-vae.safetensors",
+}
+F3_WEIGHTS = ri.ImageWeights(arch="flux3klein", files=MODELS["flux3klein"])
+
+
+def klein3_graph(data=None, **row):
+    settings = dict(seed=11, **f3.KLEIN3)
+    settings.update(row)
+    blob3 = {"arch": "flux3klein", "prompt": "a red room", "aspect": "16:9",
+             "short_edge": 1024, "refs": [], "loras": []}
+    blob3.update(data or {})
+    payload = ci.compile_prestage(blob3, f3, lambda name: (1920, 1080))
+    return payload, by_class(ri.emit(payload, F3_WEIGHTS, sampling_mod.Sampling(**settings),
+                                     NODE_ID, f3).finalize())
+
+
+if "flux3" not in _clip_types:
+    print("Flux 3 Klein section skipped: this core predates it")
+else:
+    _, f3t2i = klein3_graph()
+    check("flux3klein loads its encoder typed flux3 and samples on the Flux 2 latent",
+          (f3t2i["UNETLoader"][0][1]["unet_name"], f3t2i["CLIPLoader"][0][1]["type"],
+           "EmptyFlux2LatentImage" in f3t2i),
+          (MODELS["flux3klein"]["model"], "flux3", True))
+    f3_sampler = f3t2i["KSampler"][0][1]
+    check("flux3klein samples the flow map's row, with no shift or scheduler node",
+          (f3_sampler["steps"], f3_sampler["cfg"], f3_sampler["sampler_name"],
+           f3_sampler["scheduler"], f3_sampler["denoise"],
+           "ModelSamplingFlux" in f3t2i, "Flux2Scheduler" in f3t2i),
+          (16, 1.0, "euler", "simple", 1.0, False, False))
+    check("at cfg 1 the negative is a zeroed copy, not a second encode",
+          (len(f3t2i["CLIPTextEncode"]), "ConditioningZeroOut" in f3t2i), (1, True))
+    _, f3base = klein3_graph(steps=50, cfg=3.5)
+    check("at real CFG (Klein Base) the negative is the empty prompt, encoded",
+          sorted(n[1]["text"] for n in f3base["CLIPTextEncode"]), ["", "a red room"])
+
+    f3e_payload, f3e = klein3_graph({
+        "prompt": "put @img-2 on the table", "edit_first": True,
+        "refs": [{"filename": "room.png", "handle": "img-1"},
+                 {"filename": "cup.png", "handle": "img-2"}]})
+    check("flux3klein encodes each picture once and chains it onto both branches",
+          (len(f3e["VAEEncode"]), len(f3e["ReferenceLatent"])), (2, 4))
+    f3e_sampler = f3e["KSampler"][0][1]
+    f3e_refs = {node_id for node_id, _ in f3e["ReferenceLatent"]}
+    check("...and the sampler reads both ends of the chain",
+          (f3e_sampler["positive"][0] in f3e_refs, f3e_sampler["negative"][0] in f3e_refs),
+          (True, True))
+    check("the edited picture sets the canvas and its latent stays empty",
+          (f3e_payload.width > f3e_payload.height, f3e_sampler["latent_image"][0]
+           == f3e["EmptyFlux2LatentImage"][0][0]), (True, True))
+    check("a citation becomes the slot's shared label",
+          [n[1]["text"] for n in f3e["CLIPTextEncode"]], ["put Picture 2 on the table"])
+    _, f3i2i = klein3_graph({"init": {"filename": "a.png", "denoise": 0.6}})
+    check("an init below full denoise is encoded and sampled at its denoise",
+          (f3i2i["KSampler"][0][1]["denoise"], "EmptyFlux2LatentImage" in f3i2i), (0.6, False))
+    ten = [{"filename": f"{n}.png", "handle": f"img-{n + 1}"} for n in range(10)]
+    _, f3ten = klein3_graph({"refs": ten})
+    check("ten pictures — BFL's own limit — all reach the model",
+          len(f3ten["VAEEncode"]), 10)
+    expect_error("an eleventh is refused in the family's words",
+                 lambda: klein3_graph({"refs": ten + [{"filename": "x.png", "handle": "img-11"}]}),
+                 f3.REFS_LIMIT_REASON)
+    _, f3seeded = klein3_graph({"refs": ["room.png"]}, seed=11)
+    check("flux3klein samples an edit on the derived seed",
+          f3seeded["KSampler"][0][1]["seed"], derived(11, ["room.png"]))

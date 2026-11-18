@@ -205,6 +205,24 @@ two sizes: 4B (Apache 2.0) or 9B (non-commercial).
 The VAE is the same file Ideogram loads. The turbo pill swaps in the distilled
 checkpoint; there is no turbo LoRA for this family.
 
+## Flux 3 Klein (stills, drawn or edited from pictures)
+
+Published by Black Forest Labs as
+[black-forest-labs/flux-3-image-klein](https://huggingface.co/black-forest-labs/flux-3-image-klein)
+(gated: accept the license on the page first).
+
+| Slot | File | Folder |
+|---|---|---|
+| Checkpoint | `model.safetensors` (BF16), or `variants/fp8r/` / `variants/nvfp4/` | `diffusion_models` |
+| Text encoder | `qwen3vl_4b` (the same file Krea 2 loads) | `text_encoders` |
+| VAE | `flux2-vae.safetensors` | `vae` |
+
+BFL names the checkpoint `model.safetensors`. Rename it to something like
+`flux-3-image-klein-bf16.safetensors` so it can be told apart and the picker
+finds it. BFL's `text_encoder/` folder and `ae.safetensors` are the stock
+Qwen3-VL 4B Instruct and the Flux 2 VAE, so the single-file encoder Krea 2
+uses and `flux2-vae.safetensors` work.
+
 ## Qwen Image 2.1 (stills, drawn or edited from pictures)
 
 Published by [Comfy-Org/Qwen-Image-2.1](https://huggingface.co/Comfy-Org/Qwen-Image-2.1)

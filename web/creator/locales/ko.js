@@ -3386,4 +3386,8 @@ export const ko = {
   "MiniMax H3 Still — the H3 video model drawing one frame. Its own look, and every MiniMax H3 LoRA works on it. Best from about 3 MP up; 50 steps, or 20 with the Turbo LoRA.": "MiniMax H3 Still — H3 비디오 모델로 한 프레임을 그립니다. 고유한 화풍이 있고, MiniMax H3용 LoRA가 모두 작동합니다. 약 3 MP 이상에서 가장 좋습니다. 50스텝, Turbo LoRA를 쓰면 20스텝.",
   "A MiniMax H3 video checkpoint — FL2VA, the one a shot renders on. It reads reference pictures too; Ref2VA also works here.": "MiniMax H3 비디오 체크포인트 — 샷을 렌더링하는 FL2VA. 참조 이미지도 읽습니다. Ref2VA도 여기서 작동합니다.",
   "The MiniMax H3 video VAE — the file a shot is decoded with. Not the MiniMax H3 Image VAE.": "MiniMax H3 비디오 VAE — 샷을 디코딩하는 파일입니다. MiniMax H3 Image VAE가 아닙니다.",
+  "FLUX 3 Image Klein — BFL's 5.6B image editor (FLUX Kommunity License). Edits from an instruction, draws from prose, and combines up to ten pictures. Write full scene captions: a short prompt gives generic output.": "FLUX 3 Image Klein — BFL의 5.6B 이미지 편집 모델(FLUX Kommunity License). 지시로 편집하고, 텍스트로 그리고, 최대 10장의 그림을 합성합니다. 장면 전체를 묘사하는 캡션을 쓰세요. 짧은 프롬프트는 평범한 결과를 냅니다.",
+  "FLUX 3 Image Klein — the distilled 5.6B DiT, 16 steps at cfg 1. BF16, FP8 or NVFP4. Klein Base loads here too, at ~50 steps and cfg 3.5.": "FLUX 3 Image Klein — 증류된 5.6B DiT, cfg 1에서 16스텝. BF16, FP8 또는 NVFP4. Klein Base도 여기서 로드됩니다(약 50스텝, cfg 3.5).",
+  "Qwen3-VL 4B Instruct, loaded as CLIPLoader type 'flux3' — the text_encoder folder of BFL's repository, or a single-file repack of it.": "Qwen3-VL 4B Instruct, CLIPLoader 타입 'flux3'로 로드 — BFL 저장소의 text_encoder 폴더 또는 그 단일 파일 버전.",
+  "The Flux 2 VAE — BFL's ae.safetensors for Klein 3, and the same file Flux 2 Klein loads.": "Flux 2 VAE — BFL이 Klein 3용으로 배포하는 ae.safetensors이며, Flux 2 Klein이 로드하는 것과 같은 파일입니다.",
 };
