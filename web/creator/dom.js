@@ -1,6 +1,8 @@
 // Tiny DOM helpers and the icon set. No framework — the node body is small
 // enough that hand-built elements stay clearer than a template layer.
 
+import { t } from "./i18n.js";
+
 export function el(tag, props = {}, children = []) {
   const node = document.createElement(tag);
   for (const [key, value] of Object.entries(props)) {
@@ -510,4 +512,37 @@ export function placeNear(popover, anchor, { above = true } = {}) {
     place();
   });
   observer.observe(popover);
+}
+
+/** Put text on the clipboard. -> whether it got there.
+ *
+ *  `navigator.clipboard` only exists on a secure origin, and a ComfyUI reached
+ *  over the LAN by address is not one — so the old selection-based copy stands
+ *  behind it, which is what still works there. */
+export async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch { /* no clipboard API here, or it was refused; try the other way */ }
+  const field = el("textarea", { style: { position: "fixed", opacity: "0", top: "0", left: "0" } });
+  field.value = text;
+  document.body.appendChild(field);
+  field.select();
+  let done = false;
+  try { done = document.execCommand("copy"); } catch { /* refused as well */ }
+  field.remove();
+  return done;
+}
+
+/** A button that copies one text and says, on its own face, that it did. */
+export function copyDoor(label, text) {
+  const button = el("button", {
+    class: "mmc-copy-door", text: label,
+    onclick: async () => {
+      const done = await copyText(text);
+      button.textContent = done ? t("Copied") : t("Could not copy");
+      setTimeout(() => { button.textContent = label; }, 1400);
+    },
+  });
+  return button;
 }

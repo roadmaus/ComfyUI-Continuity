@@ -1321,7 +1321,15 @@ export class PreStageEditor {
           onclick: () => this.replaceRef(ref),
         },
       ),
-      el("span", { class: "mmc-asset-handle", text: `@${ref.handle}` }),
+      // The name is the door, as on the shot's chips: click it, get the card
+      // that holds everything about this picture. See `openReferenceSheet`.
+      el("button", {
+        class: "mmc-asset-handle mmc-asset-door",
+        title: t("Open @{handle} — what it is a reference to, and everything else about it",
+                 { handle: ref.handle }),
+        text: `@${ref.handle}`,
+        onclick: (event) => this.openReferenceSheet(event.currentTarget, ref),
+      }),
       this.cropMark(ref),
       // What this picture is *for*, which is not the same on every arch: a
       // style reference on Krea 2, and on an edit family the first slot is the
@@ -1356,6 +1364,111 @@ export class PreStageEditor {
         },
       }),
     ]);
+  }
+
+  /**
+   * Everything about one attached picture, opened from its name — the card the
+   * shot's chips open (`CreatorEditor.openReferenceSheet`), holding the rows a
+   * still has an answer to.
+   *
+   * Fewer rows than the shot's, and that is the model rather than an
+   * omission: a still's picture has no soundtrack and no trim, and no family
+   * here encodes a reference at a size of its choosing, so the shot's "detail"
+   * row is a note that says so instead of a switch that would do nothing.
+   */
+  openReferenceSheet(anchor, ref) {
+    const pop = el("div", { class: "mmc-pop mmc-refsheet" });
+    const opens = (label, title, run, danger = false) => el("button", {
+      class: `mmc-refsheet-go${danger ? " danger" : ""}`,
+      title, text: label,
+      onclick: () => { close(); run(); },
+    });
+    // Rebuilt after every pick: a commit redraws the chips, and the marks in
+    // here are the only state left to keep true. See the shot's card.
+    const paint = () => {
+      const state = this.state;
+      const refs = S.PRESTAGE_REFS[state.arch] ?? {};
+      const slot = S.preStageCountedRefs(state).indexOf(ref);
+      const editable = S.preStageEditable(state);
+      const cited = refs.edit ? t("image {n}", { n: slot + 1 })
+        : editable ? t("Picture {n}", { n: slot + 1 })
+        : t(refs.noun?.[0] ?? "style reference");
+      const rows = [];
+      // The one decision a still's picture carries: cited beside the sentence,
+      // or the picture changed in place. Offered where the chip offers it —
+      // the first plain picture on a family that edits, with no init image.
+      if (editable && ref === S.preStageEditableRef(state) && !state.init) {
+        const editing = S.preStageEditsFirst(state);
+        const pick = (key) => {
+          if ((key === "editing") === editing) return;
+          state.edit_first = key === "editing";
+          if (state.edit_first) state.refs = [ref, ...state.refs.filter((r) => r !== ref)];
+          this.commit();
+          paint();
+        };
+        rows.push(el("div", { class: "mmc-refsheet-row" }, [
+          el("span", {
+            class: "mmc-refsheet-name", text: t("attached as"),
+            title: t("A reference is read beside the sentence and the aspect pill sets the "
+                   + "canvas. Editing changes this picture in place: the canvas follows its "
+                   + "shape and the render is fitted to it."),
+          }),
+          el("div", { class: "mmc-refsheet-opts" },
+            [["reference", cited], ["editing", t("editing")]].map(([key, label]) => el("button", {
+              class: "mmc-refsheet-opt",
+              "aria-checked": String((key === "editing") === editing),
+              onclick: () => pick(key),
+            }, [el("span", { text: label })]))),
+        ]));
+      } else {
+        rows.push(el("div", { class: "mmc-refsheet-row mmc-refsheet-len" }, [
+          el("span", { class: "mmc-refsheet-name", text: t("attached as") }),
+          el("span", { class: "mmc-refsheet-note", text: cited }),
+        ]));
+      }
+      rows.push(el("div", { class: "mmc-refsheet-row mmc-refsheet-len" }, [
+        el("span", { class: "mmc-refsheet-name", text: t("detail") }),
+        el("span", { class: "mmc-refsheet-note", text:
+          t("Read at the size {arch} takes its pictures at — a still has no match or "
+          + "max to choose between.", { arch: S.PRESTAGE_ARCH_LABEL[state.arch] }) }),
+      ]));
+
+      const said = [cropLabel(S.cropOf(ref)), ref.panels?.[0]?.cut ? t("cut out") : ""]
+        .filter(Boolean);
+      pop.replaceChildren(
+        el("div", { class: "mmc-pop-title mmc-refsheet-head" }, [
+          el("span", { class: `mmc-refsheet-handle mmc-tag-${S.tagIndex(ref.handle)}`,
+                       text: `@${ref.handle}` }),
+          el("span", { class: "mmc-refsheet-file", text: ref.filename }),
+        ]),
+        ...rows,
+        el("div", { class: "mmc-refsheet-foot" }, [
+          opens(said.join(" · ") || t("Edit…"),
+                t("Crop this picture to the part that is the reference, turn or mirror "
+                + "it, and lift the subject off its background. The file stays whole; "
+                + "what is set here is kept on @{handle} and applied when the render "
+                + "reads it.", { handle: ref.handle }),
+                () => this.cropChip(ref)),
+          opens(t("Cite"),
+                t("Write @{handle} into the prompt, where the sentence can say what to "
+                + "do with it.", { handle: ref.handle }),
+                () => this.citeName(ref.handle)),
+          opens(t("Swap file"),
+                t("Swap the file behind @{handle} — the handle stays, so the prompt still fits.",
+                  { handle: ref.handle }),
+                () => this.replaceRef(ref)),
+          opens(t("Remove"), t("Remove @{handle}", { handle: ref.handle }), () => {
+            this.state.refs = this.state.refs.filter((r) => r.handle !== ref.handle);
+            this.commit();
+          }, true),
+        ]),
+      );
+    };
+
+    paint();
+    document.body.appendChild(pop);
+    placeNear(pop, anchor);
+    const close = dismissable(pop);
   }
 
   renderLoras() {

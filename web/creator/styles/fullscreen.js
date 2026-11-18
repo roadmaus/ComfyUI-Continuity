@@ -689,6 +689,45 @@ export const css = `
 .mmc-fs-review-back:hover { background: var(--mmc-scrim-3); }
 .mmc-fs-review-back:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 
+/* The one control on a take: top right, on a scrim, turns the card over to
+   what made it. The chat's own button, drawn here because the take is this
+   window's card rather than the room's. */
+.mmc-fs-flip {
+  position: absolute; top: 10px; right: 10px; z-index: 3;
+  width: 30px; height: 30px; border-radius: 50%; padding: 0; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--mmc-scrim-2); border: 1px solid var(--mmc-edge); color: var(--mmc-text);
+  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+}
+.mmc-fs-flip:hover { color: var(--mmc-accent); border-color: var(--mmc-accent); }
+.mmc-fs-flip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+.mmc-fs-flip svg { stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+/* The back: the whole card, readout and all, so a turned take is one surface.
+   Laid out by the chat's slate rules; only where it sits is said here. */
+.mmc-fs-slate { position: absolute; inset: 0; z-index: 2; display: none; height: auto; }
+.mmc-fs-review-card.turned .mmc-fs-slate { display: flex; }
+/* A still's readout floats over its picture, and would float over the back
+   as well. The turn button is the way round again, so nothing is stranded. */
+.mmc-fs-review-card.turned > .mmc-stage-readout { visibility: hidden; }
+/* A piece has more numbers than a small plate has room for. */
+.mmc-fs-slate .mmc-ch-facts { max-height: 45%; overflow: auto; overscroll-behavior: contain; }
+.mmc-fs-slate-doors {
+  flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px;
+  padding: 10px 16px 12px; border-top: 1px solid var(--mmc-line);
+}
+.mmc-fs-slate-door {
+  font: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
+  padding: 5px 11px; border-radius: 999px;
+  background: none; color: var(--mmc-accent);
+  border: 1px solid color-mix(in srgb, var(--mmc-accent) 45%, transparent);
+}
+.mmc-fs-slate-door:hover { background: var(--mmc-scrim-3); border-color: var(--mmc-accent); }
+.mmc-fs-slate-door:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+.mmc-fs-slate-note {
+  min-width: 0; color: var(--mmc-off); font-size: calc(11px * var(--mmc-type));
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mmc-fs-review, .mmc-fs-review-media { transition: none; }
 }

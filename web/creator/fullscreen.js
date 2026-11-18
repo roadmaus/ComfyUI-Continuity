@@ -55,8 +55,8 @@
 import { app } from "../../../scripts/app.js";
 import { api } from "../../../scripts/api.js";
 import { watch as watchQueue } from "./queue.js";
-import { viewUrl } from "./api.js";
-import { el, icon, mark, spinner } from "./dom.js";
+import { viewUrl, renderMeta } from "./api.js";
+import { el, icon, mark, spinner, copyDoor } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
 import { openBlockout } from "./blockout.js";
 import { openControl } from "./control.js";
@@ -66,6 +66,7 @@ import { openForge } from "./forge.js";
 import { openChat } from "./chat.js";
 import { openLoupe } from "./loupe.js";
 import { openPresetLibrary } from "./presetlib.js";
+import * as P from "./presets.js";
 import { elapsed, stageSource, timingChips, watchFooterSize } from "./stage.js";
 import { t } from "./i18n.js";
 import { noteFullscreen } from "./styles.js";
@@ -1367,6 +1368,12 @@ class Fullscreen {
       class: "mmc-fs-review-card", "data-media": result.isImage ? "image" : "video",
     }, [
       media,
+      // The one control on the picture, as on a card in the chat: it turns
+      // the take over to what made it. See `turnReview`.
+      el("button", {
+        class: "mmc-fs-flip", "aria-pressed": "false", title: t("What made this"),
+        onclick: () => this.turnReview(),
+      }, [icon("flip", 15)]),
       // Same footer as the live video, outside the native seek controls.
       // The result carries its own clocks; reviewing it during a later queue
       // must not borrow that queue's timing.
@@ -1413,6 +1420,201 @@ class Fullscreen {
         }
       }, 1000);
     }
+  }
+
+  // ---- the back of a take ---------------------------------------------------
+
+  /**
+   * Turn the take on the picture over, or back.
+   *
+   * The chat's cards have always had a back — the prompt and the numbers a
+   * render was made from — and a take on the lip is the same object: a
+   * finished render you are deciding about. What the back adds here is the
+   * way home. A card in the chat belongs to a conversation; a take on the lip
+   * belongs to a node, so its back can put what made it back on that node.
+   *
+   * Half a turn out, the faces swapped while the card is edge-on, half a turn
+   * in. The slate is built on the first turn rather than with the card: it
+   * costs a request, and most takes are looked at and never turned.
+   */
+  turnReview() {
+    const state = this.reviewing;
+    const card = this.reviewCard;
+    if (!state || !card || state.turning) return;
+    state.turned = !state.turned;
+    if (state.turned && !state.slate) {
+      state.slate = this.slate(state.result, state.media);
+      card.appendChild(state.slate);
+    }
+    const swap = () => {
+      card.classList.toggle("turned", state.turned);
+      const button = card.querySelector(".mmc-fs-flip");
+      button.setAttribute("aria-pressed", String(state.turned));
+      button.title = state.turned ? t("Back to the picture") : t("What made this");
+      button.replaceChildren(icon(state.turned ? "image" : "flip", 15));
+      // A clip does not go on talking behind its own back.
+      if (state.turned) state.media.pause?.();
+      else state.media.play?.()?.catch?.(() => {});
+    };
+    if (reduced() || !card.animate) { swap(); return; }
+    const edge = "perspective(1400px) rotateY(90deg)";
+    const flat = "perspective(1400px) rotateY(0deg)";
+    state.turning = true;
+    const settle = () => { state.turning = false; };
+    card.animate([{ transform: flat }, { transform: edge }],
+                 { duration: 170, easing: "ease-in" }).finished.then(() => {
+      if (this.reviewCard !== card) return;
+      swap();
+      card.animate([{ transform: "perspective(1400px) rotateY(-90deg)" }, { transform: flat }],
+                   { duration: 240, easing: "cubic-bezier(.2,.7,.15,1)" })
+        .finished.then(settle, settle);
+    }, settle);
+  }
+
+  /**
+   * The back of a take: the words, the numbers, and the door back to the node.
+   *
+   * Read out of the file rather than out of anything this window remembers —
+   * both save nodes embed the graph that made a render (`renderMeta`), and
+   * `captureFromRender` already turns that into the sections a preset holds.
+   * So a take's back and "Preset from a render" are one reading of one file,
+   * and what lands on the node is exactly what a preset of it would land.
+   */
+  slate(result, media) {
+    const root = el("div", { class: "mmc-fs-slate mmc-ch-slate" }, [
+      el("div", { class: "mmc-ch-prompt" }, [el("p", { text: t("Reading…") })]),
+    ]);
+    const source = stageSource(result);
+    (async () => {
+      if (!source) throw new Error(t("This render was not saved, so nothing says what made it."));
+      const captured = P.captureFromRender(await renderMeta(source.path),
+                                           { ...source, name: result.name });
+      root.replaceChildren(...this.slateParts(result, captured, media));
+    })().catch((error) => {
+      root.replaceChildren(el("div", { class: "mmc-ch-prompt" }, [
+        el("p", { text: error.message ?? String(error) })]));
+    });
+    return root;
+  }
+
+  slateParts(result, captured, media) {
+    const data = captured.data;
+    const still = captured.scope === "prestage";
+    // The words. A still has one prompt; a piece has a standing one and one
+    // per card, and a lone shot's is the whole of it.
+    const cards = still ? [] : (data.strip?.segments ?? []);
+    const texts = still
+      ? [data.prompt]
+      : [data.prompt, ...cards].filter((text) => (text?.prompt ?? "").trim() || text?.refined?.body);
+    const words = texts.map((text, index) => {
+      const numbered = !still && cards.length > 1 && cards.includes(text);
+      const typed = (text?.prompt ?? "").trim();
+      const rewrite = text?.refined?.enabled !== false ? (text?.refined?.body ?? "").trim() : "";
+      return [
+        el("p", { text: `${numbered ? `${cards.indexOf(text) + 1}. ` : ""}${typed || rewrite}` }),
+        // The rewrite is what the sampler read; folded under the words it was
+        // written from, the way the chat folds a caption.
+        ...(typed && rewrite ? [el("details", { class: "mmc-ch-caption" }, [
+          el("summary", { text: t("Refined") }),
+          el("pre", { text: rewrite }),
+        ])] : []),
+        // Each text on its own button, named for which one it is: the typed
+        // prompt goes back in a prompt box, the rewrite goes anywhere else.
+        el("div", { class: "mmc-copy-row" }, [
+          ...(typed ? [copyDoor(t("Copy prompt"), typed)] : []),
+          ...(rewrite ? [copyDoor(t("Copy refined"), rewrite)] : []),
+        ]),
+      ];
+    }).flat();
+    const prompt = el("div", { class: "mmc-ch-prompt" },
+                      words.length ? words : [el("p", { text: t("No prompt.") })]);
+
+    const facts = [];
+    const fact = (key, value) => {
+      if (value === null || value === undefined || value === "") return null;
+      const dd = el("dd", { text: String(value), title: String(value) });
+      facts.push(el("dt", { text: key }), dd);
+      return dd;
+    };
+    const arch = data.weights?.arch;
+    fact(t("made with"), still
+      ? t(S.PRESTAGE_ARCH_LABEL[arch] ?? arch ?? "")
+      : t(S.FAMILY_LABEL[data.speed?.family] ?? data.speed?.family ?? ""));
+    const size = fact(t("size"), "—");
+    const canvas = [data.look?.aspect,
+                    data.look?.short_edge ? t("{n} short edge", { n: data.look.short_edge }) : null]
+      .filter(Boolean).join(" · ");
+    const measure = () => {
+      const w = media.naturalWidth || media.videoWidth, h = media.naturalHeight || media.videoHeight;
+      size.textContent = [w && h ? `${w} × ${h}` : null, canvas].filter(Boolean).join(" · ") || "—";
+    };
+    measure();
+    media.addEventListener(media.tagName === "VIDEO" ? "loadedmetadata" : "load", measure, { once: true });
+    if (!still) {
+      const seconds = cards.reduce((sum, card) => sum + (Number(card.duration_s) || 0), 0);
+      if (seconds) fact(t("length"), t("{n} s", { n: Math.round(seconds * 100) / 100 }));
+    }
+    const row = data.speed?.row ?? {};
+    const turbo = still ? data.speed?.turbo?.[arch]?.on : data.speed?.turbo?.on;
+    fact(t("sampler"), [row.quality ? t(row.quality) : null,
+                        row.steps ? t("{n} steps", { n: row.steps }) : null,
+                        row.cfg != null ? `cfg ${row.cfg}` : null,
+                        row.sampler_name, row.scheduler,
+                        turbo ? t("turbo") : null].filter(Boolean).join(" · "));
+    if (captured.seed != null) fact(t("seed"), captured.seed);
+    const loras = [...(data.loras ?? []), ...cards.flatMap((card) => card.loras ?? [])]
+      .filter((entry) => entry?.name && entry.enabled !== false)
+      .map((entry) => entry.name.split("/").pop().replace(/\.[^.]+$/, ""));
+    fact(t("LoRAs"), [...new Set(loras)].join(", "));
+    const files = still
+      ? (data.refs?.refs?.length ?? 0) + (data.refs?.init ? 1 : 0)
+      : (data.refs?.length ?? 0) + cards.reduce((sum, card) => sum + (card.assets?.length ?? 0), 0);
+    if (files) fact(t("from"), t(files === 1 ? "{count} file" : "{count} files", { count: files }));
+    if (result.tookMs) fact(t("took"), elapsed(result.tookMs));
+
+    // The way home. Which node, by what the file is: a still is the
+    // pre-stage's to take back and a clip the piece's, whichever step is up.
+    const node = still ? preStageOf(this.node) : this.node;
+    const target = node?.mmcBody?.presetTarget?.() ?? null;
+    const off = P.sectionsOff();
+    const keys = !target ? [] : Object.keys(data).filter((key) => !off.has(key)
+      && P.crossable(key, captured.scope, target.scope, {
+        arch: arch ?? null, targetArch: target.arch?.() ?? null,
+        family: data.speed?.family ?? null, targetFamily: target.family?.() ?? null,
+      }).ok);
+    const said = el("span", { class: "mmc-fs-slate-note" });
+    const keepSeed = () => {
+      if (captured.seed === null) return;
+      const io = node.mmcBody.widgetIO();
+      io.set("seed", captured.seed);
+      io.set("control_after_generate", "fixed");
+    };
+    const door = (label, title, run, done) => el("button", {
+      class: "mmc-fs-slate-door", text: label, title,
+      onclick: () => {
+        try { run(); said.textContent = done; }
+        catch (error) { said.textContent = t("Could not apply it — {error}", { error: error.message }); }
+      },
+    });
+    const taken = keys.map((key) => t(P.SECTION[key]?.label ?? key)).join(" · ");
+    const doors = el("div", { class: "mmc-fs-slate-doors" }, !target
+      ? [el("span", { class: "mmc-fs-slate-note",
+                      text: t("The node that made this is not in the graph any more.") })]
+      : [
+          door(t("Use these settings"),
+               t("Put what made this take back on {label}: {sections} — and its seed, kept. "
+               + "The sections are the ones ticked in Presets.",
+                 { label: target.label, sections: taken || t("nothing") }),
+               () => { keepSeed(); target.apply(data, keys, captured.scope); },
+               t("Back on {label}.", { label: target.label })),
+          ...(captured.seed !== null ? [door(t("Seed only"),
+               t("Keep seed {seed} on {label} and leave everything else as it is.",
+                 { seed: captured.seed, label: target.label }),
+               keepSeed, t("Seed {seed} kept.", { seed: captured.seed }))] : []),
+          said,
+        ]);
+    if (target && !said.textContent) said.textContent = taken;
+    return [prompt, el("dl", { class: "mmc-ch-facts" }, facts), doors];
   }
 
   /**

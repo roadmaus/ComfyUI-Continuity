@@ -36,7 +36,8 @@
 // the queue itself, exactly as `stage.js` does for the node on the canvas, and
 // shows the real progress and the real preview frames rather than a spinner.
 
-import { el, icon, mark, spinner, dragsFiles, mountOverlay, keepScroll, placeNear, dismissable } from "./dom.js";
+import { el, icon, mark, spinner, dragsFiles, mountOverlay, keepScroll, placeNear, dismissable,
+         copyDoor } from "./dom.js";
 import { openChoicePopover, openAspectPopover, edgeSlider, aspectGlyph } from "./pills.js";
 import { seedPill, seedMarkBits } from "./sampling.js";
 import { rulesFor, resolveCanvas } from "./canvas.js";
@@ -2323,6 +2324,11 @@ class Room {
     const prompt = el("div", { class: "mmc-ch-prompt" }, [
       el("p", { text: card.action?.prompt || "" }),
       ...(caption ? [caption] : []),
+      // The words, and the caption written from them, each on its own button.
+      ...(card.action?.prompt || card.action?.caption ? [el("div", { class: "mmc-copy-row" }, [
+        ...(card.action?.prompt ? [copyDoor(t("Copy prompt"), card.action.prompt)] : []),
+        ...(card.action?.caption ? [copyDoor(t("Copy caption"), card.action.caption)] : []),
+      ])] : []),
     ]);
     const facts = [];
     const fact = (key, value, cls) => {

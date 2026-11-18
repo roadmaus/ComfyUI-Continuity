@@ -308,6 +308,37 @@ export async function replaceBody(id, { data, scope, cover }) {
   });
 }
 
+// ---- which sections were left unticked --------------------------------------
+//
+// The ticks are a habit rather than a fact about one preset: somebody who
+// never wants a preset's canvas does not want to say so again on every card.
+// So what is remembered is the sections that were switched *off*, for every
+// preset and every node alike — a section nobody has touched stays ticked,
+// which keeps "everything" the default. localStorage, like the fullscreen
+// view: it is a switch thrown while working, not a setting to go and find.
+
+const TICKS_KEY = "continuity-preset-ticks";
+
+/** The section keys last left unticked. */
+export function sectionsOff() {
+  try {
+    const stored = JSON.parse(localStorage.getItem(TICKS_KEY) ?? "[]");
+    return new Set(Array.isArray(stored) ? stored.filter((key) => typeof key === "string") : []);
+  } catch {
+    return new Set();
+  }
+}
+
+/** Remember one section as ticked or not, for the next preset opened. */
+export function rememberSection(key, on) {
+  const off = sectionsOff();
+  if (on) off.delete(key); else off.add(key);
+  try {
+    if (off.size) localStorage.setItem(TICKS_KEY, JSON.stringify([...off]));
+    else localStorage.removeItem(TICKS_KEY);
+  } catch { /* private mode; the ticks still hold for this window */ }
+}
+
 // ---- the sections -----------------------------------------------------------
 //
 // Each key is a set of fields that always move together and that the node
@@ -584,7 +615,10 @@ export function capturePreStage(state, io) {
     },
     speed: { turbo: blob.turbo ?? null,
              row: readRow(io, stillSpeedNames(blob.arch)) },
-    prompt: pick(blob, ["prompt"]),
+    // The rewrite rides with the words it was written from, as it does on a
+    // piece: `refined` is what the sampler actually read, so a preset that
+    // kept only the box would put back a prompt the render was never made of.
+    prompt: pick(blob, ["prompt", "refined"]),
     loras: blob.loras ?? [],
     refs: {
       ...(blob.init ? { init: blob.init } : {}),
@@ -895,6 +929,9 @@ export function captureFromRender(meta, asset) {
     // preset off a real node, it may simply be off the other one.
     ambiguous: matching.length > 1 ? matching.length : 0,
     node: source.id,
+    // The one number a preset never carries and a take always has: what this
+    // file was sampled on. Null where the seed arrived down a wire.
+    seed: Number.isFinite(source.inputs?.seed) ? source.inputs.seed : null,
   };
 }
 
@@ -1479,6 +1516,19 @@ export function addSubjectToPiece(stored, timeline, { pool = false } = {}) {
 /** Write the speed row through the widget accessor. Names the target does not
  *  declare are skipped by `widgetIO.set` itself, which is what makes one stored
  *  row applicable to a pre-stage's shorter one. */
+/** The rewrite a preset's prompt section carries, where it may land.
+ *
+ *  A rewrite is written in one model's form — a still's is a description of a
+ *  picture, a shot's is the video family's sections — so it only follows its
+ *  prompt between two nodes of the same kind. Across that line the words land
+ *  alone and the old rewrite goes, because it was of a prompt that is no
+ *  longer in the box. */
+function carriedRewrite(text, from, to = "video") {
+  const side = from === "prestage" ? "prestage" : "video";
+  if (side !== to || !text.refined || typeof text.refined !== "object") return null;
+  return JSON.parse(JSON.stringify(text.refined));
+}
+
 function applyRow(row, io) {
   for (const [name, value] of Object.entries(row ?? {})) io.set(name, value);
 }
@@ -1511,7 +1561,7 @@ export function applyToPiece(body, keys, timeline, io, { from = "piece" } = {}) 
     timeline.prompt = text.prompt ?? "";
     timeline.soundscape = text.soundscape ?? "";
     timeline.music = text.music ?? "";
-    timeline.refined = text.refined ?? null;
+    timeline.refined = carriedRewrite(text, from);
   }
   if (chosen.has("style")) {
     timeline.prompt = leadWithStyle(timeline.prompt, body.style?.text);
@@ -1577,7 +1627,7 @@ export function applyToShot(body, keys, segment, io, { from = "shot", piece } = 
     segment.prompt = text.prompt ?? "";
     segment.soundscape = text.soundscape ?? "";
     segment.music = text.music ?? "";
-    segment.refined = text.refined ?? null;
+    segment.refined = carriedRewrite(text, from);
   }
   if (chosen.has("style")) {
     segment.prompt = leadWithStyle(segment.prompt, body.style?.text);
@@ -1654,6 +1704,7 @@ export function applyToPreStage(body, keys, state, io, { from = "prestage" } = {
   }
   if (chosen.has("prompt")) {
     state.prompt = body.prompt?.prompt ?? "";
+    state.refined = carriedRewrite(body.prompt ?? {}, from, "prestage");
   }
   if (chosen.has("style")) {
     state.prompt = leadWithStyle(state.prompt, body.style?.text);
