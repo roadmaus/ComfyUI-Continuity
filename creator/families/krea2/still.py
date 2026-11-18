@@ -428,10 +428,13 @@ def emit_graph(graph, payload, sampling, weights, clip, vae, model, unique_id,
         negative = _refs_negative(graph, sampling, positive, clip, pair)
     else:
         positive = graph.node("CLIPTextEncode", clip=clip, text=payload.prompt).out(0)
-        # Nothing grounded to be unconditional *about*: with no pictures in the
-        # conditioning, a zeroed copy is the whole unconditional either
-        # checkpoint wants, and at Turbo's cfg 1.0 it is skipped outright.
-        negative = graph.node("ConditioningZeroOut", conditioning=positive).out(0)
+        # At Turbo's cfg 1 the unconditional is never evaluated, so a zeroed
+        # copy is free. RAW at real CFG needs the empty prompt encoded: guided
+        # away from an all-zero text stream it never trained on, it renders grain.
+        if sampling.cfg == 1.0:
+            negative = graph.node("ConditioningZeroOut", conditioning=positive).out(0)
+        else:
+            negative = graph.node("CLIPTextEncode", clip=clip, text="").out(0)
 
     sampled = graph.node(
         "KSampler", model=model, positive=positive, negative=negative,

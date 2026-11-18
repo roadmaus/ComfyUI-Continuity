@@ -164,8 +164,9 @@ def past_preview(kinds_, link):
 
 # ---- Krea 2 t2i --------------------------------------------------------------
 #
-# The template shape: loaders, one text encode, a zeroed negative, an empty
-# 16-channel latent, one KSampler, one decode, one save. Nothing else.
+# The template shape: loaders, the prompt and an empty-prompt negative (RAW
+# runs real CFG), an empty 16-channel latent, one KSampler, one decode, one
+# save. Nothing else.
 
 out = build()
 graph = out.expand
@@ -180,8 +181,13 @@ check("expansion exports every node that writes a file",
       sorted(tuple(link) for link in out.result), written)
 check("...and there is one", len(written) > 0, True)
 check("one sampler", len(kinds["KSampler"]), 1)
-check("one text encode", len(kinds["CLIPTextEncode"]), 1)
-check("the negative is the prompt zeroed out", len(kinds["ConditioningZeroOut"]), 1)
+check("RAW's negative is the empty prompt, encoded — not a zeroed copy",
+      (len(kinds["CLIPTextEncode"]), "" in [i["text"] for _, i in kinds["CLIPTextEncode"]],
+       "ConditioningZeroOut" in kinds),
+      (2, True, False))
+turbo_kinds = by_class(build(cfg=1.0).expand)
+check("at Turbo's cfg 1 the negative is zeroed, with no second encode",
+      (len(turbo_kinds["CLIPTextEncode"]), len(turbo_kinds["ConditioningZeroOut"])), (1, 1))
 check("an empty 16-channel latent", len(kinds["EmptySD3LatentImage"]), 1)
 check("one decode", len(kinds["VAEDecode"]), 1)
 for absent in ("LoadImage", "VAEEncode", "LoraLoaderModelOnly", "SamplerCustomAdvanced",
@@ -265,8 +271,8 @@ turbo = by_class(build(blob(turbo={"on": True, "quality": "good", "saved": None}
 # carries, and Krea 2 is the only family that had one — so it still reads.
 check("turbo loads the Turbo checkpoint",
       [i["unet_name"] for _, i in turbo["UNETLoader"]], [MODELS["krea2"]["turbo_model"]])
-check("turbo changes nothing structural but the shift",
-      sorted(turbo), sorted(k for k in kinds if k != "ModelSamplingFlux"))
+check("turbo changes nothing structural but the shift and the cfg-1 negative",
+      sorted(turbo), sorted({k for k in kinds if k != "ModelSamplingFlux"} | {"ConditioningZeroOut"}))
 check("turbo keeps the pin the checkpoint already detected, so emits no shift node",
       "ModelSamplingFlux" in turbo, False)
 check("the pill's sampler row arrives verbatim",
@@ -1588,7 +1594,7 @@ for seed in (100, 2331284070, 32029067):
     check(f"an image arch renders the alternative seed {seed} chooses",
           sorted(i["text"] for _, i in
                  by_class(build(blob(prompt=varied_text), seed=seed).expand)["CLIPTextEncode"]),
-          [chosen])
+          ["", chosen])
     check(f"...and MiniMax H3 Image the same choice on seed {seed}",
           h3i_build(h3i_blob(prompt=varied_text), seed=seed)[1]
           ["MiniMaxH3ImageConditioning"][0][1]["prompt"], chosen)

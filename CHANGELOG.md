@@ -6,6 +6,14 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Krea 2 Raw renders a picture again instead of coloured grain.** A
+text-to-image render's negative was the prompt zeroed out on both checkpoints.
+That is what Turbo's template does, and at cfg 1 it is never read. Raw runs
+real CFG, though, and being guided away from an all-zero text stream it never
+trained on came out as grain over a ghost of the subject, on every Raw
+checkpoint and finetune. At cfg 1 nothing changes; at any other cfg the negative
+is now the empty prompt, encoded.
+
 **Flux 3 Klein arrives as a still family: edits from an instruction, draws
 from prose, and combines up to ten pictures.** BFL's FLUX 3 Image Klein on the
 pre-stage's model pill as `flux3klein`, built on core's native support
