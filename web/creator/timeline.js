@@ -17,6 +17,7 @@ import { el, icon, mountOverlay, swappable, closeOwnedPopovers } from "./dom.js"
 import { createDisclosure } from "./disclosure.js";
 import { CreatorEditor, pickTakes, takesHelp } from "./editor.js";
 import { t } from "./i18n.js";
+import { settingsHome } from "./slate.js";
 import { openLoras, loraBlock, loraBase, settlePins, watchPins } from "./loras.js";
 import { openPicker } from "./picker.js";
 import { openPresetLibrary, styleCastMember } from "./presetlib.js";
@@ -3564,6 +3565,7 @@ export class TimelineBody {
         kinds: ["renders"],
         kind: "renders",
         viewOnly: true,
+        home: this.settingsHome(),
         capacity: () => ({ used: 0, max: 0, filesLeft: 0 }),
       }),
     });
@@ -3899,6 +3901,17 @@ export class TimelineBody {
    * strip whose durations can no longer afford their seams has them pruned on
    * the way in, rather than failing at queue time.
    */
+  /** Where a render's settings land from the gallery — see
+   *  `slate.settingsHome`. The whole piece: this is the node's own gallery. */
+  settingsHome() {
+    return settingsHome({
+      kind: "video",
+      nodeId: () => this.nodeId?.() ?? null,
+      target: () => this.presetTarget(),
+      io: () => this.widgetIO(),
+    });
+  }
+
   presetTarget() {
     return {
       scope: "piece",
@@ -4086,6 +4099,7 @@ export class TimelineBody {
              t("Browse, organize and attach finished renders and pre-stage stills"),
              () => openPicker({
                kinds: ["renders"], kind: "renders", viewOnly: true,
+               home: this.settingsHome(),
                capacity: () => ({ used: 0, max: 0, filesLeft: 0 }),
              })),
         tool("Settings", "gear",

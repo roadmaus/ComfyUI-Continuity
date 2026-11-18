@@ -705,10 +705,10 @@ export const css = `
 /* The back: the whole card, readout and all, so a turned take is one surface.
    Laid out by the chat's slate rules; only where it sits is said here. */
 .mmc-fs-slate { position: absolute; inset: 0; z-index: 2; display: none; height: auto; }
-.mmc-fs-review-card.turned .mmc-fs-slate { display: flex; }
+.mmc-turned > .mmc-fs-slate { display: flex; }
 /* A still's readout floats over its picture, and would float over the back
    as well. The turn button is the way round again, so nothing is stranded. */
-.mmc-fs-review-card.turned > .mmc-stage-readout { visibility: hidden; }
+.mmc-turned > .mmc-stage-readout { visibility: hidden; }
 /* A piece has more numbers than a small plate has room for. */
 .mmc-fs-slate .mmc-ch-facts { max-height: 45%; overflow: auto; overscroll-behavior: contain; }
 .mmc-fs-slate-doors {

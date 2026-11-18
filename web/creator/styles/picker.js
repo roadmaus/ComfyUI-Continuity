@@ -229,6 +229,18 @@ export const css = `
 .mmc-cell:focus-visible .mmc-cell-save { display: flex; }
 .mmc-cell-save svg { width: 13px; height: 13px; }
 .mmc-cell[aria-selected="true"] .mmc-cell-save { right: 64px; }
+/* What made it: a render's third button, on the same terms. */
+.mmc-cell-made {
+  position: absolute; top: 8px; right: 64px; width: 24px; height: 24px;
+  display: none; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: var(--mmc-scrim-2);
+  color: var(--mmc-text); cursor: pointer; padding: 0;
+}
+.mmc-cell:hover .mmc-cell-made,
+.mmc-cell:focus-visible .mmc-cell-made { display: flex; }
+.mmc-cell-made:hover { color: var(--mmc-accent); }
+.mmc-cell-made svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mmc-cell[aria-selected="true"] .mmc-cell-made { right: 92px; }
 /* Where a file lives — worth a caption only on the All shelf, where everything
    is mixed together. Sits above the name gradient. */
 .mmc-cell-home {

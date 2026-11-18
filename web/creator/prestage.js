@@ -54,6 +54,7 @@ import { loadCatalog, refreshCatalog, catalogByFolder, rememberedWeights,
 import { viewUrl, primeSettings } from "./api.js";
 import { editPicture, asPick, applyPick, cropLabel } from "./picture.js";
 import { t } from "./i18n.js";
+import { settingsHome } from "./slate.js";
 import * as S from "./state.js";
 
 const QUALITY_TITLE = {
@@ -578,6 +579,40 @@ export class PreStageEditor {
     });
     const row = chosen?.[0];
     return row ? { path: row.path, kind: row.kind === "video" ? "video" : "image" } : null;
+  }
+
+  /**
+   * The gallery: the picker on the renders tab, as on the shot's rail.
+   *
+   * A pick is a picture attached, where this arch reads pictures and has room
+   * for one; where it does not, the gallery is for looking — and for turning
+   * a still over, which needs no slot at all.
+   */
+  async openGallery() {
+    const blocked = this.refBlocked();
+    const room = () => S.preStageMaxRefs(this.state) - S.preStageCountedRefs(this.state).length;
+    const chosen = await openPicker({
+      kinds: ["renders", "image"], kind: "renders", rendersBucket: "image",
+      viewOnly: Boolean(blocked),
+      aspect: this.pickerAspect(),
+      plate: blocked ? null : this.plateSpec(),
+      capacity: (kind) => (blocked || (kind && kind !== "image")
+        ? { used: 0, max: 0, filesLeft: 0 }
+        : { used: S.preStageCountedRefs(this.state).length,
+            max: S.preStageMaxRefs(this.state), filesLeft: Math.max(0, room()) }),
+      home: settingsHome({
+        kind: "still",
+        nodeId: () => this.nodeId?.() ?? null,
+        target: () => this.presetTarget?.() ?? null,
+        io: () => this.widgetIO(),
+      }),
+    });
+    if (!chosen?.length || blocked) return;
+    for (const asset of chosen.filter((entry) => entry.kind === "image").slice(0, Math.max(0, room()))) {
+      this.state.refs.push(applyPick(
+        { handle: S.nextPreStageHandle(this.state), kind: "image", role: "reference" }, asset));
+    }
+    this.commit();
   }
 
   async addRefs(fromVideo = false) {
@@ -1217,6 +1252,12 @@ export class PreStageEditor {
         tool(t("Presets"), "star",
              t("Save this setup so you can put it back, or apply one you saved before"),
              () => openPresetLibrary({ target: this.presetTarget?.() ?? null })),
+        // What this ComfyUI has already made, as on the shot's rail — and the
+        // way to a still's back, where its prompt and settings are.
+        tool(t("Gallery"), "gallery",
+             t("Browse finished stills and renders — attach one as a picture, or turn "
+             + "one over to copy its prompt or put its settings back on this node"),
+             () => this.openGallery()),
       ]),
     ]);
   }

@@ -10,6 +10,7 @@ import { openTrim, trimLabel } from "./trim.js";
 import { openPicture, cropLabel } from "./picture.js";
 import { greyField } from "./subject.js";
 import { t } from "./i18n.js";
+import { takeSlate, turner } from "./slate.js";
 import { memberFromMod } from "./presets.js";
 import { queueState, watch as watchQueue, dropQueued } from "./queue.js";
 
@@ -1230,6 +1231,14 @@ export class Picker {
       title: starred ? t("Remove from favorites") : t("Add to favorites"),
       onclick: (event) => { event.stopPropagation(); this.toggleFav(asset); },
     }, [icon("star", 13)]));
+    // What made it, one place further in again: straight to the back of the
+    // card, where the prompt can be copied and the settings put on the node.
+    if (this.turnable(asset)) {
+      cell.appendChild(el("button", {
+        class: "mmc-cell-made", title: t("What made this — copy its prompt, or use its settings"),
+        onclick: (event) => { event.stopPropagation(); this.view(asset, { turned: true }); },
+      }, [icon("flip", 13)]));
+    }
     // Download beside it, on the star's terms: quiet until hovered. The one way
     // a file on a remote box reaches the machine the browser is on. A mod is
     // left out — its .safetensors is downloaded from its own row's menu.
@@ -1393,7 +1402,14 @@ export class Picker {
   /** Full size, in an overlay above the modal: a video plays with the
    *  browser's controls and its sound, an image just gets the room the grid
    *  cell could not give it. Opened by double-click on any tab. */
-  view(asset) {
+  /** Whether a file has a back to turn to: something these nodes rendered,
+   *  which is the only kind of file that carries what made it. */
+  turnable(asset) {
+    return !asset.mod && (asset.kind === "image" || asset.kind === "video")
+      && / \[output\]$/.test(asset.path);
+  }
+
+  view(asset, { turned = false } = {}) {
     let unmount;
     // A mesh is shown by its picture here; the tool is where it is walked around.
     if (asset.kind === "mesh" && !stillUrl(asset)) return;
@@ -1404,13 +1420,27 @@ export class Picker {
       : asset.kind === "video" && !asset.mod
         ? el("video", { class: "mmc-light-media", src: viewUrl(asset.path), controls: true, autoplay: true, loop: true })
         : el("img", { class: "mmc-light-media", src: viewUrl(asset.path), alt: asset.name });
+    // A render turns over to what made it, as a take on the fullscreen lip
+    // does — and from there back onto the node this gallery was opened from.
+    let turn = null;
+    let shown = media;
+    if (this.turnable(asset)) {
+      shown = el("div", { class: "mmc-light-card" }, [media]);
+      const made = turner(shown, media, () => takeSlate({
+        source: { path: asset.path, kind: asset.kind }, name: asset.name, media,
+        home: this.options.home ?? null,
+      }));
+      shown.appendChild(made.button);
+      turn = made.turn;
+    }
     const overlay = el("div", {
       class: "mmc-overlay",
       onpointerdown: (event) => { if (event.target === overlay) unmount(); },
     }, [
-      el("div", { class: "mmc-light" }, [media, el("div", { class: "mmc-light-name", text: asset.name })]),
+      el("div", { class: "mmc-light" }, [shown, el("div", { class: "mmc-light-name", text: asset.name })]),
     ]);
     unmount = mountOverlay(overlay, () => unmount());
+    if (turned) turn?.();
   }
 
   // ---- the sheet ------------------------------------------------------------
@@ -2116,7 +2146,9 @@ export class Picker {
     } else {
       // The renders tab has no bucket of its own — a picked render is a video
       // and counts where a video counts.
-      const bucket = this.kind === "renders" ? "video"
+      // Unless the opener only takes pictures: a pre-stage's renders tab is
+      // counted in stills, the one kind it can attach.
+      const bucket = this.kind === "renders" ? (this.options.rendersBucket ?? "video")
         : this.kind === "refmods" ? "image" : this.kind;
       const { used, max } = this.options.capacity(bucket);
       const filled = used + this.claimed(bucket);

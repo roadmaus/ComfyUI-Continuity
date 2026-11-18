@@ -12,6 +12,16 @@ export const css = `
   min-height: 0; border-radius: 12px; background: var(--mmc-media-bg); object-fit: contain;
   box-shadow: 0 30px 80px var(--mmc-shadow);
 }
+/* A render's card: the picture, and a back laid over all of it. Never smaller
+   than its back can be read at, so a thumbnail-sized still turns over to
+   something with room for a prompt. */
+.mmc-light-card {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  min-width: min(560px, 90vw); min-height: min(380px, 70vh);
+  max-width: 100%; border-radius: 12px; overflow: hidden;
+  background: var(--mmc-media-bg); box-shadow: 0 30px 80px var(--mmc-shadow);
+}
+.mmc-light-card > .mmc-light-media { border-radius: 0; box-shadow: none; }
 .mmc-light-audio { width: min(520px, 90vw); }
 .mmc-light-name { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); }
 
