@@ -286,8 +286,8 @@ export const css = `
    red of something wrong. The ground is nearly black and neutral, so nothing
    it sits beside is tinted by it. The dim text is lifted to where it holds
    4.5 against every surface on the ladder, which the pinned dark's #999 does
-   not. And the corners come in to a few pixels, pills included, so the frame
-   around a picture is drawn in the same straight lines the picture is.
+   not. And the corners are square, pills included, so the frame around a
+   picture is drawn in the same straight lines the picture is.
 
    The roles, the tags and the blue keep their hues. Those are not decoration;
    they say which file lends what, and a monochrome theme that took them away
@@ -300,8 +300,8 @@ export const css = `
   --mmc-on-ink: #0b0b0c;
   --mmc-accent: var(--mmc-ink);
   --mmc-on-accent: var(--mmc-ground);
-  --mmc-round: 0.3;
-  --mmc-pill-r: 3px;
+  --mmc-round: 0;
+  --mmc-pill-r: 0px;
 }
 
 /* Setting --tag is all these do; components read it with an accent fallback,
