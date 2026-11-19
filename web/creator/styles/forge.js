@@ -41,22 +41,22 @@ export const css = `
 /* The project's name is the way to another project: a crumb that opens. */
 .mmc-fg-switch {
   display: flex; align-items: center; gap: 6px; padding: 4px 8px; margin-left: -4px;
-  border-radius: 8px; border: 0; background: none; cursor: pointer; font-family: inherit;
+  border-radius: calc(8px * var(--mmc-round)); border: 0; background: none; cursor: pointer; font-family: inherit;
   font-size: calc(13px * var(--mmc-type)); font-weight: 600; color: var(--mmc-strong);
 }
 .mmc-fg-switch:hover { background: var(--mmc-surface); }
 .mmc-fg-switch svg { stroke: var(--mmc-off); fill: none; stroke-width: 1.6; }
 /* The two pages, as one control in the middle of the bar. */
-.mmc-fg-tabs { display: flex; gap: 2px; padding: 3px; border-radius: 11px; background: var(--mmc-surface); }
+.mmc-fg-tabs { display: flex; gap: 2px; padding: 3px; border-radius: calc(11px * var(--mmc-round)); background: var(--mmc-surface); }
 .mmc-fg-tabs:empty { display: none; }
 .mmc-fg-tab {
-  padding: 5px 16px; border-radius: 8px; border: 0; background: none; cursor: pointer;
+  padding: 5px 16px; border-radius: calc(8px * var(--mmc-round)); border: 0; background: none; cursor: pointer;
   font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
 .mmc-fg-tab:hover { color: var(--mmc-text); }
 .mmc-fg-tab.on { background: var(--mmc-surface-3); color: var(--mmc-strong); font-weight: 600; }
 .mmc-fg-barbutton {
-  display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: 9px;
+  display: flex; align-items: center; gap: 7px; padding: 6px 12px; border-radius: calc(9px * var(--mmc-round));
   border: 1px solid var(--mmc-line-2); background: none; cursor: pointer; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
 }
@@ -117,7 +117,7 @@ export const css = `
 .mmc-fg-remove.armed { color: var(--mmc-bad); text-decoration-color: currentColor; }
 .mmc-fg-iconbutton {
   flex: none; display: flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; padding: 0; border-radius: 7px; border: 0; background: none;
+  width: 26px; height: 26px; padding: 0; border-radius: calc(7px * var(--mmc-round)); border: 0; background: none;
   color: var(--mmc-dim); cursor: pointer;
 }
 .mmc-fg-iconbutton:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
@@ -127,7 +127,7 @@ export const css = `
 
 /* --- choosing: a name and what it means -------------------------------------- */
 .mmc-fg-choices {
-  display: flex; flex-direction: column; border: 1px solid var(--mmc-line); border-radius: 10px; overflow: hidden;
+  display: flex; flex-direction: column; border: 1px solid var(--mmc-line); border-radius: calc(10px * var(--mmc-round)); overflow: hidden;
 }
 .mmc-fg-choice {
   display: grid; grid-template-columns: 16px 1fr; gap: 10px; align-items: start;
@@ -140,12 +140,12 @@ export const css = `
   width: 14px; height: 14px; margin-top: 1px; box-sizing: border-box;
   border: 1.5px solid var(--mmc-line-3); border-radius: 50%; position: relative;
 }
-.mmc-fg-choice.checkbox .mmc-fg-tick { border-radius: 4px; }
+.mmc-fg-choice.checkbox .mmc-fg-tick { border-radius: calc(4px * var(--mmc-round)); }
 .mmc-fg-choice.on .mmc-fg-tick { border-color: var(--mmc-strong); }
 .mmc-fg-choice.on .mmc-fg-tick::after {
   content: ""; position: absolute; inset: 2.5px; border-radius: inherit; background: var(--mmc-strong);
 }
-.mmc-fg-choice.checkbox.on .mmc-fg-tick::after { border-radius: 1.5px; }
+.mmc-fg-choice.checkbox.on .mmc-fg-tick::after { border-radius: calc(1.5px * var(--mmc-round)); }
 .mmc-fg-choicetext { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .mmc-fg-choicename { display: block; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text); }
 /* Look names are ids (pixel, toon); said as words, they start with a capital. */
@@ -162,7 +162,7 @@ export const css = `
 .mmc-fg-games { display: flex; flex-direction: column; gap: 8px; }
 .mmc-fg-game {
   display: flex; flex-direction: column; gap: 3px; padding: 12px 14px; text-align: left; cursor: pointer;
-  border-radius: 12px; border: 1px solid var(--mmc-line); background: var(--mmc-tint); font-family: inherit;
+  border-radius: calc(12px * var(--mmc-round)); border: 1px solid var(--mmc-line); background: var(--mmc-tint); font-family: inherit;
 }
 .mmc-fg-game:hover { background: var(--mmc-surface); border-color: var(--mmc-line-2); }
 .mmc-fg-gamename { font-size: calc(15px * var(--mmc-type)); font-weight: 600; color: var(--mmc-strong); }
@@ -174,7 +174,7 @@ export const css = `
 .mmc-fg-shelfhead { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-left: 4px; }
 .mmc-fg-count { font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums; }
 .mmc-fg-add {
-  display: flex; align-items: center; gap: 5px; padding: 5px 11px 5px 8px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; gap: 5px; padding: 5px 11px 5px 8px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line-2); background: var(--mmc-surface); color: var(--mmc-text);
   font-family: inherit; font-size: calc(12px * var(--mmc-type));
 }
@@ -188,7 +188,7 @@ export const css = `
 .mmc-fg-groupcount { margin-left: auto; font-weight: 400; font-variant-numeric: tabular-nums; color: var(--mmc-faint); }
 .mmc-fg-items { display: flex; flex-direction: column; gap: 2px; }
 .mmc-fg-item {
-  display: flex; align-items: center; gap: 10px; width: 100%; padding: 4px 8px 4px 4px; border-radius: 9px;
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 4px 8px 4px 4px; border-radius: calc(9px * var(--mmc-round));
   border: 0; background: none; cursor: pointer; text-align: left; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
@@ -204,25 +204,25 @@ export const css = `
 /* A thumbnail is pixel art at a whole zoom, on a checkerboard so a sprite's
    transparency is seen as transparency and not as the shelf's grey. */
 .mmc-fg-thumb {
-  flex: none; width: 36px; height: 36px; border-radius: 7px; overflow: hidden; box-sizing: border-box;
+  flex: none; width: 36px; height: 36px; border-radius: calc(7px * var(--mmc-round)); overflow: hidden; box-sizing: border-box;
   display: flex; align-items: center; justify-content: center; background: var(--mmc-fg-check);
 }
 .mmc-fg-thumb.empty { background: none; border: 1px dashed var(--mmc-line-2); }
 .mmc-fg-thumb img {
   max-width: 100%; max-height: 100%; display: block; image-rendering: pixelated; -webkit-user-drag: none;
 }
-.mmc-fg-thumb.big { width: auto; height: auto; aspect-ratio: 1; border-radius: 9px; }
+.mmc-fg-thumb.big { width: auto; height: auto; aspect-ratio: 1; border-radius: calc(9px * var(--mmc-round)); }
 /* Where an asset stands, one small mark at the row's end: a ring planned, a
    dot made, a square gone out to every engine, a dashed ring the pack's mark
    for "real, but not what it was". The words are the row's tooltip. */
 .mmc-fg-mark { flex: none; width: 7px; height: 7px; border-radius: 50%; box-sizing: border-box; }
 .mmc-fg-mark.planned { border: 1px solid var(--mmc-line-3); }
 .mmc-fg-mark.made { background: var(--mmc-dim); }
-.mmc-fg-mark.exported { background: var(--mmc-strong); border-radius: 1.5px; }
+.mmc-fg-mark.exported { background: var(--mmc-strong); border-radius: calc(1.5px * var(--mmc-round)); }
 .mmc-fg-mark.stale { border: 1.5px dashed var(--mmc-dim); }
 /* After a check, how many problems an asset has for the engine in the foot. */
 .mmc-fg-bad {
-  flex: none; min-width: 16px; padding: 0 5px; border-radius: 8px; box-sizing: border-box;
+  flex: none; min-width: 16px; padding: 0 5px; border-radius: calc(8px * var(--mmc-round)); box-sizing: border-box;
   font-size: calc(10.5px * var(--mmc-type)); font-weight: 600; line-height: 16px;
   text-align: center; font-variant-numeric: tabular-nums;
   color: var(--mmc-bad); border: 1px solid currentColor;
@@ -230,9 +230,9 @@ export const css = `
 
 /* --- the glass --------------------------------------------------------------------- */
 .mmc-fg-glassbar { flex: none; display: flex; align-items: center; gap: 10px; min-height: 30px; }
-.mmc-fg-seg { display: flex; gap: 2px; padding: 2px; border-radius: 9px; background: var(--mmc-surface); }
+.mmc-fg-seg { display: flex; gap: 2px; padding: 2px; border-radius: calc(9px * var(--mmc-round)); background: var(--mmc-surface); }
 .mmc-fg-segbutton {
-  padding: 4px 12px; border-radius: 7px; border: 0; background: none; cursor: pointer; font-family: inherit;
+  padding: 4px 12px; border-radius: calc(7px * var(--mmc-round)); border: 0; background: none; cursor: pointer; font-family: inherit;
   font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums;
 }
 .mmc-fg-segbutton:hover:not(:disabled) { color: var(--mmc-text); }
@@ -320,7 +320,7 @@ export const css = `
 }
 .mmc-fg-swatches { display: flex; flex-wrap: wrap; gap: 6px; }
 .mmc-fg-swatch {
-  position: relative; width: 28px; height: 28px; padding: 0; border-radius: 7px; cursor: pointer;
+  position: relative; width: 28px; height: 28px; padding: 0; border-radius: calc(7px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line-2); background: var(--swatch); box-sizing: border-box;
 }
 .mmc-fg-swatch:hover:not(.mmc-fg-wellnew) { box-shadow: 0 0 0 2px var(--mmc-bad); }
@@ -335,7 +335,7 @@ export const css = `
 /* --- menus -------------------------------------------------------------------------- */
 .mmc-fg-menu { min-width: 230px; display: flex; flex-direction: column; gap: 1px; }
 .mmc-fg-menurow {
-  display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border-radius: 9px;
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 7px 10px; border-radius: calc(9px * var(--mmc-round));
   border: 0; background: none; cursor: pointer; text-align: left; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
 }
@@ -349,7 +349,7 @@ export const css = `
 .mmc-fg-newpop.wide { width: min(440px, 92vw); }
 .mmc-fg-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
 .mmc-fg-kind {
-  display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: 9px; cursor: pointer;
+  display: flex; flex-direction: column; gap: 2px; padding: 8px 10px; border-radius: calc(9px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line); background: none; text-align: left; font-family: inherit;
 }
 .mmc-fg-kind:hover { background: var(--mmc-wash); }
@@ -366,7 +366,7 @@ export const css = `
 /* A floor of light under the figure, so it stands in the room rather than
    floating on a card. The viewer's canvas is transparent over it. */
 .mmc-fg-stage {
-  flex: 1; min-height: 0; position: relative; overflow: hidden; border-radius: 14px;
+  flex: 1; min-height: 0; position: relative; overflow: hidden; border-radius: calc(14px * var(--mmc-round));
   border: 1px solid var(--mmc-line);
   background: radial-gradient(ellipse 60% 38% at 50% 92%,
     color-mix(in oklab, var(--mmc-ground) 80%, var(--mmc-ink)) 0, transparent 70%), var(--mmc-surface);
@@ -385,7 +385,7 @@ export const css = `
 /* What the render job drew, side by side as the sprite grid will hold them. */
 .mmc-fg-drawn { position: absolute; inset: 0; display: flex; align-items: center; gap: 10px; padding: 16px; overflow-x: auto; }
 .mmc-fg-cell { margin: 0; height: 100%; flex: none; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.mmc-fg-cell img { height: calc(100% - 24px); width: auto; border-radius: 6px; background: #fff; display: block; }
+.mmc-fg-cell img { height: calc(100% - 24px); width: auto; border-radius: calc(6px * var(--mmc-round)); background: #fff; display: block; }
 .mmc-fg-cell figcaption { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); font-variant-numeric: tabular-nums; }
 
 /* The frame strip: each frame a sheet of animation paper. The one you are on
@@ -397,7 +397,7 @@ export const css = `
 }
 .mmc-fg-frame {
   position: relative; flex: none; width: 44px; height: 99px; padding: 0; box-sizing: border-box;
-  border-radius: 6px; overflow: hidden; cursor: pointer;
+  border-radius: calc(6px * var(--mmc-round)); overflow: hidden; cursor: pointer;
   border: 1px solid var(--mmc-line-2); background: var(--mmc-fg-paper);
 }
 .mmc-fg-frame img { display: block; width: 100%; height: 100%; object-fit: cover; -webkit-user-drag: none; }
@@ -411,7 +411,7 @@ export const css = `
    the server drew are fainter, so the strip reads as an animator's chart. */
 .mmc-fg-frame.key::before {
   content: ""; position: absolute; right: 5px; top: 5px; width: 6px; height: 6px; z-index: 1;
-  background: var(--mmc-accent); transform: rotate(45deg); border-radius: 1px;
+  background: var(--mmc-accent); transform: rotate(45deg); border-radius: calc(1px * var(--mmc-round));
 }
 .mmc-fg-frame.tween img { opacity: 0.55; }
 .mmc-fg-keybutton.on { border-color: var(--mmc-accent); color: var(--mmc-strong); }
@@ -444,7 +444,7 @@ export const css = `
 
 /* Symmetry, beside the Pose and Drawn switch: a mode, so amber while it is on. */
 .mmc-fg-mirror {
-  display: flex; align-items: center; gap: 6px; padding: 4px 11px 4px 9px; border-radius: 9px; cursor: pointer;
+  display: flex; align-items: center; gap: 6px; padding: 4px 11px 4px 9px; border-radius: calc(9px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line-2); background: none; color: var(--mmc-dim); font-family: inherit;
   font-size: calc(12px * var(--mmc-type));
 }
@@ -459,13 +459,13 @@ export const css = `
    because it is the view the drawing is made from. */
 .mmc-fg-views {
   position: absolute; top: 12px; right: 12px; z-index: 2;
-  display: grid; gap: 2px; padding: 4px; border-radius: 10px;
+  display: grid; gap: 2px; padding: 4px; border-radius: calc(10px * var(--mmc-round));
   grid-template-columns: repeat(4, auto);
   grid-template-areas: ". top . ." "a b c d" ". cam cam .";
   background: var(--mmc-scrim-3); border: 1px solid var(--mmc-line);
 }
 .mmc-fg-face {
-  min-width: 44px; height: 26px; padding: 0 8px; border-radius: 6px; cursor: pointer;
+  min-width: 44px; height: 26px; padding: 0 8px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line); background: var(--mmc-surface); font-family: inherit;
   font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap;
 }
@@ -493,7 +493,7 @@ export const css = `
 .mmc-fg-point.on { background: var(--mmc-accent); border-color: var(--mmc-accent); }
 .mmc-fg-needle {
   position: absolute; left: 50%; top: calc(50% - 40px); width: 2px; height: 40px; margin-left: -1px;
-  border-radius: 1px; background: var(--mmc-strong); transform-origin: 50% 100%; transform: rotate(var(--turn));
+  border-radius: calc(1px * var(--mmc-round)); background: var(--mmc-strong); transform-origin: 50% 100%; transform: rotate(var(--turn));
   transition: transform 180ms ease;
 }
 .mmc-fg-compassread {

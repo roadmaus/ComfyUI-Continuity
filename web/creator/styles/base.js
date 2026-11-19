@@ -176,6 +176,15 @@ export const css = `
      as a row, and every one of those numbers was set locally by whoever added
      the control. Tokenised so the next one cannot be a fourth. */
   --mmc-pill-h: calc(38px * var(--mmc-type));
+  /* How round the pack is, the same way --mmc-type is how large it writes:
+     every border-radius in styles/ is "calc(Npx * var(--mmc-round))", so each
+     corner keeps the size it was chosen at against the thing beside it and a
+     theme turns all of them at once. The fully round end is its own token
+     because 999px times anything is still a pill, and a theme with square
+     corners has to be able to say that its pills are not pills. Circles are
+     written as 50% and follow neither. */
+  --mmc-round: 1;
+  --mmc-pill-r: 999px;
   /* The rail's tile, and everything positioned against it — the refiner's
      corner chevron is the one that kept drifting off the box when the shell
      drew a smaller square. One token, so the shell is a single override
@@ -264,6 +273,35 @@ export const css = `
   --mmc-blue: color-mix(in oklab, #0b8ce9 72%, var(--mmc-ink));
   --mmc-accent: #f0a63c;
   --mmc-on-accent: #141414;
+}
+
+/* Slate -- the Appearance tab's third colour, and like the pinned dark it is
+   only ever on while the fullscreen shell is up: applyTheme() sets this class
+   alongside .mmc-force-dark, so everything said there about node faces and
+   about the light-accent correction holds here without being said twice.
+
+   What it changes is the premise rather than the values. There is no hue in
+   it: the accent is the ink itself, so the one thing on screen with colour in
+   it is the picture, and the only colour the interface still speaks in is the
+   red of something wrong. The ground is nearly black and neutral, so nothing
+   it sits beside is tinted by it. The dim text is lifted to where it holds
+   4.5 against every surface on the ladder, which the pinned dark's #999 does
+   not. And the corners come in to a few pixels, pills included, so the frame
+   around a picture is drawn in the same straight lines the picture is.
+
+   The roles, the tags and the blue keep their hues. Those are not decoration;
+   they say which file lends what, and a monochrome theme that took them away
+   would have taken away the meaning with them. */
+:root.mmc-force-dark.mmc-slate {
+  --mmc-ground: #0b0b0c;
+  --mmc-ink: #fff;
+  --mmc-text: #e8e8e8;
+  --mmc-dim: #a3a3a6;
+  --mmc-on-ink: #0b0b0c;
+  --mmc-accent: var(--mmc-ink);
+  --mmc-on-accent: var(--mmc-ground);
+  --mmc-round: 0.3;
+  --mmc-pill-r: 3px;
 }
 
 /* Setting --tag is all these do; components read it with an accent fallback,
@@ -364,7 +402,7 @@ export const css = `
 .mmc-copy-row { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
 .mmc-copy-door {
   font: inherit; font-size: calc(11px * var(--mmc-type)); cursor: pointer;
-  padding: 3px 9px; border-radius: 999px; background: none;
+  padding: 3px 9px; border-radius: var(--mmc-pill-r); background: none;
   color: var(--mmc-dim); border: 1px solid var(--mmc-line);
 }
 .mmc-copy-door:hover { color: var(--mmc-accent); border-color: var(--mmc-accent); }

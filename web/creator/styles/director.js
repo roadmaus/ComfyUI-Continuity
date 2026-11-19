@@ -21,7 +21,7 @@ export const css = `
 .mmc-ch-msg.mmc-dr-card {
   flex-direction: column; gap: 16px;
   padding: 18px 20px 14px; box-sizing: border-box;
-  border: 1px solid var(--mmc-line); border-radius: 14px;
+  border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   background: var(--mmc-surface);
   font-size: calc(13.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-text);
 }
@@ -49,7 +49,7 @@ export const css = `
 .mmc-dr-facts .mmc-dr-rail { margin-left: auto; }
 .mmc-dr-length { display: inline-flex; align-items: baseline; gap: 3px; }
 .mmc-dr-number {
-  width: 3ch; field-sizing: content; min-width: 1ch; padding: 0 1px; border-radius: 3px;
+  width: 3ch; field-sizing: content; min-width: 1ch; padding: 0 1px; border-radius: calc(3px * var(--mmc-round));
   font: inherit; color: var(--mmc-strong); text-align: right;
   background: transparent; border: 0; border-bottom: 1px dashed var(--mmc-line-3);
   -moz-appearance: textfield;
@@ -72,11 +72,11 @@ export const css = `
 .mmc-dr-sbar { display: flex; gap: 2px; height: 22px; }
 .mmc-dr-sshot {
   flex: 1 1 0; min-width: 3px; display: flex; overflow: hidden;
-  border-radius: 3px; background: color-mix(in srgb, var(--mmc-ink) 13%, transparent);
+  border-radius: calc(3px * var(--mmc-round)); background: color-mix(in srgb, var(--mmc-ink) 13%, transparent);
   transition: background-color .12s ease;
 }
-.mmc-dr-sbeat:first-child .mmc-dr-sshot:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
-.mmc-dr-sbeat:last-child .mmc-dr-sshot:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+.mmc-dr-sbeat:first-child .mmc-dr-sshot:first-child { border-top-left-radius: calc(6px * var(--mmc-round)); border-bottom-left-radius: calc(6px * var(--mmc-round)); }
+.mmc-dr-sbeat:last-child .mmc-dr-sshot:last-child { border-top-right-radius: calc(6px * var(--mmc-round)); border-bottom-right-radius: calc(6px * var(--mmc-round)); }
 .mmc-dr-sclip { flex: 1 1 0; min-width: 0; }
 /* A shot too long for one clip: the seam the run carries it on across. */
 .mmc-dr-sclip + .mmc-dr-sclip { border-left: 1px dashed var(--mmc-surface); }
@@ -94,7 +94,7 @@ export const css = `
 }
 .mmc-dr-beat { display: flex; flex-direction: column; gap: 2px; }
 .mmc-dr-beatline, .mmc-dr-shot {
-  display: grid; gap: 10px; align-items: baseline; border-radius: 6px;
+  display: grid; gap: 10px; align-items: baseline; border-radius: calc(6px * var(--mmc-round));
 }
 .mmc-dr-beatline {
   grid-template-columns: 1.4em 1fr 7.4em 3.2em; margin-bottom: 2px;
@@ -123,7 +123,7 @@ export const css = `
 /* A long shot's one-take switch, and what a long take costs beside it. */
 .mmc-dr-takeline { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; }
 .mmc-dr-take {
-  border: 1px solid var(--mmc-line); border-radius: 999px; background: transparent;
+  border: 1px solid var(--mmc-line); border-radius: var(--mmc-pill-r); background: transparent;
   color: var(--mmc-faint); padding: 1px 8px; cursor: pointer;
   font: inherit; font-size: calc(11.5px * var(--mmc-type));
 }
@@ -141,7 +141,7 @@ export const css = `
 .mmc-dr-shot:hover .mmc-dr-tools, .mmc-dr-shot:focus-within .mmc-dr-tools { opacity: 1; }
 .mmc-dr-tool {
   display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px;
-  padding: 0; border: 0; border-radius: 4px; background: transparent; color: var(--mmc-faint); cursor: pointer;
+  padding: 0; border: 0; border-radius: calc(4px * var(--mmc-round)); background: transparent; color: var(--mmc-faint); cursor: pointer;
 }
 .mmc-dr-tool.up svg { transform: rotate(180deg); }
 .mmc-dr-tool:hover:not(:disabled) { color: var(--mmc-text); background: var(--mmc-wash); }
@@ -150,7 +150,7 @@ export const css = `
 .mmc-dr-addline { margin: 1px 0 4px calc(1.4em + 10px + 6.6em + 10px); }
 .mmc-dr-add {
   display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px 1px 5px;
-  border: 1px dashed var(--mmc-line); border-radius: 999px; background: transparent;
+  border: 1px dashed var(--mmc-line); border-radius: var(--mmc-pill-r); background: transparent;
   color: var(--mmc-faint); cursor: pointer; font: inherit; font-size: calc(11.5px * var(--mmc-type));
 }
 .mmc-dr-add:hover { color: var(--mmc-text); border-color: var(--mmc-dim); }
@@ -164,14 +164,14 @@ export const css = `
 .mmc-dr-source.cited { color: var(--mmc-blue); }
 
 /* --- words that change when pressed -------------------------------------- */
-.mmc-dr-text { min-width: 0; word-break: break-word; border-radius: 4px; }
+.mmc-dr-text { min-width: 0; word-break: break-word; border-radius: calc(4px * var(--mmc-round)); }
 .mmc-dr-text.empty { color: var(--mmc-faint); font-style: italic; }
 .mmc-dr-text[role="button"] { cursor: text; }
 .mmc-dr-text[role="button"]:hover { background: var(--mmc-wash); box-shadow: 0 0 0 3px var(--mmc-wash); }
 .mmc-dr-text[role="button"]:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-dr-input {
   width: 100%; box-sizing: border-box; resize: none; overflow: hidden;
-  margin: -3px; padding: 2px 3px; border-radius: 6px;
+  margin: -3px; padding: 2px 3px; border-radius: calc(6px * var(--mmc-round));
   font: inherit; line-height: inherit; color: var(--mmc-text);
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-accent); outline: 0;
 }
@@ -179,7 +179,7 @@ export const css = `
 /* A choice among three words, drawn as the word it holds. */
 .mmc-dr-beatline .mmc-dr-select, .mmc-dr-beatline .mmc-dr-tag { justify-self: end; }
 .mmc-dr-select {
-  justify-self: start; max-width: 100%; padding: 0 16px 0 4px; margin-left: -4px; border-radius: 4px;
+  justify-self: start; max-width: 100%; padding: 0 16px 0 4px; margin-left: -4px; border-radius: calc(4px * var(--mmc-round));
   cursor: pointer; -webkit-appearance: none; appearance: none;
   font: inherit; font-size: calc(12px * var(--mmc-type)); font-weight: 400; color: var(--mmc-dim);
   background: transparent no-repeat right 3px center / 9px 9px;
@@ -192,7 +192,7 @@ export const css = `
 
 /* --- what is said under it ----------------------------------------------- */
 .mmc-dr-warn, .mmc-dr-error {
-  padding: 7px 10px; border-radius: 8px; font-size: calc(12.5px * var(--mmc-type));
+  padding: 7px 10px; border-radius: calc(8px * var(--mmc-round)); font-size: calc(12.5px * var(--mmc-type));
 }
 .mmc-dr-warn { color: var(--mmc-warn); background: color-mix(in srgb, var(--mmc-warn) 9%, transparent); }
 .mmc-dr-error { color: var(--mmc-bad); background: color-mix(in srgb, var(--mmc-bad) 9%, transparent); }
@@ -213,7 +213,7 @@ export const css = `
 .mmc-dr-state.approved { color: var(--mmc-dim); }
 .mmc-dr-state.stale, .mmc-dr-state.failed { color: var(--mmc-warn); }
 .mmc-dr-thumb {
-  width: 22px; height: 22px; object-fit: cover; border-radius: 4px; flex: none;
+  width: 22px; height: 22px; object-fit: cover; border-radius: calc(4px * var(--mmc-round)); flex: none;
   align-self: center; background: var(--mmc-wash);
 }
 .mmc-dr-frame {

@@ -11,7 +11,7 @@ export const css = `
    the rail and not on the picture: the glass has one job, and a second
    rectangle inside it would take room from the thing being judged. */
 .mmc-up-loc {
-  position: relative; width: 100%; border-radius: 8px; overflow: hidden;
+  position: relative; width: 100%; border-radius: calc(8px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
   touch-action: none; cursor: crosshair; line-height: 0;
 }
@@ -29,7 +29,7 @@ export const css = `
    shadow is what keeps it visible over a white frame. */
 .mmc-up-locsquare {
   position: absolute; box-sizing: border-box; pointer-events: none;
-  border: 1.5px solid var(--mmc-accent); border-radius: 2px;
+  border: 1.5px solid var(--mmc-accent); border-radius: calc(2px * var(--mmc-round));
   box-shadow: 0 0 0 1px var(--mmc-scrim-2);
 }
 
@@ -41,7 +41,7 @@ export const css = `
    a backend was for. */
 .mmc-up-try {
   position: absolute; top: 12px; right: 12px; z-index: 2;
-  padding: 6px 13px; border-radius: 14px; cursor: pointer; font-family: inherit;
+  padding: 6px 13px; border-radius: calc(14px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: var(--mmc-float); border: 1px solid var(--mmc-line-3);
   color: var(--mmc-text); font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
   box-shadow: 0 4px 14px var(--mmc-shadow-soft);
@@ -55,7 +55,7 @@ export const css = `
 /* The tracing bench's result goes through a door into a card. This one is the
    finished file on a shelf, so the press that matters is the one that opens it. */
 .mmc-up-open {
-  flex: none; padding: 8px 15px; border-radius: 10px; text-decoration: none;
+  flex: none; padding: 8px 15px; border-radius: calc(10px * var(--mmc-round)); text-decoration: none;
   cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(12.5px * var(--mmc-type)); font-weight: 600;

@@ -37,7 +37,7 @@ export const css = `
    well and drawing one under the pointer would invent a target the moment
    somebody stopped needing it. */
 .mmc-overlay.mmc-bn-over.dropping::after {
-  content: ""; position: absolute; inset: 10px; border-radius: 18px;
+  content: ""; position: absolute; inset: 10px; border-radius: calc(18px * var(--mmc-round));
   border: 2px dashed var(--mmc-accent); pointer-events: none;
 }
 .mmc-bn {
@@ -60,7 +60,7 @@ export const css = `
   display: flex; align-items: center; gap: 9px;
   font-size: calc(13px * var(--mmc-type)); font-weight: 600; letter-spacing: .01em;
   background: none; border: 0; cursor: pointer; padding: 5px 8px; margin-left: -8px;
-  border-radius: 10px; color: var(--mmc-text); font-family: inherit;
+  border-radius: calc(10px * var(--mmc-round)); color: var(--mmc-text); font-family: inherit;
 }
 .mmc-bn-home:hover { background: var(--mmc-surface); }
 .mmc-bn-home:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
@@ -73,7 +73,7 @@ export const css = `
    like. Same treatment as the shell's, for the same reason. */
 .mmc-bn-logo {
   display: flex; flex: none; width: 20px; height: 20px;
-  border-radius: 6px; overflow: hidden;
+  border-radius: calc(6px * var(--mmc-round)); overflow: hidden;
 }
 .mmc-bn-logo svg { stroke: none; fill: initial; stroke-width: initial; display: block; }
 .mmc-bn-slash { color: var(--mmc-off); }
@@ -133,7 +133,7 @@ export const css = `
 .mmc-bn-verb {
   width: 100%; display: flex; white-space: nowrap; overflow: hidden;
   align-items: center; justify-content: center; gap: 7px;
-  height: calc(32px * var(--mmc-type)); border-radius: 8px; cursor: pointer;
+  height: calc(32px * var(--mmc-type)); border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
 }
@@ -222,18 +222,18 @@ export const css = `
   background: none; cursor: pointer; margin: 0;
 }
 .mmc-bn-range::-webkit-slider-runnable-track {
-  height: 2px; border-radius: 1px; background: var(--mmc-line-2);
+  height: 2px; border-radius: calc(1px * var(--mmc-round)); background: var(--mmc-line-2);
 }
-.mmc-bn-range::-moz-range-track { height: 2px; border-radius: 1px; background: var(--mmc-line-2); }
+.mmc-bn-range::-moz-range-track { height: 2px; border-radius: calc(1px * var(--mmc-round)); background: var(--mmc-line-2); }
 /* Square, not round. Every other slider on the internet has a dot on it; this
    is an instrument, and the mark that says where a stepped dial is sitting is
    the same shape as the ticks it is sitting between. */
 .mmc-bn-range::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none; width: 4px; height: 14px; margin-top: -6px;
-  border-radius: 1px; background: var(--mmc-strong); border: 0;
+  border-radius: calc(1px * var(--mmc-round)); background: var(--mmc-strong); border: 0;
 }
 .mmc-bn-range::-moz-range-thumb {
-  width: 4px; height: 14px; border-radius: 1px; background: var(--mmc-strong); border: 0;
+  width: 4px; height: 14px; border-radius: calc(1px * var(--mmc-round)); background: var(--mmc-strong); border: 0;
 }
 .mmc-bn-range:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 3px; }
 /* The stops a stepped dial actually has. Drawn only where there are few enough
@@ -243,7 +243,7 @@ export const css = `
 .mmc-bn-ticks span { width: 1px; height: 4px; background: var(--mmc-line-2); }
 .mmc-bn-text {
   width: 100%; box-sizing: border-box; padding: 5px 8px;
-  border: 1px solid var(--mmc-line-2); border-radius: 6px;
+  border: 1px solid var(--mmc-line-2); border-radius: calc(6px * var(--mmc-round));
   background: var(--mmc-wash); color: var(--mmc-strong);
   font: inherit; font-size: calc(12.5px * var(--mmc-type));
 }
@@ -259,7 +259,7 @@ export const css = `
    a door. */
 .mmc-bn-opts { display: flex; flex-wrap: wrap; gap: 4px; }
 .mmc-bn-opt {
-  padding: 3px 9px; border-radius: 6px; cursor: pointer; font-family: inherit;
+  padding: 3px 9px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type));
 }
@@ -291,7 +291,7 @@ export const css = `
 }
 .mmc-bn-box {
   flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center;
-  background: var(--mmc-media-bg); border-radius: 14px; border: 1px solid var(--mmc-line);
+  background: var(--mmc-media-bg); border-radius: calc(14px * var(--mmc-round)); border: 1px solid var(--mmc-line);
   overflow: hidden; position: relative;
 }
 .mmc-bn-box.bare { background: none; border-style: dashed; }
@@ -336,7 +336,7 @@ export const css = `
 /* Which side is which, said once at the foot of each half. Without them a wipe
    sat halfway across a low-contrast frame is two pictures nobody can name. */
 .mmc-bn-tag {
-  position: absolute; bottom: 10px; padding: 3px 8px; border-radius: 7px;
+  position: absolute; bottom: 10px; padding: 3px 8px; border-radius: calc(7px * var(--mmc-round));
   background: var(--mmc-scrim-3); color: var(--mmc-dim); pointer-events: none;
   font-size: calc(10px * var(--mmc-type)); letter-spacing: .12em; text-transform: uppercase;
 }
@@ -369,7 +369,7 @@ export const css = `
 .mmc-bn-held {
   position: absolute; top: 10px; right: 10px; z-index: 2;
   display: flex; align-items: center; gap: 8px;
-  padding: 6px 11px 6px 10px; border-radius: 9px;
+  padding: 6px 11px 6px 10px; border-radius: calc(9px * var(--mmc-round));
   background: var(--mmc-scrim-3);
   border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(11.5px * var(--mmc-type));
@@ -426,7 +426,7 @@ export const css = `
 .mmc-bn-foot { flex: none; display: flex; align-items: center; gap: 14px; }
 .mmc-bn-run {
   flex: none; white-space: nowrap;
-  height: calc(40px * var(--mmc-type)); padding: 0 28px; border-radius: 20px; border: 0;
+  height: calc(40px * var(--mmc-type)); padding: 0 28px; border-radius: calc(20px * var(--mmc-round)); border: 0;
   background: var(--mmc-accent); color: var(--mmc-on-accent); cursor: pointer;
   font-family: inherit; font-size: calc(13.5px * var(--mmc-type)); font-weight: 600;
 }
@@ -441,7 +441,7 @@ export const css = `
    the smaller errand and lighting both the same way would make the room ask
    twice which one you meant. */
 .mmc-bn-second {
-  height: calc(40px * var(--mmc-type)); padding: 0 16px; border-radius: 20px;
+  height: calc(40px * var(--mmc-type)); padding: 0 16px; border-radius: calc(20px * var(--mmc-round));
   background: var(--mmc-surface); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); cursor: pointer; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type));
@@ -456,7 +456,7 @@ export const css = `
 .mmc-bn-out { flex: none; display: none; }
 .mmc-bn-out.on {
   display: flex; align-items: center; gap: 16px; padding: 11px 12px 11px 14px;
-  border-radius: 12px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
 .mmc-bn-outword { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .mmc-bn-outname {
@@ -477,7 +477,7 @@ export const css = `
 .mmc-bn-door {
   display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
   max-width: calc(240px * var(--mmc-type)); padding: 8px 13px 9px;
-  border-radius: 10px; text-align: left; cursor: pointer; font-family: inherit;
+  border-radius: calc(10px * var(--mmc-round)); text-align: left; cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text);
   transition: border-color 120ms ease, background 120ms ease;

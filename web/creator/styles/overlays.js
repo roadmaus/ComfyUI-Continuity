@@ -9,7 +9,7 @@ export const css = `
 }
 .mmc-light-media {
   max-width: min(1400px, 100%); max-height: calc(100vh - 140px);
-  min-height: 0; border-radius: 12px; background: var(--mmc-media-bg); object-fit: contain;
+  min-height: 0; border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-media-bg); object-fit: contain;
   box-shadow: 0 30px 80px var(--mmc-shadow);
 }
 /* A render's card: the picture, and a back laid over all of it. Never smaller
@@ -18,7 +18,7 @@ export const css = `
 .mmc-light-card {
   position: relative; display: flex; align-items: center; justify-content: center;
   min-width: min(560px, 90vw); min-height: min(380px, 70vh);
-  max-width: 100%; border-radius: 12px; overflow: hidden;
+  max-width: 100%; border-radius: calc(12px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-media-bg); box-shadow: 0 30px 80px var(--mmc-shadow);
 }
 .mmc-light-card > .mmc-light-media { border-radius: 0; box-shadow: none; }
@@ -35,7 +35,7 @@ export const css = `
   display: flex; flex-direction: column; gap: 12px;
   width: min(1100px, 100%); height: min(860px, 100%); max-height: 100%; min-height: 0;
   background: var(--mmc-float); color: var(--mmc-text);
-  border: 1px solid var(--mmc-line); border-radius: 16px; padding: 16px;
+  border: 1px solid var(--mmc-line); border-radius: calc(16px * var(--mmc-round)); padding: 16px;
   box-sizing: border-box; box-shadow: 0 30px 80px var(--mmc-shadow);
 }
 .mmc-reference-preview-head { display: flex; align-items: center; gap: 12px; flex: none; }
@@ -46,7 +46,7 @@ export const css = `
 }
 .mmc-reference-preview-stage > img, .mmc-reference-preview-stage > video {
   display: block; max-width: 100%; max-height: 100%; width: 100%; height: 100%; min-height: 0;
-  object-fit: contain; border-radius: 8px;
+  object-fit: contain; border-radius: calc(8px * var(--mmc-round));
 }
 .mmc-reference-preview-stage > video:fullscreen { max-width: none; max-height: none; width: 100%; height: 100%; }
 .mmc-reference-preview-foot { flex: none; display: flex; flex-direction: column; gap: 8px; max-height: 24vh; overflow: auto; }
@@ -57,7 +57,7 @@ export const css = `
 .mmc-reference-preview-nav { display: flex; align-items: center; justify-content: center; gap: 12px; }
 .mmc-reference-preview-nav[hidden], .mmc-reference-preview-note[hidden], .mmc-reference-preview-error[hidden] { display: none; }
 .mmc-reference-preview-nav button {
-  border: 1px solid var(--mmc-line); border-radius: 8px; background: var(--mmc-surface);
+  border: 1px solid var(--mmc-line); border-radius: calc(8px * var(--mmc-round)); background: var(--mmc-surface);
   color: var(--mmc-text); min-width: 36px; min-height: 32px; font-size: 20px; cursor: pointer;
 }
 .mmc-reference-preview-nav button:disabled { opacity: .35; cursor: default; }
@@ -72,7 +72,7 @@ export const css = `
    column. The layout itself tells you which kind of file you opened. */
 .mmc-sheet {
   position: relative; display: flex; overflow: hidden;
-  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: 22px;
+  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: calc(22px * var(--mmc-round));
   width: min(1040px, 100%); height: min(680px, 100%);
   box-shadow: 0 30px 80px var(--mmc-shadow); color: var(--mmc-text);
 }
@@ -92,7 +92,7 @@ export const css = `
   display: flex; gap: 8px; padding: 10px 14px 0; overflow-x: auto; flex: none;
 }
 .mmc-sheet-thumb {
-  flex: none; width: 56px; height: 56px; padding: 0; border-radius: 8px; overflow: hidden;
+  flex: none; width: 56px; height: 56px; padding: 0; border-radius: calc(8px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-surface); border: 2px solid transparent; cursor: pointer;
 }
 .mmc-sheet-thumb[aria-selected="true"] { border-color: var(--mmc-strong); }
@@ -114,7 +114,7 @@ export const css = `
   display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
 }
 .mmc-sheet-copy {
-  flex: none; height: calc(24px * var(--mmc-type)); padding: 0 10px; border-radius: 12px;
+  flex: none; height: calc(24px * var(--mmc-type)); padding: 0 10px; border-radius: calc(12px * var(--mmc-round));
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
@@ -150,7 +150,7 @@ export const css = `
 .mmc-sheet-chips { display: flex; gap: 6px; flex-wrap: wrap; }
 .mmc-sheet-chip {
   display: inline-flex; align-items: baseline; gap: 5px;
-  padding: 3px 9px; border-radius: 11px; font-size: calc(11.5px * var(--mmc-type));
+  padding: 3px 9px; border-radius: calc(11px * var(--mmc-round)); font-size: calc(11.5px * var(--mmc-type));
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line); color: var(--mmc-text);
 }
 .mmc-sheet-chip.accent { border-color: color-mix(in srgb, var(--mmc-accent) 40%, transparent); color: var(--mmc-accent); }
@@ -160,7 +160,7 @@ export const css = `
 .mmc-sheet-desc ul, .mmc-sheet-desc ol { margin: 0 0 8px; padding-left: 18px; }
 .mmc-sheet-desc code, .mmc-sheet-desc pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(11px * var(--mmc-type));
-  background: var(--mmc-surface-2); border-radius: 4px; padding: 1px 4px;
+  background: var(--mmc-surface-2); border-radius: calc(4px * var(--mmc-round)); padding: 1px 4px;
 }
 .mmc-sheet-desc pre { padding: 8px 10px; overflow-x: auto; }
 .mmc-sheet-desc blockquote {
@@ -188,7 +188,7 @@ export const css = `
 .mmc-sheet-version.pick { align-items: center; gap: 6px; padding: 2px 0; }
 .mmc-sheet-version-pick {
   flex: 1; min-width: 0; display: flex; align-items: baseline; gap: 8px;
-  margin-left: -7px; padding: 5px 7px; border: 0; border-radius: 8px;
+  margin-left: -7px; padding: 5px 7px; border: 0; border-radius: calc(8px * var(--mmc-round));
   background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
 }
 .mmc-sheet-version-pick:hover { background: var(--mmc-float); }
@@ -196,7 +196,7 @@ export const css = `
 .mmc-sheet-version-pin {
   flex: none; display: inline-flex; align-items: center; justify-content: center;
   width: calc(24px * var(--mmc-type)); height: calc(24px * var(--mmc-type));
-  padding: 0; border: 0; border-radius: 8px; background: none;
+  padding: 0; border: 0; border-radius: calc(8px * var(--mmc-round)); background: none;
   color: var(--mmc-off); cursor: pointer; opacity: .45;
 }
 .mmc-sheet-version-pin:hover { opacity: 1; color: var(--mmc-text); }
@@ -237,7 +237,7 @@ export const css = `
 /* --- segment editor ------------------------------------------------------- */
 /* Above the picker: it opens on top of it. */
 .mmc-trim {
-  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: 20px;
+  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: calc(20px * var(--mmc-round));
   width: min(640px, 100%); padding: 16px 18px 14px;
   display: flex; flex-direction: column; gap: 12px;
   box-shadow: 0 30px 80px var(--mmc-shadow);
@@ -248,7 +248,7 @@ export const css = `
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-trim-media {
-  width: 100%; height: auto; max-height: 46vh; border-radius: 12px; background: var(--mmc-media-bg); display: block;
+  width: 100%; height: auto; max-height: 46vh; border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-media-bg); display: block;
   /* The stage is a canvas sized to the clip. Height follows the aspect on its
      own until max-height clamps it; past that only object-fit keeps the picture
      from being squashed into the box. */
@@ -263,11 +263,11 @@ export const css = `
 .mmc-trim-play svg { width: 16px; height: 16px; stroke: currentColor; fill: none;
   stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .mmc-trim-track {
-  position: relative; flex: 1; height: 30px; border-radius: 8px;
+  position: relative; flex: 1; height: 30px; border-radius: calc(8px * var(--mmc-round));
   background: var(--mmc-surface-2); cursor: pointer; touch-action: none;
 }
 /* Audio files: no picture, so the waveform is the preview. */
-.mmc-trim-track-tall { height: 120px; border-radius: 12px; }
+.mmc-trim-track-tall { height: 120px; border-radius: calc(12px * var(--mmc-round)); }
 .mmc-trim-wave {
   position: absolute; inset: 0; width: 100%; height: 100%;
   display: block; pointer-events: none;
@@ -294,7 +294,7 @@ export const css = `
   background: var(--mmc-strong); opacity: .8; pointer-events: none; }
 .mmc-trim-handle {
   position: absolute; top: -3px; bottom: -3px; width: 12px; margin-left: -6px;
-  border-radius: 5px; background: var(--mmc-blue); cursor: ew-resize; touch-action: none;
+  border-radius: calc(5px * var(--mmc-round)); background: var(--mmc-blue); cursor: ew-resize; touch-action: none;
 }
 .mmc-trim-handle:focus-visible { outline: 2px solid var(--mmc-strong); outline-offset: 1px; }
 .mmc-trim-read { display: flex; flex-wrap: wrap; justify-content: space-between; font-size: calc(12px * var(--mmc-type)); color: var(--mmc-text); }
@@ -313,7 +313,7 @@ export const css = `
 /* Shrink-wraps the canvas, so the window's percentages are the picture's. */
 .mmc-crop-stage {
   position: relative; display: inline-block; line-height: 0; max-width: 100%;
-  overflow: hidden; border-radius: 12px; background: var(--mmc-media-bg);
+  overflow: hidden; border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-media-bg);
   cursor: crosshair; touch-action: none; user-select: none;
 }
 .mmc-crop-canvas {
@@ -360,7 +360,7 @@ export const css = `
 /* The transport for a clip: the trim editor's track with nothing to select on
    it — only a head to drag across the segment. */
 .mmc-crop-scrub {
-  position: relative; flex: 1; height: 18px; border-radius: 8px;
+  position: relative; flex: 1; height: 18px; border-radius: calc(8px * var(--mmc-round));
   background: var(--mmc-surface-2); cursor: pointer; touch-action: none;
 }
 /* The clicks that say which subject the scissors mean, over the stage. The
@@ -376,14 +376,14 @@ export const css = `
 .mmc-crop-cutrow .mmc-plate-say { flex: 1; min-width: 200px; text-align: left; padding: 0; text-shadow: none; color: var(--mmc-dim); }
 .mmc-crop-cut {
   display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px;
-  border: 1px solid var(--mmc-line-3); border-radius: 7px; font-size: calc(12.5px * var(--mmc-type));
+  border: 1px solid var(--mmc-line-3); border-radius: calc(7px * var(--mmc-round)); font-size: calc(12.5px * var(--mmc-type));
 }
 .mmc-crop-cut.on { background: color-mix(in srgb, var(--mmc-blue) 22%, transparent); border-color: var(--mmc-blue); color: var(--mmc-strong); }
 /* The still off a clip, on the transport row: the scissors' shape, since it is
    the same kind of door — out of this file into a derived one. */
 .mmc-crop-frame-use {
   display: inline-flex; align-items: center; gap: 6px; padding: 3px 12px; white-space: nowrap;
-  border: 1px solid var(--mmc-line-3); border-radius: 7px; font-size: calc(12.5px * var(--mmc-type));
+  border: 1px solid var(--mmc-line-3); border-radius: calc(7px * var(--mmc-round)); font-size: calc(12.5px * var(--mmc-type));
 }
 .mmc-crop-frame-use svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
   stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -397,7 +397,7 @@ export const css = `
 /* The track switch: three mutually exclusive choices, so one bordered group
    rather than three loose pills that would read as independent toggles. */
 .mmc-seg {
-  display: flex; height: 30px; border-radius: 15px; overflow: hidden;
+  display: flex; height: 30px; border-radius: calc(15px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
 }
 .mmc-seg-opt {
@@ -420,7 +420,7 @@ export const css = `
 /* A saved reference's caption: what it was pooled to and what it costs, in the
    monospace the cast's own size mark wears — this is what the model is handed. */
 .mmc-cell-mod {
-  position: absolute; left: 6px; top: 6px; padding: 1px 5px; border-radius: 4px;
+  position: absolute; left: 6px; top: 6px; padding: 1px 5px; border-radius: calc(4px * var(--mmc-round));
   font-size: calc(9px * var(--mmc-type)); letter-spacing: .03em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: var(--mmc-scrim-3); color: var(--mmc-text);
@@ -429,7 +429,7 @@ export const css = `
 .mmc-modal-foot {
   position: absolute; bottom: 34px; right: 44px;
   display: flex; align-items: center; gap: 16px; padding: 10px 12px 10px 20px;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   box-shadow: 0 12px 32px var(--mmc-shadow-soft); font-size: calc(14px * var(--mmc-type));
 }
 .mmc-slots { color: var(--mmc-text); }
@@ -438,7 +438,7 @@ export const css = `
   font-family: inherit; cursor: pointer; }
 .mmc-ghost:hover { color: var(--mmc-text); }
 .mmc-add {
-  height: calc(36px * var(--mmc-type)); padding: 0 20px; border-radius: 10px; background: var(--mmc-blue);
+  height: calc(36px * var(--mmc-type)); padding: 0 20px; border-radius: calc(10px * var(--mmc-round)); background: var(--mmc-blue);
   border: 0; color: var(--mmc-strong); font-size: calc(14px * var(--mmc-type)); font-weight: 500; font-family: inherit; cursor: pointer;
 }
 .mmc-add:disabled { opacity: .4; cursor: not-allowed; }

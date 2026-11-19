@@ -17,7 +17,7 @@ export const css = `
    what they were looking for is the way in. */
 .mmc-cast-empty {
   display: flex; flex-direction: column; gap: 3px; align-items: flex-start;
-  padding: 12px 14px; border: 1px dashed var(--mmc-line); border-radius: 12px;
+  padding: 12px 14px; border: 1px dashed var(--mmc-line); border-radius: calc(12px * var(--mmc-round));
   background: none; color: inherit; font-family: inherit; cursor: pointer;
   text-align: left; width: 100%;
 }
@@ -31,7 +31,7 @@ export const css = `
 .mmc-cast-list {
   display: flex; flex-direction: column; min-width: 0;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 12px; overflow: hidden;
+  border-radius: calc(12px * var(--mmc-round)); overflow: hidden;
 }
 
 /* One entry per subject. The left edge is their identity hue — the same one their
@@ -67,7 +67,7 @@ export const css = `
 }
 .mmc-cast-grip:hover { background: var(--mmc-surface-2); }
 .mmc-cast-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
-.mmc-cast-row > .mmc-cast-face { width: 30px; height: 30px; border-radius: 8px; margin-left: 9px; }
+.mmc-cast-row > .mmc-cast-face { width: 30px; height: 30px; border-radius: calc(8px * var(--mmc-round)); margin-left: 9px; }
 .mmc-cast-row > .mmc-cast-face-blank svg { width: 16px; height: 16px; }
 
 .mmc-cast-line-ident { display: flex; align-items: baseline; gap: 7px; min-width: 0; }
@@ -102,7 +102,7 @@ export const css = `
 
 .mmc-cast-collapse-area {
   flex: 1; min-width: 0; align-self: stretch; min-height: 24px;
-  padding: 0; border: 0; border-radius: 6px; background: none; cursor: pointer;
+  padding: 0; border: 0; border-radius: calc(6px * var(--mmc-round)); background: none; cursor: pointer;
 }
 .mmc-cast-collapse-area:hover { background: var(--mmc-surface-3); }
 .mmc-cast-collapse-area:focus-visible {
@@ -111,7 +111,7 @@ export const css = `
 
 .mmc-cast-shut {
   display: flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; padding: 0; border: 0; border-radius: 6px;
+  width: 22px; height: 22px; padding: 0; border: 0; border-radius: calc(6px * var(--mmc-round));
   background: none; color: var(--mmc-off); cursor: pointer; flex: none;
   transform: rotate(180deg);
 }
@@ -130,7 +130,7 @@ export const css = `
 .mmc-wears-rail { display: flex; gap: 4px; flex-wrap: wrap; }
 .mmc-wears-tab {
   display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 7px;
-  border-radius: 999px; border: 1px solid var(--mmc-line); background: none;
+  border-radius: var(--mmc-pill-r); border: 1px solid var(--mmc-line); background: none;
   color: var(--mmc-dim); font: inherit; font-size: calc(11px * var(--mmc-type)); cursor: pointer;
   white-space: nowrap;
 }
@@ -148,7 +148,7 @@ export const css = `
 .mmc-wears-dot.words { background: var(--mmc-off); }
 .mmc-wears-dot.off { background: var(--mmc-bad); }
 .mmc-wears-panel {
-  border: 1px solid var(--mmc-line); border-radius: 9px; background: var(--mmc-surface); min-width: 0;
+  border: 1px solid var(--mmc-line); border-radius: calc(9px * var(--mmc-round)); background: var(--mmc-surface); min-width: 0;
 }
 .mmc-wears-sentence {
   padding: 8px 10px; font-size: calc(12px * var(--mmc-type)); line-height: 1.7; color: var(--mmc-text);
@@ -159,7 +159,7 @@ export const css = `
 .mmc-wears-choice {
   display: inline-flex; align-items: baseline; gap: 4px; max-width: 100%; vertical-align: baseline;
   appearance: none; cursor: pointer; font: inherit; font-size: calc(11.5px * var(--mmc-type));
-  border: 0; border-radius: 999px; padding: 1px 9px; margin: 0 1px;
+  border: 0; border-radius: var(--mmc-pill-r); padding: 1px 9px; margin: 0 1px;
   background: var(--mmc-surface-2); color: var(--mmc-text);
 }
 .mmc-wears-choice:not(.fixed)::after { content: " ▾"; font-size: 9px; color: var(--mmc-dim); }
@@ -201,7 +201,7 @@ export const css = `
 .mmc-wears-status .amber { color: var(--mmc-accent); }
 .mmc-wears-act {
   display: inline-flex; align-items: center; gap: 5px; flex: none;
-  padding: 3px 9px; border-radius: 999px; border: 1px solid var(--mmc-line-2);
+  padding: 3px 9px; border-radius: var(--mmc-pill-r); border: 1px solid var(--mmc-line-2);
   background: none; color: var(--mmc-text); font: inherit; font-size: calc(11.5px * var(--mmc-type));
   cursor: pointer; white-space: nowrap;
 }
@@ -212,7 +212,7 @@ export const css = `
 .mmc-wears-act.quiet { border-color: transparent; color: var(--mmc-dim); }
 .mmc-wears-act.quiet:hover { color: var(--mmc-text); border-color: var(--mmc-line-2); }
 /* Encoding: the status line grows a bar across its foot and nothing else moves. */
-.mmc-wears-bar { flex-basis: 100%; height: 3px; border-radius: 2px; background: var(--mmc-surface-3); overflow: hidden; }
+.mmc-wears-bar { flex-basis: 100%; height: 3px; border-radius: calc(2px * var(--mmc-round)); background: var(--mmc-surface-3); overflow: hidden; }
 .mmc-wears-bar i { display: block; height: 100%; background: var(--mmc-accent); transition: width .3s ease; }
 .mmc-wears-note { flex-basis: 100%; color: var(--mmc-bad); line-height: 1.45; }
 
@@ -226,7 +226,7 @@ export const css = `
 }
 .mmc-cast-foot-act {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 3px 9px; border-radius: 999px; border: 1px solid transparent;
+  padding: 3px 9px; border-radius: var(--mmc-pill-r); border: 1px solid transparent;
   background: none; color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type));
   cursor: pointer; white-space: nowrap;
 }
@@ -243,7 +243,7 @@ export const css = `
 /* Their face: the first still they are built out of, at a size you can recognise
    somebody at. Square, because every other thumbnail in the pack is. */
 .mmc-cast-face {
-  width: 46px; height: 46px; border-radius: 10px; object-fit: cover; flex: none;
+  width: 46px; height: 46px; border-radius: calc(10px * var(--mmc-round)); object-fit: cover; flex: none;
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--tag, transparent);
 }
 /* Only a real representative image opens the read-only preview. */
@@ -275,7 +275,7 @@ img.mmc-cast-face { cursor: zoom-in; }
    the sentence "@anna is a person", and a bordered chip there would read as a
    second control of the same weight as the name itself. */
 .mmc-cast-takes {
-  background: none; border: 0; padding: 2px 4px; border-radius: 6px;
+  background: none; border: 0; padding: 2px 4px; border-radius: calc(6px * var(--mmc-round));
   color: var(--mmc-dim); font-family: inherit; font-size: calc(11.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-cast-takes:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
@@ -283,7 +283,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-desc {
   flex: 1; min-width: 120px; width: 100%; box-sizing: border-box;
   background: var(--mmc-surface-2); border: 1px solid transparent;
-  border-radius: 8px; padding: 5px 9px; color: inherit; font: inherit;
+  border-radius: calc(8px * var(--mmc-round)); padding: 5px 9px; color: inherit; font: inherit;
   font-size: calc(12px * var(--mmc-type)); outline: none;
 }
 .mmc-cast-desc:focus { border-color: var(--mmc-line); }
@@ -295,7 +295,7 @@ img.mmc-cast-face { cursor: zoom-in; }
    and never write their name. So the readout that says so is also the button that
    fixes it, and it is dashed to say there is something outstanding here. */
 .mmc-cast-where-idle {
-  background: none; border: 1px dashed var(--mmc-line); border-radius: 999px;
+  background: none; border: 1px dashed var(--mmc-line); border-radius: var(--mmc-pill-r);
   padding: 3px 9px; color: var(--mmc-off); font-family: inherit; cursor: pointer;
 }
 .mmc-cast-where-idle:hover:not(:disabled) {
@@ -318,14 +318,14 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-shut-refs { padding: 0 8px 8px 52px; }
 .mmc-cast-ref {
   position: relative; padding: 0; border: 0; background: none; cursor: pointer;
-  border-radius: 9px; line-height: 0; flex: none;
+  border-radius: calc(9px * var(--mmc-round)); line-height: 0; flex: none;
 }
 .mmc-cast-ref:hover .mmc-cast-ref-thumb, .mmc-cast-ref:focus-visible .mmc-cast-ref-thumb {
   filter: brightness(1.25);
 }
 .mmc-cast-ref:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-cast-ref-thumb {
-  width: 38px; height: 38px; border-radius: 9px; object-fit: cover;
+  width: 38px; height: 38px; border-radius: calc(9px * var(--mmc-round)); object-fit: cover;
   background: var(--mmc-surface-3); display: flex; align-items: center;
   justify-content: center; color: var(--mmc-dim);
   box-shadow: 0 0 0 2px var(--tag, transparent);
@@ -350,7 +350,7 @@ img.mmc-cast-face { cursor: zoom-in; }
    picture is the thing you recognise and the badge is the thing you check. */
 .mmc-cast-badge {
   position: absolute; right: -3px; bottom: -3px;
-  width: 17px; height: 17px; border-radius: 999px;
+  width: 17px; height: 17px; border-radius: var(--mmc-pill-r);
   display: flex; align-items: center; justify-content: center;
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--mmc-surface);
   color: var(--mmc-text);
@@ -363,14 +363,14 @@ img.mmc-cast-face { cursor: zoom-in; }
    tile's menu carry them. Both shared with the library sheet's tiles, which say
    the same two things about the same files. */
 .mmc-cast-size {
-  position: absolute; left: -3px; top: -3px; padding: 0 3px; border-radius: 4px;
+  position: absolute; left: -3px; top: -3px; padding: 0 3px; border-radius: calc(4px * var(--mmc-round));
   line-height: 12px; font-size: calc(8.5px * var(--mmc-type)); letter-spacing: .04em;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   box-shadow: 0 0 0 2px var(--mmc-surface);
 }
 .mmc-cast-noted {
-  position: absolute; right: -2px; top: -2px; width: 7px; height: 7px; border-radius: 999px;
+  position: absolute; right: -2px; top: -2px; width: 7px; height: 7px; border-radius: var(--mmc-pill-r);
   background: var(--mmc-accent); box-shadow: 0 0 0 2px var(--mmc-surface);
 }
 /* ...and hollow where the file has words to wake on: a rule rather than a
@@ -389,13 +389,13 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-menu-wake { position: relative; }
 .mmc-cast-menu-wake::before {
   content: ""; position: absolute; left: 17px; top: 50%; margin-top: -6.5px;
-  width: 7px; height: 7px; border-radius: 999px; pointer-events: none;
+  width: 7px; height: 7px; border-radius: var(--mmc-pill-r); pointer-events: none;
   box-shadow: inset 0 0 0 1.5px var(--mmc-accent);
 }
 .mmc-cast-menu-wake .mmc-cast-menu-field { padding-left: 22px; }
 .mmc-cast-menu-field {
   width: 100%; box-sizing: border-box; min-width: 260px;
-  padding: 5px 8px; border-radius: 6px; border: 1px solid var(--mmc-line);
+  padding: 5px 8px; border-radius: calc(6px * var(--mmc-round)); border: 1px solid var(--mmc-line);
   background: var(--mmc-surface-2); color: var(--mmc-text);
   font: inherit; font-size: calc(12px * var(--mmc-type)); outline: none;
 }
@@ -411,7 +411,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 /* The way to hang another file on them: a tile of the same size as the files,
    in the same row, so it reads as the next slot rather than as a control. */
 .mmc-cast-add {
-  width: calc(38px * var(--mmc-type)); height: calc(38px * var(--mmc-type)); box-sizing: border-box; border-radius: 9px; flex: none;
+  width: calc(38px * var(--mmc-type)); height: calc(38px * var(--mmc-type)); box-sizing: border-box; border-radius: calc(9px * var(--mmc-round)); flex: none;
   border: 1px dashed var(--mmc-line); background: none; cursor: pointer;
   color: var(--mmc-off); font-size: calc(17px * var(--mmc-type)); font-family: inherit; line-height: 1;
   display: flex; align-items: center; justify-content: center;
@@ -440,7 +440,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 }
 .mmc-cast-feature-add {
   margin-left: auto; flex: none; appearance: none; border: 0; background: none;
-  padding: 2px 5px; margin-right: -5px; border-radius: 6px; cursor: pointer;
+  padding: 2px 5px; margin-right: -5px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   color: var(--mmc-off); font: inherit; font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-feature-add:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
@@ -488,7 +488,7 @@ img.mmc-cast-face { cursor: zoom-in; }
    background, nothing to look at until you go looking for it. */
 .mmc-cast-feature-kept {
   flex: none; appearance: none; border: 0; background: none; cursor: pointer;
-  padding: 3px 6px; border-radius: 6px; color: var(--mmc-off);
+  padding: 3px 6px; border-radius: calc(6px * var(--mmc-round)); color: var(--mmc-off);
   font: inherit; font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-feature-kept:hover { color: var(--mmc-accent); background: var(--mmc-surface-2); }
@@ -504,7 +504,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-marker {
   display: flex; align-items: baseline; gap: 8px; align-self: flex-start;
   appearance: none; border: 0; background: none; cursor: pointer;
-  padding: 3px 6px; margin: 6px 0 0 -6px; border-radius: 6px;
+  padding: 3px 6px; margin: 6px 0 0 -6px; border-radius: calc(6px * var(--mmc-round));
   font: inherit; text-align: left;
 }
 .mmc-cast-marker:hover { background: var(--mmc-surface-2); }
@@ -524,7 +524,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-cast-place:hover, .mmc-cast-place:focus-within, .mmc-cast-place.on { opacity: 1; }
 .mmc-cast-place-clip {
   flex: none; appearance: none; background: none; cursor: pointer;
-  border: 1px solid var(--mmc-line); border-radius: 7px; padding: 3px 8px;
+  border: 1px solid var(--mmc-line); border-radius: calc(7px * var(--mmc-round)); padding: 3px 8px;
   color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type)); white-space: nowrap;
 }
 .mmc-cast-place-clip:hover { border-color: var(--mmc-accent); color: var(--mmc-text); }
@@ -572,7 +572,7 @@ img.mmc-cast-face { cursor: zoom-in; }
 .mmc-tool-cast { position: relative; }
 .mmc-tool-count {
   position: absolute; top: -4px; right: calc(50% - var(--mmc-tool-tile) / 2 - 6px);
-  min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px;
+  min-width: 16px; height: 16px; padding: 0 4px; border-radius: calc(8px * var(--mmc-round));
   background: var(--mmc-surface-3); color: var(--mmc-text);
   box-shadow: 0 0 0 1px var(--mmc-line-2);
   font-size: 10px; font-weight: 600; line-height: 16px; text-align: center;
@@ -602,7 +602,7 @@ img.mmc-cast-face { cursor: zoom-in; }
   overflow-wrap: anywhere;
 }
 .mmc-cast-menu-thumb {
-  width: 30px; height: 30px; border-radius: 7px; object-fit: cover; flex: none;
+  width: 30px; height: 30px; border-radius: calc(7px * var(--mmc-round)); object-fit: cover; flex: none;
   background: var(--mmc-surface-3); display: flex; align-items: center;
   justify-content: center; color: var(--mmc-dim);
   box-shadow: 0 0 0 2px var(--tag, transparent);

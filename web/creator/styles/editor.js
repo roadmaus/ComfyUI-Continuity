@@ -24,7 +24,7 @@ export const css = `
   color: var(--mmc-dim); font-size: 12px; font-family: inherit;
 }
 .mmc-tool-icon {
-  width: var(--mmc-tool-tile); height: var(--mmc-tool-tile); border-radius: 14px;
+  width: var(--mmc-tool-tile); height: var(--mmc-tool-tile); border-radius: calc(14px * var(--mmc-round));
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   display: flex; align-items: center; justify-content: center;
   transition: background .12s ease;
@@ -66,10 +66,10 @@ export const css = `
 .mmc-asset {
   display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 4px;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  border-radius: 10px; font-size: calc(12px * var(--mmc-type));
+  border-radius: calc(10px * var(--mmc-round)); font-size: calc(12px * var(--mmc-type));
 }
 .mmc-asset-thumb {
-  width: 30px; height: 30px; border-radius: 7px; object-fit: cover;
+  width: 30px; height: 30px; border-radius: calc(7px * var(--mmc-round)); object-fit: cover;
   background: var(--mmc-surface-3); display: flex; align-items: center; justify-content: center;
   color: var(--mmc-dim); flex: none;
   /* The identity ring: paints the asset's hue onto the actual picture, which is
@@ -141,7 +141,7 @@ export const css = `
    .mmc-asset-name makes. */
 .mmc-asset-role-pick {
   background: none; border: 0; padding: 0 2px; font: inherit; cursor: pointer;
-  line-height: inherit; border-radius: 5px;
+  line-height: inherit; border-radius: calc(5px * var(--mmc-round));
 }
 .mmc-asset-role-pick.on { color: var(--mmc-accent); }
 .mmc-asset-role-pick:hover, .mmc-asset-role-pick:focus-visible {
@@ -183,14 +183,14 @@ export const css = `
    baseline holds either way. */
 .mmc-tack { position: relative; display: flex; align-items: center; height: calc(40px * var(--mmc-type)); flex: none; }
 .mmc-tack-stub {
-  width: 30px; height: 30px; border-radius: 7px; border: 0; padding: 0; cursor: pointer;
+  width: 30px; height: 30px; border-radius: calc(7px * var(--mmc-round)); border: 0; padding: 0; cursor: pointer;
   background: var(--mmc-accent); color: #2a1c05;
   display: flex; align-items: center; justify-content: center; position: relative; flex: none;
 }
 .mmc-tack-stub svg { fill: currentColor; }
 .mmc-tack-stub:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-tack-mono {
-  position: absolute; right: -4px; bottom: -4px; padding: 2px 3px; border-radius: 4px;
+  position: absolute; right: -4px; bottom: -4px; padding: 2px 3px; border-radius: calc(4px * var(--mmc-round));
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 9px; line-height: 1; letter-spacing: .02em;
   background: var(--mmc-surface); color: var(--mmc-accent); border: 1px solid var(--mmc-accent);
@@ -279,7 +279,7 @@ export const css = `
 /* --- prompt + pills ------------------------------------------------------- */
 .mmc-panel {
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 20px; padding: 14px; display: flex; flex-direction: column;
+  border-radius: calc(20px * var(--mmc-round)); padding: 14px; display: flex; flex-direction: column;
   gap: 12px; flex: 1; min-height: 0;
 }
 /* contenteditable, not a textarea: @references are atomic chips, and a textarea
@@ -313,7 +313,7 @@ export const css = `
 .mmc-panel-corner { position: absolute; top: 10px; right: 10px; z-index: 1; }
 .mmc-expand {
   display: flex; align-items: center; justify-content: center;
-  width: 26px; height: 26px; padding: 0; border-radius: 8px; cursor: pointer;
+  width: 26px; height: 26px; padding: 0; border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-off); opacity: .55; transition: opacity .12s ease, color .12s ease;
 }
@@ -413,7 +413,7 @@ export const css = `
 .mmc-prompt-head { display: none; }
 .mmc-prompt-fold.superseded > .mmc-prompt-head {
   display: flex; align-items: center; gap: 7px; min-width: 0;
-  padding: 4px 6px; margin: -4px -6px; border-radius: 9px;
+  padding: 4px 6px; margin: -4px -6px; border-radius: calc(9px * var(--mmc-round));
   color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); cursor: pointer; list-style: none;
 }
 .mmc-prompt-head::-webkit-details-marker { display: none; }
@@ -453,7 +453,7 @@ export const css = `
 }
 .mmc-compiled-rail:hover { color: var(--mmc-text); }
 .mmc-compiled-rail:focus-visible {
-  outline: 1px solid var(--mmc-accent); outline-offset: 3px; border-radius: 6px;
+  outline: 1px solid var(--mmc-accent); outline-offset: 3px; border-radius: calc(6px * var(--mmc-round));
 }
 .mmc-compiled-title { flex: none; }
 .mmc-compiled-rail svg {
@@ -524,7 +524,7 @@ export const css = `
 }
 /* Where the sections will be, while the first answer is outstanding. */
 .mmc-compiled-bar {
-  height: 9px; border-radius: 4px; background: var(--mmc-surface-2);
+  height: 9px; border-radius: calc(4px * var(--mmc-round)); background: var(--mmc-surface-2);
   animation: mmc-compiled-pulse 1.2s ease-in-out infinite;
 }
 @keyframes mmc-compiled-pulse { 0%, 100% { opacity: .45; } 50% { opacity: .9; } }
@@ -539,7 +539,7 @@ export const css = `
 /* .mmc-ref, not .mmc-chip: the refiner's language chips own that name, and the
    two rules fighting over it is what once turned these gray. */
 .mmc-ref {
-  display: inline-block; padding: 1px 7px; margin: 0 1px; border-radius: 7px;
+  display: inline-block; padding: 1px 7px; margin: 0 1px; border-radius: calc(7px * var(--mmc-round));
   background: color-mix(in srgb, var(--tag, var(--mmc-accent)) 14%, transparent);
   color: var(--tag, var(--mmc-accent));
   font-size: .92em; white-space: nowrap; user-select: all;
@@ -636,7 +636,7 @@ export const css = `
 /* --- @ mention menu ------------------------------------------------------- */
 .mmc-mention {
   position: fixed; z-index: 1350; width: 330px; max-height: 300px; overflow-y: auto;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   padding: 6px; box-shadow: 0 20px 50px var(--mmc-shadow);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
 }
@@ -650,12 +650,12 @@ export const css = `
 .mmc-mention-row {
   display: flex; align-items: center; gap: 10px; width: 100%; min-width: 0;
   padding: 7px 8px; background: none; border: 1px solid transparent;
-  border-radius: 10px; font-family: inherit; text-align: left; cursor: pointer;
+  border-radius: calc(10px * var(--mmc-round)); font-family: inherit; text-align: left; cursor: pointer;
   color: var(--mmc-text); overflow: hidden;
 }
 .mmc-mention-row[aria-selected="true"] { background: var(--mmc-surface-3); border-color: var(--mmc-wash-2); }
 .mmc-mention-thumb {
-  width: calc(30px * var(--mmc-type)); height: calc(30px * var(--mmc-type)); border-radius: 7px; object-fit: cover; flex: none;
+  width: calc(30px * var(--mmc-type)); height: calc(30px * var(--mmc-type)); border-radius: calc(7px * var(--mmc-round)); object-fit: cover; flex: none;
   background: var(--mmc-surface-3); display: flex; align-items: center; justify-content: center;
   color: var(--mmc-dim); font-size: calc(13px * var(--mmc-type));
 }
@@ -693,7 +693,7 @@ export const css = `
   margin: 4px 2px 0; padding: 8px 6px 2px; border-top: 1px solid var(--mmc-line);
 }
 .mmc-say-dial {
-  padding: 3px 9px; border-radius: 7px; border: 1px solid var(--mmc-line);
+  padding: 3px 9px; border-radius: calc(7px * var(--mmc-round)); border: 1px solid var(--mmc-line);
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   font-family: inherit; font-size: calc(11px * var(--mmc-type));
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer;
@@ -710,7 +710,7 @@ export const css = `
    shown rather than something to type in — which is the one thing this field
    has to say. */
 .mmc-say-field {
-  width: 100%; padding: 9px 11px; border-radius: 9px;
+  width: 100%; padding: 9px 11px; border-radius: calc(9px * var(--mmc-round));
   border: 1px solid var(--mmc-wash-2); background: var(--mmc-surface-3);
   color: var(--mmc-text); font-family: inherit; font-size: calc(13.5px * var(--mmc-type));
 }
@@ -754,7 +754,7 @@ export const css = `
 .mmc-pills { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .mmc-pill {
   display: flex; align-items: center; gap: 7px; height: var(--mmc-pill-h); padding: 0 14px;
-  border-radius: 19px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
+  border-radius: calc(19px * var(--mmc-round)); background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap; transition: background .12s ease;
 }
@@ -876,7 +876,7 @@ export const css = `
 .mmc-mode {
   font-size: calc(11px * var(--mmc-type)); letter-spacing: .04em; color: var(--mmc-dim);
   display: flex; align-items: center; gap: 6px; height: var(--mmc-pill-h);
-  background: none; border: 1px solid transparent; border-radius: 19px;
+  background: none; border: 1px solid transparent; border-radius: calc(19px * var(--mmc-round));
   padding: 0 12px; font-family: inherit; box-sizing: border-box;
 }
 /* Only the clickable form gets affordances — as a span it is a plain readout. */
@@ -886,7 +886,7 @@ button.mmc-mode:hover { background: var(--mmc-surface-2); border-color: var(--mm
 .mmc-mode b { color: var(--mmc-accent); font-weight: 600; }
 .mmc-pin {
   font-size: calc(10px * var(--mmc-type)); letter-spacing: .06em; text-transform: uppercase;
-  color: var(--mmc-accent); border: 1px solid currentColor; border-radius: 8px;
+  color: var(--mmc-accent); border: 1px solid currentColor; border-radius: calc(8px * var(--mmc-round));
   padding: 0 5px; opacity: .8;
 }
 .mmc-warn { color: var(--mmc-warn); font-size: calc(12px * var(--mmc-type)); }

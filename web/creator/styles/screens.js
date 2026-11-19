@@ -11,7 +11,7 @@ export const css = `
 .mmc-screen-chip {
   display: flex; align-items: center; gap: 6px; padding: 4px 10px 4px 5px;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  border-radius: 10px; cursor: pointer; font-family: inherit;
+  border-radius: calc(10px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); text-align: left;
 }
 .mmc-screen-chip:hover { border-color: var(--mmc-line-3); }
@@ -21,12 +21,12 @@ export const css = `
    read as a phone and a monitor before a word of the label. The hairline is
    what keeps a white tracker from dissolving into a light palette. */
 .mmc-screen-tracker {
-  display: block; flex: none; border-radius: 3px;
+  display: block; flex: none; border-radius: calc(3px * var(--mmc-round));
   box-shadow: 0 0 0 1px var(--mmc-line-2);
 }
 .mmc-screen-arrow { color: var(--mmc-faint); font-size: calc(11px * var(--mmc-type)); }
 .mmc-screen-thumb {
-  width: 26px; height: 26px; flex: none; border-radius: 6px; object-fit: cover;
+  width: 26px; height: 26px; flex: none; border-radius: calc(6px * var(--mmc-round)); object-fit: cover;
   background: var(--mmc-surface-3); color: var(--mmc-dim);
   display: flex; align-items: center; justify-content: center;
 }
@@ -44,7 +44,7 @@ export const css = `
 .mmc-screen-head { display: flex; align-items: center; justify-content: space-between; }
 .mmc-screen-pop .mmc-pop-title { color: var(--mmc-strong); font-weight: 600; }
 .mmc-screen-remove {
-  display: inline-flex; padding: 6px; margin-right: 4px; border: 0; border-radius: 8px;
+  display: inline-flex; padding: 6px; margin-right: 4px; border: 0; border-radius: calc(8px * var(--mmc-round));
   background: none; color: var(--mmc-dim); cursor: pointer;
 }
 .mmc-screen-remove:hover { background: var(--mmc-surface-2); color: var(--mmc-bad); }
@@ -55,13 +55,13 @@ export const css = `
 .mmc-screen-pair {
   display: flex; align-items: center; justify-content: center; gap: 14px;
   padding: 10px 10px 14px; margin: 0 2px 6px;
-  background: var(--mmc-surface); border-radius: 12px;
+  background: var(--mmc-surface); border-radius: calc(12px * var(--mmc-round));
 }
 .mmc-screen-side { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 7px; }
 .mmc-screen-side figcaption { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); }
 .mmc-screen-frame {
   display: flex; align-items: center; justify-content: center;
-  border-radius: 5px; overflow: hidden; box-shadow: 0 0 0 1px var(--mmc-line-2);
+  border-radius: calc(5px * var(--mmc-round)); overflow: hidden; box-shadow: 0 0 0 1px var(--mmc-line-2);
 }
 .mmc-screen-frame .mmc-screen-tracker { border-radius: 0; box-shadow: none; }
 /* Black, because that is what the pass letterboxes with: a fit that leaves
@@ -76,7 +76,7 @@ export const css = `
 }
 .mmc-screen-device {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 9px 4px 7px; border: 0; border-radius: 10px; background: none; cursor: pointer;
+  padding: 9px 4px 7px; border: 0; border-radius: calc(10px * var(--mmc-round)); background: none; cursor: pointer;
   color: var(--mmc-dim); font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
 }
 .mmc-screen-device:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
@@ -86,7 +86,7 @@ export const css = `
 }
 .mmc-screen-glyph { width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
 .mmc-screen-glyph > span {
-  box-sizing: border-box; border: 1.5px solid var(--mmc-edge-2); border-radius: 2px;
+  box-sizing: border-box; border: 1.5px solid var(--mmc-edge-2); border-radius: calc(2px * var(--mmc-round));
 }
 .mmc-screen-device[aria-checked="true"] .mmc-screen-glyph > span { border-color: var(--mmc-blue); }
 
@@ -98,13 +98,13 @@ export const css = `
 .mmc-screen-stack { flex-wrap: wrap; }
 .mmc-screen-stack .mmc-screen-flip { flex: 1 0 100%; }
 .mmc-screen-change {
-  flex: none; padding: 4px 10px; border: 1px solid var(--mmc-line-2); border-radius: 12px;
+  flex: none; padding: 4px 10px; border: 1px solid var(--mmc-line-2); border-radius: calc(12px * var(--mmc-round));
   background: none; color: var(--mmc-text); cursor: pointer;
   font-family: inherit; font-size: calc(12px * var(--mmc-type));
 }
 .mmc-screen-change:hover { background: var(--mmc-surface-2); }
 .mmc-screen-ratio {
-  width: 56px; padding: 4px 6px; border: 1px solid var(--mmc-line-2); border-radius: 8px;
+  width: 56px; padding: 4px 6px; border: 1px solid var(--mmc-line-2); border-radius: calc(8px * var(--mmc-round));
   background: var(--mmc-surface); color: var(--mmc-text);
   font-family: inherit; font-size: calc(12px * var(--mmc-type)); font-variant-numeric: tabular-nums;
 }
@@ -115,7 +115,7 @@ export const css = `
    The colour buttons wear a swatch and the marker buttons a small tracker in
    the colour in force; the hairline keeps white visible on a light palette. */
 .mmc-set-swatch {
-  width: 11px; height: 11px; flex: none; border-radius: 3px;
+  width: 11px; height: 11px; flex: none; border-radius: calc(3px * var(--mmc-round));
   box-shadow: 0 0 0 1px var(--mmc-line-3);
 }
 /* The specimen: the tracker in force on a phone and a laptop, big enough to
@@ -125,7 +125,7 @@ export const css = `
   padding: 14px 0 16px; border-bottom: 1px solid var(--mmc-line);
 }
 .mmc-set-tracker { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 8px; }
-.mmc-set-tracker .mmc-screen-tracker { border-radius: 6px; }
+.mmc-set-tracker .mmc-screen-tracker { border-radius: calc(6px * var(--mmc-round)); }
 .mmc-set-tracker figcaption { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); }
 .mmc-set-tracker-note {
   flex: 1 1 180px; margin: 0 0 22px; max-width: 34ch;

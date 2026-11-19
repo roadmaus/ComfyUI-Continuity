@@ -15,7 +15,7 @@ export const css = `
   top: calc(var(--mmc-tool-tile) - 20px);
   margin-left: calc(var(--mmc-tool-tile) / 2 - 20px);
   display: flex; align-items: center; justify-content: center;
-  background: none; border: 0; border-radius: 6px; padding: 0;
+  background: none; border: 0; border-radius: calc(6px * var(--mmc-round)); padding: 0;
   color: var(--mmc-off); cursor: pointer; transition: color .12s ease, background .12s ease;
 }
 .mmc-refine-more svg { width: 12px; height: 12px; }
@@ -46,7 +46,7 @@ export const css = `
   /* The pill's own height, not a number: the pill is --mmc-pill-h, which the
      text size scales, and a chevron fixed at 38 sat short inside a 43px pill
      with its corner showing. */
-  position: static; width: 24px; height: var(--mmc-pill-h); border-radius: 0 19px 19px 0;
+  position: static; width: 24px; height: var(--mmc-pill-h); border-radius: 0 calc(19px * var(--mmc-round)) calc(19px * var(--mmc-round)) 0;
   margin-left: 0; background: var(--mmc-surface-2);
   border: 1px solid var(--mmc-line); border-left: 0; color: var(--mmc-dim);
 }
@@ -54,7 +54,7 @@ export const css = `
 /* Two halves of one pill: the label's end is squared where the chevron joins
    it. It used to keep its round end and slide 10px under the chevron, and the
    curve showed through as a notch in the outline. */
-.mmc-refine-split.pill .mmc-pill { padding-right: 12px; border-radius: 19px 0 0 19px; border-right: 0; }
+.mmc-refine-split.pill .mmc-pill { padding-right: 12px; border-radius: calc(19px * var(--mmc-round)) 0 0 calc(19px * var(--mmc-round)); border-right: 0; }
 
 /* A card, not a strip: 264px stacked every section into a scroll of wrapped
    chips and paragraphs. At 420 the chips sit in rows, the dials share a line,
@@ -70,11 +70,11 @@ export const css = `
 }
 .mmc-refine-head .mmc-pop-title { padding: 0 0 0 8px; }
 .mmc-refine-seg {
-  display: flex; padding: 2px; border-radius: 999px;
+  display: flex; padding: 2px; border-radius: var(--mmc-pill-r);
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
 }
 .mmc-refine-seg-btn {
-  border: 0; background: none; border-radius: 999px; cursor: pointer;
+  border: 0; background: none; border-radius: var(--mmc-pill-r); cursor: pointer;
   padding: 4px 12px; color: var(--mmc-dim); font-family: inherit;
   font-size: calc(11px * var(--mmc-type)); transition: all .12s ease;
 }
@@ -90,12 +90,12 @@ export const css = `
   display: flex; flex-direction: column; gap: 8px;
   margin: 0 2px 8px; padding: 10px;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 12px;
+  border-radius: calc(12px * var(--mmc-round));
 }
 .mmc-refine-server .mmc-refine-row { flex-wrap: nowrap; align-items: center; }
 .mmc-refine-connect {
   flex: none; height: calc(30px * var(--mmc-type)); padding: 0 14px;
-  border: 0; border-radius: 15px; cursor: pointer;
+  border: 0; border-radius: calc(15px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-accent); color: var(--mmc-bg);
   font-family: inherit; font-size: calc(12px * var(--mmc-type));
 }
@@ -133,7 +133,7 @@ export const css = `
 .mmc-opt-kind {
   flex: none; margin-left: auto; margin-right: 8px;
   font-size: calc(10px * var(--mmc-type)); color: var(--mmc-dim);
-  border: 1px solid var(--mmc-line); border-radius: 999px; padding: 1px 7px;
+  border: 1px solid var(--mmc-line); border-radius: var(--mmc-pill-r); padding: 1px 7px;
 }
 .mmc-refine-hint { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.4; }
 /* The eject chip sits inside the server card, under its hint: it is a
@@ -150,7 +150,7 @@ export const css = `
 .mmc-refine-empty code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(11px * var(--mmc-type));
   color: var(--mmc-text); background: var(--mmc-surface-2);
-  border: 1px solid var(--mmc-line); border-radius: 7px; padding: 5px 8px;
+  border: 1px solid var(--mmc-line); border-radius: calc(7px * var(--mmc-round)); padding: 5px 8px;
 }
 .mmc-refine-empty .mmc-ghost { font-size: calc(12px * var(--mmc-type)); }
 
@@ -184,7 +184,7 @@ export const css = `
    list would scroll and a <select> would be the only browser chrome in the node. */
 .mmc-chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .mmc-chip {
-  padding: 4px 10px; border-radius: 12px; background: var(--mmc-surface-2);
+  padding: 4px 10px; border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface-2);
   border: 1px solid var(--mmc-line); color: var(--mmc-dim);
   font-family: inherit; font-size: calc(11px * var(--mmc-type)); cursor: pointer; transition: all .12s ease;
 }
@@ -215,7 +215,7 @@ export const css = `
 .mmc-refined-lede { color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); margin-top: -4px; }
 .mmc-refined-box {
   width: 100%; box-sizing: border-box; resize: vertical;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 12px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(12px * var(--mmc-round));
   color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type)); line-height: 1.5;
   padding: 10px 12px; outline: none;
 }

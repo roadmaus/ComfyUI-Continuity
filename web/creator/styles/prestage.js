@@ -28,7 +28,7 @@ export const css = `
    have to opt back in or they are pictures of buttons. */
 .mmc-stage-send {
   pointer-events: auto;
-  background: var(--mmc-scrim-2); border: 1px solid var(--mmc-edge); border-radius: 999px;
+  background: var(--mmc-scrim-2); border: 1px solid var(--mmc-edge); border-radius: var(--mmc-pill-r);
   padding: 3px 10px; cursor: pointer; font-family: inherit; font-size: calc(12px * var(--mmc-type));
   color: var(--mmc-text);
 }
@@ -39,7 +39,7 @@ export const css = `
 .mmc-grab-card {
   display: flex; flex-direction: column; gap: 14px;
   width: min(720px, 92vw); padding: 20px 24px;
-  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: 18px;
+  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: calc(18px * var(--mmc-round));
   box-shadow: 0 24px 64px var(--mmc-shadow-soft);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
   color: var(--mmc-text); font-size: calc(13px * var(--mmc-type));
@@ -48,14 +48,14 @@ export const css = `
 .mmc-grab-title svg { stroke: currentColor; fill: none; stroke-width: 1.6; }
 .mmc-grab-stage {
   width: 100%; max-height: 46vh; object-fit: contain;
-  background: var(--mmc-media-bg); border-radius: 12px;
+  background: var(--mmc-media-bg); border-radius: calc(12px * var(--mmc-round));
 }
 .mmc-grab-row { display: flex; align-items: center; gap: 10px; }
 .mmc-grab-scrub { flex: 1; }
 .mmc-grab-time { min-width: 64px; text-align: right; color: var(--mmc-dim); font-variant-numeric: tabular-nums; }
 .mmc-grab-actions { display: flex; justify-content: flex-end; gap: 12px; }
 .mmc-grab-actions .mmc-btn {
-  padding: 8px 18px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 8px 18px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   font-size: calc(13px * var(--mmc-type)); background: var(--mmc-surface-2); color: var(--mmc-text);
   border: 1px solid var(--mmc-line);
 }
@@ -69,7 +69,7 @@ export const css = `
 .mmc-contact-stage { max-height: 52vh; }
 .mmc-contact-grid { display: flex; gap: 8px; flex-wrap: wrap; }
 .mmc-contact-cell {
-  padding: 7px 14px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 7px 14px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   font-size: calc(12px * var(--mmc-type)); font-variant-numeric: tabular-nums;
   background: var(--mmc-surface-2); color: var(--mmc-text);
   border: 1px solid var(--mmc-line);
