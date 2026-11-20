@@ -188,6 +188,38 @@ function seamPinRow(piece, segment, width, commit) {
   };
 }
 
+/** The keystone on this seam: whether it carries the first shot of its scene
+ *  forward (`creator/keystone.py`). On is the machine's setting, so the row
+ *  only ever writes the opt-out, and only on a seam that could carry one —
+ *  `S.keystoneSeam`, the same gate `core/emit.py` reads. */
+function keystoneRow(piece, segment, index, commit) {
+  if (!S.keystoneSeam(segment, piece, index)) return null;
+  return (close) => {
+    const on = segment.keystone !== false;
+    return el("div", { class: "mmc-twopass" }, [
+      el("button", {
+        class: "mmc-opt",
+        "aria-checked": on,
+        onclick: () => {
+          if (on) segment.keystone = false; else delete segment.keystone;
+          close();
+          commit();
+        },
+      }, [
+        el("span", { class: "mmc-opt-label mmc-opt-col" }, [
+          el("span", { text: t("Hold to the scene's first shot") }),
+          el("span", { class: "mmc-opt-sub",
+                       text: t("Carries the first shot's clean first frame into this one "
+                             + "so drift cannot stack up. Only while the keystone is on "
+                             + "under Settings, Rendering. Switch it off for a shot that "
+                             + "should leave the look behind.") }),
+        ]),
+        el("span", { class: "mmc-radio" }),
+      ]),
+    ]);
+  };
+}
+
 /** filename -> {width, height}, null while a probe is out. Module-level so the
  *  modal bar and the node face — two views of the same strip — measure a file
  *  once between them. Clip cards never land here: they store their own size. */
@@ -2171,7 +2203,8 @@ class Timeline {
       extra: seamRows(
         seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
                    () => this.commit()),
-        seamRestoreRow(this.timeline, segment, index, () => this.commit())),
+        seamRestoreRow(this.timeline, segment, index, () => this.commit()),
+        keystoneRow(this.timeline, segment, index, () => this.commit())),
       onPick: (choice) => {
         const width = grid.find((f) => label(f) === choice) ?? 1;
         if (width > 1) segment.feather = width;

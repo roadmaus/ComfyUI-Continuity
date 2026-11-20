@@ -188,16 +188,21 @@ def _fingerprint(blob):
     piece keeps its reference pool.
 
     The settings are the ones `_render` reads off the file when it builds
-    the graph — the seam handoff, the turbo lead-in, the LoRA loader and the
-    screen tracker. They are not node inputs,
+    the graph — the seam handoff, the turbo lead-in, the LoRA loader, the
+    keystone and the screen tracker. They are not node inputs,
     so without this a changed setting left the node's inputs identical, the
     expansion was a cache hit, and the switch on the settings page did nothing
     until something else about the render moved.
     """
+    keystone = settings.keystone()
     graph_settings = (settings.seam_handoff(), settings.turbo_lead_in(),
                       settings.lora_loader(),
                       tuple(sorted(settings.screen_tracker().items())),
                       settings.screen_debug())
+    if keystone:
+        # Only while it is on, so turning this release on changes no cache
+        # key for anybody who never touches it.
+        graph_settings += (tuple(sorted(keystone.items())),)
     try:
         return (blob, timeline.stamps(compiler.as_piece(json.loads(blob))), graph_settings)
     except Exception:

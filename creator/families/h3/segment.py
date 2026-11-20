@@ -118,6 +118,13 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 # not handed forward to be brightened and sharpened again.
                 io.Latent.Input("anchor_latent", optional=True,
                     tooltip="The first pass's sampler latent, whose tone a levelled seam is pulled back to."),
+                # The first pass of this shot's scene, on a seam carrying the
+                # keystone (`creator/keystone.py`): its first latent is held in
+                # this shot's latent 0, and its last single-frame latent rides
+                # on the output for the sampler's capstone wrapper. Wired only
+                # where the loop says the seam carries one.
+                io.Latent.Input("keystone_latent", optional=True,
+                    tooltip="The scene's first pass, whose clean first frame this shot is held to."),
                 io.Audio.Input("prev_audio", optional=True,
                     tooltip="The tail of an earlier segment's soundtrack, when this segment's sound continues from it."),
                 # The storyboard of earlier passes this segment is shown
@@ -195,7 +202,7 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 model_fl2va=None, model_ref2va=None,
                 prev_image=None, prev_audio=None,
                 next_image=None, next_audio=None, hold_lora="",
-                prev_latent=None, anchor_latent=None,
+                prev_latent=None, anchor_latent=None, keystone_latent=None,
                 sampler_backend="", storyboard_image=None,
                 lora_loader="") -> io.NodeOutput:
         payload = _parse(segment_data)
@@ -300,6 +307,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
                 loaded[encoder.PREV_LATENT] = {"latent": prev_latent["samples"]}
                 if anchor_latent is not None:
                     loaded[encoder.ANCHOR_LATENT] = {"latent": anchor_latent["samples"]}
+                if keystone_latent is not None:
+                    loaded[encoder.KEYSTONE_LATENT] = {"latent": keystone_latent["samples"]}
         if compiled.continues_audio:
             if prev_audio is None:
                 raise ValueError(
@@ -348,7 +357,8 @@ class MiniMaxH3TimelineSegment(io.ComfyNode):
             {"vae": vae_name, "audio_vae": audio_vae_name},
             sound=payload.get("sound"),
             masked_seam=payload.get("seam_road") == "masked",
-            native_audio_seams=distributed)
+            native_audio_seams=distributed,
+            keystone=payload.get("keystone") if isinstance(payload.get("keystone"), dict) else None)
         return io.NodeOutput(model, cond, latent, model if lead is None else lead)
 
 

@@ -1529,3 +1529,95 @@ _direct = build(blob(aspect="1:1", short_edge=864, upscale="direct", aspect_sour
 _direct_canvases = sorted({tuple(json.loads(n["inputs"]["segment_data"])["canvas"][k] for k in ("width", "height"))
                            for n in _direct.values() if n["class_type"] == "MiniMaxH3TimelineSegment"})
 check("a direct strip off the pill pins every segment at the slider", _direct_canvases, [(864, 864)])
+
+# ---- the keystone ------------------------------------------------------------
+#
+# The first pass of each scene, carried into every blended seam after it
+# (`creator/keystone.py`). A hard cut starts a scene; a card can opt its seam
+# out; off, nothing about the graph changes.
+_ks_was = _settings.keystone
+_ks_strip = blob(segments=[
+    {"prompt": "one", "duration_s": 5},
+    {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22},
+    {"prompt": "three", "duration_s": 5, "continue": True, "feather": 22},
+    {"prompt": "four", "duration_s": 5},
+    {"prompt": "five", "duration_s": 5, "continue": True, "feather": 22, "keystone": False},
+    {"prompt": "six", "duration_s": 5, "continue": True, "feather": 22},
+    {"prompt": "seven", "duration_s": 5, "continue": True},
+])
+_ks_order = ["one", "two", "three", "four", "five", "six", "seven"]
+_settings.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+try:
+    _ks = build(_ks_strip).expand
+finally:
+    _settings.keystone = _ks_was
+_ks_chain = in_order([(n_id, n["inputs"]) for n_id, n in _ks.items()
+                      if n["class_type"] == "MiniMaxH3TimelineSegment"], _ks_order)
+_ks_payloads = [json.loads(inputs["segment_data"]) for _, inputs in _ks_chain]
+
+
+def _ks_sampler(segment_id):
+    return [n_id for n_id, n in _ks.items() if n["class_type"] == "KSampler"
+            and model_under(_ks, n["inputs"]["model"][0]) in
+            (segment_id, *[m for m, mn in _ks.items() if mn["class_type"] == "ContinuityKeystoneLock"
+                           and mn["inputs"]["model"][0] == segment_id])][0]
+
+
+_ks_first = _ks_sampler(_ks_chain[0][0])
+check("keystone: a blended seam is handed the scene's first pass",
+      _ks_chain[1][1].get("keystone_latent"), [_ks_first, 0])
+check("...and so is the next one down the scene",
+      _ks_chain[2][1].get("keystone_latent"), [_ks_first, 0])
+check("...each on the masked road, whatever the handoff setting",
+      [p.get("seam_road") for p in _ks_payloads[1:3]], ["masked", "masked"])
+check("...with the machine's plan in the payload, so the node caches on it",
+      _ks_payloads[1].get("keystone"), {"capstone": True, "lock": 4, "noise": 1.0})
+check("a hard cut carries none",
+      ("keystone_latent" in _ks_chain[3][1], "keystone" in _ks_payloads[3]), (False, False))
+check("a seam switched off on its card carries none, and stays on the latent road",
+      ("keystone_latent" in _ks_chain[4][1], _ks_payloads[4].get("keystone"),
+       _ks_payloads[4].get("seam_road")), (False, False, None))
+_ks_fourth = _ks_sampler(_ks_chain[3][0])
+check("after a cut the next scene's first pass is the keystone",
+      _ks_chain[5][1].get("keystone_latent"), [_ks_fourth, 0])
+check("a classic single-frame seam carries none",
+      "keystone_latent" in _ks_chain[6][1], False)
+_ks_locks = [n["inputs"] for n in _ks.values() if n["class_type"] == "ContinuityKeystoneLock"]
+check("one capstone lock per keystone pass, reading its own segment's latent",
+      sorted(lock["latent"][0] for lock in _ks_locks),
+      sorted([_ks_chain[1][0], _ks_chain[2][0], _ks_chain[5][0]]))
+check("...at the machine's step, on the whole schedule",
+      {(lock["lock"], lock["offset"]) for lock in _ks_locks}, {(4, 0)})
+_ks_restores = {n["inputs"]["source"][0]: n_id for n_id, n in _ks.items()
+                if n["class_type"] == "ContinuityKeystoneRestore"}
+check("one restore per keystone pass", sorted(_ks_restores),
+      sorted([_ks_chain[1][0], _ks_chain[2][0], _ks_chain[5][0]]))
+check("...which is what the next seam slices its run off",
+      _ks_chain[2][1]["prev_latent"], [_ks_restores[_ks_chain[1][0]], 0])
+
+_settings.keystone = lambda: {"capstone": False, "lock": 4, "noise": 0.5}
+try:
+    _ks_front = build(_ks_strip).expand
+finally:
+    _settings.keystone = _ks_was
+check("keystone without the capstone wraps no model",
+      any(n["class_type"] == "ContinuityKeystoneLock" for n in _ks_front.values()), False)
+check("...but still restores", sum(n["class_type"] == "ContinuityKeystoneRestore"
+                                   for n in _ks_front.values()), 3)
+
+_ks_off = build(_ks_strip).expand
+check("keystone off: no segment is handed one",
+      any("keystone_latent" in n["inputs"] for n in _ks_off.values()), False)
+check("...no keystone node is emitted",
+      any(n["class_type"].startswith("ContinuityKeystone") for n in _ks_off.values()), False)
+check("...and only the opted-out card's payload says anything about it",
+      [json.loads(n["inputs"]["segment_data"]).get("keystone") for n in _ks_off.values()
+       if n["class_type"] == "MiniMaxH3TimelineSegment"].count(False), 1)
+
+_settings.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+try:
+    _fp_ks = cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA)
+finally:
+    _settings.keystone = _ks_was
+check("the keystone is part of the node's cache key",
+      _fp_ks != cn.MiniMaxH3Timeline.fingerprint_inputs(timeline_data=DATA), True)

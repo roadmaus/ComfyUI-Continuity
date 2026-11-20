@@ -6,6 +6,24 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A long chain can be held to the first shot of its scene: the keystone,
+after roycho87's Geiru Context Suite.** Experimental, and off until it is
+switched on under Settings, Rendering, Seams. On, every blended seam between
+two generated shots carries the first shot of its scene: that shot's first
+latent, the cleanest frame the scene has, held in the new shot's latent 0
+beside the run the seam hands over and taken back out before anything is
+decoded. *Keystone + capstone* also tacks the scene's last single frame onto
+the end of every model call from a chosen step (four by default), so the shot
+settles its own pose first. Context noise, ethanfel's, gives the carried run
+part of the sampler's noise, most on its oldest frame and none at the join.
+A hard cut starts a new scene and a new keystone; a card can switch its own
+seam out on the blend pill. It rides on the masked seam, so a seam carrying
+it takes the masked road whatever the handoff says. Under Raylight the
+keystone and the noise travel in the latent, and the capstone is put on the
+workers' model for that one shot's sampling and taken off again. A
+reimplementation of the ideas, not the code: the suite is GPL-3.0. Not yet
+measured on this pack's strips, and not yet run on two cards.
+
 **Refine on Flux 3 Klein keeps the cast's names.** BFL's upsampler cannot
 know that `@anna` is somebody, so it described her and dropped the name, and
 the queued render lost her pictures and her LoRAs with it, since the compile

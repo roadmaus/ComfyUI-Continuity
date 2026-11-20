@@ -391,6 +391,11 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
     handing = settings.seam_handoff()
     anchor = None           # the first generated pass's latent, the tone every
                             # levelled seam is pulled back to
+    keystone = settings.keystone() if family.keystones else None
+    roots = []              # per `decoded` entry: the sampler latent of the
+                            # first pass of its scene, the keystone's source —
+                            # a hard cut, or a pass with nothing to hand, starts
+                            # a new scene (or none), so it moves on its own
 
     for index, one in enumerate(compiled):
         if one is None:
@@ -406,6 +411,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                 clip_inputs["audio_vae"] = links.audio_vae
             reel = graph.node(CLIP_NODE, **clip_inputs).out(0)
             decoded.append(("clip", spec, None))
+            roots.append(None)
             continue
 
         # The seams, wired here because they are the loop's own bookkeeping —
@@ -466,6 +472,21 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                 # the identity.
                 if handing == "levelled" and anchor is not None and anchor is not source[2]:
                     seams["anchor_latent"] = anchor
+            # The keystone: the first pass of this scene, carried into every
+            # blended seam after it (`creator/keystone.py`). It sits beside a
+            # masked run, so a seam carrying one takes the masked road whatever
+            # the machine's handoff says; a card can switch it off on its
+            # seam. Said in the payload because it changes what the segment
+            # encodes and the model wrapper the sampler runs, so it is part of
+            # the cache key; absent everywhere it is not in play.
+            root = roots[source_index] if index else None
+            if (keystone is not None and handoff is not None and root is not None
+                    and payloads[index].get("keystone") is not False):
+                payloads[index]["seam_road"] = "masked"
+                payloads[index]["keystone"] = {
+                    "capstone": keystone["capstone"] and not (one.ends_on or one.ends_on_audio),
+                    "lock": keystone["lock"], "noise": keystone["noise"]}
+                seams["keystone_latent"] = root
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:
             # compile clamps it to a feathered seam's overlap, and this is
@@ -589,6 +610,8 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                              and not (one.motion_fix and family.fixes_motion)
                              and one.ends_feather <= 1) else None
         decoded.append(("pass", source.out(1), handoff))
+        # A continued pass is in its source's scene; anything else starts one.
+        roots.append((roots[source_index] if index else None) if one.continues else handoff)
         if anchor is None and handoff is not None:
             anchor = handoff
 

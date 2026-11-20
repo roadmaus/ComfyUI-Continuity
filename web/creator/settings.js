@@ -450,6 +450,37 @@ const SEAM_HANDOFFS = [
         + "a turbo lead-in. Picture only; the sound crosses the seam as before." },
 ];
 
+// The keystone (`creator/keystone.py`, after roycho87's Geiru Context Suite).
+const KEYSTONES = [
+  { value: "off", label: "Off",
+    note: "Each continued shot sees only the shot it continues. What every "
+        + "render did before this existed." },
+  { value: "keystone", label: "Keystone",
+    note: "The first shot of the scene's clean first frame is held in every "
+        + "blended seam after it, beside the run the seam carries, and taken out "
+        + "again before the frames are written. A hard cut starts a new scene. "
+        + "Blended seams take the masked road while this is on." },
+  { value: "capstone", label: "Keystone + capstone",
+    note: "The keystone, plus the scene's last single frame tacked on after the "
+        + "end of the shot once its pose has settled. The setting roycho87 "
+        + "measured best on long chains." },
+];
+
+const KEYSTONE_LOCK = [
+  { value: 2, label: "Step 2", note: "Earlier: holds the look harder, can stiffen the motion." },
+  { value: 4, label: "Step 4", note: "The default, from the Geiru Context Suite: about the "
+        + "last half of an 8-step turbo schedule." },
+  { value: 6, label: "Step 6", note: "Later: the shot moves more freely, the anchor pulls less." },
+];
+
+const KEYSTONE_NOISE = [
+  { value: 0, label: "Off", note: "The carried run is handed over clean, as on the plain masked road." },
+  { value: 0.5, label: "Half", note: "Half the current noise on the oldest carried frame, fading to none at the join." },
+  { value: 1, label: "Full", note: "The default. The oldest carried frame is as noisy as the new ones, "
+        + "fading to clean at the join, so the drift it carries is not copied exactly "
+        + "(ethanfel's context noise)." },
+];
+
 const PLAYBACK = [
   { value: true, label: "Plays itself",
     note: "What the stage has always done: the clip loops silently as soon as it "
@@ -813,6 +844,46 @@ class SettingsPage {
         apply: (value) => this.set({ seam_handoff: value }),
       }),
     })];
+    const keystone = this.settings.keystone || "off";
+    rows.push(this.row({
+      key: "keystone",
+      name: "Keystone",
+      hint: "What a continued shot carries from the start of its scene.",
+      ...this.segment({
+        options: KEYSTONES,
+        value: keystone,
+        also: "Experimental. Only blended seams between two generated shots, at the "
+            + "canvas of the scene's first shot; a card can switch it off on its "
+            + "blend. Read when a render is queued.",
+        apply: (value) => this.set({ keystone: value }),
+      }),
+    }));
+    if (keystone === "capstone") {
+      rows.push(this.row({
+        key: "keystone_lock",
+        name: "Capstone joins at",
+        hint: "The shot settles its own pose before it is shown the anchor.",
+        ...this.segment({
+          options: KEYSTONE_LOCK,
+          value: Number(this.settings.keystone_lock ?? 4),
+          also: "Counted on the whole schedule, lead-in included. Raise it if the "
+              + "motion stiffens, lower it if colour or detail starts to go.",
+          apply: (value) => this.set({ keystone_lock: value }),
+        }),
+      }));
+    }
+    if (keystone !== "off") {
+      rows.push(this.row({
+        key: "keystone_noise",
+        name: "Context noise",
+        hint: "How much of the sampler's noise the carried frames get.",
+        ...this.segment({
+          options: KEYSTONE_NOISE,
+          value: Number(this.settings.keystone_noise ?? 1),
+          apply: (value) => this.set({ keystone_noise: value }),
+        }),
+      }));
+    }
     if (this.settings.advanced === true || leadIn > 0) {
       rows.push(this.row({
         key: "turbo_lead_in",

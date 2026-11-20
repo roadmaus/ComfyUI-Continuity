@@ -20,7 +20,7 @@ import time
 import node_helpers
 import torch
 from comfy.ldm.minimax.model import FRAME_PER_TOKEN
-from ... import audiolatent, latents, media, refmod
+from ... import audiolatent, keystone as keystones, latents, media, refmod
 from . import payload as payload_repair
 from .payload import AUDIO_END_KEY, CORE_ANCHORS_ANYWHERE, FRAME_INDEX_KEY
 from comfy_extras.nodes_minimax_h3 import (
@@ -62,6 +62,9 @@ ANCHOR_LATENT = "__anchor_latent__"
 # written into the target latent by `_masked_prefix` and the head seam pins no
 # guides for it. Set by `encode`, read by `_inherited_run`.
 MASKED_RUN = "__masked_run__"
+# The first pass of this shot's scene, on a seam carrying the keystone
+# (`creator/keystone.py`). Grafted onto the masked run by `encode`.
+KEYSTONE_LATENT = "__keystone_latent__"
 
 # Where time is on an H3 audio latent, and the rate its VAE is assumed to run at
 # when it does not name one. `_empty_av_latent` builds `[B, 32, 2, audio_t]`, so
@@ -617,7 +620,7 @@ def _native_audio_seams(conditioning):
 
 
 def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
-           masked_seam=False, native_audio_seams=False):
+           masked_seam=False, native_audio_seams=False, keystone=None):
     """-> (conditioning, latent). `loaded` maps asset handle -> decoded media.
 
     `masked_seam` is the third seam road (`settings.seam_handoff = "masked"`):
@@ -671,6 +674,17 @@ def encode(clip, vae, audio_vae, compiled, loaded, checkpoints=None, sound=None,
         cond = _native_audio_seams(cond)
     if MASKED_RUN in loaded:
         latent = _masked_prefix(latent, loaded[MASKED_RUN]["latent"])
+        if keystone and KEYSTONE_LATENT in loaded:
+            # The scene's first frame beside the run, and the run's own
+            # context noise — `keystone.graft`, which stands down by itself
+            # where the source cannot stand in (another canvas).
+            latent, note = keystones.graft(
+                latent, loaded[KEYSTONE_LATENT]["latent"],
+                capstone=bool(keystone.get("capstone")),
+                noise=float(keystone.get("noise", 0.0)))
+            logging.info("[MiniMax] seam: %s", note)
+    elif keystone:
+        logging.info("[MiniMax] seam: no masked run on this seam; keystone skipped")
     return cond, audiolatent.apply_av(latent, audio_vae, sound or [],
                                       compiled.frames, AUDIO_LAYOUT)
 

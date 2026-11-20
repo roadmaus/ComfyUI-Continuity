@@ -354,6 +354,11 @@ def manifest():
             # (`seamrestore.py`); a family declaring nothing here draws no
             # switch and the compiler's value is ignored by its loop.
             "seam_restore": True,
+            # Whether a blended seam can carry the scene's keystone
+            # (`creator/keystone.py`) — a machine setting a card's seam can
+            # opt out of. A family declaring nothing draws no switch, and its
+            # loop never reads the setting (`Family.keystones`).
+            "keystone": True,
             # Whether a card can have its fast motion slowed, re-drawn and put
             # back on the clock after it renders — `Compiled.motion_fix`. H3's
             # own pass (`motionfix.py`, planned by `derope.py`); a family

@@ -204,6 +204,35 @@ def patched(graph, model, sampling, acceleration, weights):
     return core.graph_preview(graph, model, weights, declare.RULES.fps)
 
 
+def _keystone_plan(payload):
+    """The keystone this pass carries (`core/emit.py` stamps it), or None."""
+    plan = payload.get("keystone")
+    return plan if isinstance(plan, dict) else None
+
+
+def _keystone_locked(graph, model, segment, payload, offset):
+    """`model` wrapped to tack the capstone on, where the pass carries one.
+
+    The capstone itself rides on the segment's latent — the graft put it there
+    when it found a source that fits — so the node reads it off that, and hands
+    the model back untouched when the graft stood down.
+    """
+    plan = _keystone_plan(payload)
+    if not plan or not plan.get("capstone"):
+        return model
+    return graph.node("ContinuityKeystoneLock", model=model, latent=segment.out(2),
+                      lock=int(plan.get("lock", 0)), offset=int(offset)).out(0)
+
+
+def _keystone_restored(graph, segment, payload, sampled):
+    """`sampled` with the shot's own latent 0 and held run put back after a
+    keystone pass (`keystone.restore`); every other pass as it came."""
+    if not _keystone_plan(payload):
+        return sampled
+    return graph.node("ContinuityKeystoneRestore", latent=sampled,
+                      source=segment.out(2)).out(0)
+
+
 def _lora_loader_inputs():
     """The machine's loader choice, visible to every ordinary segment's cache.
 
@@ -534,9 +563,9 @@ class H3(base.Family):
         splits = run.within(sampling, compiled, payload)
 
         if raylight.enabled(weights):
-            return self._emit_ray_sampler(graph, links, segment, payload,
-                                          compiled, sampling, acceleration,
-                                          weights, seed, splits)
+            return _keystone_restored(graph, segment, payload, self._emit_ray_sampler(
+                graph, links, segment, payload, compiled, sampling, acceleration,
+                weights, seed, splits))
 
         # The distilled H3 checkpoints run at cfg 1.0, where the negative is
         # skipped outright, so there is nothing here worth a socket on the node.
@@ -546,6 +575,11 @@ class H3(base.Family):
         # every one of these adds nothing and this is the segment's model
         # unchanged.
         model = patched(graph, segment.out(0), sampling, acceleration, weights)
+        # The keystone's capstone, outermost: it wraps the model call itself,
+        # and the step it joins at is counted on the whole schedule, so the
+        # lead-in's second sitting is told where its slice starts.
+        model = _keystone_locked(graph, model, segment, payload,
+                                 run.steps if splits else 0)
 
         # What every sampler below this line is handed, whether the schedule is
         # run in one sitting or two. The seed is not in here because the two
@@ -573,8 +607,9 @@ class H3(base.Family):
             # is held off, and `opening` is where that is said.
             opening = graph.node(
                 "KSamplerAdvanced",
-                model=patched(graph, segment.out(3), sampling,
-                              accel.opening(acceleration), weights),
+                model=_keystone_locked(graph, patched(graph, segment.out(3), sampling,
+                                                      accel.opening(acceleration), weights),
+                                       segment, payload, 0),
                 latent_image=segment.out(2),
                 add_noise="enable", noise_seed=seed,
                 start_at_step=0, end_at_step=run.steps,
@@ -600,7 +635,7 @@ class H3(base.Family):
             sampled = graph.node(
                 "KSampler", model=model, latent_image=segment.out(2),
                 seed=seed, denoise=1.0, **common)
-        return sampled.out(0)
+        return _keystone_restored(graph, segment, payload, sampled.out(0))
 
     def _emit_ray_sampler(self, graph, links, segment, payload, compiled,
                           sampling, acceleration, weights, seed, splits):
@@ -671,12 +706,23 @@ class H3(base.Family):
             scheduler=sampling.scheduler, steps=sampling.steps, denoise=1.0).out(0)
         sampler = graph.node("KSamplerSelect",
                              sampler_name=sampling.sampler_name).out(0)
+        bridge = {"k3u_adapter_context": context} if context is not None else {}
+        plan = _keystone_plan(payload)
+        if plan and plan.get("capstone"):
+            # The capstone is a wrapper on the model, and the model is in the
+            # workers: it goes on there for this run only, inside the same
+            # node that samples (`ContinuityKeystoneRaySample`).
+            return graph.node(
+                "ContinuityKeystoneRaySample",
+                add_noise=True, noise_seed=seed,
+                guider=guider, sampler=sampler, sigmas=sigmas,
+                latent_image=segment.out(2), keystone=segment.out(2),
+                lock=int(plan.get("lock", 0)), **bridge).out(0)
         return graph.node(
             raylight.SAMPLER_NODE,
             add_noise=True, noise_seed=seed,
             guider=guider, sampler=sampler, sigmas=sigmas,
-            latent_image=segment.out(2),
-            **({"k3u_adapter_context": context} if context is not None else {}),
+            latent_image=segment.out(2), **bridge,
         ).out(0)
 
     def _ray_loras(self, payload, compiled):
@@ -817,6 +863,7 @@ class H3(base.Family):
 
     restores_seams = True
     hands_latents = True
+    keystones = True
     fixes_motion = True
     finishes = True
 

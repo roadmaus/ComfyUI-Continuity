@@ -702,4 +702,113 @@ check("sage attention moves onto the initializer",
 check("...and emits no model patch of ours",
       "MiniMaxH3MemoryEfficientSageAttentionPatch" in saged, False)
 
+# ---- the keystone across the wire ------------------------------------------
+#
+# Keystone front and context noise are the latent and its mask, which the
+# sampler already sends to every worker. The capstone is a wrapper on the
+# model, which lives in the workers: the shot that carries it samples through
+# `ContinuityKeystoneRaySample`, which puts it on, runs the fork's own sampler
+# and takes it off again.
+was_ks = settings_mod.keystone
+ks_strip = [{"prompt": "wide", "duration_s": 5},
+            {"prompt": "closer", "duration_s": 5, "continue": True, "feather": 22}]
+settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+try:
+    ks_graph = by_class(strip_build(segments=ks_strip))
+finally:
+    settings_mod.keystone = was_ks
+ks_segments = ks_graph["MiniMaxH3TimelineSegment"]
+ks_second = next(i for _, i in ks_segments if "keystone_latent" in i)
+ks_ray = ks_graph.get("ContinuityKeystoneRaySample", [])
+check("keystone under Raylight: the first shot samples on the fork's own node",
+      len(ks_graph[ray.SAMPLER_NODE]), 1)
+check("...the continued shot through the keystone sampler", len(ks_ray), 1)
+ks_second_id = next(nid for nid, i in ks_segments if "keystone_latent" in i)
+check("...which reads the capstone off that shot's own latent",
+      (ks_ray[0][1]["keystone"], ks_ray[0][1]["latent_image"], ks_ray[0][1]["lock"]),
+      ([ks_second_id, 2], [ks_second_id, 2], 4))
+check("...and keeps the fork's guider and preview bridge",
+      all(k in ks_ray[0][1] for k in ("guider", "sampler", "sigmas")), True)
+check("...and the restore runs on this side of the wire",
+      ks_graph["ContinuityKeystoneRestore"][0][1]["latent"], [ks_ray[0][0], 0])
+check("the keystone is the first shot's sampler output",
+      ks_second["keystone_latent"][0], ks_graph[ray.SAMPLER_NODE][0][0])
+
+settings_mod.keystone = lambda: {"capstone": False, "lock": 4, "noise": 1.0}
+try:
+    ks_front = by_class(strip_build(segments=ks_strip))
+finally:
+    settings_mod.keystone = was_ks
+check("without the capstone nothing goes to the workers but the latent",
+      ("ContinuityKeystoneRaySample" in ks_front, len(ks_front[ray.SAMPLER_NODE])),
+      (False, 2))
+
+# The node itself, against a stand-in Ray: the wrapper goes on in every worker
+# before the fork's sampler runs and comes off after it, even when it fails.
+import types as _types
+
+timeline_mod = importlib.import_module(f"{PACKAGE}.creator.timeline")
+keystone_mod = importlib.import_module(f"{PACKAGE}.creator.keystone")
+calls = []
+
+
+class _Remote:
+    def __init__(self, name):
+        self.name = name
+
+    def remote(self, fn, *args):
+        calls.append((self.name, fn.__name__))
+        return None
+
+
+class _Worker:
+    def __init__(self, name):
+        self.model_function_runner = _Remote(name)
+
+
+_workers = [_Worker("w0"), _Worker("w1")]
+
+
+class _FakeSampler:
+    fail = False
+
+    def ray_sample(self, add_noise, noise_seed, guider, sampler, sigmas, latent_image, **kw):
+        calls.append(("sample", "ray_sample"))
+        if _FakeSampler.fail:
+            raise RuntimeError("worker died")
+        return ({"samples": "out"}, {"samples": "denoised"}, guider)
+
+
+_FakeSampler.__module__ = "fake_raylight_sampler"
+fake_mod = _types.ModuleType("fake_raylight_sampler")
+fake_mod._extract_ray_actors_from_guider = lambda guider: {"workers": _workers}
+fake_ray = _types.ModuleType("ray")
+fake_ray.get = lambda futures: futures
+fake_ray.cloudpickle = _types.SimpleNamespace(register_pickle_by_value=lambda module: None)
+grafted = {"samples": "in", keystone_mod.KEY: {"originals": {}, "back": "capstone"}}
+with patch.dict(sys.modules, {"ray": fake_ray, "ray.cloudpickle": fake_ray.cloudpickle,
+                              "fake_raylight_sampler": fake_mod}), \
+        patch.dict(comfy_nodes.NODE_CLASS_MAPPINGS, {ray.SAMPLER_NODE: _FakeSampler}):
+    out = timeline_mod.ContinuityKeystoneRaySample.execute(
+        True, 1, "guider", "sampler", "sigmas", grafted, grafted, 4)
+    check("the keystone sampler hands back the fork's output", out.result[0], {"samples": "out"})
+    check("...installing on every worker first and removing after",
+          calls, [("w0", "ray_install"), ("w1", "ray_install"), ("sample", "ray_sample"),
+                  ("w0", "ray_remove"), ("w1", "ray_remove")])
+    calls.clear()
+    _FakeSampler.fail = True
+    try:
+        timeline_mod.ContinuityKeystoneRaySample.execute(
+            True, 1, "guider", "sampler", "sigmas", grafted, grafted, 4)
+    except RuntimeError:
+        pass
+    check("...and removing even when the sampler fails",
+          calls[-2:], [("w0", "ray_remove"), ("w1", "ray_remove")])
+    _FakeSampler.fail = False
+    calls.clear()
+    timeline_mod.ContinuityKeystoneRaySample.execute(
+        True, 1, "guider", "sampler", "sigmas", grafted,
+        {"samples": "in", keystone_mod.KEY: {"originals": {}, "back": None}}, 4)
+    check("a shot whose graft stood down touches no worker", calls, [("sample", "ray_sample")])
+
 passed("all Raylight graph tests passed")

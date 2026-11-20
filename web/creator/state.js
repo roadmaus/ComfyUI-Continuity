@@ -3152,6 +3152,12 @@ function syncCanvas(timeline) {
             || isClip(segment) || !donor || isClip(donor))) {
       delete segment.seam_restore;
     }
+    // A card's opt-out of the keystone, on the same terms: only `false` says
+    // anything (on is the machine's setting), and only on a seam that could
+    // carry one — a blend between two generated shots on a family that can.
+    if (segment.keystone !== undefined && !keystoneOff(segment, timeline, index)) {
+      delete segment.keystone;
+    }
     // The motion fix is a fact about a generated pass: not on footage, and
     // not where the family has no such pass.
     if (segment.motion_fix !== undefined && !motionFix(segment, timeline)) {
@@ -3666,6 +3672,9 @@ export function serializeTimeline(timeline) {
       // first member by `emit`. Absent is off, which is the default and what
       // every blob written before the pass existed says.
       if (seamRestore(segment, timeline)) out.seam_restore = seamRestore(segment, timeline);
+      // The keystone opt-out, only where it says something: absent is "as the
+      // machine is set", which is what every blob before it existed says.
+      if (keystoneOff(segment, timeline, index)) out.keystone = false;
       // The card's motion fix, only when it is on: absent is off, which is the
       // default and what every blob written before the pass existed says.
       if (motionFix(segment, timeline)) out.motion_fix = true;
@@ -6475,6 +6484,22 @@ export const SEAM_RESTORE_LEVELS = [0, 0.3, 0.45, 0.6];
 
 /** How far the seam re-draws the run it inherits, or 0 for as written. Only on
  *  a seam, and only where the family has the pass (`seam_restore`). */
+/** Whether this card's seam is switched out of the keystone — the machine's
+ *  setting (`settings.keystone`), carried by every blended seam between two
+ *  generated shots unless the card says `keystone: false`. Mirrors the gate in
+ *  `core/emit.py`, which also needs the source to have a latent to hand. */
+export function keystoneSeam(segment, piece, index) {
+  if (!canDo(piece, "keystone") || !segment.continue || isClip(segment)) return false;
+  if (!(feather(segment, piece) > 1)) return false;
+  const donor = piece.segments?.[Number.isInteger(segment.continue_from)
+    ? segment.continue_from : index - 1];
+  return Boolean(donor) && !isClip(donor);
+}
+
+export function keystoneOff(segment, piece, index) {
+  return segment.keystone === false && keystoneSeam(segment, piece, index);
+}
+
 export function seamRestore(segment, piece) {
   const value = Number(segment.seam_restore);
   if (!(value > 0) || !segment.continue || !canDo(piece, "seam_restore")) return 0;

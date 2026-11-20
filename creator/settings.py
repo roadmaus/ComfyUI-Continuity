@@ -80,6 +80,10 @@ def default_prefixes():
 
 # The roads a blended seam can take, see `DEFAULTS["seam_handoff"]`.
 SEAM_HANDOFFS = ("frames", "latent", "levelled", "masked")
+# What a continued shot carries from the start of its scene, see
+# `DEFAULTS["keystone"]`.
+KEYSTONES = ("off", "keystone", "capstone")
+MAX_KEYSTONE_LOCK = 50
 # Which loader puts H3's LoRAs on, see `DEFAULTS["lora_loader"]`.
 LORA_LOADERS = ("vendored", "core")
 DEFAULTS = {
@@ -146,6 +150,24 @@ DEFAULTS = {
     # again — the road every render took before any of these existed, kept so
     # the four can be compared on the same strip.
     "seam_handoff": "latent",
+    # The keystone (`creator/keystone.py`, after roycho87's Geiru Context
+    # Suite): what a continued shot carries forward from the first shot of
+    # its scene, so the drift a strip picks up seam by seam has a clean frame
+    # to be pulled back toward. "keystone": that shot's first latent held in
+    # this shot's latent 0. "capstone": the same, plus its last single-frame
+    # latent tacked onto the end of every model call from `keystone_lock`
+    # steps in. "off": neither, which is every render before this existed.
+    # It rides on the masked seam — a blended seam with the keystone on takes
+    # the masked road whatever `seam_handoff` says — and a hard cut starts a
+    # new scene, so the source moves with the strip on its own. Per seam, the
+    # blend pill can switch it off (`keystone: false` on the segment).
+    "keystone": "off",
+    # The step the capstone joins at: the shot settles its own pose first.
+    "keystone_lock": 4,
+    # Context noise on the masked run's held steps (ethanfel's): 0..1, the
+    # share of the current noise the oldest held step gets, fading to none at
+    # the join. Only alongside a keystone.
+    "keystone_noise": 1.0,
     # What a screen's tracker looks like: `{"pattern", "colour"}`, from
     # `screens.spec.PATTERNS` and `COLOURS`. The first screen on a shot takes
     # this colour and a second the next free one. It reaches the render — the
@@ -506,6 +528,24 @@ def clean(raw):
         if raw["seam_handoff"] not in SEAM_HANDOFFS:
             raise ValueError(f"seam_handoff must be one of {', '.join(SEAM_HANDOFFS)}")
         clean_settings["seam_handoff"] = raw["seam_handoff"]
+    if "keystone" in raw and raw["keystone"] is not None:
+        if raw["keystone"] not in KEYSTONES:
+            raise ValueError(f"keystone must be one of {', '.join(KEYSTONES)}")
+        clean_settings["keystone"] = raw["keystone"]
+    if "keystone_lock" in raw and raw["keystone_lock"] is not None:
+        step = raw["keystone_lock"]
+        if isinstance(step, bool) or not isinstance(step, (int, float)) or step != int(step):
+            raise ValueError("keystone_lock must be a whole number of steps")
+        if not 0 <= int(step) <= MAX_KEYSTONE_LOCK:
+            raise ValueError(f"keystone_lock must be between 0 and {MAX_KEYSTONE_LOCK}")
+        clean_settings["keystone_lock"] = int(step)
+    if "keystone_noise" in raw and raw["keystone_noise"] is not None:
+        share = raw["keystone_noise"]
+        if isinstance(share, bool) or not isinstance(share, (int, float)):
+            raise ValueError("keystone_noise must be a number")
+        if not 0 <= share <= 1:
+            raise ValueError("keystone_noise must be between 0 and 1")
+        clean_settings["keystone_noise"] = float(share)
     if "lora_loader" in raw and raw["lora_loader"] is not None:
         if raw["lora_loader"] not in LORA_LOADERS:
             raise ValueError(f"lora_loader must be one of {', '.join(LORA_LOADERS)}")
@@ -963,6 +1003,19 @@ def turbo_lead_in():
 def seam_handoff():
     """What a blended seam hands the next shot: one of `SEAM_HANDOFFS`."""
     return load()["seam_handoff"]
+
+
+def keystone():
+    """What a continued shot carries from its scene's start: `KEYSTONES`.
+
+    -> `{"capstone": bool, "lock": int, "noise": float}`, or None when off.
+    """
+    clean = load()
+    if clean["keystone"] == "off":
+        return None
+    return {"capstone": clean["keystone"] == "capstone",
+            "lock": int(clean["keystone_lock"]),
+            "noise": float(clean["keystone_noise"])}
 
 
 def lora_loader():

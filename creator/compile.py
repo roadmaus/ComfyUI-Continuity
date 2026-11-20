@@ -3344,6 +3344,11 @@ def timeline_payloads(data, image_size_lookup=None):
             restore = seam_restore_denoise(head.get("seam_restore"))
             if restore:
                 payload["seam_restore"] = restore
+            # The keystone is the machine's (`settings.keystone`); a seam
+            # can only opt out of it. Carried only when it does, so every
+            # other seam's payload — and cache key — is what it was.
+            if head.get("keystone") is False:
+                payload["keystone"] = False
         # The motion fix is the card's own switch rather than the seam's, read
         # off the run's first segment like the rest; carried only when it is
         # on, so a strip without it keeps every cache key it had. Never on
@@ -3703,6 +3708,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     request.pop("feather", None)
     request.pop("feather_pin", None)
     request.pop("seam_restore", None)
+    request.pop("keystone", None)
     request.pop("motion_fix", None)
     request.pop("merge", None)
     request.pop("storyboard", None)

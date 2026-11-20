@@ -202,6 +202,8 @@ This pack is glue. The work underneath it belongs to other people:
 - [ReDetail](https://github.com/Bambushu/redetail) by Bambushu - the graph and the measurements behind the ReDetail upscale
 - [Minimax-H3-ComfyUI](https://huggingface.co/Alissonerdx/Minimax-H3-ComfyUI) by Alissonerdx - the guide LoRAs behind the guide pass, and the rig they run in; trained on [ostris](https://github.com/ostris)'s ai-toolkit fork with guide-latent support
 - [Raylight](https://github.com/Karmabu/raylight) by Karmabu - H3 across two GPUs
+- [Geiru Context Suite](https://github.com/roycho87/geiru_context_suite) by roycho87 - the keystone, the capstone and its late lock, which the keystone seam setting reimplements
+- [ComfyUI-MiniMaxH3-Context-Loop](https://github.com/ethanfel/ComfyUI-MiniMaxH3-Context-Loop) by ethanfel (Lumifel) - the context noise on a carried run
 - MiniMax - H3 itself, and the reference guide this pack's prompts are written to
 - Krea, Ideogram, Black Forest Labs and the Qwen team - the four still families beside H3 and LTX 2.5
 - Meta - SAM 3, behind click-to-select cutouts, the faces pass and the Matte tracing

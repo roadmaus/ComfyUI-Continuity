@@ -60,6 +60,42 @@ per-machine settings on the gear's Rendering tab act on it:
   shot continues from them. Helps on raw H3 with a good reference, hurts on
   turbo and low step counts. Off by default.
 
+### The keystone
+
+Experimental, and off by default. A fourth setting on the same tab, after
+roycho87's [Geiru Context Suite](https://github.com/roycho87/geiru_context_suite):
+the first shot of a scene is the only one made before any drift, so every
+blended seam after it carries that shot forward as an anchor.
+
+- **Keystone.** The scene's first latent — the cleanest frame it has — is held
+  in the new shot's latent 0, beside the run the seam hands over, so every step
+  attends to it. The shot's own latent 0 goes back before anything is decoded,
+  so the keystone is never in a written frame.
+- **Keystone + capstone.** Also the scene's last single frame, tacked onto the
+  end of the shot for every model call from **Capstone joins at** (step 4 by
+  default, counted on the whole schedule, lead-in included) and cut off again.
+  The shot settles its own pose before it is shown the anchor. Raise the step
+  if the motion stiffens, lower it if colour or detail starts to go.
+- **Context noise** (ethanfel's): the carried run gets part of the sampler's
+  current noise, all of it on its oldest frame fading to none at the join, so
+  the model does not copy the drift it carries exactly. Full by default.
+
+A hard cut starts a new scene, and its first shot becomes the next keystone.
+The blend pill on a seam has a switch to take that one seam out, for a shot
+that should leave the look behind. It needs the masked seam underneath it, so
+a seam carrying a keystone takes the masked road whatever **Seam handoff**
+says; on *The frames* nothing is handed as a latent and it stands down. It also
+stands down on a seam whose scene started at another canvas.
+
+Under Raylight the keystone and the noise travel in the latent; the capstone is
+put on the workers' model for that one shot and taken off again.
+
+roycho87 measured it on 10- to 50-clip chains of an 8-step turbo
+([NerdNotes](https://github.com/roycho87/NerdNotes)): colour drift at clip 10
+fell from 6.4 with no protection to 3.9 with the keystone and 2.9 with the
+capstone added. Not yet measured here. Their own note: on a locked-off static
+shot it holds the texture better than the colour, and the turbo LoRA matters.
+
 None of this is zero yet. If you find a setting or a method that measures
 better on your strips, open an issue with the per-cut numbers.
 

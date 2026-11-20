@@ -139,6 +139,22 @@ check("a null is the default", settings.clean({"seam_handoff": None})["seam_hand
 refuses("a road that does not exist", {"seam_handoff": "pixels"}, "one of")
 refuses("the old boolean", {"seam_handoff": True}, "one of")
 
+# The keystone: off by default (every render before it existed), three modes,
+# a lock step and a share of noise. `settings.keystone()` is what the loop
+# reads, and it is None while off.
+check("the keystone is off by default", settings.clean({})["keystone"], "off")
+check("...and its two dials sit at Geiru's defaults",
+      (settings.clean({})["keystone_lock"], settings.clean({})["keystone_noise"]), (4, 1.0))
+check("every mode is accepted",
+      [settings.clean({"keystone": mode})["keystone"] for mode in settings.KEYSTONES],
+      list(settings.KEYSTONES))
+refuses("a mode that does not exist", {"keystone": "on"}, "one of")
+refuses("a lock step that is not whole", {"keystone_lock": 2.5}, "whole number")
+refuses("a lock step past the ceiling", {"keystone_lock": 500}, "between")
+refuses("a boolean lock step", {"keystone_lock": True}, "whole number")
+refuses("noise past one", {"keystone_noise": 1.5}, "between")
+check("noise as a float", settings.clean({"keystone_noise": 0})["keystone_noise"], 0.0)
+
 check("the LoRA loader is the vendored stack by default", settings.clean({})["lora_loader"], "vendored")
 check("...and either loader is accepted",
       [settings.clean({"lora_loader": which})["lora_loader"] for which in settings.LORA_LOADERS],

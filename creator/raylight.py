@@ -21,7 +21,7 @@ and everything this pack does to a model between the loader and the sampler has
 to be re-said as something done to a set of actors instead, or not said.
 
 That is the whole shape of what follows, and it is why this module is mostly
-refusals. Four things move across cleanly:
+refusals. Five things move across cleanly:
 
 - The **checkpoint**, as a filename on `RayUNETLoader` (or `RayGGUFLoader`,
   which the fork registers when city96's pack is beside it).
@@ -32,6 +32,11 @@ refusals. Four things move across cleanly:
   `XFuserKSamplerAdvanced` because it is the only one that takes a K3U context,
   and the preview is worth the three extra nodes: a distributed render is the
   one you least want to watch as an empty box.
+- The **keystone** (`keystone.py`). Its front frame and context noise are the
+  latent and its noise mask, which the sampler already sends every worker;
+  the capstone is a model wrapper, put on every worker's model through the
+  fork's own `model_function_runner` for one shot's sampling and taken off
+  again, inside the node that samples (`ContinuityKeystoneRaySample`).
 - The **preview**, through K3U Export -> KJNodes' override -> K3U Import. The
   adapter is an allowlist of exactly one wrapper and it refuses a model carrying
   patches it did not register, which is a second reason the accelerators below

@@ -55,7 +55,7 @@ import logging
 
 from comfy_api.latest import io
 
-from . import (compile as compiler, guide, lora, media, mux,
+from . import (compile as compiler, guide, keystone, lora, media, mux,
                outputs, settings, spill)
 
 def announce(unique_id, progress):
@@ -441,6 +441,144 @@ class ContinuitySeamHold(io.ComfyNode):
             held.append(stream * keep + original.to(device=stream.device, dtype=stream.dtype) * (1 - keep))
         samples = comfy.nested_tensor.NestedTensor(tuple(held)) if len(held) > 1 else held[0]
         return io.NodeOutput({**latent, "samples": samples, "noise_mask": mask})
+
+
+class ContinuityKeystoneLock(io.ComfyNode):
+    """The capstone's model wrapper, for one sampler (`keystone.lock`).
+
+    Reads the capstone off the segment's own latent — the graft put it there —
+    and wraps the model so it is tacked onto the end of the video from step
+    `lock` on. `offset` is where this sampler's schedule starts in the whole
+    run, for a lead-in's second sitting. A latent with no capstone hands the
+    model back as it came.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityKeystoneLock",
+            display_name="Continuity Keystone Lock",
+            category="Continuity/internal",
+            description="Tacks the scene's capstone onto the end of the shot from a step on.",
+            is_dev_only=True,
+            inputs=[
+                io.Model.Input("model"),
+                io.Latent.Input("latent"),
+                io.Int.Input("lock", default=keystone.DEFAULT_LOCK, min=0, max=keystone.MAX_LOCK),
+                io.Int.Input("offset", default=0, min=0, max=10000),
+            ],
+            outputs=[io.Model.Output()],
+        )
+
+    @classmethod
+    def execute(cls, model, latent, lock, offset) -> io.NodeOutput:
+        back = (latent.get(keystone.KEY) or {}).get("back")
+        if back is None:
+            return io.NodeOutput(model)
+        logging.info("[Continuity] keystone: capstone tacked on from step %d", int(lock) + 1)
+        return io.NodeOutput(keystone.lock(model, back, int(lock), int(offset)))
+
+
+class ContinuityKeystoneRestore(io.ComfyNode):
+    """The latents the keystone replaced, put back after sampling.
+
+    `source` is the segment's own latent, which says what was replaced and
+    holds the originals (`keystone.restore`). Every other key of the sampled
+    latent rides through.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityKeystoneRestore",
+            display_name="Continuity Keystone Restore",
+            category="Continuity/internal",
+            description="Puts the shot's own latent 0 and held run back after a keystone sampled.",
+            is_dev_only=True,
+            inputs=[
+                io.Latent.Input("latent"),
+                io.Latent.Input("source"),
+            ],
+            outputs=[io.Latent.Output()],
+        )
+
+    @classmethod
+    def execute(cls, latent, source) -> io.NodeOutput:
+        return io.NodeOutput(keystone.restore(latent, source))
+
+
+class ContinuityKeystoneRaySample(io.ComfyNode):
+    """Raylight's custom sampler, with the capstone installed for its run.
+
+    A Ray render's model lives in the workers and is the same object for
+    every shot of the strip, so a wrapper installed by a node of its own would
+    stay on for whatever samples next — and ComfyUI is free to run another
+    shot's sampler in between. So the install, the sampling and the removal
+    are one node: the wrapper goes on in every worker
+    (`model_function_runner`, the fork's own patch hook, as its guidance
+    nodes use it), Raylight's own `XFuserSamplerCustomAdvanced` runs exactly
+    as it would have, and the wrapper comes off again whatever happened.
+
+    The inputs are that sampler's, plus `keystone` — the segment's latent,
+    which carries the capstone — and the step it locks in at.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityKeystoneRaySample",
+            display_name="Continuity Keystone Ray Sample",
+            category="Continuity/internal",
+            description="Raylight's sampler, with the keystone's capstone on the workers' model for the run.",
+            is_dev_only=True,
+            inputs=[
+                io.Boolean.Input("add_noise", default=True),
+                io.Int.Input("noise_seed", default=0, min=0, max=0xffffffffffffffff),
+                io.Custom("RAY_GUIDER").Input("guider"),
+                io.Sampler.Input("sampler"),
+                io.Sigmas.Input("sigmas"),
+                io.Latent.Input("latent_image"),
+                io.Latent.Input("keystone"),
+                io.Int.Input("lock", default=keystone.DEFAULT_LOCK, min=0, max=keystone.MAX_LOCK),
+                io.Custom("K3U_ADAPTER_CONTEXT").Input("k3u_adapter_context", optional=True),
+            ],
+            outputs=[io.Latent.Output()],
+        )
+
+    @classmethod
+    def execute(cls, add_noise, noise_seed, guider, sampler, sigmas, latent_image,
+                keystone, lock, k3u_adapter_context=None) -> io.NodeOutput:
+        import sys
+
+        import nodes
+        import ray
+
+        from . import keystone as keystone_mod, raylight
+
+        node = nodes.NODE_CLASS_MAPPINGS.get(raylight.SAMPLER_NODE)
+        if node is None:
+            raise ValueError(f"the keystone under Raylight needs '{raylight.SAMPLER_NODE}' "
+                             f"from the Raylight community fork ({raylight.SOURCE})")
+        back = (keystone.get(keystone_mod.KEY) or {}).get("back")
+        kwargs = {"k3u_adapter_context": k3u_adapter_context} \
+            if k3u_adapter_context is not None else {}
+        if back is None:
+            return io.NodeOutput(node().ray_sample(add_noise, noise_seed, guider, sampler,
+                                                   sigmas, latent_image, **kwargs)[0])
+        actors = sys.modules[node.__module__]._extract_ray_actors_from_guider(guider)
+        workers = actors["workers"]
+        keystone_mod.register_for_ray()
+        ray.get([worker.model_function_runner.remote(keystone_mod.ray_install, back, int(lock))
+                 for worker in workers])
+        logging.info("[Continuity] keystone: capstone on %d Ray workers from step %d",
+                     len(workers), int(lock) + 1)
+        try:
+            out = node().ray_sample(add_noise, noise_seed, guider, sampler, sigmas,
+                                    latent_image, **kwargs)
+        finally:
+            ray.get([worker.model_function_runner.remote(keystone_mod.ray_remove)
+                     for worker in workers])
+        return io.NodeOutput(out[0])
 
 
 class MiniMaxH3ClipReel(io.ComfyNode):
@@ -985,5 +1123,6 @@ NODES = [ContinuityStoryboard, MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
          ContinuitySeamHold,
+         ContinuityKeystoneLock, ContinuityKeystoneRestore, ContinuityKeystoneRaySample,
          ContinuityGuideFrames,
          ContinuityTake, MiniMaxH3Save]

@@ -245,6 +245,13 @@ class Family:
     # the cache keys — it had.
     hands_latents = False
 
+    # Whether this family's segment node takes `keystone_latent` — the first
+    # pass of the scene — and its sampler hook carries the keystone through
+    # (`creator/keystone.py`). Needs `hands_latents` and the masked road. The
+    # loop reads the machine's keystone setting only where this is True, so a
+    # family without it keeps every graph it had.
+    keystones = False
+
     # Whether `emit_finish` is written for this family: a pass over every
     # written pass on the reel, at the size it was written, before ReDetail and
     # the DLSS refiner. H3's guide-LoRA pass. `finish_request` reads the piece's

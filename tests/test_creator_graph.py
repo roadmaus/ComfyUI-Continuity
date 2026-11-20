@@ -1170,3 +1170,31 @@ if _job is not None:
     # must never hand the second one the first one's answer.
     check("and is never cached",
           _job.fingerprint_inputs(job="{}") != _job.fingerprint_inputs(job="{}"), True)
+
+# --- the keystone under the lead-in ------------------------------------------
+#
+# The capstone's lock step is counted on the whole schedule, so the lead-in's
+# two sittings each get the wrapper, the second told where its slice starts.
+# The masked run is still put back between the sittings, and the restore runs
+# after the second.
+KS_TURBO = json.dumps({
+    **json.loads(TURBO_DATA),
+    "segments": [{"prompt": "one", "duration_s": 5},
+                 {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22}],
+})
+was_lead, was_ks = settings_mod.turbo_lead_in, settings_mod.keystone
+settings_mod.turbo_lead_in = lambda: 2
+settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+try:
+    ks_kinds = by_class(build(data=KS_TURBO, steps=8).expand)
+finally:
+    settings_mod.turbo_lead_in, settings_mod.keystone = was_lead, was_ks
+ks_locks = sorted(((i["lock"], i["offset"]) for _, i in ks_kinds.get("ContinuityKeystoneLock", [])))
+check("keystone + lead-in: one lock per sitting, the second offset by the lead-in",
+      ks_locks, [(4, 0), (4, 2)])
+check("...the masked run is put back between them",
+      len(ks_kinds.get("ContinuitySeamHold", [])), 1)
+ks_restore = ks_kinds["ContinuityKeystoneRestore"][0][1]
+ks_rest = [(nid, i) for nid, i in ks_kinds["KSamplerAdvanced"] if i["start_at_step"] == 2]
+check("...and the restore reads the second sitting's latent",
+      ks_restore["latent"][0] in [nid for nid, _ in ks_rest], True)

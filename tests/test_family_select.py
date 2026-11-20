@@ -714,4 +714,50 @@ check("footage is never fixed", motion["onClip"], False)
 check("absent is off", motion["byDefault"], False)
 check("...and off is written as absent", motion["offIsAbsent"], False)
 
+# ---- the keystone opt-out ----------------------------------------------------
+#
+# The keystone is the machine's; a card can only switch its seam out of it, so
+# the only value that is ever written is `false`, and only on a seam that could
+# carry one: a blend between two generated shots, on a family that has it.
+
+KEYSTONE_JS = """
+const S = await import(process.argv[1]);
+const strip = (family, extra, donor) => {
+  const t = S.emptyTimeline();
+  t.family = family;
+  const grid = S.featherGridOf(t);
+  t.segments = [donor ?? S.emptySegment(), S.emptySegment()];
+  Object.assign(t.segments[1], { continue: true, feather: grid[2], ...extra });
+  S.syncTimeline(t);
+  return t;
+};
+const clip = () => ({ kind: "clip", filename: "footage/plate.mp4", duration_s: 6 });
+const written = (family, extra, donor) =>
+  JSON.parse(S.serializeTimeline(strip(family, extra, donor))).segments[1];
+console.log(JSON.stringify({
+  canDo: [S.canDo(strip("h3", {}), "keystone"), S.canDo(strip("ltx25", {}), "keystone")],
+  written: [written("h3", { keystone: false }).keystone ?? null,
+            written("ltx25", { keystone: false }).keystone ?? null],
+  reopened: S.parseTimeline(S.serializeTimeline(strip("h3", { keystone: false })))
+              .segments[1].keystone ?? null,
+  onAbsent: "keystone" in written("h3", {}),
+  onTrue: "keystone" in written("h3", { keystone: true }),
+  unblended: "keystone" in written("h3", { keystone: false, feather: undefined }),
+  offAClip: written("h3", { keystone: false }, clip()).keystone ?? null,
+  seam: [S.keystoneSeam(strip("h3", {}).segments[1], strip("h3", {}), 1),
+         S.keystoneSeam(strip("h3", { continue: false }).segments[1],
+                        strip("h3", { continue: false }), 1)],
+}));
+"""
+
+keystone = layout.run(KEYSTONE_JS, STATE)
+check("only a family with the keystone offers the switch", keystone["canDo"], [True, False])
+check("a seam switched out of it is written to the blob", keystone["written"], [False, None])
+check("...and comes back as itself", keystone["reopened"], False)
+check("on is the machine's, written as absent", (keystone["onAbsent"], keystone["onTrue"]),
+      (False, False))
+check("the opt-out goes with the blend", keystone["unblended"], False)
+check("a seam off a clip has no keystone to opt out of", keystone["offAClip"], None)
+check("only a blended continuation is a keystone seam", keystone["seam"], [True, False])
+
 passed("the piece names its family, and both halves read it off the piece")
