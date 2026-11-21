@@ -481,6 +481,16 @@ const KEYSTONE_NOISE = [
         + "(ethanfel's context noise)." },
 ];
 
+const KEYSTONE_ATTENTION = [
+  { value: 1, label: "Off", note: "The keystone gets the attention the model would give it anyway." },
+  { value: 10, label: "x10", note: "Half the suite's default: a lighter hold on the brightness." },
+  { value: 20, label: "x20", note: "The default, from the Geiru Context Suite: on the 13 blocks found "
+        + "to carry brightness, the keystone counts twenty times its weight against the "
+        + "carried frames. Held a 30-clip chain to about -9 % brightness, where the "
+        + "keystone alone drifted -17 %. Costs a little motion and about 5-10 % speed." },
+  { value: 40, label: "x40", note: "Holds the look harder, and the motion with it." },
+];
+
 const PLAYBACK = [
   { value: true, label: "Plays itself",
     note: "What the stage has always done: the clip loops silently as soon as it "
@@ -881,6 +891,19 @@ class SettingsPage {
           options: KEYSTONE_NOISE,
           value: Number(this.settings.keystone_noise ?? 1),
           apply: (value) => this.set({ keystone_noise: value }),
+        }),
+      }));
+      rows.push(this.row({
+        key: "keystone_attention",
+        name: "Keystone attention",
+        hint: "How hard the keystone pulls against the carried frames.",
+        ...this.segment({
+          options: KEYSTONE_ATTENTION,
+          value: Number(this.settings.keystone_attention ?? 20),
+          also: "Only the share the keystone and the carried frames split between them "
+              + "moves; the prompt, references, sound and new frames keep theirs. Single "
+              + "GPU only: a Raylight render leaves it out.",
+          apply: (value) => this.set({ keystone_attention: value }),
         }),
       }));
     }

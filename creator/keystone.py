@@ -27,6 +27,10 @@ reads them through this module only. What is borrowed, and from whom:
   exactly. ethanfel's (Lumifel's) idea, in
   https://github.com/ethanfel/ComfyUI-MiniMaxH3-Context-Loop; core reads a
   fractional noise mask as exactly that.
+- **Keystone attention.** On the blocks that carry brightness the keystone
+  pulls harder than the carried run, taken from the carried run's share only.
+  roycho87's, after ckinpdx's Carry Attention (ComfyUI-MMH3Tools). See the
+  section at the bottom; single-GPU only.
 
 It builds on the masked seam road (`families/h3/encode._masked_prefix`), which
 is the same masked hold — seitanism's and drozbay's — that the Geiru suite is
@@ -328,3 +332,211 @@ def register_for_ray():
     from ray import cloudpickle
 
     cloudpickle.register_pickle_by_value(sys.modules[__name__])
+
+
+# ---- keystone attention ------------------------------------------------------
+#
+# roycho87's Keystone Attention (Geiru Context Suite), after ckinpdx's Carry
+# Attention: on the blocks that carry a shot's brightness, the keystone is
+# made to pull harder on every token *at the carried frames' expense only*.
+# Each token's attention is a pie shared by the prompt, the references, the
+# sound, the new frames, the carried run and the keystone; this re-splits only
+# the slice the keystone and the carried run share, by `balance`, and leaves
+# every other slice exactly the size the model made it.
+#
+# With pK and pC the shares of the keystone and the carried run, and oK and
+# oC what each would contribute alone, a token's output is
+# `... + pK·oK + pC·oC`. Inside S = pK + pC the keystone's share becomes
+# S·b·pK / (b·pK + pC) and the carried run's the rest of S, so the output
+# moves by (new pK − pK)·(oK − oC). Exact per token and per head: one full
+# attention and two small ones over just those keys, each with its
+# log-sum-exp, give every term.
+#
+# Single-GPU only. Raylight's parallel forward replaces core's attention, so a
+# Ray render leaves this out (and says so) rather than refusing the keystone.
+
+ATTENTION_KEY = "continuity_keystone_attention"
+DEFAULT_BALANCE = 20.0
+MAX_BALANCE = 100.0
+# Found by a block sweep in the Geiru suite to carry brightness on H3 (Nov
+# 2026). Balancing on these held a 30-clip chain's brightness to about -9 %.
+LIGHTING_BLOCKS = (31, 32, 33, 36, 37, 38, 39, 40, 41, 42, 43, 44, 47)
+_HEAD_GROUPS = 4
+
+
+def _held_frames(mask, frames):
+    """Per video step, whether the token-grid mask holds it outright, or None."""
+    if mask is None or mask.ndim != 5 or int(mask.shape[2]) != int(frames):
+        return None
+    peaks = mask[0, 0].reshape(int(frames), -1).amax(dim=1).float().cpu()
+    return [bool(p < 0.5) for p in peaks]
+
+
+def _lse_attention(q, k, v, scale):
+    """`(out, logsumexp)` of plain attention, q/k/v `[B, H, S, D]`.
+
+    The fused kernels hand the log-sum-exp back for free; anything without
+    one (a backend the kernel refuses) takes the explicit road, a query block
+    at a time so a long shot does not build its whole score matrix at once.
+    """
+    if q.device.type == "cuda":
+        try:
+            out, lse = torch.ops.aten._scaled_dot_product_efficient_attention(
+                q, k, v, None, True, 0.0, False, scale=scale)[:2]
+            return out, lse.float()[..., :q.shape[2]]
+        except Exception:  # noqa: BLE001 - an unsupported shape or dtype
+            pass
+    elif q.device.type == "cpu":
+        try:
+            out, lse = torch.ops.aten._scaled_dot_product_flash_attention_for_cpu(
+                q, k, v, 0.0, False, attn_mask=None, scale=scale)[:2]
+            return out, lse.float()
+        except Exception:  # noqa: BLE001
+            pass
+    outs, lses = [], []
+    for start in range(0, q.shape[2], 1024):
+        scores = (q[:, :, start:start + 1024].float() @ k.float().transpose(-1, -2)) * scale
+        lse = torch.logsumexp(scores, dim=-1)
+        outs.append((torch.exp(scores - lse[..., None]) @ v.float()).to(q.dtype))
+        lses.append(lse)
+    return torch.cat(outs, dim=2), torch.cat(lses, dim=2)
+
+
+def _token_indices(state, layout, seq_len, device):
+    """`(keystone tokens, carried tokens)` in the packed sequence, or None."""
+    if layout is None or getattr(layout, "seq_len", seq_len) != seq_len:
+        return None
+    cached = state["cache"].get((seq_len, str(device)))
+    if cached is not None:
+        return cached
+    for start, stop, kind in layout.segments:
+        if kind != "video":
+            continue
+        frames = state["frames"]
+        if (stop - start) % frames:
+            return None
+        per = (stop - start) // frames
+
+        def rows(steps):
+            return torch.cat([torch.arange(start + t * per, start + (t + 1) * per)
+                              for t in steps]).to(device)
+
+        found = (rows(state["anchors"]), rows(state["carried"]))
+        state["cache"][(seq_len, str(device))] = found
+        return found
+    return None
+
+
+def _balanced(state, balance, block):
+    """An `optimized_attention_override` doing the re-split on one block."""
+
+    def override(func, q, k, v, heads, mask=None, skip_reshape=False,
+                 transformer_options=None, **kwargs):
+        def plain():
+            return func(q, k, v, heads, mask=mask, skip_reshape=skip_reshape,
+                        transformer_options=transformer_options, **kwargs)
+
+        if mask is not None or not skip_reshape or q.ndim != 4:
+            return plain()
+        options = transformer_options or {}
+        found = _token_indices(state, options.get("minimax_h3_layout"), q.shape[2], q.device)
+        if found is None:
+            return plain()
+        keys, carried = found
+        b = float(balance)
+        batch, heads_n, seq, dim = q.shape
+        scale = dim ** -0.5
+        out = torch.empty((batch, heads_n, seq, dim), dtype=q.dtype, device=q.device)
+        groups = max(1, min(_HEAD_GROUPS, heads_n))
+        size = -(-heads_n // groups)
+        for h in range(0, heads_n, size):
+            qg, kg, vg = q[:, h:h + size], k[:, h:h + size], v[:, h:h + size]
+            whole, lse = _lse_attention(qg, kg, vg, scale)
+            o_key, lse_key = _lse_attention(qg, kg.index_select(2, keys), vg.index_select(2, keys), scale)
+            o_run, lse_run = _lse_attention(qg, kg.index_select(2, carried),
+                                            vg.index_select(2, carried), scale)
+            p_key = torch.exp(lse_key - lse).unsqueeze(-1)
+            p_run = torch.exp(lse_run - lse).unsqueeze(-1)
+            shared = p_key + p_run
+            weighted = b * p_key + p_run
+            moved = torch.where(weighted > 1e-12,
+                                shared * b * p_key / weighted.clamp_min(1e-12), p_key) - p_key
+            out[:, h:h + size] = (whole.float() + moved * (o_key.float() - o_run.float())).to(q.dtype)
+            if not state["said"]:
+                state["said"] = True
+                before = float(p_key.mean())
+                logging.info("[Continuity] keystone attention x%g, block %d: the keystone's share "
+                             "%.1f%% -> %.1f%%", b, block, before * 100, (before + float(moved.mean())) * 100)
+        return out.transpose(1, 2).reshape(batch, seq, heads_n * dim)
+
+    return override
+
+
+def attend(model, steps, balance=DEFAULT_BALANCE, blocks=LIGHTING_BLOCKS):
+    """A clone of `model` with keystone attention on `blocks`.
+
+    `steps` is the shot's own length in latent steps, so a call one step
+    longer is known to carry the capstone at its end. Each model call reads the
+    noise mask the sampler hands the forward: the keystone is latent 0 (and
+    the capstone) where they are held outright, the carried run every other
+    held step. A call without both — the first shot, a graft that stood down —
+    runs untouched, and so does every block not in `blocks`.
+
+    The balance is spliced in around core's own attention forward on those
+    blocks, as an `optimized_attention_override` for that one call, so the
+    projection, the norms and the rope stay core's.
+    """
+    import types
+
+    import comfy.patcher_extension
+
+    m = model.clone()
+    b = max(1.0, float(balance))
+    if b <= 1.0:
+        return m
+
+    def wrapper(executor, x, timestep, context, transformer_options={}, *args, **kwargs):
+        video = x[0] if isinstance(x, (list, tuple)) else x
+        frames = int(video.shape[2])
+        held = _held_frames(kwargs.get("denoise_mask"), frames)
+        state = None
+        if held is not None:
+            anchors = [0] if held[0] else []
+            if frames == int(steps) + 1 and held[-1]:
+                anchors.append(frames - 1)
+            carried = [t for t in range(frames) if held[t] and t not in anchors]
+            if anchors and carried:
+                state = {"anchors": anchors, "carried": carried, "frames": frames,
+                         "cache": {}, "said": True}
+        transformer_options[ATTENTION_KEY] = state
+        return executor(x, timestep, context, transformer_options, *args, **kwargs)
+
+    m.add_wrapper_with_key(comfy.patcher_extension.WrappersMP.DIFFUSION_MODEL, ATTENTION_KEY, wrapper)
+
+    said = {"first": False}
+    diffusion = m.get_model_object("diffusion_model")
+    stack = getattr(diffusion, "blocks", None)
+    if not stack or not hasattr(stack[0], "attn"):
+        logging.warning("[Continuity] keystone attention: not an H3 model; left out")
+        return m
+    for index in blocks:
+        if index >= len(stack):
+            continue
+        attn = stack[index].attn
+        path = f"diffusion_model.blocks.{index}.attn.forward"
+        prev = m.object_patches.get(path) or types.MethodType(type(attn).forward, attn)
+
+        def forward(self, x, rope_freqs=None, transformer_options={}, _prev=prev, _index=index):
+            state = (transformer_options or {}).get(ATTENTION_KEY)
+            if not state:
+                return _prev(x, rope_freqs=rope_freqs, transformer_options=transformer_options)
+            if not said["first"]:
+                # Said once per sampling run, on the first balanced call.
+                said["first"] = True
+                state["said"] = False
+            options = dict(transformer_options)
+            options["optimized_attention_override"] = _balanced(state, b, _index)
+            return _prev(x, rope_freqs=rope_freqs, transformer_options=options)
+
+        m.add_object_patch(path, types.MethodType(forward, attn))
+    return m

@@ -712,7 +712,7 @@ check("...and emits no model patch of ours",
 was_ks = settings_mod.keystone
 ks_strip = [{"prompt": "wide", "duration_s": 5},
             {"prompt": "closer", "duration_s": 5, "continue": True, "feather": 22}]
-settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0, "attention": 20.0}
 try:
     ks_graph = by_class(strip_build(segments=ks_strip))
 finally:
@@ -731,6 +731,8 @@ check("...and keeps the fork's guider and preview bridge",
       all(k in ks_ray[0][1] for k in ("guider", "sampler", "sigmas")), True)
 check("...and the restore runs on this side of the wire",
       ks_graph["ContinuityKeystoneRestore"][0][1]["latent"], [ks_ray[0][0], 0])
+check("keystone attention is left out under Raylight, not refused",
+      "ContinuityKeystoneAttention" in ks_graph, False)
 check("the keystone is the first shot's sampler output",
       ks_second["keystone_latent"][0], ks_graph[ray.SAMPLER_NODE][0][0])
 

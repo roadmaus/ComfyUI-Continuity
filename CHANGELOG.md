@@ -16,11 +16,15 @@ decoded. *Keystone + capstone* also tacks the scene's last single frame onto
 the end of every model call from a chosen step (four by default), so the shot
 settles its own pose first. Context noise, ethanfel's, gives the carried run
 part of the sampler's noise, most on its oldest frame and none at the join.
+Keystone attention, also roycho87's, makes the keystone pull twenty times
+harder than the carried run on the 13 blocks that carry brightness, taken
+from the carried run's share only.
 A hard cut starts a new scene and a new keystone; a card can switch its own
 seam out on the blend pill. It rides on the masked seam, so a seam carrying
 it takes the masked road whatever the handoff says. Under Raylight the
 keystone and the noise travel in the latent, and the capstone is put on the
-workers' model for that one shot's sampling and taken off again. A
+workers' model for that one shot's sampling and taken off again; keystone
+attention is single-GPU only and is left out there. A
 reimplementation of the ideas, not the code: the suite is GPL-3.0. Not yet
 measured on this pack's strips, and not yet run on two cards.
 

@@ -479,6 +479,42 @@ class ContinuityKeystoneLock(io.ComfyNode):
         return io.NodeOutput(keystone.lock(model, back, int(lock), int(offset)))
 
 
+class ContinuityKeystoneAttention(io.ComfyNode):
+    """Keystone attention on the model, for one shot (`keystone.attend`).
+
+    Reads the shot's own length off the segment's latent, so a call carrying
+    the capstone is known by its extra step. A latent the graft stood down on
+    hands the model back as it came.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityKeystoneAttention",
+            display_name="Continuity Keystone Attention",
+            category="Continuity/internal",
+            description="Makes the scene's keystone pull harder than the carried run on H3's lighting blocks.",
+            is_dev_only=True,
+            inputs=[
+                io.Model.Input("model"),
+                io.Latent.Input("latent"),
+                io.Float.Input("balance", default=keystone.DEFAULT_BALANCE, min=1.0,
+                               max=keystone.MAX_BALANCE, step=0.5),
+            ],
+            outputs=[io.Model.Output()],
+        )
+
+    @classmethod
+    def execute(cls, model, latent, balance) -> io.NodeOutput:
+        if not latent.get(keystone.KEY) or float(balance) <= 1.0:
+            return io.NodeOutput(model)
+        samples = latent["samples"]
+        video = samples.unbind()[0] if getattr(samples, "is_nested", False) else samples
+        logging.info("[Continuity] keystone attention x%g on %d blocks", float(balance),
+                     len(keystone.LIGHTING_BLOCKS))
+        return io.NodeOutput(keystone.attend(model, int(video.shape[2]), float(balance)))
+
+
 class ContinuityKeystoneRestore(io.ComfyNode):
     """The latents the keystone replaced, put back after sampling.
 
@@ -1123,6 +1159,7 @@ NODES = [ContinuityStoryboard, MiniMaxH3Reel,
          MiniMaxH3PassFrames, MiniMaxH3PassAudio,
          MiniMaxH3ClipReel, MiniMaxH3ClipFrames, MiniMaxH3ClipAudio,
          ContinuitySeamHold,
-         ContinuityKeystoneLock, ContinuityKeystoneRestore, ContinuityKeystoneRaySample,
+         ContinuityKeystoneLock, ContinuityKeystoneAttention, ContinuityKeystoneRestore,
+         ContinuityKeystoneRaySample,
          ContinuityGuideFrames,
          ContinuityTake, MiniMaxH3Save]

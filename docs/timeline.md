@@ -79,6 +79,13 @@ blended seam after it carries that shot forward as an anchor.
 - **Context noise** (ethanfel's): the carried run gets part of the sampler's
   current noise, all of it on its oldest frame fading to none at the join, so
   the model does not copy the drift it carries exactly. Full by default.
+- **Keystone attention** (roycho87's, after ckinpdx's Carry Attention): on the
+  13 blocks found to carry brightness (31–33, 36–44, 47), the keystone counts
+  ×20 against the carried run when attention is shared out. Only the share
+  those two split between them moves; the prompt, the references, the sound
+  and the new frames keep exactly theirs. Measured there to hold a 30-clip
+  chain's brightness to about −9 %, against −17 % for the keystone and
+  capstone alone. Costs a little motion and about 5–10 % speed.
 
 A hard cut starts a new scene, and its first shot becomes the next keystone.
 The blend pill on a seam has a switch to take that one seam out, for a shot
@@ -88,7 +95,9 @@ says; on *The frames* nothing is handed as a latent and it stands down. It also
 stands down on a seam whose scene started at another canvas.
 
 Under Raylight the keystone and the noise travel in the latent; the capstone is
-put on the workers' model for that one shot and taken off again.
+put on the workers' model for that one shot and taken off again. Keystone
+attention is left out there — Raylight's parallel forward replaces core's
+attention — and the log says so; everything else still carries.
 
 roycho87 measured it on 10- to 50-clip chains of an 8-step turbo
 ([NerdNotes](https://github.com/roycho87/NerdNotes)): colour drift at clip 10

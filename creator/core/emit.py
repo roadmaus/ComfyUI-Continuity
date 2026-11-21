@@ -485,7 +485,8 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                 payloads[index]["seam_road"] = "masked"
                 payloads[index]["keystone"] = {
                     "capstone": keystone["capstone"] and not (one.ends_on or one.ends_on_audio),
-                    "lock": keystone["lock"], "noise": keystone["noise"]}
+                    "lock": keystone["lock"], "noise": keystone["noise"],
+                    "attention": keystone.get("attention", 1.0)}
                 seams["keystone_latent"] = root
         if one.continues_audio:
             # `one.audio_tail_s` rather than the timeline's setting directly:

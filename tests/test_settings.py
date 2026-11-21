@@ -154,6 +154,9 @@ refuses("a lock step past the ceiling", {"keystone_lock": 500}, "between")
 refuses("a boolean lock step", {"keystone_lock": True}, "whole number")
 refuses("noise past one", {"keystone_noise": 1.5}, "between")
 check("noise as a float", settings.clean({"keystone_noise": 0})["keystone_noise"], 0.0)
+check("keystone attention at the suite's x20 by default", settings.clean({})["keystone_attention"], 20.0)
+check("...1 is off and allowed", settings.clean({"keystone_attention": 1})["keystone_attention"], 1.0)
+refuses("keystone attention under one", {"keystone_attention": 0.5}, "between")
 
 check("the LoRA loader is the vendored stack by default", settings.clean({})["lora_loader"], "vendored")
 check("...and either loader is accepted",

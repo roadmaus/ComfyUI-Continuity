@@ -84,6 +84,7 @@ SEAM_HANDOFFS = ("frames", "latent", "levelled", "masked")
 # `DEFAULTS["keystone"]`.
 KEYSTONES = ("off", "keystone", "capstone")
 MAX_KEYSTONE_LOCK = 50
+MAX_KEYSTONE_ATTENTION = 100.0
 # Which loader puts H3's LoRAs on, see `DEFAULTS["lora_loader"]`.
 LORA_LOADERS = ("vendored", "core")
 DEFAULTS = {
@@ -168,6 +169,11 @@ DEFAULTS = {
     # share of the current noise the oldest held step gets, fading to none at
     # the join. Only alongside a keystone.
     "keystone_noise": 1.0,
+    # Keystone attention (roycho87's): how much harder the keystone pulls
+    # than the carried run on the blocks that carry brightness, taken from the
+    # carried run's share only. 1 is off; 20 is the suite's default. Single
+    # GPU only — a Raylight render leaves it out and says so.
+    "keystone_attention": 20.0,
     # What a screen's tracker looks like: `{"pattern", "colour"}`, from
     # `screens.spec.PATTERNS` and `COLOURS`. The first screen on a shot takes
     # this colour and a second the next free one. It reaches the render — the
@@ -546,6 +552,13 @@ def clean(raw):
         if not 0 <= share <= 1:
             raise ValueError("keystone_noise must be between 0 and 1")
         clean_settings["keystone_noise"] = float(share)
+    if "keystone_attention" in raw and raw["keystone_attention"] is not None:
+        weight = raw["keystone_attention"]
+        if isinstance(weight, bool) or not isinstance(weight, (int, float)):
+            raise ValueError("keystone_attention must be a number")
+        if not 1 <= weight <= MAX_KEYSTONE_ATTENTION:
+            raise ValueError(f"keystone_attention must be between 1 and {MAX_KEYSTONE_ATTENTION:g}")
+        clean_settings["keystone_attention"] = float(weight)
     if "lora_loader" in raw and raw["lora_loader"] is not None:
         if raw["lora_loader"] not in LORA_LOADERS:
             raise ValueError(f"lora_loader must be one of {', '.join(LORA_LOADERS)}")
@@ -1008,14 +1021,16 @@ def seam_handoff():
 def keystone():
     """What a continued shot carries from its scene's start: `KEYSTONES`.
 
-    -> `{"capstone": bool, "lock": int, "noise": float}`, or None when off.
+    -> `{"capstone": bool, "lock": int, "noise": float, "attention": float}`,
+    or None when off. `attention` 1.0 is keystone attention off.
     """
     clean = load()
     if clean["keystone"] == "off":
         return None
     return {"capstone": clean["keystone"] == "capstone",
             "lock": int(clean["keystone_lock"]),
-            "noise": float(clean["keystone_noise"])}
+            "noise": float(clean["keystone_noise"]),
+            "attention": float(clean["keystone_attention"])}
 
 
 def lora_loader():

@@ -1546,7 +1546,7 @@ _ks_strip = blob(segments=[
     {"prompt": "seven", "duration_s": 5, "continue": True},
 ])
 _ks_order = ["one", "two", "three", "four", "five", "six", "seven"]
-_settings.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+_settings.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0, "attention": 20.0}
 try:
     _ks = build(_ks_strip).expand
 finally:
@@ -1556,11 +1556,17 @@ _ks_chain = in_order([(n_id, n["inputs"]) for n_id, n in _ks.items()
 _ks_payloads = [json.loads(inputs["segment_data"]) for _, inputs in _ks_chain]
 
 
+def _ks_model_root(link):
+    """Down through the keystone's own model nodes to what they wrap."""
+    while _ks[link]["class_type"] in ("ContinuityKeystoneLock", "ContinuityKeystoneAttention",
+                                      "ContinuityPreview"):
+        link = _ks[link]["inputs"]["model"][0]
+    return link
+
+
 def _ks_sampler(segment_id):
     return [n_id for n_id, n in _ks.items() if n["class_type"] == "KSampler"
-            and model_under(_ks, n["inputs"]["model"][0]) in
-            (segment_id, *[m for m, mn in _ks.items() if mn["class_type"] == "ContinuityKeystoneLock"
-                           and mn["inputs"]["model"][0] == segment_id])][0]
+            and _ks_model_root(n["inputs"]["model"][0]) == segment_id][0]
 
 
 _ks_first = _ks_sampler(_ks_chain[0][0])
@@ -1571,7 +1577,8 @@ check("...and so is the next one down the scene",
 check("...each on the masked road, whatever the handoff setting",
       [p.get("seam_road") for p in _ks_payloads[1:3]], ["masked", "masked"])
 check("...with the machine's plan in the payload, so the node caches on it",
-      _ks_payloads[1].get("keystone"), {"capstone": True, "lock": 4, "noise": 1.0})
+      _ks_payloads[1].get("keystone"),
+      {"capstone": True, "lock": 4, "noise": 1.0, "attention": 20.0})
 check("a hard cut carries none",
       ("keystone_latent" in _ks_chain[3][1], "keystone" in _ks_payloads[3]), (False, False))
 check("a seam switched off on its card carries none, and stays on the latent road",
@@ -1588,6 +1595,10 @@ check("one capstone lock per keystone pass, reading its own segment's latent",
       sorted([_ks_chain[1][0], _ks_chain[2][0], _ks_chain[5][0]]))
 check("...at the machine's step, on the whole schedule",
       {(lock["lock"], lock["offset"]) for lock in _ks_locks}, {(4, 0)})
+_ks_attention = [n["inputs"] for n in _ks.values() if n["class_type"] == "ContinuityKeystoneAttention"]
+check("keystone attention on every keystone pass, at the machine's balance",
+      sorted((a["latent"][0], a["balance"]) for a in _ks_attention),
+      sorted((s, 20.0) for s in (_ks_chain[1][0], _ks_chain[2][0], _ks_chain[5][0])))
 _ks_restores = {n["inputs"]["source"][0]: n_id for n_id, n in _ks.items()
                 if n["class_type"] == "ContinuityKeystoneRestore"}
 check("one restore per keystone pass", sorted(_ks_restores),
@@ -1595,13 +1606,14 @@ check("one restore per keystone pass", sorted(_ks_restores),
 check("...which is what the next seam slices its run off",
       _ks_chain[2][1]["prev_latent"], [_ks_restores[_ks_chain[1][0]], 0])
 
-_settings.keystone = lambda: {"capstone": False, "lock": 4, "noise": 0.5}
+_settings.keystone = lambda: {"capstone": False, "lock": 4, "noise": 0.5, "attention": 1.0}
 try:
     _ks_front = build(_ks_strip).expand
 finally:
     _settings.keystone = _ks_was
-check("keystone without the capstone wraps no model",
-      any(n["class_type"] == "ContinuityKeystoneLock" for n in _ks_front.values()), False)
+check("keystone without the capstone or attention wraps no model",
+      any(n["class_type"] in ("ContinuityKeystoneLock", "ContinuityKeystoneAttention")
+          for n in _ks_front.values()), False)
 check("...but still restores", sum(n["class_type"] == "ContinuityKeystoneRestore"
                                    for n in _ks_front.values()), 3)
 

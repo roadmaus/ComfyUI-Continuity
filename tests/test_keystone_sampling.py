@@ -97,3 +97,54 @@ check("...and the run context noise touched is the run",
       torch.equal(restored[:, :, 1:6], run[:, :, 1:6]), True)
 check("...through the join, which was held outright",
       torch.allclose(restored[:, :, 6], run[:, :, 6], atol=1e-5), True)
+
+# ---- keystone attention through core's own attention forward -----------------
+#
+# The tiny model has two blocks, so both are balanced. Every balanced call has
+# to go through the override (q/k/v, norms and rope are core's), the result
+# has to differ from the same run without it, and a run with nothing held
+# must not touch a single call.
+balanced_calls = []
+original_balanced = ks._balanced
+
+
+def counting(state, balance, block):
+    inner_override = original_balanced(state, balance, block)
+
+    def override(func, q, k, v, heads, **kwargs):
+        got = inner_override(func, q, k, v, heads, **kwargs)
+        plain = func(q, k, v, heads, **kwargs)
+        balanced_calls.append((block, tuple(got.shape) == tuple(plain.shape),
+                               float((got - plain).abs().max())))
+        return got
+    return override
+
+
+ks._balanced = counting
+try:
+    attended = ks.attend(ks.lock(patcher, grafted[ks.KEY]["back"], 3), T, 20.0, blocks=(0, 1))
+    with_attention = comfy.sample.sample(
+        attended, noise, 6, 1.0, "euler", "simple", positive, negative, grafted["samples"],
+        denoise=1.0, noise_mask=grafted["noise_mask"], seed=1).unbind()[0]
+    plain_calls = len(balanced_calls)
+    blank = {"samples": comfy.nested_tensor.NestedTensor((torch.zeros(1, C, T, H, W), silence))}
+    ks.attend(patcher, T, 20.0, blocks=(0, 1))
+    comfy.sample.sample(ks.attend(patcher, T, 20.0, blocks=(0, 1)),
+                        comfy.sample.prepare_noise(blank["samples"], 1), 2, 1.0, "euler", "simple",
+                        positive, negative, blank["samples"], denoise=1.0, seed=1)
+finally:
+    ks._balanced = original_balanced
+check("keystone attention runs on every balanced block of every step",
+      plain_calls, 2 * 6)
+check("...nothing held, nothing balanced", len(balanced_calls), plain_calls)
+check("...in core's own output shape", all(same for _, same, _ in balanced_calls), True)
+check("...and moves the attention, at every call",
+      min(moved for _, _, moved in balanced_calls) > 1e-5, True)
+check("...still finite", bool(torch.isfinite(with_attention).all()), True)
+
+# Let the patchers go while ComfyUI is still loaded: their `__del__` reaches
+# for module state that interpreter shutdown has already cleared.
+import gc  # noqa: E402
+
+del attended, locked, patcher
+gc.collect()

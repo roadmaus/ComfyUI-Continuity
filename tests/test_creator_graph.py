@@ -1184,7 +1184,7 @@ KS_TURBO = json.dumps({
 })
 was_lead, was_ks = settings_mod.turbo_lead_in, settings_mod.keystone
 settings_mod.turbo_lead_in = lambda: 2
-settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0}
+settings_mod.keystone = lambda: {"capstone": True, "lock": 4, "noise": 1.0, "attention": 20.0}
 try:
     ks_kinds = by_class(build(data=KS_TURBO, steps=8).expand)
 finally:
@@ -1192,6 +1192,8 @@ finally:
 ks_locks = sorted(((i["lock"], i["offset"]) for _, i in ks_kinds.get("ContinuityKeystoneLock", [])))
 check("keystone + lead-in: one lock per sitting, the second offset by the lead-in",
       ks_locks, [(4, 0), (4, 2)])
+check("...and keystone attention on both sittings",
+      len(ks_kinds.get("ContinuityKeystoneAttention", [])), 2)
 check("...the masked run is put back between them",
       len(ks_kinds.get("ContinuitySeamHold", [])), 1)
 ks_restore = ks_kinds["ContinuityKeystoneRestore"][0][1]

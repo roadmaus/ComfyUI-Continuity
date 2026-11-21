@@ -17,6 +17,7 @@ nothing outside an expanded graph ever sees.
 """
 
 import json
+import logging
 from dataclasses import dataclass, replace
 
 import comfy.sample
@@ -218,7 +219,14 @@ def _keystone_locked(graph, model, segment, payload, offset):
     the model back untouched when the graft stood down.
     """
     plan = _keystone_plan(payload)
-    if not plan or not plan.get("capstone"):
+    if not plan:
+        return model
+    if float(plan.get("attention", 1.0)) > 1.0:
+        # Keystone attention: the re-split on the lighting blocks. Single
+        # GPU only, which is the only road that reaches here.
+        model = graph.node("ContinuityKeystoneAttention", model=model, latent=segment.out(2),
+                           balance=float(plan["attention"])).out(0)
+    if not plan.get("capstone"):
         return model
     return graph.node("ContinuityKeystoneLock", model=model, latent=segment.out(2),
                       lock=int(plan.get("lock", 0)), offset=int(offset)).out(0)
@@ -708,6 +716,12 @@ class H3(base.Family):
                              sampler_name=sampling.sampler_name).out(0)
         bridge = {"k3u_adapter_context": context} if context is not None else {}
         plan = _keystone_plan(payload)
+        if plan and float(plan.get("attention", 1.0)) > 1.0:
+            # Raylight's parallel forward replaces core's attention, so the
+            # re-split has nowhere to go: left out, not refused — the keystone
+            # and the capstone still carry.
+            logging.info("[Continuity] keystone attention is single-GPU only; "
+                         "left out of this Raylight render")
         if plan and plan.get("capstone"):
             # The capstone is a wrapper on the model, and the model is in the
             # workers: it goes on there for this run only, inside the same

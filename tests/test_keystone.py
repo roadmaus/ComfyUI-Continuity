@@ -192,3 +192,55 @@ source = Path(ks.__file__).read_text()
 check("the module imports nothing of the pack's (Ray pickles it by value)",
       any(line.lstrip().startswith(("from .", "import .")) for line in source.splitlines()),
       False)
+
+# ---- keystone attention: the re-split, against the softmax written out -------
+#
+# On one block call: the keystone's share of every token's attention moves to
+# S·b·pK/(b·pK + pC) inside the slice S it shares with the carried run, and
+# every other key keeps exactly its weight. Checked against attention computed
+# the long way with those weights.
+
+
+class _Layout:
+    def __init__(self, text, frames, per, extra):
+        self.segments = [(0, text, "text"), (text, text + frames * per, "video"),
+                         (text + frames * per, text + frames * per + extra, "audio")]
+        self.seq_len = text + frames * per + extra
+
+
+frames, per = 6, 4
+lay = _Layout(5, frames, per, 7)
+state = {"anchors": [0], "carried": [1, 2, 3], "frames": frames, "cache": {}, "said": True}
+q = torch.randn(1, 2, lay.seq_len, 16)
+k = torch.randn(1, 2, lay.seq_len, 16)
+v = torch.randn(1, 2, lay.seq_len, 16)
+b = 20.0
+override = ks._balanced(state, b, 31)
+got = override(None, q, k, v, 2, skip_reshape=True,
+               transformer_options={"minimax_h3_layout": lay})
+weights = torch.softmax((q @ k.transpose(-1, -2)) * 16 ** -0.5, dim=-1)
+key_cols = torch.arange(5, 5 + per)
+run_cols = torch.arange(5 + per, 5 + 4 * per)
+p_key = weights[..., key_cols].sum(-1, keepdim=True)
+p_run = weights[..., run_cols].sum(-1, keepdim=True)
+new_key = (p_key + p_run) * b * p_key / (b * p_key + p_run)
+reweighted = weights.clone()
+reweighted[..., key_cols] *= new_key / p_key
+reweighted[..., run_cols] *= (p_key + p_run - new_key) / p_run
+want = (reweighted @ v).transpose(1, 2).reshape(1, lay.seq_len, 32)
+check("keystone attention is the re-split softmax, exactly",
+      torch.allclose(got, want, atol=1e-4), True)
+check("...every row still sums to one", torch.allclose(reweighted.sum(-1), torch.ones(1), atol=1e-5),
+      True)
+outside = torch.cat([torch.arange(0, 5), torch.arange(5 + 4 * per, lay.seq_len)])
+check("...and nobody outside the slice gives anything up",
+      torch.allclose(reweighted[..., outside], weights[..., outside]), True)
+check("the keystone's token rows are the video's first frame",
+      state["cache"][(lay.seq_len, "cpu")][0].tolist(), list(range(5, 5 + per)))
+called = []
+override(lambda *a, **kw: called.append(True) or "plain", q, k, v, 2, skip_reshape=True,
+         transformer_options={"minimax_h3_layout": _Layout(5, 5, per, 7)})
+check("a sequence the layout does not match goes to the model's own attention", called, [True])
+check("held frames off a token-grid mask",
+      ks._held_frames(torch.tensor([0.0, 0.2, 0.7, 1.0]).view(1, 1, 4, 1, 1).expand(1, 1, 4, 2, 2), 4),
+      [True, True, False, False])
