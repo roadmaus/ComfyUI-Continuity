@@ -607,6 +607,9 @@ export class SoundLane {
       this.renderRead(),
     ]);
 
+    // Empty, the lane is one line: the invitation and its button. The reel
+    // above already draws the sound each shot writes.
+    this.host.classList.toggle("empty", !blocks.length);
     this.host.replaceChildren(
       el("div", { class: "mmc-snd-head" }, [
         el("span", { class: "mmc-snd-name", text: t("Sound") }),

@@ -22,7 +22,7 @@ import { openLoras, loraBlock, loraBase, settlePins, watchPins } from "./loras.j
 import { openPicker } from "./picker.js";
 import { openPresetLibrary, styleCastMember } from "./presetlib.js";
 import * as P from "./presets.js";
-import { PromptBox, openEditorSheet } from "./prompt.js";
+import { PromptBox, openEditorSheet, focusEnd } from "./prompt.js";
 import { openSettings } from "./settings.js";
 import { SoundLane } from "./soundlane.js";
 import { openTrim, trimLabel } from "./trim.js";
@@ -316,22 +316,18 @@ export function openTimeline(options) {
   return new Promise((resolve) => new Timeline(options, resolve).mount());
 }
 
-/**
- * Card width from duration. Compressed rather than linear: durations run 1 s to
- * 60 s, and at any scale that keeps a 1-second card wide enough for its own
- * buttons a 60-second one would be most of a metre. Square root keeps the
- * ordering legible — a longer shot is visibly a wider card — without that.
- * The lane in the node body stays strictly proportional; that is its whole job.
- */
-const cardWidth = (seconds) => 132 + Math.round(Math.sqrt(seconds) * 26);
-
-/** What a card or a pass looks like when it is not in the next render: solid
- *  because the film already exists, perforated because it does not. Empty for
- *  everything in the render, which is every card on a strip that has never held
- *  one back. */
-const holdSkin = (head, gone) => (S.isHeld(head)
-  ? (S.takeOn(head) && !gone.has(S.takeOn(head).filename) ? " mmc-tl-kept" : " mmc-tl-unshot")
-  : "");
+/** Whether the caret sits at the end of `root`'s text, with nothing but
+ *  whitespace after it — where Enter means "next shot" rather than a line. */
+function caretAtEnd(root) {
+  const selection = root.ownerDocument.getSelection();
+  if (!selection?.rangeCount || !selection.isCollapsed) return false;
+  const range = selection.getRangeAt(0);
+  if (!root.contains(range.endContainer)) return false;
+  const after = root.ownerDocument.createRange();
+  after.selectNodeContents(root);
+  after.setStart(range.endContainer, range.endOffset);
+  return after.toString().trim() === "";
+}
 
 /**
  * The finished prompt for the pass holding one card of a piece — what the
@@ -446,6 +442,9 @@ class Timeline {
 
   commit() {
     S.syncTimeline(this.timeline);
+    // A kept take of a card that just changed no longer describes it: back in
+    // the next render, with everything that follows from it. See `state.reshoot`.
+    S.releaseEdited(this.timeline);
     this.onCommit?.();
     this.render();
     // A handle whose asset just left the pool is no longer a chip, and one
@@ -586,12 +585,9 @@ class Timeline {
   mount() {
     this.promptBox = this.globalPromptBox();
     this.promptBox.setValue(this.timeline.prompt ?? "");
-    this.promptSection = createDisclosure({
-      // Display label only. The serialized key remains `prompt`.
-      title: "global_prompt", content: this.promptBox.frame,
-      onBeforeCollapse: () => this.promptBox.closeMenu(),
-    });
-    this.promptBox.root.setAttribute("aria-labelledby", this.promptSection.titleId);
+    // The scene is the first paragraph of the script: the standing description
+    // every shot is written under. Display label only; the key stays `prompt`.
+    this.promptBox.root.setAttribute("aria-label", t("Scene"));
 
     // The two audio fields H3's own prompt format has, kept side by side and
     // shorter than the prompt: they are a few sentences each, and putting them
@@ -627,35 +623,56 @@ class Timeline {
     // Errors stay visible even when the reference body is folded.
     this.poolHost.append(this.poolSection.root, this.poolWarning);
     this.castHost = el("div", { class: "mmc-tl-cast" });
-    this.barHost = el("div", { class: "mmc-tl-bar" });
+    this.barHost = el("div", { class: "mmc-tl-bar mmc-reel-bar" });
     this.loraHost = el("div", { class: "mmc-tl-loras" });
     watchPins(this, "pinsMoved");
-    this.stripHost = el("div", { class: "mmc-tl-strip" });
-    // A trackpad swipes sideways on its own; a wheel only ever sends deltaY,
-    // and without this the strip is unreachable for anyone using one.
-    this.stripHost.addEventListener("wheel", (event) => {
-      if (event.deltaX || !event.deltaY) return;
-      event.preventDefault();
-      this.stripHost.scrollLeft += event.deltaY;
-    }, { passive: false });
-    // Under the strip, because it is under the strip in what it describes: the
-    // cards are what the piece is made of and the lane is what it is cut to.
+    // Under the reel, because it is under the reel in what it describes: the
+    // shots are what the piece is made of and the lane is what it is cut to.
     // It brings its own axis — see `sound.js` for why it cannot borrow the
-    // strip's.
+    // reel's.
     this.sound = new SoundLane({
       read: () => this.timeline,
       onCommit: () => this.commit(),
       flash: (message) => this.flash?.(message),
     });
 
-    this.modal = el("div", { class: "mmc-modal mmc-tl-modal" }, [
+    // The reel: the script on the left, the player and whatever is selected on
+    // the right, and the piece at its real length underneath. One surface for
+    // writing, joining, watching and reshooting — see docs/timeline.md.
+    this.rows = new Map();
+    this.sel = null;
+    this.scriptHost = el("div", { class: "mmc-reel-shots" });
+    this.playerHost = el("div", { class: "mmc-reel-player" });
+    this.inspectHost = el("div", { class: "mmc-reel-inspect" });
+    this.reelHost = el("div", { class: "mmc-reel-lane" });
+    const scene = el("div", { class: "mmc-reel-row mmc-reel-scene" }, [
+      el("span", { class: "mmc-reel-gutter" }, [el("span", { class: "mmc-reel-scene-tag", text: t("Scene") })]),
+      this.promptBox.frame,
+    ]);
+    const addRow = el("div", { class: "mmc-reel-add" }, [
+      el("button", { class: "mmc-reel-addbtn", onclick: () => this.insertShot(this.timeline.segments.length) },
+        [icon("plus", 14), el("span", { text: t("Shot") })]),
+      el("button", { class: "mmc-reel-addbtn", onclick: () => this.addClip() },
+        [icon("video", 14), el("span", { text: t("Clip") })]),
+      el("span", { class: "mmc-reel-hint", text: t("Enter at the end of a shot starts the next one.") }),
+    ]);
+
+    this.modal = el("div", { class: "mmc-modal mmc-tl-modal mmc-reel" }, [
       el("div", { class: "mmc-modal-head" }, [
         el("span", { class: "mmc-tab", "aria-selected": "true", text: t("Timeline") }),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
-      el("div", { class: "mmc-tl-body" }, [
-        this.promptSection.root, this.audioHost, this.poolHost, this.castHost,
-        this.barHost, this.loraHost, this.stripHost, this.sound.host,
+      el("div", { class: "mmc-tl-body mmc-reel-body" }, [
+        this.barHost,
+        el("div", { class: "mmc-reel-main" }, [
+          el("div", { class: "mmc-reel-script" }, [
+            scene, this.scriptHost, addRow,
+            el("div", { class: "mmc-reel-piece" }, [this.audioHost, this.poolHost, this.castHost, this.loraHost]),
+          ]),
+          el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost]),
+        ]),
+        this.reelHost,
+        this.sound.host,
       ]),
     ]);
 
@@ -665,14 +682,23 @@ class Timeline {
     }, [this.modal]);
 
     this.unmount = mountOverlay(this.overlay, () => this.close());
-    this.render();
+    // The reel is laid out to the width it has, so a resized window redraws it.
+    if (typeof ResizeObserver !== "undefined") {
+      this.resize = new ResizeObserver(() => this.renderReel());
+      this.resize.observe(this.reelHost);
+    }
     if (this.openOnMount != null && this.timeline.segments[this.openOnMount]) {
-      this.edit(this.openOnMount);
+      this.sel = { kind: "shot", index: this.openOnMount };
+    }
+    this.render();
+    if (this.openOnMount != null) {
+      this.focusShot(this.openOnMount);
       this.openOnMount = null;
     }
   }
 
   close() {
+    this.resize?.disconnect();
     this.unmount();
     this.resolve();
   }
@@ -1513,47 +1539,6 @@ class Timeline {
   }
 
   /**
-   * Chained or one pass — the two ends of the same dial.
-   *
-   * Both are now the same statement made on every seam at once, which is why
-   * the control has a third position it never asks for: a strip with some of
-   * its seams merged is neither, and saying "chained" about it would be a lie
-   * told by the one control on the bar that changes what all the others mean.
-   * Mixed is reported, not offered — the seams themselves are where a pass is
-   * made, and there is no sensible thing for clicking it to do.
-   */
-  renderMode() {
-    const single = S.isSingle(this.timeline);
-    const passes = S.passes(this.timeline);
-    const mixed = !single && passes.length < this.timeline.segments.length;
-    const option = (merge, label, title) => el("button", {
-      class: `mmc-tl-render-opt${!mixed && merge === single ? " on" : ""}`,
-      text: t(label),
-      title,
-      onclick: () => { if (mixed || merge !== single) this.mergeAll(merge); },
-    });
-    return el("div", { class: "mmc-tl-render" }, [
-      option(false, "Chained",
-        t("One generation per segment, joined end to end. No limit on the finished length, "
-        + "and a segment can start from the previous one's last frame — but every join is a real seam.")),
-      ...(mixed ? [el("span", {
-        class: "mmc-tl-render-opt mmc-tl-render-mixed",
-        text: t("Mixed"),
-        title: t("Some of this strip's segments are merged into passes and some are "
-             + "generated alone — {passes} generations for {count} segments. Merge or "
-             + "split a seam to change it, or use the two ends of this control to make "
-             + "the whole strip one or the other.",
-             { passes: passes.length, count: this.timeline.segments.length }),
-      })] : []),
-      option(true, "One pass",
-        t("One generation. The segments become the shots of a single description, cut times and all, "
-        + "so nothing is decoded and re-encoded mid-clip and there is no seam to cross. "
-        + "Everything a single pass can only have one of — mode, checkpoint, LoRAs — "
-        + "becomes the timeline's.")),
-    ]);
-  }
-
-  /**
    * The mode, the canvas, and the running total.
    *
    * The canvas sits here rather than on a segment because chained segments are
@@ -1585,7 +1570,6 @@ class Timeline {
       // a mode can even be — the routes, the frame step the cut times round to,
       // the checkpoints a pass may chain between. See `familyPill`.
       familyPill({ piece: this.timeline, onChange: () => this.commit() }),
-      this.renderMode(),
       el("button", {
         class: "mmc-pill",
         title: fromInput
@@ -1685,49 +1669,18 @@ class Timeline {
       // same gate the "{s} s next" readout below uses — a strip nobody has held
       // anything on is not in this mode yet, and the way into it is to click a
       // card's number.
-      ...this.holdAllPills(),
       el("div", { class: "mmc-tl-total" }, [
-        // What this queue will actually make, when that is not the whole piece.
-        // The one number that says what holding a card back bought: a strip of
-        // eight cards with seven of them held is six seconds of sampling, not
-        // forty-eight, and nothing else on this bar would say so. Absent while
-        // the two are the same, which they are on every strip that has never
-        // held anything.
-        ...(S.shotInParts(this.timeline) ? [el("b", {
-          class: "mmc-tl-next",
-          text: t("{s} s next", { s: S.sampledSeconds(this.timeline).toFixed(1) }),
-          title: t("The next render generates {s} s of the {total} s this piece runs to. "
-                 + "The rest is either film it already has or cards you are holding back.",
-                   { s: S.sampledSeconds(this.timeline).toFixed(1),
-                     total: seconds.toFixed(1) }),
-        })] : []),
         el("b", {
           text: auto ? `~${seconds.toFixed(1)} s` : `${seconds.toFixed(1)} s`,
           ...(auto ? { title: t("An estimate: a shot on auto is measured by the model "
                               + "while it renders, so the finished length is not known "
                               + "until it has.") } : {}),
         }),
-        el("span", { text: single
-          ? t(count === 1 ? "{count} shot · {frames} frames" : "{count} shots · {frames} frames",
-              { count, frames })
-          : t(count === 1 ? "{count} segment" : "{count} segments", { count }) }),
+        el("span", { text: t(count === 1 ? "{count} shot" : "{count} shots", { count }) }),
       ]),
-      // How many sampler passes this queue costs, which is not obvious from the
-      // strip: a row of cards looks like several small edits, and a merged run
-      // of them is the whole stretch riding on a single denoise.
-      el("div", {
-        class: "mmc-note",
-        title: single
-          ? t("The whole timeline is generated at once, so the shots cost no more than one clip of the same length.")
-          : passes.length === count
-            ? t("Each segment is generated separately and they run one after another.")
-            : t("One generation per pass, run one after another. A pass holding several "
-              + "shots costs no more than one clip of the same length."),
-      }, [
-        el("span", { class: "mmc-note-key", text: t("cost") }),
-        el("span", { text: t(passes.length === 1 ? "{count} generation per queue"
-          : "{count} generations per queue", { count: passes.length }) }),
-      ]),
+      // What the next render will do: shoot what is new or changed, play what
+      // is kept. The number that says what keeping takes bought.
+      this.planNote(passes),
       // A refusal the queue would raise, about the strip rather than about one
       // pass. Said here for the same reason the pass's own problems are said
       // under their rail: while the cards are still in front of you and it is
@@ -1742,144 +1695,25 @@ class Timeline {
       ...(this.refineError ? [el("div", { class: "mmc-warn", text: this.refineError })] : []),
     );
   }
-
-  /**
-   * The strip: one enclosure per pass, seams between them.
-   *
-   * A pass is what one queue generates, so it is what the strip is built out of
-   * — usually one card, which is what the whole strip used to be. Every card
-   * sits in an enclosure whether or not it shares one, so the cards line up
-   * whatever the run lengths are; the enclosure only draws itself when it holds
-   * more than one, and the head rails only take up room once the strip has a
-   * pass in it at all.
-   */
-  renderStrip() {
-    const parts = [];
-    const passes = S.passes(this.timeline);
-    // Which kept takes have stopped describing their cards. Asked once for the
-    // strip rather than once per card: the answer is a comparison against the
-    // serialized piece, and twenty cards would otherwise serialize it twenty
-    // times to draw one mark.
-    this.edited = S.editedSince(this.timeline);
-    this.askTakes();
-    passes.forEach((pass, position) => {
-      if (position > 0) parts.push(this.renderJoin(pass.start));
-      parts.push(this.renderPass(pass));
-    });
-    // An empty strip is just this tile: the two ways to begin, where they are
-    // the rest of the time.
-    const what = S.isSingle(this.timeline) ? "Shot" : "Segment";
-    // The refusal is the tooltip when there is one: the button says why it is
-    // dead rather than leaving the user to find out at queue time.
-    const refusal = S.addSegmentRefusal(this.timeline);
-    // Two things a card can be, so two buttons in one tile. A shot is written
-    // and generated; a clip is footage that already exists and is played. They
-    // sit together because they occupy the same place on the strip — the
-    // choice is what the next stretch of the piece is made of, not which tool
-    // to reach for.
-    parts.push(el("div", { class: "mmc-tl-add-pair" }, [
-      el("button", {
-        class: "mmc-tl-add",
-        title: refusal ?? t("Add a {what} to the end", { what: t(what.toLowerCase()) }),
-        disabled: refusal ? true : undefined,
-        onclick: () => this.add(),
-      }, [el("span", { text: "+" }), el("span", { text: t(what) })]),
-      el("button", {
-        class: "mmc-tl-add mmc-tl-add-clip",
-        title: refusal ?? t("Cut a video you already have into the piece. It is played as it "
-                          + "is — scaled to the render's size, never generated."),
-        disabled: refusal ? true : undefined,
-        onclick: () => this.addClip(),
-      }, [el("span", { text: "+" }), el("span", { text: t("Clip") })]),
-    ]));
-    this.stripHost.classList.toggle(
-      "has-pass", passes.some((pass) => pass.segments.length > 1));
-    this.stripHost.replaceChildren(...parts);
-  }
-
-  /**
-   * One pass: its cards, and — once there are several — the casing that says
-   * they are one generation.
-   *
-   * The casing is the whole visual idea. Inside it the cards lose their own
-   * borders and become panels of one strip of film, and the gaps between them
-   * become the cut times the description will carry. What the rail says is
-   * everything the pass can only have one of, which is exactly what merging
-   * cost: one mode, one length, one generation.
-   */
-  renderPass(pass) {
-    const cards = [];
-    pass.segments.forEach((segment, offset) => {
-      if (offset > 0) cards.push(this.renderCut(pass, offset));
-      cards.push(this.renderCard(segment, pass.start + offset, pass));
-    });
-    if (pass.segments.length === 1) {
-      return el("div", { class: "mmc-tl-pass" }, [
-        el("div", { class: "mmc-tl-pass-head" }),
-        el("div", { class: "mmc-tl-pass-cards" }, cards),
-      ]);
-    }
-
-    const count = pass.segments.length;
-    const passRules = rulesFor(S.pieceFamily(this.timeline));
-    const frames = framesForSeconds(S.cutTimes(pass.segments).total, passRules);
-    const seconds = secondsForFrames(frames, passRules);
-    const problem = S.passProblem(this.timeline, pass);
-    const manyShots = S.overAdvisedShots(this.timeline, pass);
-    // A pass is one generation, so it is held or shot as one and its take is
-    // the pass's. The casing wears the skin the card wears alone — solid
-    // because the film exists, perforated because it does not — and the rail
-    // carries the switch, alongside the other things a pass has one of.
-    const chip = this.takeChip(pass.start);
-
-    return el("div", { class: `mmc-tl-pass on${holdSkin(pass.segments[0], this.gone)}` }, [
-      el("div", { class: "mmc-tl-pass-head" }, [
-        el("span", { class: "mmc-tl-pass-name" }, [
-          icon("timeline", 13), el("span", { text: t("one pass") }),
-        ]),
-        el("span", {
-          class: `mmc-tl-pass-len${isTrainedLength(frames, passRules) && !manyShots
-                                   ? "" : " off-distribution"}`,
-          text: t("{count} shots · {s} s", { count, s: seconds.toFixed(1) }),
-          // Two things put a pass outside what its weights like, and they are
-          // different statements: how long it runs, and how many cuts are in
-          // it. The length is checked for every family; the cut count only
-          // where the family's own guidance gives a number to check against.
-          title: !isTrainedLength(frames, passRules)
-            ? t("{frames} frames in one generation — outside the ~5-15 s the weights "
-              + "were trained on. Split the pass to bring each side back inside it.",
-                { frames })
-            : manyShots
-            ? t("{count} cuts in one generation. This family's own guidance prefers at "
-              + "most {advised} — past that each shot has fewer frames to establish "
-              + "itself, and identity across the cuts holds less well. Split the pass, "
-              + "or give each shot a shorter, clearer beat.",
-                { count, advised: S.advisedShots(this.timeline) })
-            : t("{frames} frames at {fps} fps, generated in one go.",
-                  { frames, fps: rulesFor(S.pieceFamily(this.timeline)).fps }),
-        }),
-        el("span", { class: "mmc-tl-mode",
-                     text: S.passMode(pass.segments, this.timeline) }),
-        ...(chip ? [chip] : []),
-        ...this.takeTools(pass.start, "mmc-ghost"),
-        el("button", {
-          class: "mmc-ghost mmc-tl-pass-split",
-          text: t("Split"),
-          title: t("Generate these {count} shots separately again. Every cut between "
-               + "them becomes a seam you can set, and each shot gets its own mode, "
-               + "checkpoint and length back — nothing written is lost either way.",
-                 { count }),
-          onclick: () => this.splitPass(pass),
-        }),
-        this.holdSwitch(pass.start, count),
-      ]),
-      el("div", { class: "mmc-tl-pass-cards" }, cards),
-      ...(problem ? [el("div", { class: "mmc-tl-problem" }, [
-        el("span", { class: "mmc-note-key", text: t("one pass") }),
-        el("span", { text: problem }),
-      ])] : []),
+  planNote(passes) {
+    const { shoot, kept } = S.shootPlan(this.timeline);
+    const shootText = shoot.length
+      ? t(shoot.length === 1 ? "Next render shoots 1 pass" : "Next render shoots {n} passes", { n: shoot.length })
+      : t("Nothing left to shoot");
+    return el("div", {
+      class: "mmc-note mmc-reel-plan",
+      title: t("Kept takes are played, not shot again. A pass is shot when it is new, when you changed it, "
+             + "when you asked to reshoot it, or when it continues from one of those."),
+    }, [
+      el("span", { class: "mmc-note-key", text: t("next") }),
+      el("span", { text: shootText }),
+      ...(kept.length ? [el("span", { class: "mmc-reel-kept",
+        text: t(kept.length === 1 ? "plays 1 kept take" : "plays {n} kept takes", { n: kept.length }) })] : []),
+      ...(passes.length !== this.timeline.segments.length ? [el("span", {
+        text: t("{p} passes from {n} shots", { p: passes.length, n: this.timeline.segments.length }) })] : []),
     ]);
   }
+
 
   /**
    * The seam between two segments, and the only control on it.
@@ -1888,33 +1722,6 @@ class Timeline {
    * it a keyframe generation — so it cannot also carry references, and the
    * switch is refused rather than silently dropping them.
    */
-  /**
-   * The join inside a pass: a cut, and when it happens.
-   *
-   * No seam to switch, because there is no seam — a cut inside one generation
-   * is a line of the description, `[Shot 3] At 00:09.000, ...`, and the model
-   * draws it. So what there is to show is the timestamp the compiler will
-   * write, which is the one number the shot durations decide that is not
-   * visible anywhere else. Timed from the pass rather than from the timeline,
-   * because that is what the description says: every pass opens at 00:00.
-   *
-   * Clicking splits the pass here, which is the way back out.
-   */
-  renderCut(pass, offset) {
-    const { at } = S.cutTimes(pass.segments);
-    const time = S.shotTime(at[offset]);
-    const n = pass.start + offset + 1;
-    return el("button", {
-      class: "mmc-tl-cut",
-      title: t("Shot {n} cuts in {time} into this pass. "
-           + 'Write its prompt as the cut — "the camera cuts to…", "the shot transitions to…" — '
-           + "and the timestamp is added for you. Click to split the pass here, so the two "
-           + "sides are generated separately and this cut becomes a seam.",
-           { n, time }),
-      onclick: () => this.splitAt(pass.start + offset),
-    }, [el("span", { text: "✂" }), el("span", { text: time })]);
-  }
-
   /**
    * The seam in front of a supplied clip, which can only run the other way.
    *
@@ -2004,148 +1811,6 @@ class Timeline {
     });
   }
 
-  renderJoin(index) {
-    const segment = this.timeline.segments[index];
-    if (S.isClip(segment)) return this.renderClipJoin(index);
-    const on = S.continues(segment);
-    const blocked = on ? null : S.blockedReason(segment, "continue");
-
-    const sound = S.continuesAudio(segment);
-    const soundBlocked = sound ? null : S.blockedReason(segment, "continue_audio");
-
-    // Which earlier segment a live seam inherits from — the previous one unless
-    // the seam names another, which is what makes a circular narrative possible:
-    // segment 3 can return to segment 1's hallway after an unrelated segment 2.
-    // Resolved through the passes, because the frames that exist to inherit are
-    // a generation's: a source merged into the middle of a pass means the pass,
-    // which is what compile.py reaches for and so what this has to say.
-    const stored = S.continueSource(segment, index);
-    const from = this.earlierPasses(index)
-      .find((pass) => stored > pass.start && stored <= pass.end)?.end ?? stored;
-
-    // Two switches, not one control with three states. The picture and the sound
-    // cross a seam independently: a hard cut whose score keeps playing is as
-    // ordinary as a match cut that resets the room tone.
-    return el("div", { class: "mmc-tl-seam" }, [
-      seamGroup([el("button", {
-        class: `mmc-tl-join${on ? " on" : ""}`,
-        disabled: blocked ? true : undefined,
-        title: blocked || (on
-          ? t("Segment {n} starts on segment {from}'s last frame. Click for a hard cut.",
-              { n: index + 1, from })
-          : t("Hard cut into segment {n}. Click to start it on segment {prev}'s last frame.",
-              { n: index + 1, prev: index })),
-        onclick: blocked ? undefined : () => { segment.continue = !on; this.commit(); },
-      }, [el("span", { text: on ? "↝" : "✂" }), el("span", { text: on ? t("continues") : t("cut") })])]),
-      seamGroup([el("button", {
-        class: `mmc-tl-join mmc-tl-join-sound${sound ? " on" : ""}`,
-        disabled: soundBlocked ? true : undefined,
-        title: soundBlocked || (sound
-          ? t("Segment {n}'s sound carries on from segment {from}'s. "
-            + "Click to let it start its own.", { n: index + 1, from })
-          : t("Segment {n} generates its own sound from scratch. "
-            + "Click to carry the last {tail}s of segment {from}'s into it.",
-              { n: index + 1, tail: this.timeline.audio_tail_s, from })),
-        onclick: soundBlocked ? undefined : () => { segment.continue_audio = !sound; this.commit(); },
-      }, [icon("audio", 13), el("span", { text: sound ? t("sound") : t("silent seam") })])]),
-      // Where the seam inherits from. Only on a live seam, and only once there
-      // is a choice to make: the second pass can only continue from the first,
-      // and a one-option picker would only raise the question it answers.
-      seamGroup([
-      ...((on || sound) && this.earlierPasses(index).length >= 2 ? [el("button", {
-        class: `mmc-tl-join mmc-tl-join-from${from !== index ? " on" : ""}`,
-        title: t("What continues across this seam is segment {from}'s last {what}. "
-             + "Click to inherit from a different earlier segment — a story returning to "
-             + "segment 1 after an unrelated shot continues from segment 1.",
-             { from, what: t(on && sound ? "frame and sound" : on ? "frame" : "sound") }),
-        onclick: (event) => this.pickContinueFrom(event.currentTarget, segment, index),
-      }, [el("span", { text: t("from #{from}", { from }) })])] : []),
-      // How much of the source's tail crosses the seam. Only on a live picture
-      // seam: the width is a property of the inherited frames, and the classic
-      // last-frame seam is what it says until widened. The chip and its picker
-      // speak in seconds of motion — the frame counts are the encoder's
-      // business, not the user's.
-      ...(on ? [(() => {
-        const width = S.feather(segment, this.timeline);
-        const rules = rulesFor(S.pieceFamily(this.timeline));
-        return el("button", {
-        class: `mmc-tl-join mmc-tl-join-from${width > 1 ? " on" : ""}`,
-        title: (width > 1
-          ? t("The last {s} s of segment {from}'s motion "
-            + "carries across this cut, so the movement flows through instead of restarting "
-            + "from a still. That blended moment is redone at the start of segment {n} "
-            + "and removed from the final video, so it plays about "
-            + "{s} s shorter than its set length.",
-              { s: blendSeconds(width, rules), from, n: index + 1 })
-          : t("This cut picks up from segment {from}'s last frame. Click to blend a moment "
-            + "of its motion across instead — a smoother handoff, in exchange for segment "
-            + "{n} playing slightly shorter.", { from, n: index + 1 }))
-          // The sound rides the same inherited instants as the frames, so the
-          // blend sets the tail rather than the piece's setting. Said here
-          // because this chip is where the number that wins is on screen.
-          + (blendSetsTail(segment, this.timeline)
-            ? " " + t("Its sound carries the same {s} s, so the soundtrack and the "
-                    + "picture cross the seam on the same instants.",
-                      { s: blendSeconds(width, rules) })
-            : "")
-          // Only when it is on: off is the default and the sentence above
-          // already describes it.
-          + (S.featherPin(segment, this.timeline)
-            ? " " + t("The frame it lands on is named to the text encoder as well.")
-            : ""),
-        onclick: (event) => this.pickFeather(event.currentTarget, segment, index),
-      }, [el("span", {
-        text: width > 1
-          ? t("blend {s} s", { s: blendSeconds(width, rules) }) : t("no blend"),
-      })]);
-      })()] : []),
-      ]),
-      // What this card is shown of the strip before it. Beside the seam's
-      // chips because it is the same kind of fact — what reaches this shot
-      // from the shots before it — and unlike them it is there on a hard cut
-      // too, which is where a sheet earns most: nothing else crosses one.
-      seamGroup(S.canDo(this.timeline, "storyboard") ? [(() => {
-        const sheet = S.storyboardSheet(this.timeline, index);
-        const shown = sheet.length > 0;
-        return el("button", {
-          class: `mmc-tl-join mmc-tl-join-board${shown ? " on" : ""}`,
-          title: shown
-            ? t("Segment {n} is shown a storyboard of {which}: nine of their frames on one "
-              + "sheet, in order, cited as a picture reference so the room, the light and "
-              + "where things stand carry across this cut. It runs on the reference "
-              + "checkpoint for it, and re-renders when those shots change. Click to "
-              + "change which shots, or show it nothing.",
-                { n: index + 1, which: passNumbers(sheet) })
-            : t("Segment {n} is shown nothing of the shots before it. Click to show it a "
-              + "storyboard of them — nine of their frames on one sheet, cited as a "
-              + "picture reference.", { n: index + 1 }),
-          onclick: (event) => this.pickStoryboard(event.currentTarget, segment, index),
-        }, [icon("storyboard", 13),
-            el("span", { text: shown ? t("sees {which}", { which: passNumbers(sheet) })
-                                     : t("no storyboard") })]);
-      })()] : []),
-      // The third answer to what happens here, and the only structural one: no
-      // seam at all, because the two sides are one generation. Kept apart from
-      // the two switches above rather than folded in as a third state of the
-      // picture one — those say how this seam behaves, this one says whether
-      // there is a seam to behave.
-      //
-      // Absent behind supplied footage: a clip is played rather than
-      // generated, so there is no generation on the far side of this cut for
-      // this card to be folded into.
-      ...(S.isClip(this.timeline.segments[index - 1]) ? [] : [el("button", {
-        class: "mmc-tl-join mmc-tl-join-merge",
-        title: t("Generate segment {n} in the same pass as the one before it: one "
-             + "generation, with this cut written into its description for the model to "
-             + "draw. Nothing is decoded and re-encoded here, so there is no seam to "
-             + "cross — in exchange the two shots share one mode, one checkpoint and "
-             + "one LoRA stack. Everything you set here is kept, and comes "
-             + "back if you split the pass again.", { n: index + 1 }),
-        onclick: () => this.mergeAt(index),
-      }, [el("span", { text: "▤" }), el("span", { text: t("one pass") })])]),
-    ]);
-  }
-
   /** Fold the segment at `index` into the pass in front of it. */
   mergeAt(index) {
     if (index < 1) return;
@@ -2157,61 +1822,6 @@ class Timeline {
   splitAt(index) {
     delete this.timeline.segments[index].merge;
     this.commit();
-  }
-
-  /** Every shot of a pass back to a generation of its own. */
-  splitPass(pass) {
-    for (let index = pass.start + 1; index < pass.end; index += 1) {
-      delete this.timeline.segments[index].merge;
-    }
-    this.commit();
-  }
-
-  /** The bar's two ends: the whole strip as one pass, or none of it.
-   *
-   *  Written to `render` as well as to the flags, because the flags cannot say
-   *  it on a strip of one: a merge flag is a statement about the seam in front
-   *  of a card, and card 1 has no seam. `syncTimeline` re-derives `render` from
-   *  the flags the moment there are two cards and agrees with what is set here,
-   *  so the only strip this decides on its own is the one with no seam in it —
-   *  where it is still a real choice, and the only thing that says whether the
-   *  card is a shot of one pass or a pass of its own. */
-  mergeAll(merge) {
-    this.timeline.render = merge ? "single" : "chained";
-    this.timeline.segments.forEach((segment, index) => {
-      if (!index) return;
-      if (merge) segment.merge = true;
-      else delete segment.merge;
-    });
-    this.commit();
-  }
-
-  /** The seam's width. The options are the runs the video VAE can encode
-   *  standalone (`state.featherGridOf`), named by what the user hears and sees:
-   *  how long a moment of motion crosses the cut. */
-  pickFeather(anchor, segment, index) {
-    const max = S.maxFeather(segment, this.timeline);
-    const grid = S.featherGridOf(this.timeline);
-    const rules = rulesFor(S.pieceFamily(this.timeline));
-    const label = (f) => (f === 1 ? t("None — start from the last frame")
-      : t("{name} · {s} s of motion",
-          { name: t(BLEND_NAMES[grid.indexOf(f)] ?? "Blend"), s: blendSeconds(f, rules) }));
-    openChoicePopover(anchor, {
-      title: t("Blend into segment {n}", { n: index + 1 }),
-      options: grid.filter((f) => f <= max).map(label),
-      value: label(Math.min(S.feather(segment, this.timeline), max)),
-      extra: seamRows(
-        seamPinRow(this.timeline, segment, S.feather(segment, this.timeline),
-                   () => this.commit()),
-        seamRestoreRow(this.timeline, segment, index, () => this.commit()),
-        keystoneRow(this.timeline, segment, index, () => this.commit())),
-      onPick: (choice) => {
-        const width = grid.find((f) => label(f) === choice) ?? 1;
-        if (width > 1) segment.feather = width;
-        else { delete segment.feather; delete segment.feather_pin; }
-        this.commit();
-      },
-    });
   }
 
   /** The passes that finish before the segment at `index` starts — the ones
@@ -2505,7 +2115,6 @@ class Timeline {
 
     return el("div", {
       class: "mmc-tl-card mmc-tl-clip",
-      style: { width: `${cardWidth(seconds)}px` },
       ondblclick: () => this.editClip(index),
       onpointerleave: () => this.disarm(index),
     }, [
@@ -2575,419 +2184,717 @@ class Timeline {
     ]);
   }
 
-  /**
-   * The one control on a card that says whether it is in the next render.
-   *
-   * One question with three answers, because what "not in it" means depends on
-   * whether there is film: a card holding a take plays it, a card holding
-   * nothing is simply not in this render and keeps everything set on it. There
-   * is no second button for keeping a take — keeping *is* holding, and a take
-   * that came back is kept by the same click that would have held the card
-   * without one.
-   *
-   * `shots` is how many cards this one switch answers for. Past one it is a
-   * whole pass and the switch is drawn on the rail rather than on a card: a
-   * pass is one generation and there is no half of one to hold.
-   */
-  holdSwitch(index, shots = 1) {
-    const segment = this.timeline.segments[index];
-    const held = S.isHeld(segment);
-    const take = S.takeOn(segment);
-    const what = shots > 1 ? t("This pass") : t("This card");
-    return el("button", {
-      class: `mmc-ghost mmc-tl-hold${held ? (take ? " kept" : " unshot") : ""}`,
-      title: held
-        ? (take
-          ? t("Locked: {what} plays the take it already has instead of being "
-            + "generated. Unlock it to shoot it again — everything written on it "
-            + "is still set.", { what })
-          : t("Locked: {what} is not in the next render and has nothing to play "
-            + "yet. Everything written on it is kept. Unlock it to shoot it.",
-              { what }))
-        : (take
-          ? t("Unlocked: {what} is generated again by the next render. Lock it to "
-            + "keep the take it just made — the cards after it go on continuing "
-            + "from that file.", { what })
-          : t("Unlocked: {what} is generated by the next render. Lock it to hold it "
-            + "back and shoot the rest first — nothing written on it is lost.",
-              { what })),
-      onclick: (event) => {
-        event.stopPropagation();
-        if (held) delete segment.hold; else segment.hold = true;
-        this.commit();
-      },
-    }, [icon(held ? "lock" : "lockOpen", 15)]);
+  // ---- the reel ---------------------------------------------------------------
+  //
+  // Three views of one strip, kept in step: the script (one row per shot, the
+  // words), the reel (the shots at their real length, the joins between them,
+  // the sound under them) and the side (the selected shot's take and every
+  // setting of whatever is selected). Selecting a shot or a join anywhere
+  // selects it in all three.
+
+  /** Everything that shows the strip, without touching a box under the caret.
+   *  The name is the old strip's: the editor, the presets and the shelves call
+   *  it when a card changed under them. */
+  renderStrip() {
+    this.edits = S.editedSince(this.timeline);
+    this.askTakes();
+    this.renderScript();
+    this.renderReel();
+    this.renderSide();
   }
 
-  /**
-   * Lock the whole strip, or put all of it back.
-   *
-   * Two buttons rather than one that toggles: on a part-shot strip neither
-   * "locked" nor "unlocked" is the state it is in, so a switch would have to
-   * pick a side and would read as a lie half the time. Each is offered when it
-   * has something to do and absent when it does not.
-   *
-   * Locking everything is how a shoot ends — nothing is generated and the
-   * render writes the piece out of the takes it already has — so it goes dead
-   * when there would be nothing to write with, which is the same thing the
-   * strip would otherwise refuse a moment later.
-   */
-  holdAllPills() {
-    if (!S.shotInParts(this.timeline)) return [];
-    const passes = S.passes(this.timeline).filter((pass) => !S.isClip(pass.segments[0]));
-    const loose = passes.filter((pass) => !S.isHeld(pass.segments[0]));
-    const nothingLeft = !passes.some((pass) => S.takeOn(pass.segments[0]))
-      && !S.passes(this.timeline).some((pass) => S.isClip(pass.segments[0]));
-    return [
-      ...(loose.length ? [el("button", {
-        class: "mmc-pill mmc-tl-holdall",
-        disabled: nothingLeft || undefined,
-        title: nothingLeft
-          ? t("Nothing has been shot yet, so locking the strip would leave the next "
-            + "render with nothing to make.")
-          : t("Lock every card. Nothing is generated and the next render writes the "
-            + "piece out of the takes it already has — which is how a piece shot a "
-            + "card at a time is finished."),
-        onclick: () => { if (S.holdAll(this.timeline, true)) this.commit(); },
-      }, [icon("lock", 13), el("span", { text: t("Lock all") })])] : []),
-      // Every take whose file is gone, forgotten in one click: the strip a
-      // cleared-out takes/ folder leaves behind is dead takes on every card.
-      ...(passes.some((pass) => this.gone.has(S.takeOn(pass.segments[0])?.filename)) ? [el("button", {
-        class: "mmc-pill mmc-tl-holdall mmc-tl-forget-gone",
-        title: t("Forget every take whose file is no longer on disk. Those cards go "
-               + "back to not shot — everything written on them is kept — and a "
-               + "locked one stays out of the render until you unlock it."),
-        onclick: () => { if (S.dropMissingTakes(this.timeline, this.gone)) this.commit(); },
-      }, [el("span", { text: t("Forget missing takes") })])] : []),
-      ...(loose.length < passes.length ? [el("button", {
-        class: "mmc-pill mmc-tl-holdall",
-        title: t("Put every card back in the render. Takes are kept — a card that is "
-               + "unlocked is simply shot again, and its take stands until the new "
-               + "one lands."),
-        onclick: () => { if (S.holdAll(this.timeline, false)) this.commit(); },
-      }, [icon("lockOpen", 13), el("span", { text: t("Unlock all") })])] : []),
-    ];
+  /** A keystroke in the script: the card changed, so a kept take of it may have
+   *  stopped describing it. Lighter than `commit` — the row under the caret is
+   *  left alone. */
+  scriptEdited() {
+    S.releaseEdited(this.timeline);
+    this.onCommit?.();
+    this.renderBar();
+    this.renderPool();
+    this.renderCast();
+    this.renderStrip();
   }
 
-  /**
-   * The card's number, and the way to shoot that number and nothing else.
-   *
-   * A piece is built one expensive generation at a time, and doing that by hand
-   * means locking five cards to shoot the sixth — then unlocking one and
-   * locking another for every step after it. Said in one click it is the whole
-   * workflow: shoot a card, look at it, and click the next card's number, which
-   * locks the one you just shot. A card locked with a take is a card playing
-   * its take, so the strip walks itself forward and nothing is generated twice.
-   *
-   * The number rather than a control of its own, because there is no room for
-   * one — a five-second card's head is 26 px from full — and because the number
-   * is already what a card is called. "Shoot only 4" is the sentence, and the
-   * badge is the 4 in it. It goes quiet on a strip of one pass, where there is
-   * no "only" to ask for.
-   *
-   * The pass's, like the lock beside it: a pass is one generation and there is
-   * no half of one to shoot, so a number inside a merged run shoots the run.
-   */
-  soloBadge(index) {
-    const number = String(index + 1);
-    const runs = S.passes(this.timeline);
-    // Nothing to ask for on a strip that is one generation: "only this" and
-    // "all of it" are the same request there.
-    if (runs.length < 2) return el("span", { class: "mmc-tl-index", text: number });
-    const shared = runs.some((pass) => pass.segments.length > 1
-      && pass.start <= index && index < pass.start + pass.segments.length);
-    return el("button", {
-      class: "mmc-tl-index mmc-tl-solo",
-      text: number,
-      title: shared
-        ? t("Shoot only this pass. The shots merged with this one are generated "
-          + "with it — a pass is one generation — and every other card is locked "
-          + "and stays as it is.")
-        : t("Shoot only this one. Every other card is locked and stays as it "
-          + "is — the ones that already have takes go on playing them, and "
-          + "nothing else is generated. Click the next card's number when "
-          + "this one is good."),
-      onclick: (event) => {
-        event.stopPropagation();
-        if (S.soloPass(this.timeline, index)) this.commit();
-      },
-    });
-  }
-
-  /**
-   * What a locked card is locked *as*, in words.
-   *
-   * The lock says a card is out of the next render; it cannot also say whether
-   * there is film. The skin draws that — solid because the take exists,
-   * perforated because it has not been shot — and this names it, because a
-   * picture nobody has been taught to read is not a label. Absent on a card
-   * that is simply in the render with nothing rendered yet, which is the
-   * ordinary state and the one a mark would only add noise to.
-   */
-  takeChip(index) {
-    const segment = this.timeline.segments[index];
-    const take = S.takeOn(segment);
-    const held = S.isHeld(segment);
-    if (!take) {
-      return held ? el("span", {
-        class: "mmc-tl-card-state",
-        text: t("not shot"),
-        title: t("Locked, with nothing rendered yet: this card is not in the next "
-               + "render and nothing plays in its place. Everything written on it "
-               + "is kept."),
-      }) : null;
+  select(sel, { reveal = true } = {}) {
+    this.sel = sel;
+    this.armed = null;
+    this.keepRefused = null;
+    this.renderStrip();
+    if (reveal && sel?.kind === "shot") {
+      this.rowFor(sel.index)?.el.scrollIntoView({ block: "nearest" });
     }
-    const [tone, name, why] = this.gone.has(take.filename)
-      ? ["missing", held ? t("kept · file gone") : t("take · file gone"),
-         t("The file this take was written to is not under output/ any more, so "
-         + "there is nothing to play and the render would refuse this card by "
-         + "name. Unlock the card to shoot it again, or forget the take.")]
-      : this.edited?.has(index)
-      ? ["stale", held ? t("kept · edited") : t("take · edited"),
-         t("This take was made before you changed the card, so it is no longer "
-         + "what the card describes. It still plays — shoot the card again to "
-         + "replace it.")]
-      : held
-        ? ["kept", t("kept"),
-           t("Locked, and playing the take it already has. The next render splices "
-           + "this file in instead of generating it, and the cards after it go on "
-           + "continuing from it.")]
-        : ["ready", t("take ready"),
-           t("This card rendered and the file is on disk. Lock the card to keep that "
-           + "take and stop paying for it; leave it unlocked to shoot it again.")];
-    // The chip names the take; the ✕ beside it is how the card stops having
-    // one. Looking at a take and deciding against it is half of shooting a
-    // piece in parts, and until now the only way to say so was to render over
-    // it. Wearing the chip's own colour, because it acts on what the chip
-    // says — and hidden until the card is under the pointer or the keyboard,
-    // because a strip of takes is meant to read as film rather than as a row
-    // of things to delete.
-    return el("span", { class: `mmc-tl-card-state ${tone}`, title: why }, [
-      el("span", { text: name }),
-      el("button", {
-        class: "mmc-tl-take-x",
-        text: "✕",
-        title: t("Forget this take. The card goes back to not shot; the file stays "
-               + "under output/ — this only stops the card playing it."),
-        onclick: (event) => {
-          event.stopPropagation();
-          if (S.dropTake(this.timeline, index)) this.commit();
-        },
-      }),
-    ]);
   }
 
-  renderCard(segment, index, pass) {
-    if (S.isClip(segment)) return this.renderClipCard(segment, index);
-    // Whether this card is a generation or a shot inside one. Everything below
-    // that used to ask the timeline's render mode is really asking this.
-    const shared = pass.segments.length > 1;
-    // In a pass the shot does not snap to the grid on its own — the pass's
-    // total does — so the card shows what the user set and the rail above it
-    // shows the truth.
-    const cardRules = rulesFor(S.pieceFamily(this.timeline));
-    const frames = framesForSeconds(segment.duration_s, cardRules);
-    const seconds = shared ? Number(segment.duration_s) || 0
-      : secondsForFrames(frames, cardRules);
-    // The segment's own references plus the piece references its text cites —
-    // both ride into this generation, so the card counts both.
-    // Whether this shot can be handed to the duration head, and whether it is.
-    // Only alone: in a pass the length that is sampled is the pass's total, so
-    // a per-shot switch would be offering the model a number nobody reads.
-    const predicts = !shared && S.canDo(this.timeline, "duration");
-    const autoLength = predicts && segment.auto_duration === true;
-    const refs = S.references(segment).length + S.citedPool(segment).length;
-    const loras = S.activeLoras(segment, S.pieceFamily(this.timeline)).length;
-    const typed = (segment.prompt || "").trim();
-    const rewrite = segment.refined?.body?.trim();
-    const using = rewrite && segment.refined.enabled !== false;
-    // The typed sentence is what the user recognises the card by, so it stays
-    // the caption and the rewrite is only marked — a paragraph of generated
-    // prose on a 160 px card says less about which shot this is, not more. A
-    // card refined from nothing falls back to the rewrite, which is then the
-    // only description it has.
-    const prompt = typed || rewrite || "";
+  rowFor(index) {
+    const segment = this.timeline.segments[index];
+    return segment ? this.rows.get(segment.card_id) : null;
+  }
 
-    const meta = [];
-    // The sheet this card is shown counts as one of its pictures, and the
-    // strip should say at a glance which cards see the piece.
-    if (!shared && S.storyboardSheet(this.timeline, index).length) meta.push(t("storyboard"));
-    if (loras) meta.push(t(loras === 1 ? "{count} LoRA" : "{count} LoRAs", { count: loras }));
-    // A screen is set up inside the card and replaced after the render, so
-    // nothing else on the strip would say this card has one.
-    const screens = segment.screens?.length ?? 0;
-    if (screens) meta.push(t(screens === 1 ? "{count} screen" : "{count} screens", { count: screens }));
-    if (rewrite) meta.push(using ? t("refined") : t("refined (off)"));
+  focusShot(index) {
+    const row = this.rowFor(index);
+    if (!row?.box) return;
+    row.el.scrollIntoView({ block: "nearest" });
+    focusEnd(row.box.root);
+  }
 
-    // The card's half of the face pass, and only while the piece is running
-    // one: a switch for something that is not happening is a switch that lies.
-    // Two states, because with the piece on, "on" and "inherit" are the same
-    // thing — what a card gets to say is that *this* shot does not need it.
-    const repaired = S.faceOn(this.timeline, segment);
-    const faceChip = this.timeline.face?.on ? el("button", {
-      class: `mmc-tl-card-face${repaired ? " on" : ""}`,
-      text: repaired ? t("face") : t("no face"),
-      title: repaired
-        ? t("This shot's face is re-drawn after it renders. Click to leave it alone.")
-        : t("This shot is left as it renders. Click to have its face re-drawn."),
-      onclick: (event) => {
-        event.stopPropagation();
-        if (repaired) segment.face = "off";
-        else delete segment.face;
-        this.commit();
-      },
-    }) : null;
-    // The card's motion fix: its own switch, not the piece's, because which
-    // shots have a burst in them is a fact about the shots. Only a generated
-    // shot on a family with the pass draws it.
-    const fixable = !S.isClip(segment) && S.canDo(this.timeline, "motion_fix");
-    const fixed = S.motionFix(segment, this.timeline);
-    const motionChip = fixable ? el("button", {
-      class: `mmc-tl-card-motion${fixed ? " on" : ""}`,
-      text: fixed ? t("motion fix") : t("no motion fix"),
-      title: fixed
-        ? t("Where this shot moves too fast for the model, it is slowed down, re-drawn and put back on the clock after it renders — a second pass, about three times the shot's cost. Click to leave it as it renders.")
-        : t("This shot is left as it renders. Click to have its fast motion slowed down, re-drawn and put back on the clock — a second pass, about three times the shot's cost."),
-      onclick: (event) => {
-        event.stopPropagation();
-        if (fixed) delete segment.motion_fix;
-        else segment.motion_fix = true;
-        this.commit();
-      },
-    }) : null;
+  /** What the reel says about a shot's film: the pass's, because a pass is one
+   *  generation and one take. */
+  shotState(index) {
+    const segment = this.timeline.segments[index];
+    if (S.isClip(segment)) return "clip";
+    const pass = S.passOf(this.timeline, index);
+    const head = pass.segments[0];
+    const take = S.takeOn(head);
+    if (take && this.gone.has(take.filename)) return "gone";
+    if (take && S.isHeld(head)) return "kept";
+    if (take) return this.edits?.has(pass.start) ? "changed" : "reshoot";
+    return "new";
+  }
 
-    // Which of the three things this card is: in the next render, playing the
-    // take it already has, or not shot yet. The skin says which — solid because
-    // the film exists, perforated because it does not — and the switch in the
-    // head is where it is changed.
-    // In a pass of several shots both are the pass's: it is one generation, so
-    // it is held, kept and drawn as one piece of film. See `renderPass`.
-    const skin = shared ? "" : holdSkin(segment, this.gone);
-    const chip = shared ? null : this.takeChip(index);
+  stateLabel(state) {
+    return {
+      kept: t("Kept"),
+      changed: t("Changed · reshoots"),
+      reshoot: t("Reshoots"),
+      new: t("Not shot"),
+      gone: t("File missing"),
+      clip: t("Clip"),
+    }[state];
+  }
 
-    return el("div", {
-      class: `mmc-tl-card${skin}`,
-      style: { width: `${cardWidth(seconds)}px` },
-      // Double-click anywhere on the card, because "Edit" is a small target and
-      // opening a segment is the thing you do most in here.
-      ondblclick: () => this.edit(index),
-      onpointerleave: () => this.disarm(index),
+  // ---- the script ---------------------------------------------------------
+
+  renderScript() {
+    const live = new Set();
+    const els = this.timeline.segments.map((segment, index) => {
+      live.add(segment.card_id);
+      let row = this.rows.get(segment.card_id);
+      if (!row || row.clip !== S.isClip(segment)) {
+        row = this.scriptRow(segment);
+        this.rows.set(segment.card_id, row);
+      }
+      row.segment = segment;
+      this.updateRow(row, index);
+      return row.el;
+    });
+    for (const id of [...this.rows.keys()]) if (!live.has(id)) this.rows.delete(id);
+    const now = [...this.scriptHost.children];
+    if (now.length !== els.length || now.some((node, i) => node !== els[i])) {
+      this.scriptHost.replaceChildren(...els);
+    }
+  }
+
+  /** One shot's row: its number and length in the gutter, its words in the same
+   *  box a card's prompt always was, chips and menus included. */
+  scriptRow(segment) {
+    const row = { segment, clip: S.isClip(segment) };
+    const index = () => this.timeline.segments.indexOf(row.segment);
+    row.number = el("button", {
+      class: "mmc-reel-num",
+      title: t("Select this shot"),
+      onclick: () => this.select({ kind: "shot", index: index() }),
+    });
+    row.seconds = el("span", { class: "mmc-reel-secs" });
+    row.tag = el("span", { class: "mmc-reel-tag" });
+    if (row.clip) {
+      row.body = el("div", { class: "mmc-reel-clipname" });
+    } else {
+      row.box = new PromptBox({
+        getState: () => row.segment,
+        getPool: () => this.timeline.assets ?? [],
+        placeholder: t("What happens in this shot. Enter at the end starts the next one."),
+        onInput: (text) => { row.segment.prompt = text; this.scriptEdited(); },
+        onAttach: (picked) => this.attachToPool(picked),
+        attachBlocked: (action) => S.blockedReason(row.segment, action),
+        getCast: () => this.timeline.subjects ?? [],
+        castFromLibrary: (member) => this.castFromLibrary(member),
+        onCastChip: (handle) => this.openCastMember(handle),
+        pick: () => ({ seed: S.segmentSeed(row.segment) ?? this.pieceSeed(), card: index() + 1 }),
+        // Enter at the end of a shot starts the next one; anywhere else it is
+        // still a line break, and Shift+Enter always is.
+        onSubmit: () => {
+          if (caretAtEnd(row.box.root)) { this.insertShot(index() + 1); return; }
+          row.box.insertText("\n");
+          row.box.onEdit();
+        },
+      });
+      row.box.setValue(segment.prompt ?? "");
+      row.box.frame.classList.add("mmc-reel-box");
+      row.box.root.addEventListener("keydown", (event) => this.scriptKey(event, row));
+      row.box.root.addEventListener("focus", () => {
+        if (!(this.sel?.kind === "shot" && this.sel.index === index())) {
+          this.select({ kind: "shot", index: index() }, { reveal: false });
+        }
+      });
+      row.body = row.box.frame;
+    }
+    row.el = el("div", {
+      class: "mmc-reel-row",
+      onpointerdown: (event) => event.stopPropagation(),
     }, [
-      el("div", { class: "mmc-tl-card-head" }, [
-        this.soloBadge(index),
-        // The off-distribution mark belongs to whatever is actually generated in
-        // one go. Alone, that is this card; in a pass it is the pass, and
-        // marking every card would say it about the wrong thing — the rail
-        // carries it there instead.
-        // The seconds, and on a family with a duration head the switch that
-        // hands them over — the same control the shot's own editor carries,
-        // in the one place a strip is actually laid out. A card on auto wears
-        // the `~` for the same reason the strip's total does: the number is an
-        // estimate until the render measures it, and it is still what the bar
-        // and the queue guard count with. No off-distribution mark while it is
-        // on, because that would be marking a length nobody has chosen yet.
-        el(predicts ? "button" : "span", {
-          class: `mmc-tl-dur${autoLength ? " auto" : ""}`
-                 + (shared || autoLength || isTrainedLength(frames, cardRules)
-                      ? "" : " off-distribution"),
-          text: autoLength
-            ? t("~{seconds} s", { seconds: S.showSeconds(segment.duration_s) })
-            : t("{seconds} s", { seconds: S.showSeconds(segment.duration_s) }),
-          title: shared
-            ? t("{s} s of this pass — the frame count is the pass's.",
-                { s: S.showSeconds(segment.duration_s) })
-            : autoLength
-              ? t("The model picks this shot's length when it renders, from its own "
-                + "prompt. {seconds} s is the estimate the strip counts with until "
-                + "then, and the length this card goes back to. Click to set it yourself.",
-                  { seconds: S.showSeconds(segment.duration_s) })
-              : (isTrainedLength(frames, cardRules)
-                   ? t("{frames} frames at {fps} fps", { frames, fps: cardRules.fps })
-                   : t("{frames} frames — outside the ~5–15 s the weights were trained on.",
-                       { frames }))
-                + (predicts
-                     ? "\n" + t("Click to let the model pick this shot's length from its prompt.")
-                     : ""),
-          ...(predicts ? {
-            onclick: (event) => {
-              event.stopPropagation();
-              segment.auto_duration = !autoLength;
-              this.commit();
-            },
-          } : {}),
-        }),
-        // The mode is a property of the generation, and a pass holding several
-        // shots has one of those for all of them — so it moves to the rail.
-        ...(shared ? [] : [el("span", { class: "mmc-tl-mode",
-                                       text: S.mode(segment, this.timeline) })]),
-        // Whether this card is in the next render. On the head rather than in
-        // the foot because it says what the card *is* to this queue, which is
-        // the question the rest of this row answers — and because a pass of
-        // several shots answers it once, on its rail, where a per-card switch
-        // would be offering half a generation.
-        ...(shared ? [] : [this.holdSwitch(index)]),
-      ]),
-      // Dimmed while a rewrite stands in for it, the same way the editor dims the
-      // box this caption is showing: the card would otherwise read as if the
-      // sentence under it were what this shot queues.
-      el("div", {
-        class: `mmc-tl-card-prompt${prompt ? "" : " empty"}${using && typed ? " superseded" : ""}`,
-        text: prompt || t("No prompt yet"),
-        title: using && typed ? t("Not queued — this card's rewrite is. Open it to read or revert.") : "",
-      }),
-      ...(refs ? [el("div", {
-        class: "mmc-tl-card-refs",
-        text: t(refs === 1 ? "{count} ref" : "{count} refs", { count: refs }),
-      })] : []),
-      ...(meta.length || faceChip || motionChip || chip
-        ? [el("div", { class: "mmc-tl-card-meta" }, [
-            ...meta.map((text) => el("span", { text })),
-            ...(chip ? [chip] : []),
-            ...(motionChip ? [motionChip] : []),
-            ...(faceChip ? [faceChip] : []),
-          ])]
-        : []),
-      // The same per-shot override the editor exposed, now reachable from the
-      // strip. A merged pass still samples on its first shot's seed; later
-      // shots keep their own seed for prompt alternatives and for unmerging.
-      el("div", {
-        class: "mmc-tl-card-seed",
-        onpointerdown: (event) => event.stopPropagation(),
-        onclick: (event) => event.stopPropagation(),
-        ondblclick: (event) => event.stopPropagation(),
-      }, [segmentSeedPill({
-        own: S.segmentSeed(segment),
-        piece: this.pieceSeed(),
-        taken: S.takeOn(segment)?.seed ?? null,
-        onChange: (seed) => {
-          if (seed === null) delete segment.seed; else segment.seed = seed;
+      el("div", { class: "mmc-reel-gutter" }, [row.number, row.seconds]),
+      row.body,
+      row.tag,
+    ]);
+    return row;
+  }
+
+  updateRow(row, index) {
+    const segment = row.segment;
+    const seconds = S.isClip(segment) ? S.clipSeconds(segment) : Number(segment.duration_s) || 0;
+    row.number.textContent = String(index + 1);
+    row.seconds.textContent = t("{s} s", { s: S.showSeconds(seconds) });
+    const state = this.shotState(index);
+    row.tag.textContent = state === "new" || state === "clip" ? "" : this.stateLabel(state);
+    row.tag.className = `mmc-reel-tag ${state}`;
+    row.el.classList.toggle("selected", this.sel?.kind === "shot" && this.sel.index === index);
+    row.el.classList.toggle("merged", index > 0 && S.merged(segment));
+    if (row.clip) {
+      row.body.textContent = t("Clip · {name}", { name: (segment.filename || "").split("/").pop() });
+    } else if (document.activeElement !== row.box.root
+               && row.box.getValue() !== (segment.prompt ?? "")) {
+      // Written from outside the row — a refine, a preset — while it had no caret.
+      row.box.setValue(segment.prompt ?? "");
+    }
+  }
+
+  /** Backspace in an empty shot takes it out again, as long as nothing but
+   *  the words would go with it. (Enter is the box's `onSubmit`.) */
+  scriptKey(event, row) {
+    if (event.defaultPrevented || row.box.menu || event.isComposing) return;
+    const index = this.timeline.segments.indexOf(row.segment);
+    if (event.key === "Backspace" && !(row.segment.prompt ?? "").trim()
+        && this.timeline.segments.length > 1 && !S.takeOn(row.segment)
+        && !S.references(row.segment).length) {
+      event.preventDefault();
+      this.remove(index);
+      this.focusShot(Math.max(0, index - 1));
+    }
+  }
+
+  /** A new shot at `at`, continuing from the one before it, with the caret in it. */
+  insertShot(at) {
+    if (S.addSegmentRefusal(this.timeline)) return;
+    const segment = at === 0 ? S.emptySegment() : S.continuingSegment(this.timeline);
+    this.timeline.segments.splice(at, 0, segment);
+    S.remapContinueFrom(this.timeline, (n) => (n > at ? n + 1 : n));
+    S.ensureCardIds(this.timeline);
+    this.sel = { kind: "shot", index: at };
+    this.commit();
+    this.focusShot(at);
+  }
+
+  // ---- the reel -----------------------------------------------------------
+
+  /**
+   * The piece at its real length: one card per shot, a join between each pair,
+   * the sound underneath. Strictly proportional — this is the one place the
+   * lengths are compared — and drawn to the width the window gives it.
+   */
+  renderReel() {
+    const host = this.reelHost;
+    if (!host) return;
+    const segments = this.timeline.segments;
+    const rules = rulesFor(S.pieceFamily(this.timeline));
+    const seconds = segments.map((segment) =>
+      (S.isClip(segment) ? S.clipSeconds(segment) : Number(segment.duration_s) || 0));
+    // A picture cut opens a gap; a continuing join and a cut inside one pass
+    // do not, so film that flows reads as touching.
+    const GAP = 10;
+    const cut = segments.map((segment, i) => i > 0 && !S.merged(segment) && !S.continues(segment));
+    const gaps = cut.filter(Boolean).length * GAP;
+    const width = Math.max(320, (host.clientWidth || 0) - 24);
+    const total = seconds.reduce((a, b) => a + b, 0) || 1;
+    const pps = (width - gaps) / total;
+    this.pps = pps;
+    const x = [];
+    let cursor = 0;
+    segments.forEach((_, i) => { if (cut[i]) cursor += GAP; x.push(cursor); cursor += seconds[i] * pps; });
+    const at = (i) => x[i];
+    const span = (i) => seconds[i] * pps;
+    const sel = this.sel;
+
+    const passLane = el("div", { class: "mmc-reel-passes" });
+    for (const pass of S.passes(this.timeline)) {
+      if (pass.segments.length < 2) continue;
+      const left = at(pass.start);
+      const right = at(pass.end - 1) + span(pass.end - 1);
+      passLane.append(el("div", {
+        class: "mmc-reel-pass",
+        style: { left: `${left}px`, width: `${right - left}px` },
+        title: t("Shots {a}–{b} render as one generation.", { a: pass.start + 1, b: pass.end }),
+        text: t("one pass"),
+      }));
+    }
+
+    const picture = el("div", { class: "mmc-reel-picture" });
+    segments.forEach((segment, i) => {
+      const state = this.shotState(i);
+      const take = S.takeOn(S.passOf(this.timeline, i).segments[0]);
+      const thumb = take && state !== "gone" && !S.isClip(segment)
+        ? viewUrl(take.filename, { preview: true }) : null;
+      const card = el("button", {
+        class: `mmc-reel-card ${state}${sel?.kind === "shot" && sel.index === i ? " selected" : ""}`,
+        style: { left: `${at(i)}px`, width: `${Math.max(4, span(i) - 2)}px` },
+        title: (segment.prompt || segment.filename || "").trim(),
+        onclick: () => this.select({ kind: "shot", index: i }),
+        ondblclick: () => (S.isClip(segment) ? this.editClip(i) : this.edit(i)),
+      }, [
+        ...(thumb ? [el("img", { class: "mmc-reel-thumb", src: thumb, alt: "", draggable: "false" })] : []),
+        el("span", { class: "mmc-reel-card-head" }, [
+          el("b", { text: String(i + 1) }),
+          el("span", { text: t("{s} s", { s: S.showSeconds(seconds[i]) }) }),
+        ]),
+        ...(thumb ? [] : [el("span", {
+          class: "mmc-reel-card-text",
+          text: S.isClip(segment) ? (segment.filename || "").split("/").pop()
+                                  : (segment.prompt || "").trim() || t("No words yet"),
+        })]),
+        ...(state !== "new" && state !== "clip"
+          ? [el("span", { class: `mmc-reel-card-tag ${state}`, text: this.stateLabel(state) })] : []),
+      ]);
+      // The right edge sets the length: dragged, it snaps to the family's frame
+      // grid and the script's gutter follows. A clip's length is its trim.
+      if (!S.isClip(segment)) {
+        const edge = el("span", { class: "mmc-reel-edge", title: t("Drag to change the length") });
+        edge.addEventListener("pointerdown", (event) => this.dragLength(event, i, rules));
+        edge.addEventListener("click", (event) => event.stopPropagation());
+        card.append(edge);
+      }
+      picture.append(card);
+    });
+
+    // The joins, on the line under the picture. One click on a join cuts the
+    // picture or carries it on — and selects it, so everything else about it
+    // is on the side.
+    const joins = el("div", { class: "mmc-reel-joins" });
+    const bands = [];
+    segments.forEach((segment, i) => {
+      if (!i) return;
+      const mid = at(i) - (cut[i] ? GAP / 2 : 0);
+      const selected = sel?.kind === "join" && sel.index === i;
+      const clipSide = S.isClip(segment);
+      const merged = S.merged(segment);
+      const on = S.continues(segment);
+      const blocked = on ? null : S.blockedReason(segment, "continue");
+      joins.append(el("button", {
+        class: `mmc-reel-join${merged ? " merged" : on ? " on" : ""}${selected ? " selected" : ""}`,
+        style: { left: `${mid}px` },
+        title: merged ? t("A cut inside one pass")
+          : clipSide ? t("Join {a} → {b}", { a: i, b: i + 1 })
+          : blocked || (on ? t("Continues. Click to cut the picture here.")
+                           : t("Cut. Click to continue the picture across.")),
+        onclick: () => {
+          if (!merged && !clipSide && !blocked) segment.continue = !on;
+          this.sel = { kind: "join", index: i };
           this.commit();
         },
-      })]),
-      el("div", { class: "mmc-tl-card-foot" }, [
-        el("button", { class: "mmc-tl-edit", text: t("Edit"), onclick: () => this.edit(index) }),
-        ...(shared ? [] : this.takeTools(index, "mmc-tl-edit")),
-        el("button", {
-          class: "mmc-ghost", text: "◀", title: t("Move earlier"),
-          disabled: index === 0 || undefined,
-          onclick: () => this.move(index, -1),
+      }, [icon(merged ? "clapperboard" : on ? "link" : "scissors", 13)]));
+      // A blend is the overlap, drawn to scale across the join, with a handle
+      // that sets it.
+      if (on && !merged && !clipSide) {
+        const frames = S.feather(segment, this.timeline);
+        if (frames > 1) {
+          const w = (frames / rules.fps) * pps;
+          const band = el("div", {
+            class: `mmc-reel-blend${selected ? " selected" : ""}`,
+            style: { left: `${at(i) - w / 2}px`, width: `${w}px` },
+            title: t("Blend {s} s. Drag the handle to change it.", { s: blendSeconds(frames, rules) }),
+          });
+          const grip = el("span", { class: "mmc-reel-grip" });
+          grip.addEventListener("pointerdown", (event) => this.dragBlend(event, i, rules));
+          band.append(grip);
+          bands.push(band);
+        }
+      }
+    });
+    picture.append(...bands);
+
+    // The sound, as a thread: unbroken where it carries over, parted where a
+    // seam starts its own. Its own dots, because the sound and the picture
+    // cross a join independently.
+    const sound = el("div", { class: "mmc-reel-sound" });
+    let runStart = 0;
+    segments.forEach((segment, i) => {
+      const breaks = i > 0 && !S.merged(segment) && !S.continuesAudio(segment);
+      if (i > 0 && breaks) {
+        sound.append(el("div", { class: "mmc-reel-wave",
+          style: { left: `${at(runStart)}px`, width: `${at(i - 1) + span(i - 1) - at(runStart) - 3}px` } }));
+        runStart = i;
+      }
+      if (i > 0 && !S.merged(segment) && !S.isClip(segment)) {
+        const carries = S.continuesAudio(segment);
+        const blocked = carries ? null : S.blockedReason(segment, "continue_audio");
+        sound.append(el("button", {
+          class: `mmc-reel-sdot${carries ? " on" : ""}`,
+          style: { left: `${at(i) - (cut[i] ? GAP / 2 : 0)}px` },
+          title: blocked || (carries ? t("The sound carries over. Click to start it fresh.")
+                                     : t("The sound starts fresh. Click to carry it over.")),
+          onclick: () => {
+            if (!blocked) segment.continue_audio = !carries;
+            this.sel = { kind: "join", index: i };
+            this.commit();
+          },
+        }));
+      }
+    });
+    const last = segments.length - 1;
+    if (last >= 0) {
+      sound.append(el("div", { class: "mmc-reel-wave",
+        style: { left: `${at(runStart)}px`, width: `${at(last) + span(last) - at(runStart)}px` } }));
+    }
+
+    host.replaceChildren(el("div", { class: "mmc-reel-track", style: { width: `${width}px` } },
+      [passLane, picture, joins, sound]));
+  }
+
+  /** Drag a shot's right edge. Live on the reel and in the gutter; written on
+   *  release, which is when a kept take of it is released too. */
+  dragLength(event, index, rules) {
+    event.preventDefault();
+    event.stopPropagation();
+    const segment = this.timeline.segments[index];
+    const start = Number(segment.duration_s) || 0;
+    const x0 = event.clientX;
+    const move = (e) => {
+      const want = Math.min(60, Math.max(1, start + (e.clientX - x0) / this.pps));
+      const snapped = secondsForFrames(framesForSeconds(want, rules), rules);
+      if (snapped === segment.duration_s) return;
+      segment.duration_s = snapped;
+      this.renderReel();
+      this.renderScript();
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      this.sel = { kind: "shot", index };
+      this.commit();
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
+
+  /** Drag a blend's handle: the band is the overlap, so its width on screen is
+   *  its length in seconds. Snaps to the family's grid, capped where the shot
+   *  is too short to give more. */
+  dragBlend(event, index, rules) {
+    event.preventDefault();
+    event.stopPropagation();
+    const segment = this.timeline.segments[index];
+    const grid = S.featherGridOf(this.timeline).filter((f) => f <= S.maxFeather(segment, this.timeline));
+    const start = S.feather(segment, this.timeline) / rules.fps;
+    const x0 = event.clientX;
+    const move = (e) => {
+      const want = start + (2 * (e.clientX - x0)) / this.pps;
+      const best = grid.reduce((a, f) => (Math.abs(f / rules.fps - want) < Math.abs(a / rules.fps - want) ? f : a), grid[0]);
+      if (best === S.feather(segment, this.timeline)) return;
+      if (best > 1) segment.feather = best; else { delete segment.feather; delete segment.feather_pin; }
+      this.renderReel();
+      this.renderSide();
+    };
+    const up = () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+      this.sel = { kind: "join", index };
+      this.commit();
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+  }
+
+  // ---- the side -----------------------------------------------------------
+
+  renderSide() {
+    if (!this.inspectHost) return;
+    const sel = this.sel;
+    if (sel && !(sel.index >= 0 && sel.index < this.timeline.segments.length)) this.sel = null;
+    this.renderPlayer();
+    if (this.sel?.kind === "join" && this.sel.index > 0) {
+      this.inspectHost.replaceChildren(this.inspectJoin(this.sel.index));
+    } else if (this.sel?.kind === "shot") {
+      this.inspectHost.replaceChildren(this.inspectShot(this.sel.index));
+    } else {
+      this.inspectHost.replaceChildren(el("div", { class: "mmc-reel-empty" }, [
+        el("b", { text: t("Select a shot or a join") }),
+        el("span", { text: t("Click a shot's number or its card on the reel to see its take and settings. Click a join to cut or continue it.") }),
+      ]));
+    }
+  }
+
+  /** The selected shot's take, or what is missing. Only rebuilt when the file
+   *  changes, so typing does not restart the video. */
+  renderPlayer() {
+    const index = this.sel?.kind === "shot" ? this.sel.index
+      : this.sel?.kind === "join" ? this.sel.index : null;
+    const segment = index != null ? this.timeline.segments[index] : null;
+    let key = "none";
+    let content;
+    if (segment && S.isClip(segment) && segment.filename) {
+      key = `clip:${segment.filename}`;
+      content = () => el("video", { class: "mmc-reel-video", src: viewUrl(segment.filename), controls: "", preload: "metadata" });
+    } else if (segment) {
+      const take = S.takeOn(S.passOf(this.timeline, index).segments[0]);
+      if (take && !this.gone.has(take.filename)) {
+        key = `take:${take.filename}`;
+        content = () => el("video", { class: "mmc-reel-video", src: viewUrl(take.filename), controls: "", preload: "metadata" });
+      } else {
+        key = `none:${index}`;
+        content = () => el("div", { class: "mmc-reel-noplay" }, [
+          el("b", { text: t("Shot {n} isn't shot yet", { n: index + 1 }) }),
+          el("span", { text: t("Its take plays here once the next render has made it.") }),
+        ]);
+      }
+    } else {
+      content = () => el("div", { class: "mmc-reel-noplay" }, [
+        el("b", { text: t("Nothing selected") }),
+        el("span", { text: t("Takes play here.") }),
+      ]);
+    }
+    if (this.playerKey === key) return;
+    this.playerKey = key;
+    this.playerHost.replaceChildren(content());
+  }
+
+  inspectShot(index) {
+    const segment = this.timeline.segments[index];
+    const state = this.shotState(index);
+    const passIndex = S.passIndexOf(this.timeline, index);
+    const follow = S.followers(this.timeline, passIndex);
+    const runs = S.passes(this.timeline);
+    const followNames = follow.map((k) => runs[k].start + 1);
+    const header = el("div", { class: "mmc-reel-ihead" }, [
+      el("b", { text: S.isClip(segment) ? t("Clip {n}", { n: index + 1 }) : t("Shot {n}", { n: index + 1 }) }),
+      el("span", { class: `mmc-reel-tag ${state}`, text: this.stateLabel(state) }),
+    ]);
+    if (S.isClip(segment)) {
+      return el("div", { class: "mmc-reel-inspect-body" }, [header, this.renderClipCard(segment, index)]);
+    }
+
+    // What the next render does with this shot, and the one button that
+    // changes it.
+    const why = {
+      kept: t("The next render plays this take instead of shooting it again."),
+      changed: t("You changed it after its take was made, so the next render shoots it again."),
+      reshoot: t("The next render shoots it again. Its current take stays until the new one lands."),
+      new: t("The next render shoots it."),
+      gone: t("The take's file is not under output/ any more. The next render shoots it again."),
+    }[state];
+    const ripple = followNames.length
+      ? t(followNames.length === 1 ? "Shot {list} continues from it and reshoots too."
+                                   : "Shots {list} continue from it and reshoot too.",
+          { list: followNames.join(", ") })
+      : t("Nothing else is touched.");
+    const film = [];
+    if (state === "kept") {
+      film.push(el("button", {
+        class: "mmc-reel-btn primary",
+        title: ripple,
+        onclick: () => { if (S.reshoot(this.timeline, index)) this.commit(); },
+      }, [icon("rewind", 14), el("span", { text: t("Reshoot") })]));
+      film.push(el("span", { class: "mmc-reel-note", text: ripple }));
+    } else if (state === "reshoot") {
+      film.push(el("button", {
+        class: "mmc-reel-btn",
+        onclick: () => {
+          if (S.keepTake(this.timeline, index)) this.commit();
+          else { this.keepRefused = index; this.renderSide(); }
+        },
+      }, [icon("lock", 14), el("span", { text: t("Keep this take") })]));
+      if (this.keepRefused === index) {
+        film.push(el("span", { class: "mmc-reel-note", text: t("It can't be kept while the shot it continues from is being reshot.") }));
+      }
+    }
+    const take = S.takeOn(runs[passIndex].segments[0]);
+    if (take && state !== "gone") {
+      film.push(el("button", {
+        class: "mmc-reel-btn quiet",
+        title: t("Forget this take. The file stays under output/."),
+        onclick: () => { if (S.dropTake(this.timeline, index)) this.commit(); },
+      }, [el("span", { text: t("Forget take") })]));
+    }
+
+    const rules = rulesFor(S.pieceFamily(this.timeline));
+    const predicts = runs[passIndex].segments.length === 1 && S.canDo(this.timeline, "duration");
+    const nudge = (delta) => {
+      const next = Math.min(60, Math.max(1, (Number(segment.duration_s) || 0) + delta));
+      segment.duration_s = secondsForFrames(framesForSeconds(next, rules), rules);
+      this.commit();
+    };
+    const settings = [
+      el("div", { class: "mmc-reel-line" }, [
+        el("span", { text: t("Length") }),
+        el("span", { class: "mmc-reel-stepper" }, [
+          el("button", { text: "−", title: t("Shorter"), onclick: () => nudge(-0.5) }),
+          el("span", { text: (segment.auto_duration === true && predicts ? "~" : "")
+            + t("{s} s", { s: S.showSeconds(segment.duration_s) }) }),
+          el("button", { text: "+", title: t("Longer"), onclick: () => nudge(0.5) }),
+        ]),
+        ...(predicts ? [el("button", {
+          class: `mmc-reel-chip${segment.auto_duration === true ? " on" : ""}`,
+          text: t("auto"),
+          title: t("Let the model pick this shot's length from its prompt."),
+          onclick: () => { segment.auto_duration = segment.auto_duration !== true; this.commit(); },
+        })] : []),
+      ]),
+      el("div", { class: "mmc-reel-line" }, [
+        el("span", { text: t("Mode") }),
+        el("span", { class: "mmc-reel-mono", text: S.mode(segment, this.timeline) }),
+      ]),
+      el("div", { class: "mmc-reel-line" }, [
+        el("span", { text: t("Seed") }),
+        segmentSeedPill({
+          own: S.segmentSeed(segment),
+          piece: this.pieceSeed(),
+          taken: S.takeOn(segment)?.seed ?? null,
+          onChange: (seed) => {
+            if (seed === null) delete segment.seed; else segment.seed = seed;
+            this.commit();
+          },
         }),
+      ]),
+    ];
+    if (S.canDo(this.timeline, "motion_fix")) {
+      const fixed = S.motionFix(segment, this.timeline);
+      settings.push(el("div", { class: "mmc-reel-line" }, [
+        el("span", { text: t("Motion fix") }),
         el("button", {
-          class: "mmc-ghost", text: "▶", title: t("Move later"),
+          class: `mmc-reel-chip mmc-reel-motion${fixed ? " on" : ""}`, text: fixed ? t("on") : t("off"),
+          title: t("Slow down, re-draw and re-time fast motion after the shot renders — about three times the shot's cost."),
+          onclick: () => { if (fixed) delete segment.motion_fix; else segment.motion_fix = true; this.commit(); },
+        }),
+      ]));
+    }
+    if (this.timeline.face?.on) {
+      const repaired = S.faceOn(this.timeline, segment);
+      settings.push(el("div", { class: "mmc-reel-line" }, [
+        el("span", { text: t("Face") }),
+        el("button", {
+          class: `mmc-reel-chip${repaired ? " on" : ""}`, text: repaired ? t("re-drawn") : t("left as is"),
+          onclick: () => { if (repaired) segment.face = "off"; else delete segment.face; this.commit(); },
+        }),
+      ]));
+    }
+
+    return el("div", { class: "mmc-reel-inspect-body" }, [
+      header,
+      el("p", { class: "mmc-reel-why", text: why }),
+      el("div", { class: "mmc-reel-actions" }, film),
+      el("div", { class: "mmc-reel-group" }, settings),
+      el("div", { class: "mmc-reel-actions" }, [
+        el("button", { class: "mmc-reel-btn", onclick: () => this.edit(index) },
+          [icon("sliders", 14), el("span", { text: t("References, LoRAs and more…") })]),
+        ...this.takeTools(index, "mmc-reel-btn"),
+      ]),
+      el("div", { class: "mmc-reel-actions" }, [
+        el("button", { class: "mmc-reel-btn quiet", text: t("Earlier"), disabled: index === 0 || undefined,
+          onclick: () => { this.move(index, -1); this.select({ kind: "shot", index: index - 1 }); } }),
+        el("button", { class: "mmc-reel-btn quiet", text: t("Later"),
           disabled: index === this.timeline.segments.length - 1 || undefined,
-          onclick: () => this.move(index, 1),
-        }),
-        // Weighed against this card's own length, not a fresh card's: a copy of
-        // a twenty-second shot costs twenty seconds of the budget.
-        el("button", {
-          class: "mmc-ghost", text: "⧉",
-          title: S.addSegmentRefusal(this.timeline, segment.duration_s) ?? t("Duplicate"),
+          onclick: () => { this.move(index, 1); this.select({ kind: "shot", index: index + 1 }); } }),
+        el("button", { class: "mmc-reel-btn quiet", text: t("Duplicate"),
+          title: S.addSegmentRefusal(this.timeline, segment.duration_s) ?? "",
           disabled: S.addSegmentRefusal(this.timeline, segment.duration_s) ? true : undefined,
-          onclick: () => this.duplicate(index),
-        }),
-        this.removeButton(index, t("Remove this segment")),
+          onclick: () => this.duplicate(index) }),
+        this.removeButton(index, t("Remove this shot")),
       ]),
     ]);
+  }
+
+  /** Everything about one join, in one place: picture, sound, where it
+   *  continues from, the blend and what rides on it, the storyboard sheet,
+   *  and whether the two shots are one generation at all. */
+  inspectJoin(index) {
+    const segments = this.timeline.segments;
+    const segment = segments[index];
+    const header = el("div", { class: "mmc-reel-ihead" }, [
+      el("b", { text: t("Join {a} → {b}", { a: index, b: index + 1 }) }),
+    ]);
+    if (S.isClip(segment)) {
+      // Footage on the far side: its own switches, which read the other way round.
+      return el("div", { class: "mmc-reel-inspect-body" }, [header, this.renderClipJoin(index)]);
+    }
+    const afterClip = S.isClip(segments[index - 1]);
+    if (S.merged(segment)) {
+      const pass = S.passOf(this.timeline, index);
+      return el("div", { class: "mmc-reel-inspect-body" }, [
+        header,
+        el("p", { class: "mmc-reel-why", text: t("Shots {a}–{b} render as one generation, so this is a cut the model draws. There is no blend, sound switch or source here.",
+          { a: pass.start + 1, b: pass.end }) }),
+        el("div", { class: "mmc-reel-actions" }, [
+          el("button", { class: "mmc-reel-btn", onclick: () => { this.splitAt(index); } },
+            [el("span", { text: t("Split into two passes here") })]),
+        ]),
+      ]);
+    }
+    const rules = rulesFor(S.pieceFamily(this.timeline));
+    const on = S.continues(segment);
+    const blocked = on ? null : S.blockedReason(segment, "continue");
+    const sound = S.continuesAudio(segment);
+    const soundBlocked = sound ? null : S.blockedReason(segment, "continue_audio");
+    const seg = (options, current, onPick, tone = "") => el("div", { class: `mmc-reel-seg ${tone}` },
+      options.map(([value, label, sub, disabled]) => el("button", {
+        "aria-pressed": String(value === current),
+        disabled: disabled || undefined,
+        onclick: () => onPick(value),
+      }, [el("span", { text: label }), ...(sub ? [el("small", { text: sub })] : [])])));
+    const row = (label, control, note = null) => el("div", { class: "mmc-reel-irow" }, [
+      el("span", { class: "mmc-reel-ilabel", text: label }),
+      control,
+      ...(note ? [el("span", { class: "mmc-reel-note", text: note })] : []),
+    ]);
+
+    const rows = [
+      row(t("Picture"), seg([[true, t("Continues"), null, !!blocked], [false, t("Cut")]], on,
+        (v) => { segment.continue = v; this.commit(); }, "motion"), blocked),
+      row(t("Sound"), seg([[true, t("Carries over"), null, !!soundBlocked], [false, t("Starts fresh")]], sound,
+        (v) => { segment.continue_audio = v; this.commit(); }, "voice"), soundBlocked),
+    ];
+    const earlier = this.earlierPasses(index);
+    if (on || sound) {
+      const stored = S.continueSource(segment, index);
+      const from = earlier.find((pass) => stored > pass.start && stored <= pass.end)?.end ?? stored;
+      rows.push(row(t("Continues from"), earlier.length >= 2
+        ? el("button", { class: "mmc-reel-btn", onclick: (event) => this.pickContinueFrom(event.currentTarget, segment, index) },
+            [el("span", { text: t("Shot {n}", { n: from }) }), icon("chevron", 12)])
+        : el("span", { class: "mmc-reel-mono", text: t("Shot {n}", { n: from }) }),
+        earlier.length >= 2 ? null : t("Only the shot before it has film to continue from yet.")));
+    }
+    if (on) {
+      const max = S.maxFeather(segment, this.timeline);
+      const grid = S.featherGridOf(this.timeline);
+      const width = Math.min(S.feather(segment, this.timeline), max);
+      rows.push(row(t("Blend"), seg(grid.map((f, k) => [f, t(BLEND_NAMES[k] ?? "Blend"),
+        f > 1 ? `${blendSeconds(f, rules)} s` : null, f > max]), width,
+      (f) => { if (f > 1) segment.feather = f; else { delete segment.feather; delete segment.feather_pin; } this.commit(); }),
+      grid.some((f) => f > max) ? t("Longer blends would take more than half of a shot this short.") : null));
+      const extra = [
+        seamPinRow(this.timeline, segment, S.feather(segment, this.timeline), () => this.commit()),
+        seamRestoreRow(this.timeline, segment, index, () => this.commit()),
+        keystoneRow(this.timeline, segment, index, () => this.commit()),
+      ].filter(Boolean);
+      if (extra.length) rows.push(el("div", { class: "mmc-reel-extra" }, extra.map((draw) => draw(() => {}))));
+    } else {
+      rows.push(row(t("Blend"), el("span", { class: "mmc-reel-mono", text: t("none") }),
+        t("A cut has nothing to blend. Continue the picture to set one.")));
+    }
+    if (S.canDo(this.timeline, "storyboard")) {
+      const sheet = S.storyboardSheet(this.timeline, index);
+      rows.push(row(t("Storyboard sheet"), el("button", {
+        class: "mmc-reel-btn",
+        onclick: (event) => this.pickStoryboard(event.currentTarget, segment, index),
+      }, [icon("storyboard", 14), el("span", { text: sheet.length ? t("sees {which}", { which: passNumbers(sheet) }) : t("none") })])));
+    }
+    // Footage cannot share a generation, so there is nothing to merge into.
+    if (!afterClip) {
+      rows.push(el("div", { class: "mmc-reel-actions" }, [
+        el("button", {
+          class: "mmc-reel-btn quiet mmc-reel-merge",
+          title: t("One generation for both shots, with this cut written into its description. They then share one mode, one checkpoint and one LoRA stack."),
+          onclick: () => this.mergeAt(index),
+        }, [el("span", { text: t("Render with shot {n} as one pass", { n: index }) })]),
+      ]));
+    }
+    return el("div", { class: "mmc-reel-inspect-body" }, [header, ...rows]);
   }
 
   // ---- actions ---------------------------------------------------------------

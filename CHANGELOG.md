@@ -6,6 +6,22 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The timeline opens as the reel: the script, the take and the piece at its
+real length, in one window. Takes are kept by default.** The scene and the
+shots are written as one script, a paragraph a shot, and Enter at the end of a
+shot starts the next. The selected shot's take plays on the right, above
+everything about whatever is selected: a shot's length, seed and take, or a
+join's picture and sound switches, source, blend, restore, keystone,
+storyboard sheet and whether its two shots are one pass, all in one place
+instead of spread over the seam column, the blend popover, the bar and the
+shot editor. Underneath, the reel draws the shots to scale; a shot's edge and
+a blend's handle are dragged there, and a join is cut or continued with one
+click. The Chained / One pass switch, the padlocks, solo and Lock all are
+gone. A take that comes back is kept, so the next render shoots only what is
+new or changed; changing a shot, or pressing Reshoot, puts it back in the
+render along with every shot that continues from it or sees it on a
+storyboard sheet, and says which before it does.
+
 **A long chain can be held to the first shot of its scene: the keystone,
 after roycho87's Geiru Context Suite.** Experimental, and off until it is
 switched on under Settings, Rendering, Seams. On, every blended seam between

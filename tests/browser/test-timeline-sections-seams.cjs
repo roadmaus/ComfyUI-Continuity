@@ -26,6 +26,9 @@ ${popovers}
 ${helper}
 const t = (text, vars = {}) => text.replace(/\\{([^}]+)\\}/g, (_, key) => vars[key] ?? key);
 const icon = () => el('span', { text: '·' });
+const watchPins = () => {};
+const BLEND_NAMES = ['None', 'Short', 'Medium', 'Long', 'Extra long', 'Longest'];
+const seamPinRow = () => null, seamRestoreRow = () => null, keystoneRow = () => null;
 const seamGroup = children => children.length ? el('div', {class:'mmc-tl-seam-group'}, children) : null;
 const blendSeconds = (frames, rules) => (frames / rules.fps).toFixed(1);
 const blendSetsTail = (segment, piece) => S.continuesAudio(segment) && S.feather(segment, piece) > 1;
@@ -45,6 +48,9 @@ const S = {
   feather: item => item.feather ?? 1,
   featherPin: () => false,
   canDo: state => state.storyboard !== false,
+  merged: item => item?.merge === true,
+  maxFeather: () => 46,
+  featherGridOf: () => [1, 10, 22, 34, 46],
   storyboardSheet: () => [],
   clipSeamBlocked: (state,index,key) => state.segments[index]['blocked_' + key] || null,
   maxClipFeather: () => 24,
@@ -54,13 +60,14 @@ const S = {
 let pickerAnswer = null;
 const openPicker = async () => pickerAnswer;
 class Subject {
- ${['mount','textBox','setGlobalPrompt','renderPool','openCastMember','renderClipJoin','renderJoin','citeName','citeInGlobal','addPoolAssets'].map(name=>method(name)).join('\n')}
+ ${['mount','textBox','setGlobalPrompt','renderPool','openCastMember','renderClipJoin','inspectJoin','citeName','citeInGlobal','addPoolAssets'].map(name=>method(name)).join('\n')}
  globalPromptBox() {
    const root = el('div', {contenteditable:'true',class:'mmc-prompt'});
    return {root, frame:el('div',{class:'mmc-tl-prompt-frame'},[root]),
      setValue(value) { root.textContent=value; }, closeMenu() { window.menuClosed++; }};
  }
  render() { this.renderPool(); }
+ renderReel() {}
  renderCast() {}
  renderBar() {}
  commit() { this.commits++; this.renderPool(); }
@@ -69,7 +76,6 @@ class Subject {
  poolEntry(pick) { return {handle:'ref-'+(this.timeline.assets.length+1),kind:pick.kind,filename:pick.path}; }
  earlierPasses() { return this.passes || []; }
  close() { this.unmount(); }
- pickFeather(anchor) { window.lastPick={kind:'blend',anchor}; }
  pickClipFeather(anchor) { window.lastPick={kind:'clipBlend',anchor}; }
  pickContinueFrom(anchor) { window.lastPick={kind:'source',anchor}; }
  pickStoryboard(anchor) { window.lastPick={kind:'board',anchor}; }
@@ -107,8 +113,8 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
   await page.route('**/*', route => { requests++; return route.abort(); });
   await page.setContent(`<html><head><style>${css}</style></head><body style="--mmc-type:1;--mmc-surface:#242424;--mmc-surface-2:#333;--mmc-line:#555;--mmc-line-2:#777;--mmc-text:#eee;--mmc-dim:#bbb;--mmc-accent:#acf;background:#111;font-family:Arial"></body></html>`);
   await page.evaluate(`(() => { ${code} })()`);
-  await check('Four Timeline shells open by default and global label retains prompt value', async () => {
-    assert.deepEqual(await page.evaluate(() => ({states:[subject.promptSection,subject.soundscapeSection,subject.musicSection,subject.poolSection].map(s=>s.isOpen()),label:subject.promptSection.toggle.textContent,prompt:subject.timeline.prompt,aria:subject.soundscapeBox.getAttribute('aria-labelledby')===subject.soundscapeSection.titleId})),{states:[true,true,true,true],label:'⌄global_prompt',prompt:'Standing scene',aria:true});
+  await check('Three Timeline shells open by default and the scene keeps the prompt', async () => {
+    assert.deepEqual(await page.evaluate(() => ({states:[subject.soundscapeSection,subject.musicSection,subject.poolSection].map(s=>s.isOpen()),label:subject.promptBox.root.getAttribute('aria-label'),prompt:subject.timeline.prompt,aria:subject.soundscapeBox.getAttribute('aria-labelledby')===subject.soundscapeSection.titleId})),{states:[true,true,true],label:'Scene',prompt:'Standing scene',aria:true});
   });
   await check('Independent folding retains textarea DOM, values and serialized state', async () => {
     assert.equal(await page.evaluate(() => {
@@ -119,13 +125,12 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
       return good&&input===subject.soundscapeBox&&input.value==='Room tone'&&before===JSON.stringify(subject.timeline)&&subject.commits===0;
     }),true);
   });
-  await check('Native Enter and Space toggle exactly once; prompt menu closes on fold', async () => {
+  await check('Native Enter and Space toggle exactly once', async () => {
     const button=page.locator('.mmc-tl-section-toggle').first();
     await button.focus(); await page.keyboard.press('Enter');
-    assert.equal(await page.evaluate(()=>subject.promptSection.isOpen()),false);
+    assert.equal(await page.evaluate(()=>subject.soundscapeSection.isOpen()),false);
     await page.keyboard.press('Space');
-    assert.equal(await page.evaluate(()=>subject.promptSection.isOpen()),true);
-    assert.equal(await page.evaluate(()=>menuClosed),1);
+    assert.equal(await page.evaluate(()=>subject.soundscapeSection.isOpen()),true);
   });
   await check('Programmatic collapse restores focus and hides body from tab order', async () => {
     assert.equal(await page.evaluate(() => {
@@ -158,10 +163,10 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
       return cancelled&&subject.poolSection.isOpen()&&subject.timeline.assets.length===2;
     }),true);
   });
-  await check('Successful citation reveals global prompt without changing stored key', async () => {
+  await check('A citation writes into the scene without changing the stored key', async () => {
     assert.equal(await page.evaluate(() => {
-      subject.promptSection.setOpen(false); subject.citeName('subject');
-      return subject.promptSection.isOpen()&&subject.timeline.prompt.includes('@subject')&&!Object.hasOwn(subject.timeline,'global_prompt');
+      subject.citeName('subject');
+      return subject.timeline.prompt.includes('@subject')&&!Object.hasOwn(subject.timeline,'global_prompt');
     }),true);
   });
   await check('Hidden Cast navigation forces open while visible navigation keeps normal toggle', async () => {
@@ -225,32 +230,41 @@ async function check(name, fn) { await fn(); results.push({name,passed:true}); }
     await page.evaluate(()=>document.body.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true})));
     assert.equal(await page.evaluate(()=>!regularPop.node.isConnected&&popoverClosed.filter(x=>x==='regular').length===1),true);
   });
-  await check('Seam option matrix has no empty groups; One pass stays direct child', async () => {
+  await check('Every join control is drawn, and a source only where something continues', async () => {
     const rows=await page.evaluate(() => {
       const result=[];
       for (const [on,sound,passes] of [[false,false,2],[false,true,2],[true,false,1],[true,true,2]]) {
         const s=Object.assign(new Subject(),{timeline:{segments:[{},{},{continue:on,continue_audio:sound}]},passes:Array.from({length:passes},(_,i)=>({start:i,end:i+1})),commits:0});
-        const node=s.renderJoin(2);document.body.append(node);
-        result.push({groups:node.querySelectorAll('.mmc-tl-seam-group').length,options:node.querySelectorAll('.mmc-tl-join-from').length,empty:[...node.querySelectorAll('.mmc-tl-seam-group')].some(g=>!g.children.length),merge:node.querySelector('.mmc-tl-join-merge')?.parentNode===node});node.remove();
+        const node=s.inspectJoin(2);document.body.append(node);
+        const labels=[...node.querySelectorAll('.mmc-reel-ilabel')].map(n=>n.textContent);
+        result.push({labels,merge:!!node.querySelector('.mmc-reel-merge')});node.remove();
       }return result;
     });
-    assert.deepEqual(rows,[{groups:3,options:0,empty:false,merge:true},{groups:4,options:1,empty:false,merge:true},{groups:4,options:1,empty:false,merge:true},{groups:4,options:2,empty:false,merge:true}]);
+    assert.deepEqual(rows,[
+      {labels:['Picture','Sound','Blend','Storyboard sheet'],merge:true},
+      {labels:['Picture','Sound','Continues from','Blend','Storyboard sheet'],merge:true},
+      {labels:['Picture','Sound','Continues from','Blend','Storyboard sheet'],merge:true},
+      {labels:['Picture','Sound','Continues from','Blend','Storyboard sheet'],merge:true}]);
   });
-  await check('Clip seams and generation after clip keep original capability gates', async () => {
+  await check('A join into a clip uses the clip switches; a shot after a clip cannot merge into it', async () => {
     assert.deepEqual(await page.evaluate(() => {
       const s=Object.assign(new Subject(),{timeline:{segments:[{},{kind:'clip',continue:true}]},commits:0});
-      const front=s.renderJoin(1);const f={groups:front.children.length,merge:!!front.querySelector('.mmc-tl-join-merge'),board:!!front.querySelector('.mmc-tl-join-board')};
-      s.timeline.segments=[{kind:'clip'},{continue:false}];const back=s.renderJoin(1);return {front:f,backMerge:!!back.querySelector('.mmc-tl-join-merge')};
-    }),{front:{groups:3,merge:false,board:false},backMerge:false});
+      const front=s.inspectJoin(1);const f={clipSwitches:!!front.querySelector('.mmc-tl-seam'),merge:!!front.querySelector('.mmc-reel-merge')};
+      s.timeline.segments=[{kind:'clip'},{continue:false}];const back=s.inspectJoin(1);return {front:f,backMerge:!!back.querySelector('.mmc-reel-merge')};
+    }),{front:{clipSwitches:true,merge:false},backMerge:false});
   });
-  await check('Seam buttons preserve callback anchors and disabled behavior', async () => {
+  await check('Join buttons keep their anchors, and a blocked switch says why without committing', async () => {
     assert.equal(await page.evaluate(() => {
       const s=Object.assign(new Subject(),{timeline:{assets:[],segments:[{},{},{continue:true,continue_audio:true}]},passes:[{start:0,end:1},{start:1,end:2}],commits:0});
-      const node=s.renderJoin(2),options=node.querySelectorAll('.mmc-tl-join-from');
-      options[0].click();const first=lastPick.kind==='source'&&lastPick.anchor===options[0];
-      options[1].click();const second=lastPick.kind==='blend'&&lastPick.anchor===options[1];
-      s.timeline.segments[2]={blocked_continue:'No reference keyframes'};const locked=s.renderJoin(2).querySelector('button');locked.click();
-      return first&&second&&locked.disabled&&s.commits===0;
+      const node=s.inspectJoin(2);
+      const from=[...node.querySelectorAll('.mmc-reel-btn')].find(b=>b.textContent.includes('Shot'));
+      from.click();const first=lastPick.kind==='source'&&lastPick.anchor===from;
+      const board=[...node.querySelectorAll('.mmc-reel-btn')].find(b=>b.textContent.includes('none'));
+      board.click();const second=lastPick.kind==='board'&&lastPick.anchor===board;
+      s.timeline.segments[2]={blocked_continue:'No reference keyframes'};
+      const locked=s.inspectJoin(2);const cont=locked.querySelector('.mmc-reel-seg button');cont.click();
+      const said=[...locked.querySelectorAll('.mmc-reel-note')].some(n=>n.textContent==='No reference keyframes');
+      return first&&second&&cont.disabled&&said&&s.commits===0;
     }),true);
   });
   await check('Large localized headings and action buttons do not overlap at narrow widths', async () => {

@@ -3,28 +3,52 @@
 ## Adding shots
 
 Under the prompt there is a band labeled **Write the next shot**. Click it and
-the piece has two shots, and the node's face becomes a timeline lane,
-proportional to the shots' durations. Delete back down to one shot and the
+the piece has two shots, the reel opens on the new one, and the node's face
+becomes a timeline lane, proportional to the shots' durations. Delete back down to one shot and the
 single-shot face comes back. There is no mode to switch.
 
-Each card on the strip is a whole generation with its own prompt, references,
+Each shot is a whole generation with its own prompt, references,
 LoRAs, and even its own family: a strip can be H3 throughout, or a pre-stage
 on Krea 2 feeding start frames into shots on LTX 2.5.
 
-## Chained vs one pass
+## The reel
 
-- **Chained** (the default) renders each segment and joins them. Seams between
-  segments are yours to control, below.
-- **One pass** compiles the same cards into a single generation, since both
-  video families take a shot list natively. No seam at all, and music or
-  dialogue carries across cuts. The tradeoff: one pass means one checkpoint,
-  one LoRA stack, one seed and one soundscape for the whole piece, and it can
-  only hold what one context window holds. Cards that disagree about those are
-  refused with a message rather than silently merged.
+**Edit timeline** opens the reel: one window for writing, joining, watching and
+reshooting the piece.
+
+- **The script**, on the left. The first paragraph is the **scene**, the
+  standing description every shot is written under (stored as the piece's
+  `prompt`). Each paragraph after it is a shot. Press **Enter** at the end of a
+  shot to start the next one; **Shift+Enter** is a line break inside a shot,
+  and **Backspace** in an empty shot takes it out again. `@` and `/` work in
+  every shot the way they do anywhere else.
+- **The side**, on the right: the selected shot's take, and every setting of
+  whatever is selected. A shot shows its length, mode, seed, motion fix and
+  face, and *References, LoRAs and more…* opens the full shot editor. A join
+  shows everything about that cut in one place.
+- **The reel**, underneath: the piece at its real length. Shots are drawn to
+  scale, so a 3 s shot is half the width of a 6 s one. Drag a shot's right edge
+  to change its length. The circles between shots are the joins: click one to
+  cut the picture there or carry it on. The thread under the shots is the
+  sound, and its own dots switch whether sound carries across. A continuing
+  join with a blend shows the blend as a hatched overlap at its real width;
+  drag its handle to change it.
+
+Selecting a shot or a join anywhere selects it in all three.
+
+## Passes
+
+A pass is one generation. Most passes are one shot. **Render with shot N as
+one pass**, on a join, compiles both shots into a single generation: no seam
+at all, so music or dialogue carries across the cut, in exchange for one
+checkpoint, one LoRA stack and one seed for the pass. The reel draws a bracket
+over a pass of several shots, and the cut inside it has **Split into two
+passes here**. A piece merged end to end is one pass, which is what one-pass
+mode always was.
 
 ## Seams
 
-In chained mode, a seam can continue from any earlier segment's last frame, at
+A seam can continue from any earlier segment's last frame, at
 a single frame or as a blend that carries real motion and phase-locked sound
 across the cut. How wide a blend can be depends on the family. Picture and
 sound cross a cut independently: a hard cut whose score keeps playing, and a
@@ -282,24 +306,34 @@ The timeline itself carries:
   rather than one shot. A segment leaving them empty inherits them.
 - **Global LoRAs**, merged in front of each segment's own.
 
-## Locked takes
+## Kept takes and reshooting
 
-Every card has a padlock. Locked cards are not rendered, so you can shoot a
-long strip one pass at a time, keep the takes you like, and re-shoot only the
-card you are working on. Each pass is written as its own file under `takes/`.
+Takes are kept by default. When a render brings a take back, the shot keeps
+it, and the next render plays that take instead of shooting the shot again. So
+the second render of a piece shoots only what changed. The bar says what the
+next render will do: how many passes it shoots and how many kept takes it plays.
 
-A locked card with nothing shot yet is simply left out of the render, with
-everything written on it kept — which is how you shoot one card of fifteen
-while the rest wait. If a take's file has been deleted from `takes/`, the card
-says `kept · file gone` and the render refuses it by name before sampling
-anything; forget the take with the ✕ on the chip (or *Forget missing takes*
-for the whole strip) and the card goes back to not shot.
+A kept take stops being kept when:
 
-A kept take has *Trim* and *Crop* on its card (on the pass rail, for a pass of
-several shots), the same editors a clip card has. They change what plays, not
-the file: the render splices the window you trimmed, framed as you cropped it,
-and the next seam continues from the end of that window. A retake replaces the
-take, and its trim and crop go with it.
+- **You change the shot.** Its words, length, seed, references or the join in
+  front of it. The shot reads `Changed · reshoots`. Changes to the scene, the
+  canvas or anything else every shot is made under change every shot.
+- **You press Reshoot** on the shot's side.
+
+Either way, the shots that **follow** it are reshot too: a shot that continues
+from it across a join, or that is shown it on a storyboard sheet, was made from
+film that is about to be replaced. A shot after a hard cut keeps its take. The
+Reshoot button says beforehand which shots will follow.
+
+A shot being reshot keeps its old take until the new one lands. **Keep this
+take** puts it back, unless the shot it continues from is itself being reshot.
+**Forget take** drops it from the shot; the file stays under `takes/`. If a
+take's file has gone missing, the shot reads `File missing` and is shot again.
+
+A kept take has *Trim* and *Crop* on its side, the same editors a clip has.
+They change what plays, not the file: the render splices the window you
+trimmed, framed as you cropped it, and the next seam continues from the end of
+that window. A new take replaces the old one, and its trim and crop go with it.
 
 ## Cutting in your own footage
 

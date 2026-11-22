@@ -70,9 +70,10 @@ const card1 = (extra = []) => ({
 });
 
 /**
- * A card, opened the way a person opens one: the Timeline window, its edit
- * button, the sheet that comes up over the window — and the Cast tool on that
- * sheet's rail, since the shelf is folded until asked for.
+ * A card, opened the way a person opens one: the Timeline window, a
+ * double-click on the shot's card in the reel, the sheet that comes up over
+ * it — and the Cast tool on that sheet's rail, since the shelf is folded until
+ * asked for.
  *
  * Built by hand, this used to be a card the window never made: it left out
  * what the window passed, so it drew a shelf the real card did not, and passed
@@ -82,7 +83,7 @@ const { openTimeline } = await import("./web/creator/timeline.js");
 const row = async (timeline, index) => {
   openTimeline({ timeline, onCommit: () => {} });
   await new Promise((done) => setTimeout(done, 0));
-  all(document.body.children.at(-1), "mmc-tl-edit")[index].listeners.click[0]();
+  all(document.body.children.at(-1), "mmc-reel-card")[index].listeners.dblclick[0]();
   const sheet = document.body.children.at(-1);
   const tool = all(sheet, "mmc-tool-cast")[0];
   tool?.listeners?.click?.[0]?.();

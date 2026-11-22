@@ -1023,19 +1023,31 @@ try {
   const { openTimeline } = await import("./web/creator/timeline.js");
   openTimeline({ timeline: body.timeline, onCommit: () => body.commit() });
   await new Promise((done) => setTimeout(done, 0));
-  const chips = (root, found = []) => {
-    if ((root.className ?? "").split(" ").includes("mmc-tl-card-motion")) found.push(root);
-    (root.children ?? []).forEach((child) => chips(child, found));
+  const find = (root, cls, found = []) => {
+    if ((root.className ?? "").split(" ").includes(cls)) found.push(root);
+    (root.children ?? []).forEach((child) => find(child, cls, found));
     return found;
   };
   // This modal and not the body: earlier blocks leave their modals open on
-  // the document, each with a strip of its own chips.
+  // the document, each with a reel of its own. The switch is on the selected
+  // shot's side, so each shot is selected in turn and its switch read.
   const modal = document.body.children.at(-1);
-  const before = chips(modal).map((chip) => chip.text);
-  chips(modal)[0].listeners.click[0]({ stopPropagation() {} });
+  const readAll = async () => {
+    const texts = [];
+    for (let i = 0; i < 2; i += 1) {
+      find(modal, "mmc-reel-card")[i].listeners.click[0]();
+      await new Promise((done) => setTimeout(done, 0));
+      texts.push(find(modal, "mmc-reel-motion")[0]?.text);
+    }
+    return texts;
+  };
+  const before = await readAll();
+  find(modal, "mmc-reel-card")[0].listeners.click[0]();
+  await new Promise((done) => setTimeout(done, 0));
+  find(modal, "mmc-reel-motion")[0].listeners.click[0]({ stopPropagation() {} });
   await new Promise((done) => setTimeout(done, 0));
   out.motionChip = {
-    before, after: chips(modal).map((chip) => chip.text),
+    before, after: await readAll(),
     written: JSON.parse(S.serializeTimeline(body.timeline)).segments.map((seg) => seg.motion_fix ?? false),
     // The lone shot's own switch, on the editor's row rather than a card.
     lone: await (async () => {
@@ -1320,20 +1332,6 @@ try {
   };
   const click = (node) => node?.listeners?.click?.[0]?.();
 
-  // One card, and the toggle at both ends of its travel.
-  const node = fakeNode("MiniMaxH3Timeline", "timeline_data", JSON.stringify({
-    version: 2, segments: [{ prompt: "shot 1", duration_s: 5, assets: [], loras: [] }],
-  }));
-  await ext.nodeCreated(node);
-  const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
-  openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => node.mmcBody.commit() });
-  await new Promise((done) => setTimeout(done, 0));
-  const opts = () => all(document.body.children.at(-1), "mmc-tl-render-opt");
-  click(opts()[1]);
-  const toSingle = node.mmcBody.timeline.render;
-  click(opts()[0]);
-  const backToChained = node.mmcBody.timeline.render;
-
   // The route badge, clicked in the window rather than on the face.
   const creator = fakeNode("MiniMaxH3Creator", "creator_data", JSON.stringify({
     version: 1, prompt: "a lighthouse", assets: [], loras: [],
@@ -1345,7 +1343,6 @@ try {
   const before = badge()?.text;
   click(badge());
   out.controls = {
-    toSingle, backToChained,
     route: creator.mmcBody.timeline.models.route,
     // The window has to redraw itself: the click landed on the node's editor.
     badgeMoved: badge()?.text !== before,
@@ -1388,7 +1385,7 @@ try {
   const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
-  click(all(document.body.children.at(-1), "mmc-tl-edit")[0]);
+  all(document.body.children.at(-1), "mmc-reel-card")[0]?.listeners?.dblclick?.[0]?.();
   const fromCard = sheetClass();
 
   out.window = {
@@ -2001,7 +1998,7 @@ try {
   const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
-  findAll(document.body.children.at(-1), "mmc-tl-edit")[1].listeners.click[0]();
+  findAll(document.body.children.at(-1), "mmc-reel-card")[1].listeners.dblclick[0]();
   const sheet = document.body.children.at(-1);
   const castHost = () => findAll(sheet, "mmc-cast-host")[0];
   const tiles = () => findAll(castHost() ?? sheet, "mmc-cast-ref").map((t) => t.dataset.handle);
@@ -2418,7 +2415,7 @@ try {
   out.poolShelf = { idle: shelf().includes("cited nowhere yet") };
 
   // Open card 1 and write the citation into its box, the way a user does.
-  findAll(modal, "mmc-tl-edit")[0].listeners.click[0]();
+  findAll(modal, "mmc-reel-card")[0].listeners.dblclick[0]();
   const sheet = document.body.children.at(-1);
   const box = findAll(sheet, "mmc-prompt")[0];
   box.append(document.createTextNode(" @ref-1"));
@@ -2740,7 +2737,7 @@ try {
   // ...and a card of the strip, which is where a cast is owned a level up. Its
   // editor used to look the piece's subjects up on the segment, find none, and
   // open nothing — while deleting a chip took nobody out of anything.
-  const card = all(modal, "mmc-tl-card")[1] ?? all(modal, "mmc-tl-card")[0];
+  const card = all(modal, "mmc-reel-card")[1] ?? all(modal, "mmc-reel-card")[0];
   card?.listeners?.dblclick?.[0]?.();
   await new Promise((done) => setTimeout(done, 0));
   const sheet = document.body.children.at(-1);
@@ -3872,10 +3869,10 @@ check("...with the shot's body in it", window.get("body"), True)
 
 # Supplied footage: both renders survive it, and both say it is there.
 motion = report.get("motionChip", {})
-check("every card offers the motion fix, off", motion.get("before"), ["no motion fix", "no motion fix"])
-check("clicking the chip turns it on, and only on that card",
+check("every shot offers the motion fix, off", motion.get("before"), ["off", "off"])
+check("switching it on in one shot's side turns it on, and only on that shot",
       (motion.get("after"), motion.get("written")),
-      (["motion fix", "no motion fix"], [True, False]))
+      (["on", "off"], [True, False]))
 check("a lone shot has the switch as a pill on its row, off",
       (motion.get("lone") or {}).get("first"), ["motion fix off"])
 check("...and the pill switches it on in the blob",
@@ -4072,8 +4069,6 @@ check("...and narrates it by opening the strip rather than swapping the face",
 check("...after which the face is the strip", grew.get("faceNow"), "strip")
 
 controls = report.get("controls", {})
-check("the render toggle moves a one-card strip to one pass", controls.get("toSingle"), "single")
-check("...and back to chained", controls.get("backToChained"), "chained")
 check("the route badge in the window changes the route", controls.get("route"), "fl2va")
 check("...and the window redraws it", controls.get("badgeMoved"), True)
 
@@ -4213,8 +4208,8 @@ check("...and she is out of the cast", detached.get("cast"), 0)
 # nothing else in this file noticed: the chips render and the sentence queues.
 doors = report.get("doors") or {}
 check("a cast chip on the node face opens somebody", doors.get("onTheFace"), "true")
-check("...and so does one in the timeline's standing prompt",
-      doors.get("inTheWindow"), "true")
+check("...and so does one in the window's scene and every shot of its script",
+      doors.get("inTheWindow"), "true,true,true")
 check("...and one in a card of the strip, whose cast is owned a level up",
       doors.get("inACard"), "true")
 

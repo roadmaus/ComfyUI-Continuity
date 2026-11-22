@@ -673,7 +673,7 @@ words ask for them — "in the style of that one" becomes `pic-2:style`.
 card after the last clip and continues from its last frames — the seam a
 card added on the node would open, live on both tracks with the family's
 medium blend. Only the new card is sampled: the earlier shots are held on
-the takes they already are, the way locked cards are on the timeline, and
+the takes they already are, the way kept takes are on the timeline, and
 the clip on the card is the whole strip so far. *"Redo the second shot,
 darker"* replaces that shot; a new shot after an earlier one cuts the strip
 there, as edit-and-resend cuts the transcript. A clip asked for with no
