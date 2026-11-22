@@ -2251,13 +2251,15 @@ export function segmentSeed(segment) {
  * the live strip. Its persistent card ids survive reloads/reorders; a removed
  * card's result remains in history rather than landing on an identical copy.
  *
- * Nothing is held here. A take that came back is a take to look at, and holding
- * the card is the gesture that says it is good — doing it here would decide for
- * the user, and would quietly stop the next queue from re-rendering the card
- * they were about to re-render.
+ * A take that lands is kept: its pass is held, so the next render plays it
+ * rather than sampling it again. The reel's rule is that film which exists is
+ * kept until something says otherwise — an edit to the card (see
+ * `releaseEdited`) or an explicit `reshoot`. Keeping it here is what lets a
+ * second render shoot only what changed instead of the whole piece.
  *
- * `stamp` comes from that same submitted snapshot, so edits made while the
- * render ran are marked by `editedSince` rather than silently approved.
+ * `stamp` comes from that same submitted snapshot, so an edit made while the
+ * render ran is not approved by landing: that take is attached but left in
+ * the next render, and so is everything that follows from it.
  */
 export function attachTakes(timeline, reports, queued = null) {
   // One serialization for the whole report rather than one per take: the strip
@@ -2273,9 +2275,171 @@ export function attachTakes(timeline, reports, queued = null) {
     // Stamped as the card was when it was queued where that is known, so an
     // edit made while its own render ran is marked rather than shipped.
     segment.take = takeFrom(report, queued?.stamps[number - 1] ?? stamps[index]);
+    if (segment.take.stamp === stamps[index]) holdPassAt(timeline, index, true);
     landed = true;
   }
+  if (landed) settleHolds(timeline);
   return landed;
+}
+
+// ---- the reel: what has to be shot again ------------------------------------
+//
+// A pass reads from earlier passes in two ways: its seam continues from one
+// (picture and sound share a source — `compile.py` reads `continue_from` for
+// both), and its storyboard sheet draws frames from others. Either way, a new
+// take upstream is a different input, so the take downstream describes a piece
+// that no longer exists. These are the passes that follow it.
+
+/** Per pass, the set of earlier pass indices it reads from. */
+export function passSources(timeline) {
+  const runs = passes(timeline);
+  const where = (segmentIndex) =>
+    runs.findIndex((pass) => segmentIndex >= pass.start && segmentIndex < pass.end);
+  return runs.map((pass, k) => {
+    const sources = new Set();
+    const head = pass.segments[0];
+    if (k && !isClip(head) && (continues(head) || continuesAudio(head))) {
+      const from = where(continueSource(head, pass.start) - 1);
+      if (from >= 0 && from < k) sources.add(from);
+    }
+    for (const { pass: drawn } of storyboardSheet(timeline, pass.start)) {
+      const from = runs.indexOf(drawn);
+      if (from >= 0 && from < k) sources.add(from);
+    }
+    return sources;
+  });
+}
+
+/**
+ * The passes that would have to be shot again if pass `passIndex` were.
+ *
+ * -> ascending pass indices, not including `passIndex` itself. Transitive: a
+ * pass that continues from one that continues from this one follows it too.
+ * A clip pass is never in the list — it is played, not generated — and a pass
+ * that reads from a clip does not follow anything through it.
+ */
+export function followers(timeline, passIndex) {
+  const runs = passes(timeline);
+  const sources = passSources(timeline);
+  const affected = new Set([passIndex]);
+  for (let k = passIndex + 1; k < runs.length; k += 1) {
+    if (isClip(runs[k].segments[0])) continue;
+    for (const from of sources[k]) {
+      if (affected.has(from)) { affected.add(k); break; }
+    }
+  }
+  affected.delete(passIndex);
+  return [...affected].sort((a, b) => a - b);
+}
+
+/** Hold or release a whole pass, found by any card in it. -> whether it changed. */
+function holdPassAt(timeline, index, held) {
+  const pass = passOf(timeline, index);
+  if (!pass || isClip(pass.segments[0])) return false;
+  let changed = false;
+  for (const segment of pass.segments) {
+    if (held === (segment.hold === true)) continue;
+    if (held) segment.hold = true; else delete segment.hold;
+    changed = true;
+  }
+  return changed;
+}
+
+/** Release every pass that has nothing to play, or that reads from a pass in
+ *  the next render. -> changed. The two invariants the reel keeps: a held pass
+ *  always has a take (a hold with nothing behind it would drop the shot from
+ *  the piece), and nothing kept continues from something about to be replaced,
+ *  or the piece would splice a take onto film that no longer exists. */
+function settleHolds(timeline) {
+  const runs = passes(timeline);
+  const sources = passSources(timeline);
+  let changed = false;
+  runs.forEach((pass, k) => {
+    const head = pass.segments[0];
+    if (isClip(head) || !isHeld(head)) return;
+    if (!takeOn(head)) { if (holdPassAt(timeline, pass.start, false)) changed = true; return; }
+    const stale = [...sources[k]].some((from) => {
+      const source = runs[from].segments[0];
+      return !isClip(source) && !isHeld(source);
+    });
+    if (stale && holdPassAt(timeline, pass.start, false)) changed = true;
+  });
+  return changed;
+}
+
+/**
+ * Put the pass holding card `index`, and every pass that follows from it, into
+ * the next render. -> whether anything changed.
+ *
+ * The takes stay where they are: a pass being reshot keeps last time's take
+ * until the new one lands, and a pass that follows keeps its take too, so
+ * nothing is lost by reshooting.
+ */
+export function reshoot(timeline, index) {
+  const passIndex = passIndexOf(timeline, index);
+  if (passIndex < 0) return false;
+  const runs = passes(timeline);
+  let changed = false;
+  for (const k of [passIndex, ...followers(timeline, passIndex)]) {
+    if (holdPassAt(timeline, runs[k].start, false)) changed = true;
+  }
+  return changed;
+}
+
+/**
+ * Keep the take the pass holding card `index` already has, taking it back out
+ * of the next render. -> whether anything changed.
+ *
+ * Refused (false) when there is nothing to keep, when the card has been edited
+ * since the take was made, or when the pass reads from one that is being
+ * reshot: in each case the take no longer describes the piece.
+ */
+export function keepTake(timeline, index) {
+  const passIndex = passIndexOf(timeline, index);
+  if (passIndex < 0) return false;
+  const runs = passes(timeline);
+  const head = runs[passIndex].segments[0];
+  if (isClip(head) || !takeOn(head)) return false;
+  if (editedSince(timeline).has(runs[passIndex].start)) return false;
+  const live = [...passSources(timeline)[passIndex]].some((from) => {
+    const source = runs[from].segments[0];
+    return !isClip(source) && !isHeld(source);
+  });
+  if (live) return false;
+  return holdPassAt(timeline, runs[passIndex].start, true);
+}
+
+/**
+ * Release every kept pass whose card has changed since its take was made,
+ * along with everything that follows from it. -> whether anything changed.
+ *
+ * Called after each edit. Undoing the edit does not keep the take again on its
+ * own; `keepTake` does that, so a release is never silently reversed.
+ */
+export function releaseEdited(timeline) {
+  let changed = false;
+  for (const index of editedSince(timeline)) {
+    if (isHeld(timeline.segments[index]) && reshoot(timeline, index)) changed = true;
+  }
+  if (settleHolds(timeline)) changed = true;
+  return changed;
+}
+
+/**
+ * What the next render will shoot, for the reel's Shoot button.
+ *
+ * -> `{ shoot, kept }`: pass indices that will be sampled and pass indices
+ * that will play a take. Clip passes are in neither.
+ */
+export function shootPlan(timeline) {
+  const shoot = [];
+  const kept = [];
+  passes(timeline).forEach((pass, k) => {
+    const head = pass.segments[0];
+    if (isClip(head)) return;
+    if (isHeld(head) && takeOn(head)) kept.push(k); else shoot.push(k);
+  });
+  return { shoot, kept };
 }
 
 /**
@@ -3918,8 +4082,9 @@ export function holdAll(timeline, held) {
 /**
  * Forget the take on this card. -> whether there was one.
  *
- * The card goes back to what it was before it rendered: locked with nothing to
- * play, or simply in the next render. Only the strip's memory of the file is
+ * The card goes back to what it was before it rendered: in the next render,
+ * along with anything that followed from it, since a held pass with nothing to
+ * play would drop the shot from the piece. Only the strip's memory of the file is
  * dropped — the take itself stays under output/ with the rest of them, because
  * it is a render somebody may still want and this is a card saying it is not
  * the one.
@@ -3933,6 +4098,7 @@ export function dropTake(timeline, index) {
   )?.segments[0];
   if (!segment || !takeOn(segment)) return false;
   delete segment.take;
+  settleHolds(timeline);
   return true;
 }
 
@@ -3950,6 +4116,7 @@ export function dropMissingTakes(timeline, gone) {
     const take = takeOn(pass.segments[0]);
     if (take && gone.has(take.filename)) { delete pass.segments[0].take; dropped += 1; }
   }
+  if (dropped) settleHolds(timeline);
   return dropped;
 }
 

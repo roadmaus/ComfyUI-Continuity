@@ -160,13 +160,12 @@ else:
 
 # ---- the shoot itself, step by step ------------------------------------------
 #
-# The controls exist so that a piece can be built one expensive generation at a
-# time, and every step of that is a click on the strip followed by a queue. This
-# walks the whole thing through `state.js` — solo a card, land the take a render
-# would report, solo the next — and asks `compile.py` at each step what it would
-# actually sample. What it is guarding is the walk-forward: soloing card 2 locks
-# card 1, and a card locked *with a take* is a card playing its take, so the
-# strip carries itself along and nothing is ever generated twice.
+# The reel keeps film that exists. A take that lands is held, so the next queue
+# plays it; an edit to a card releases that card; a reshoot releases the pass
+# and everything that continues from it. This walks a piece through `state.js`
+# — land the takes a render would report, edit, reshoot, keep — and asks
+# `compile.py` at each step what it would actually sample. Shot 2 continues
+# from shot 1; shot 3 starts after a cut.
 
 WALK = """
 const s = await import(process.argv[1]);
@@ -174,26 +173,32 @@ const timeline = s.parseTimeline(JSON.stringify({
   version: 2, render: "chained", prompt: "p", aspect: "16:9", short_edge: 768,
   segments: [1, 2, 3].map((n) => ({
     prompt: "shot " + n, duration_s: 5, assets: [], loras: [],
+    ...(n === 2 ? { continue: true, continue_audio: true, feather: 22 } : {}),
   })),
 }));
 const out = [];
-const land = (index) => s.attachTakes(timeline, [{
+const report = (index) => ({
   segment: index + 1, filename: "s" + (index + 1) + ".mp4", subfolder: "takes",
   duration_s: 5, width: 1280, height: 720, has_audio: true,
-}]);
-const step = (name) => {
+});
+const land = (...indices) => s.attachTakes(timeline, indices.map(report));
+const step = (name, extra = {}) => {
   s.syncTimeline(timeline);
-  out.push({ name, blob: s.serializeTimeline(timeline) });
+  out.push({ name, blob: s.serializeTimeline(timeline), ...extra });
 };
-s.soloPass(timeline, 0); step("solo 1");
-land(0);                 step("take 1 lands");
-s.soloPass(timeline, 1); step("solo 2");
-land(1);                 step("take 2 lands");
-s.soloPass(timeline, 2); step("solo 3");
-land(2);                 step("take 3 lands");
-s.holdAll(timeline, true);   step("lock all");
-s.dropTake(timeline, 1);     step("discard take 2");
-s.holdAll(timeline, false);  step("unlock all");
+step("nothing shot");
+land(0, 1, 2);                                  step("all takes land");
+timeline.segments[2].prompt = "shot 3, wider";
+s.releaseEdited(timeline);                      step("edit shot 3");
+land(2);                                        step("take 3 lands again");
+s.reshoot(timeline, 0);                         step("reshoot shot 1");
+const refused = s.keepTake(timeline, 1);        step("keep take 2 while 1 is live", { refused: !refused });
+s.keepTake(timeline, 0);                        step("keep take 1");
+s.keepTake(timeline, 1);                        step("keep take 2");
+s.dropTake(timeline, 1);                        step("discard take 2");
+const queued = s.queuedCards(timeline);
+timeline.segments[1].prompt = "shot 2, slower";
+s.attachTakes(timeline, [report(1)], queued);   step("take 2 lands after an edit");
 console.log(JSON.stringify(out));
 """
 
@@ -220,23 +225,24 @@ def played_cards(blob):
             for (start, _), payload in zip(runs, payloads) if "clip" in payload]
 
 
-# Card by card: exactly one generation each time, and the cards behind it
-# playing the takes they already have rather than being sampled again.
 WANT = [
-    ("solo 1",         [1], []),
-    ("take 1 lands",   [1], []),      # the take is there; the card is still in the render
-    ("solo 2",         [2], [1]),     # ...until soloing 2 locks it, and it becomes film
-    ("take 2 lands",   [2], [1]),
-    ("solo 3",         [3], [1, 2]),
-    ("take 3 lands",   [3], [1, 2]),
-    ("lock all",       [],  [1, 2, 3]),   # the last step: assembled, nothing sampled
-    ("discard take 2", [],  [1, 3]),      # ...and card 2 drops out until it is shot again
-    ("unlock all",     [1, 2, 3], []),    # everything back in the pot
+    ("nothing shot",                 [1, 2, 3], []),
+    ("all takes land",               [],  [1, 2, 3]),   # kept by default
+    ("edit shot 3",                  [3], [1, 2]),      # after a cut: nothing follows it
+    ("take 3 lands again",           [],  [1, 2, 3]),
+    ("reshoot shot 1",               [1, 2], [3]),      # 2 continues from 1, so it follows
+    ("keep take 2 while 1 is live",  [1, 2], [3]),      # refused: its source is being replaced
+    ("keep take 1",                  [2], [1, 3]),
+    ("keep take 2",                  [],  [1, 2, 3]),
+    ("discard take 2",               [2], [1, 3]),      # nothing to play, so back in the render
+    ("take 2 lands after an edit",   [2], [1, 3]),      # attached, not approved
 ]
 for (name, shot, played), seen in zip(WANT, walked):
     check(f"{name}: generated", sampled_cards(seen["blob"]), shot)
     check(f"{name}: played from film", played_cards(seen["blob"]), played)
     check(f"{name}: is the step it says", seen["name"], name)
+check("keepTake refuses while the source is live", walked[5].get("refused"), True)
+check("every step was walked", len(walked), len(WANT))
 
 # A take's trim and crop are clip settings held on the take. They have to come
 # back off a saved blob, or a reload plays the whole take uncropped again.
@@ -260,3 +266,24 @@ check("...and so does its crop", "crop" in edited_clip, True)
 
 passed(f"state.js mirrors compile.py across {len(CASES)} part-shot strips, "
        f"and a {len(WANT)}-step shoot walks itself forward")
+
+# ---- who follows whom --------------------------------------------------------
+# Shot 2 continues from 1, shot 3 starts after a cut, shot 4 continues from shot
+# 1 across it (`continue_from`). Reshooting 1 must take 2 and 4 with it and
+# leave 3 alone; reshooting 3 touches nothing else.
+FOLLOW = """
+const s = await import(process.argv[1]);
+const timeline = s.parseTimeline(JSON.stringify({
+  version: 2, render: "chained", prompt: "p", aspect: "16:9", short_edge: 768,
+  segments: [
+    { prompt: "one", duration_s: 5 },
+    { prompt: "two", duration_s: 5, continue: true, continue_audio: true, feather: 22 },
+    { prompt: "three", duration_s: 5 },
+    { prompt: "four", duration_s: 5, continue: true, feather: 22, continue_from: 1 },
+  ],
+}));
+console.log(JSON.stringify([s.followers(timeline, 0), s.followers(timeline, 2)]));
+"""
+follow = layout.run(FOLLOW, MIRROR)
+check("reshooting 1 takes the shots that continue from it", follow[0], [1, 3])
+check("reshooting a shot after a cut touches nothing else", follow[1], [])
