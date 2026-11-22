@@ -7,20 +7,26 @@ exactly as it was written, wall of text and all.
 ## Unreleased
 
 **The timeline opens as the reel: the script, the take and the piece at its
-real length, in one window. Takes are kept by default.** The scene and the
-shots are written as one script, a paragraph a shot, and Enter at the end of a
-shot starts the next. The selected shot's take plays on the right, above
-everything about whatever is selected: a shot's length, seed and take, or a
-join's picture and sound switches, source, blend, restore, keystone,
-storyboard sheet and whether its two shots are one pass, all in one place
-instead of spread over the seam column, the blend popover, the bar and the
-shot editor. Underneath, the reel draws the shots to scale; a shot's edge and
-a blend's handle are dragged there, and a join is cut or continued with one
-click. The Chained / One pass switch, the padlocks, solo and Lock all are
-gone. A take that comes back is kept, so the next render shoots only what is
-new or changed; changing a shot, or pressing Reshoot, puts it back in the
-render along with every shot that continues from it or sees it on a
-storyboard sheet, and says which before it does.
+real length, in one window. Takes are kept by default.** The window is one
+surface. The header says how long the piece is and what the next render will
+shoot, and Shoot queues it. On the left the cast and references sit as faces
+and frames above the script: the scene with its sound and score as two lines
+under it, then a paragraph a shot, and Enter at the end of a shot starts the
+next. On the right the player sits over one inspector: the piece itself when
+nothing is selected (model, frame, resolution, look, storyboards, rewrite), or
+whatever is selected, a shot, a join, a member, a reference or a laid track,
+with every setting it has in one place. Underneath, the reel draws the shots to
+scale, with the joins, the blends at their real width and the sound thread
+with any track laid on it; a shot's edge and a blend's handle are dragged
+there, and a join is cut or continued with one click. The bar of pills, the
+reference and cast shelves, the soundscape and music boxes, the separate sound
+lane, the Chained / One pass switch, the padlocks, solo and Lock all are gone.
+A take that comes back is kept, so the next render shoots only what is new or
+changed; changing a shot, or pressing Reshoot, puts it back in the render along
+with every shot that continues from it or sees it on a storyboard sheet, and
+says which before it does. The LoRA library, the picker, a member's full card
+and a shot's rarer settings still open as their own sheets; their redesign is
+written up in `specs/continuity-reel-deep-tools-spec.md`.
 
 **A long chain can be held to the first shot of its scene: the keystone,
 after roycho87's Geiru Context Suite.** Experimental, and off until it is

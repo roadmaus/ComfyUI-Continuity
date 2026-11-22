@@ -71,10 +71,10 @@ await settle();
 const cards = () => modal.modal.querySelectorAll(".mmc-reel-card");
 const pick = (index) => fire(cards()[index], "click");
 const side = () => modal.inspectHost;
-const input = () => side().querySelector(".mmc-seed-input");
+const input = () => side().querySelector(".mmc-reel-seed");
 const read = () => ({
   shown: input().value,
-  mode: side().querySelector(".mmc-seed-mode").textContent,
+  placeholder: input().attrs.placeholder,
   own: S.segmentSeed(timeline.segments[0]),
   kept: S.isHeld(timeline.segments[0]),
 });
@@ -82,22 +82,22 @@ const read = () => ({
 const out = {};
 out.keptAtFirst = S.isHeld(timeline.segments[0]);
 pick(0);
-out.seedCount = side().querySelectorAll(".mmc-seed-input").length;
+out.seedCount = side().querySelectorAll(".mmc-reel-seed").length;
 out.inherited = read();
 out.takenHint = input().attrs.title.includes("Its take was made on 123.");
 const before = snapshots.length;
 fire(input(), "change", "42");
 out.manual = { ...read(), otherOwn: S.segmentSeed(timeline.segments[1]),
                committedSeed: snapshots.at(-1).segments[0].seed };
-fire(side().querySelector(".mmc-seed-last"), "click");
+fire(side().querySelector(".mmc-reel-seed-piece"), "click");
 out.reset = read();
 out.commits = snapshots.length - before;
 pieceSeed = 777;
 modal.render();
-out.followsNode = input().value;
+out.followsNode = input().attrs.placeholder;
 out.takeRetained = JSON.stringify(timeline.segments[0].take) === initialTake;
 pick(2);
-out.clipInputs = side().querySelectorAll(".mmc-seed-input").length;
+out.clipInputs = side().querySelectorAll(".mmc-reel-seed").length;
 out.clipUnchanged = JSON.stringify(JSON.parse(S.serializeTimeline(timeline)).segments[2]) === JSON.stringify(initialClip);
 
 modal.edit(0);
@@ -123,8 +123,8 @@ const shared = new Timeline({ timeline: sharedTimeline, onCommit: () => {} }, ()
 shared.mount();
 await settle();
 fire(shared.modal.querySelectorAll(".mmc-reel-card")[1], "click");
-out.sharedShown = shared.inspectHost.querySelector(".mmc-seed-input").value;
-fire(shared.inspectHost.querySelector(".mmc-seed-input"), "change", "404");
+out.sharedShown = shared.inspectHost.querySelector(".mmc-reel-seed").value;
+fire(shared.inspectHost.querySelector(".mmc-reel-seed"), "change", "404");
 out.shared = { seeds: sharedTimeline.segments.map(S.segmentSeed), passes: S.passes(sharedTimeline).length };
 console.log(JSON.stringify(out));
 '''
@@ -134,16 +134,16 @@ with layout.pack(skip=("atlas",)) as target:
 
 check("a take that lands is kept", got["keptAtFirst"], True)
 check("the selected shot's side has exactly one seed control", got["seedCount"], 1)
-check("a shot initially inherits the piece seed", got["inherited"],
-      {"shown": "9001", "mode": "piece", "own": None, "kept": True})
+check("a shot initially inherits the piece seed, named in the empty field", got["inherited"],
+      {"shown": "", "placeholder": "piece seed, 9001", "own": None, "kept": True})
 check("the take's seed is named in the tooltip", got["takenHint"], True)
 check("typing commits only this shot's seed and puts it back in the next render",
-      got["manual"], {"shown": "42", "mode": "card", "own": 42, "kept": False,
+      got["manual"], {"shown": "42", "placeholder": "piece seed, 9001", "own": 42, "kept": False,
                       "otherOwn": None, "committedSeed": 42})
-check("reset returns the shot to the piece seed", got["reset"],
-      {"shown": "9001", "mode": "piece", "own": None, "kept": False})
+check("Use the piece's returns the shot to the piece seed", got["reset"],
+      {"shown": "", "placeholder": "piece seed, 9001", "own": None, "kept": False})
 check("each seed action commits exactly once", got["commits"], 2)
-check("an inherited seed follows the node on the next redraw", got["followsNode"], "777")
+check("an inherited seed follows the node on the next redraw", got["followsNode"], "piece seed, 777")
 check("the take itself is kept through a reshoot", got["takeRetained"], True)
 check("an imported clip has no seed", got["clipInputs"], 0)
 check("seed actions leave the imported clip unchanged", got["clipUnchanged"], True)

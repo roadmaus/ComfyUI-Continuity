@@ -13,17 +13,12 @@ export const css = `
    refusal, so it marks rather than disables. */
 .mmc-pill-group.off-distribution { border-color: color-mix(in srgb, var(--mmc-warn) 40%, transparent); }
 .mmc-pill-group.off-distribution > span { color: var(--mmc-warn); }
-.mmc-tl-dur.off-distribution { color: var(--mmc-warn); }
 
 /* Almost the whole screen, like the shot window: the strip is the one thing in
    this pack that is genuinely wide — a ten-card piece is a metre of film — and
    every pixel not given to it is a card you have to scroll for. The overlay's
    40px inset is what keeps it a window rather than a page. */
 .mmc-tl-modal { width: min(1800px, 100%); height: 100%; }
-.mmc-tl-body {
-  display: flex; flex-direction: column; gap: 16px;
-  padding: 18px 24px 24px; overflow: auto; flex: 1; min-height: 0;
-}
 .mmc-tl-prompt {
   width: 100%; box-sizing: border-box; min-height: calc(84px * var(--mmc-type)); max-height: 30vh; resize: vertical;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
@@ -74,7 +69,6 @@ export const css = `
 .mmc-tl-section-actions button { white-space: normal; }
 .mmc-tl-section-body { min-width: 0; }
 .mmc-tl-section-body[hidden], .mmc-tl-pool[hidden] { display: none; }
-.mmc-tl-section-warning .mmc-tl-section-hint { color: var(--mmc-warn); }
 .mmc-tl-field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 /* Named for the field they become, not prettified: the value goes into the
    prompt under exactly this key, and someone comparing against MiniMax's guide
@@ -94,28 +88,10 @@ export const css = `
   font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); flex: 1; min-width: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
-.mmc-tl-pool-add { display: inline-flex; gap: 5px; align-items: center; }
-.mmc-tl-pool-where { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-dim); white-space: nowrap; }
-/* The handle is a button: clicking it writes the citation into the global
-   prompt. Reset to read exactly like the editor's handle span. */
-.mmc-tl-pool-cite {
-  background: none; border: 0; padding: 0; font: inherit; cursor: pointer;
-}
-.mmc-tl-pool-cite:hover { text-decoration: underline; }
 /* What the shelf's last scissors press ran into — a missing matte model,
    mostly. One line, the shelf's own red. */
 .mmc-tl-pool-bad { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-bad); }
 
-/* The cast shelf sits between the pool and the bar, in a host of its own. The
-   shelf itself is mounted from cast.js and wears the stylesheet next door,
-   because the same shelf is mounted on the node face. */
-.mmc-tl-cast { min-width: 0; }
-
-.mmc-tl-bar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-/* The global stack, under the pill that counts it. Empty when there is none —
-   and then it must take no room at all, or the bar and the strip sit a gap
-   apart for a feature nobody used. */
-.mmc-tl-loras:empty { display: none; }
 .mmc-pill.on { border-color: var(--mmc-line-2); }
 /* An accelerator that is doing something. Lit rather than merely outlined,
    because a render with one on is not a native render and that is worth seeing
@@ -173,124 +149,6 @@ export const css = `
 .mmc-turbo-seg > .mmc-pill-seg { border-left: 1px solid var(--mmc-line); }
 .mmc-turbo-opt[aria-pressed="true"] { background: color-mix(in srgb, var(--mmc-role-motion) 14%, transparent); color: var(--mmc-role-motion); }
 .mmc-turbo-opt[aria-pressed="true"] .mmc-pill-sub { color: color-mix(in srgb, var(--mmc-role-motion) 75%, transparent); }
-.mmc-tl-total { display: flex; gap: 8px; align-items: baseline; margin-left: auto; font-size: calc(13px * var(--mmc-type)); }
-.mmc-tl-total span { color: var(--mmc-dim); }
-
-/* A refusal compile.py would raise, said while the shots are still editable.
-   Reads as a note rather than an alarm — the timeline is still saveable, and
-   switching back to chained makes it correct again. */
-.mmc-tl-problem {
-  display: flex; gap: 8px; align-items: baseline;
-  font-size: calc(11px * var(--mmc-type)); line-height: 1.4; color: var(--mmc-warn);
-}
-.mmc-tl-problem .mmc-note-key { color: inherit; opacity: .8; }
-/* The cards row, which is all a seam or the add button occupies: they have no
-   rail above them and nothing to say underneath. */
-.mmc-tl-seam{ grid-row: 2; }
-.mmc-tl-card {
-  flex: 0 0 auto; box-sizing: border-box;
-  display: flex; flex-direction: column; gap: 8px;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 14px; padding: 12px; font-size: calc(12px * var(--mmc-type)); cursor: default;
-}
-.mmc-tl-card:hover { border-color: var(--mmc-line-2); }
-.mmc-tl-card-head { display: flex; align-items: center; gap: 8px; }
-.mmc-tl-index {
-  width: calc(20px * var(--mmc-type)); height: calc(20px * var(--mmc-type)); border-radius: 50%; background: var(--mmc-surface-3);
-  display: flex; align-items: center; justify-content: center; font-size: calc(11px * var(--mmc-type)); flex: 0 0 auto;
-}
-.mmc-tl-dur { color: var(--mmc-text); font-weight: 500; }
-.mmc-tl-mode { color: var(--mmc-accent); font-size: calc(11px * var(--mmc-type)); margin-left: auto; }
-.mmc-tl-card-prompt {
-  flex: 1; color: var(--mmc-text); line-height: 1.45; overflow: hidden;
-  display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;
-}
-.mmc-tl-card-prompt.empty { color: var(--mmc-off); font-style: italic; }
-/* The card keeps showing the typed sentence because that is what the shot is
-   recognised by — dimmed, because it is not what the shot queues. */
-.mmc-tl-card-prompt.superseded { opacity: .42; }
-
-.mmc-tl-card-meta {
-  color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type));
-  display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
-}
-.mmc-tl-card-meta > span { min-width: 0; overflow-wrap: anywhere; }
-.mmc-tl-card-foot { display: flex; align-items: center; gap: 4px; }
-/* A clip's foot carries three words and four icons, wider than a clip card is
-   at any length a clip is. Unwrapped, the row ran out past the card's edge and
-   under the seam beside it, which took the clicks meant for the ✕ — a clip
-   could not be removed. Wrapped, the overflow drops to a second line inside
-   the card. A kept shot's foot carries Trim and Crop too, and wraps the same. */
-.mmc-tl-clip .mmc-tl-card-foot{ flex-wrap: wrap; row-gap: 6px; }
-/* The ✕ after one press: the question, in the warning colour, where the ✕
-   was. Kept to the ✕'s own height so the foot does not jump. */
-.mmc-tl-card-foot .mmc-asset-x.armed {
-  color: var(--mmc-warn); font-size: calc(11px * var(--mmc-type)); white-space: nowrap;
-}
-.mmc-tl-edit {
-  height: calc(26px * var(--mmc-type)); padding: 0 12px; border-radius: 8px; background: var(--mmc-surface-3);
-  border: 0; color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
-  margin-right: auto;
-}
-.mmc-tl-edit:hover { background: var(--mmc-surface-3); }
-/* A clip card has two of them, Trim and Crop, side by side on the left; the
-   gap that pushes the rest right belongs after the last one. Lit when set,
-   the way the sound button is. */
-.mmc-tl-edit + .mmc-tl-edit { margin-left: 6px; }
-.mmc-tl-edit:has(+ .mmc-tl-edit) { margin-right: 0; }
-.mmc-tl-edit.on { box-shadow: inset 0 0 0 1px var(--mmc-blue); }
-.mmc-tl-card-foot .mmc-ghost { padding: 0 4px; font-size: calc(12px * var(--mmc-type)); }
-.mmc-tl-card-foot button:disabled { opacity: .3; cursor: not-allowed; }
-
-/* The seam between two cards. It is a control, so it is wide enough to hit. */
-.mmc-tl-join {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  background: none; border: 0; color: var(--mmc-off); cursor: pointer;
-  font-family: inherit; font-size: calc(10px * var(--mmc-type)); line-height: 1.25; padding: 4px 2px;
-  border-radius: 8px;
-}
-.mmc-tl-join span:first-child { font-size: calc(15px * var(--mmc-type)); line-height: 1; }
-.mmc-tl-join:hover:not(:disabled) { color: var(--mmc-text); background: var(--mmc-surface-2); }
-.mmc-tl-join.on { color: var(--mmc-accent); }
-.mmc-tl-join:disabled { cursor: not-allowed; opacity: .5; }
-
-/* Picture above, sound below — the two switches on one seam. Stacked rather
-   than side by side so the seam stays as narrow as it was.
- *
- * The padding is the card's own — the enclosure's inset plus the card's padding
- * and head — so the switches open level with the first line of the prompt beside
- * them and the merge button sits on the row of Edit buttons. A seam carrying two
- * chips and a seam carrying four then open and close on the same two lines,
- * instead of each centring itself on a different height. */
-.mmc-tl-seam {
-  width: 78px; box-sizing: border-box; padding: 47px 3px 19px;
-  display: flex; flex-direction: column; align-items: stretch; gap: 8px;
-}
-/* A source/blend pair is one shared-options group; storyboard is independent.
-   Empty optional groups are never rendered, so they cannot leave ghost rules. */
-.mmc-tl-seam-group { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
-.mmc-tl-seam-group + .mmc-tl-seam-group { border-top: 1px solid var(--mmc-line); padding-top: 8px; }
-.mmc-tl-seam-group > .mmc-tl-join { padding: 4px 2px; min-width: 0; overflow-wrap: anywhere; }
-.mmc-tl-seam-group > .mmc-tl-join:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
-/* On a family with a duration head the seconds are a switch, so the chip is a
-   button — stripped back to the text it already was, since what says it can be
-   clicked is the hover and the lit state, not a box around a number. Lit in the
-   accent the shot editor's own auto switch uses. After the unshot rule and at its
-   specificity: a card on auto that has not been shot is still on auto. */
-.mmc-tl-card button.mmc-tl-dur {
-  border: 0; padding: 0; background: none; font: inherit; cursor: pointer;
-}
-.mmc-tl-card button.mmc-tl-dur:hover { color: var(--mmc-accent); }
-.mmc-tl-card .mmc-tl-dur.auto { color: var(--mmc-accent); }
-
-.mmc-tl-join-sound { padding-top: 0; }
-.mmc-tl-join-sound svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
-  stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-
-/* Where the seam inherits from — one line under the two switches, only shown
-   while a seam is live and there is more than one segment to inherit from. */
-.mmc-tl-join-from { padding-top: 0; }
-.mmc-tl-join-from span:first-child { font-size: calc(10px * var(--mmc-type)); }
 
 /* The sheet, in the chip's popover: nine cells carrying the number of the card
    each is filled from, in the order the frames land. A picture of the layout
@@ -302,12 +160,6 @@ export const css = `
   width: 132px; aspect-ratio: 16 / 9; margin: 8px 10px 4px; padding: 2px;
   border-radius: 6px; background: var(--mmc-ground);
 }
-.mmc-board-cell {
-  display: flex; align-items: center; justify-content: center;
-  border-radius: 2px; font-size: calc(9px * var(--mmc-type)); line-height: 1;
-  color: var(--mmc-strong); background: color-mix(in srgb, var(--mmc-accent) 34%, var(--mmc-surface-2));
-}
-.mmc-board-cell.alt { background: color-mix(in srgb, var(--mmc-accent) 14%, var(--mmc-surface-2)); }
 /* The row of earlier shots to draw the sheet on, as toggles. Lit ones are in. */
 .mmc-board-picks { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 10px 2px; }
 .mmc-board-pick {
@@ -410,16 +262,6 @@ export const css = `
   transition: color .12s ease;
 }
 .mmc-grow-shot:hover:not(:disabled) .mmc-grow-mark { color: var(--mmc-accent); }
-
-/* A clip card. Solid where a shot's card is not, because the difference worth
-   seeing at a glance is that this stretch of the piece already exists. */
-.mmc-tl-clip { background: var(--mmc-surface-3); }
-.mmc-tl-clip-tag { color: var(--mmc-dim); }
-.mmc-tl-clip-name {
-  font-style: normal; color: var(--mmc-text);
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-}
-.mmc-tl-seam-clip .mmc-tl-join.on { border-style: dashed; }
 
 /* The segment editor, over the strip, is the editor sheet — see styles/editor.js.
    Its body is the Creator node's, unchanged, and so is the window around it. */
@@ -1000,193 +842,287 @@ export const css = `
 }
 
 /* --- the reel ----------------------------------------------------------------
-   The timeline as one surface: the script on the left (the scene, then one row
-   per shot), the take and whatever is selected on the right, and the piece at
-   its real length underneath. Motion blue is a continuing picture, voice green
-   is sound that carries over, the accent is the selection. */
-.mmc-reel .mmc-reel-body { gap: 14px; overflow: hidden; }
-.mmc-reel-bar { flex: none; }
-.mmc-reel-main {
-  flex: 1; min-height: 0; display: grid; gap: 18px;
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.9fr);
+   The timeline as one window: one line of header, the script on the left, the
+   player over the inspector on the right, and the piece at its real length
+   underneath. Nothing is boxed that is not a separate thing: the script is set
+   as text, the inspector as rows. Blue is a continuing picture, green is sound
+   that carries over, the accent is the selection and anything that needs a
+   look. */
+.mmc-reel { display: flex; flex-direction: column; overflow: hidden; }
+.mmc-reel-head {
+  flex: none; display: flex; align-items: center; gap: 14px; height: 58px; padding: 0 18px 0 24px;
+  border-bottom: 1px solid var(--mmc-line);
 }
-.mmc-reel-script { min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
-.mmc-reel-row {
-  display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; gap: 10px; align-items: start;
-  padding: 6px 8px; border-radius: 12px; border: 1px solid transparent;
+.mmc-reel-title { font-size: calc(17px * var(--mmc-type)); font-weight: 650; color: var(--mmc-strong); }
+.mmc-reel-meta { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); font-variant-numeric: tabular-nums; }
+.mmc-reel-plan { margin-left: auto; color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-plan b { color: var(--mmc-text); font-weight: 550; }
+.mmc-reel-plan i { font-style: normal; color: var(--mmc-role-voice); }
+.mmc-reel-problem { color: var(--mmc-warn); font-size: calc(13px * var(--mmc-type)); }
+.mmc-reel-shoot {
+  height: 36px; padding: 0 18px; border-radius: 10px; border: 0; cursor: pointer;
+  background: var(--mmc-accent); color: var(--mmc-on-accent); font: inherit; font-weight: 650;
+  font-size: calc(14px * var(--mmc-type));
 }
-.mmc-reel-row.selected { background: var(--mmc-tint); border-color: var(--mmc-line); }
-.mmc-reel-row.merged { margin-top: -6px; }
-.mmc-reel-row.merged .mmc-reel-gutter { border-left: 2px dashed var(--mmc-line-2); padding-left: 6px; }
-.mmc-reel-gutter { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; padding-top: 8px; }
+.mmc-reel-shoot:disabled { opacity: .45; cursor: default; }
+
+.mmc-reel-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 0.72fr); }
+.mmc-reel-script { min-height: 0; overflow: auto; padding: 16px 24px 24px 18px; border-right: 1px solid var(--mmc-line); }
+.mmc-reel-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: baseline; gap: 6px; padding: 7px 10px 7px 0; border-radius: 12px; }
+.mmc-reel-shot.selected { background: var(--mmc-tint); }
+.mmc-reel-shot.merged .mmc-reel-gutter { border-left: 2px dotted var(--mmc-line-3); }
+.mmc-reel-gutter { display: flex; flex-direction: column; align-items: flex-start; padding-left: 12px; }
+.mmc-reel-label { font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-reel-num {
   font: inherit; font-weight: 650; font-size: calc(16px * var(--mmc-type)); color: var(--mmc-strong);
-  background: none; border: 0; padding: 0 6px; border-radius: 6px; cursor: pointer;
+  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
 }
-.mmc-reel-num:hover { background: var(--mmc-wash); }
-.mmc-reel-row.selected .mmc-reel-num { color: var(--mmc-accent); }
-.mmc-reel-secs, .mmc-reel-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-variant-numeric: tabular-nums;
-  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim); padding: 0 6px;
+.mmc-reel-num.ghost { color: var(--mmc-faint); cursor: default; }
+.mmc-reel-shot.selected .mmc-reel-num { color: var(--mmc-accent); }
+.mmc-reel-secs { font-variant-numeric: tabular-nums; font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); margin-top: 1px; }
+/* The prompt box, set as text: no frame, no fill, the same box underneath. */
+.mmc-reel-plain, .mmc-reel-plain .mmc-prompt { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; min-height: 0 !important; }
+.mmc-reel-plain .mmc-prompt { font-size: calc(16.5px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-text); }
+.mmc-reel-scene .mmc-reel-plain .mmc-prompt { font-size: calc(18.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-strong); }
+.mmc-reel-plain .mmc-prompt:focus { outline: none; }
+.mmc-reel-quiet { padding-top: 1px; padding-bottom: 1px; }
+.mmc-reel-line-text {
+  width: 100%; resize: none; overflow: hidden; border: 0; background: none; padding: 0; margin: 0;
+  color: var(--mmc-dim); font: inherit; font-size: calc(15px * var(--mmc-type)); line-height: 1.5;
 }
-.mmc-reel-scene-tag {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(10px * var(--mmc-type));
-  letter-spacing: .12em; text-transform: uppercase; color: var(--mmc-dim); padding: 0 6px;
-}
-.mmc-reel-scene .mmc-prompt { min-height: calc(64px * var(--mmc-type)); }
-.mmc-reel-box .mmc-prompt { min-height: calc(42px * var(--mmc-type)); }
-.mmc-reel-clipname { padding: 10px 12px; border-radius: 10px; background: var(--mmc-surface); color: var(--mmc-dim); }
+.mmc-reel-line-text:focus { outline: none; color: var(--mmc-text); }
+.mmc-reel-line-text::placeholder { color: var(--mmc-faint); }
+.mmc-reel-rule { height: 1px; background: var(--mmc-line); margin: 10px 0 10px 64px; }
+.mmc-reel-clipname { font: inherit; text-align: left; background: none; border: 0; padding: 0; color: var(--mmc-dim); cursor: pointer; font-size: calc(15px * var(--mmc-type)); }
 .mmc-reel-tag {
-  align-self: center; white-space: nowrap; font-size: calc(11px * var(--mmc-type)); font-weight: 600;
-  padding: 2px 8px; border-radius: 6px; color: var(--mmc-dim); background: var(--mmc-wash);
+  align-self: center; white-space: nowrap; font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
+  padding: 2px 8px; border-radius: 6px;
 }
 .mmc-reel-tag:empty { display: none; }
-.mmc-reel-tag.kept { color: var(--mmc-role-voice); background: color-mix(in srgb, var(--mmc-role-voice) 14%, transparent); }
 .mmc-reel-tag.changed, .mmc-reel-tag.reshoot { color: var(--mmc-on-accent); background: var(--mmc-accent); }
 .mmc-reel-tag.gone { color: var(--mmc-bad); background: color-mix(in srgb, var(--mmc-bad) 14%, transparent); }
-.mmc-reel-add { display: flex; align-items: center; gap: 8px; padding: 4px 8px 4px 82px; }
-.mmc-reel-addbtn {
-  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 9px;
-  border: 1px dashed var(--mmc-line-2); background: none; color: var(--mmc-text); font: inherit; cursor: pointer;
+.mmc-reel-next-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.mmc-reel-ghost {
+  font: inherit; font-size: calc(16.5px * var(--mmc-type)); color: var(--mmc-faint); background: none; border: 0;
+  padding: 0; cursor: text; text-align: left;
 }
-.mmc-reel-addbtn:hover { background: var(--mmc-wash); }
-.mmc-reel-hint { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-faint); }
-.mmc-reel-piece { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--mmc-line); }
+.mmc-reel-ghost:hover { color: var(--mmc-dim); }
+.mmc-reel-ghost.small { font-size: calc(13.5px * var(--mmc-type)); color: var(--mmc-dim); cursor: pointer; }
+.mmc-reel-ghost:disabled { cursor: not-allowed; opacity: .5; }
 
-.mmc-reel-side { min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 14px; }
+/* The cast and references, as faces and frames above the script. */
+.mmc-reel-castrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 2px 0 14px 64px; }
+.mmc-reel-face {
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 3px; border-radius: 999px;
+  border: 0; background: var(--mmc-surface); color: var(--mmc-accent); font: inherit; font-weight: 550;
+  font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-face.frame { color: var(--mmc-role-motion); padding-left: 4px; }
+.mmc-reel-face img, .mmc-reel-face-blank { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--mmc-surface-3); display: grid; place-items: center; color: var(--mmc-dim); }
+.mmc-reel-face.frame img, .mmc-reel-face.frame .mmc-reel-face-blank { width: 38px; height: 26px; border-radius: 6px; }
+.mmc-reel-face.selected { box-shadow: 0 0 0 2px var(--mmc-accent); }
+.mmc-reel-face-add {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px dashed var(--mmc-line-3); background: none;
+  color: var(--mmc-dim); display: grid; place-items: center; cursor: pointer;
+}
+.mmc-reel-face-add:hover { color: var(--mmc-strong); border-color: var(--mmc-strong); }
+.mmc-reel-hint { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-faint); }
+
+/* The side: the player, then the inspector. */
+.mmc-reel-side { min-height: 0; display: flex; flex-direction: column; }
 .mmc-reel-player {
-  flex: none; height: clamp(160px, 30vh, 380px); border-radius: 14px; overflow: hidden;
-  background: var(--mmc-media-bg); border: 1px solid var(--mmc-line-2); display: grid;
+  position: relative; flex: none; margin: 16px 20px 0; height: clamp(150px, 24vh, 290px); border-radius: 14px;
+  overflow: hidden; background: var(--mmc-media-bg);
 }
-.mmc-reel-video { width: 100%; height: 100%; object-fit: contain; background: var(--mmc-media-bg); }
-.mmc-reel-noplay {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; text-align: center;
-  color: var(--mmc-dim); padding: 20px;
-  background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 14px, var(--mmc-surface-2) 14px 28px);
+.mmc-reel-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mmc-reel-blank {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center;
+  color: var(--mmc-dim); background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 14px, var(--mmc-surface-2) 14px 28px);
 }
-.mmc-reel-noplay b, .mmc-reel-empty b { color: var(--mmc-text); font-weight: 600; }
-.mmc-reel-empty { display: flex; flex-direction: column; gap: 6px; color: var(--mmc-dim); padding: 4px 2px; }
-.mmc-reel-inspect-body { display: flex; flex-direction: column; gap: 12px; }
-.mmc-reel-ihead { display: flex; align-items: center; gap: 10px; }
-.mmc-reel-ihead b { font-size: calc(17px * var(--mmc-type)); color: var(--mmc-strong); font-weight: 650; }
-.mmc-reel-why { margin: 0; color: var(--mmc-text); line-height: 1.5; }
-.mmc-reel-note { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.45; }
-.mmc-reel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mmc-reel-plabel, .mmc-reel-tc {
+  position: absolute; top: 12px; padding: 4px 10px; border-radius: 8px; font-size: calc(13px * var(--mmc-type));
+  color: #fff; background: rgba(0, 0, 0, .58);
+}
+.mmc-reel-plabel { left: 12px; }
+.mmc-reel-tc { right: 12px; font-variant-numeric: tabular-nums; }
+.mmc-reel-tc:empty { display: none; }
+.mmc-reel-play {
+  position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px; border-radius: 50%; border: 0;
+  background: rgba(0, 0, 0, .5); color: #fff; display: grid; place-items: center; cursor: pointer; transition: opacity .2s;
+}
+.mmc-reel-play.playing { opacity: 0; }
+.mmc-reel-player:hover .mmc-reel-play.playing { opacity: .8; }
+.mmc-reel-inspect { flex: 1; min-height: 0; overflow: auto; padding: 16px 20px 22px; }
+.mmc-reel-inspect-body { display: flex; flex-direction: column; gap: 8px; }
+.mmc-reel-ihead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.mmc-reel-ihead b { font-size: calc(19px * var(--mmc-type)); color: var(--mmc-strong); font-weight: 650; }
+.mmc-reel-ihead > span { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-ihead .mmc-reel-tag { align-self: baseline; }
+.mmc-reel-why { margin: 0 0 4px; color: var(--mmc-text); line-height: 1.5; font-size: calc(14px * var(--mmc-type)); max-width: 60ch; }
+.mmc-reel-irow { display: grid; grid-template-columns: 136px minmax(0, 1fr); align-items: center; gap: 12px; min-height: 34px; }
+.mmc-reel-ilabel { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-icontrol { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.mmc-reel-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mmc-reel-note { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.45; }
+.mmc-reel-mono { font-variant-numeric: tabular-nums; color: var(--mmc-text); }
+.mmc-reel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 6px; }
+.mmc-reel-actions.quiet { margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--mmc-line); }
 .mmc-reel-btn {
-  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 9px;
+  display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; border-radius: 10px;
   border: 1px solid var(--mmc-line-2); background: var(--mmc-surface); color: var(--mmc-text);
-  font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
+  font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-reel-btn:hover { background: var(--mmc-surface-2); }
-.mmc-reel-btn.primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; font-weight: 600; }
-.mmc-reel-btn.quiet { background: none; border-color: transparent; color: var(--mmc-dim); }
+.mmc-reel-btn.primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; font-weight: 650; }
+.mmc-reel-btn.quiet { background: none; border-color: transparent; color: var(--mmc-dim); padding: 0 10px; }
 .mmc-reel-btn.quiet:hover { color: var(--mmc-strong); background: var(--mmc-wash); }
+.mmc-reel-btn.danger, .mmc-reel-btn.quiet.danger { color: var(--mmc-bad); }
 .mmc-reel-btn:disabled { opacity: .4; cursor: not-allowed; }
-.mmc-reel-group {
-  display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 12px;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+.mmc-reel-link {
+  font: inherit; font-size: calc(13px * var(--mmc-type)); background: none; border: 0; padding: 2px 4px;
+  color: var(--mmc-accent); cursor: pointer; border-radius: 5px;
 }
-.mmc-reel-line { display: flex; align-items: center; gap: 10px; }
-.mmc-reel-line > span:first-child { min-width: 90px; color: var(--mmc-dim); font-size: calc(12.5px * var(--mmc-type)); }
-.mmc-reel-stepper { display: inline-flex; align-items: center; border: 1px solid var(--mmc-line-2); border-radius: 8px; overflow: hidden; }
-.mmc-reel-stepper button { width: 26px; height: 26px; border: 0; background: var(--mmc-surface); color: var(--mmc-dim); cursor: pointer; font: inherit; }
-.mmc-reel-stepper button:hover { color: var(--mmc-strong); }
-.mmc-reel-stepper span { min-width: 58px; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12px * var(--mmc-type)); color: var(--mmc-strong); }
-.mmc-reel-chip {
-  height: 24px; padding: 0 10px; border-radius: 7px; border: 1px solid var(--mmc-line-2); background: none;
-  color: var(--mmc-dim); font: inherit; font-size: calc(12px * var(--mmc-type)); cursor: pointer;
+.mmc-reel-link:hover { background: var(--mmc-wash); }
+.mmc-reel-value {
+  display: inline-flex; align-items: baseline; gap: 8px; height: 32px; padding: 0 12px; border-radius: 9px;
+  border: 0; background: var(--mmc-surface-2); color: var(--mmc-strong); font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
-.mmc-reel-chip.on { color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 55%, transparent); }
-.mmc-reel-irow { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
-.mmc-reel-ilabel { font-size: calc(11px * var(--mmc-type)); text-transform: uppercase; letter-spacing: .06em; color: var(--mmc-dim); }
-.mmc-reel-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 2px; border-radius: 9px; background: var(--mmc-surface-2); align-self: flex-start; }
+.mmc-reel-value small { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); }
+.mmc-reel-value { align-items: center; }
+.mmc-reel-value svg { color: var(--mmc-dim); }
+.mmc-reel .mmc-refine-split { display: inline-flex; align-items: center; position: static; }
+.mmc-reel .mmc-refine-split .mmc-tool-icon { display: none; }
+.mmc-reel .mmc-refine-split .mmc-reel-btn { border-radius: 10px 0 0 10px; }
+.mmc-reel .mmc-refine-more {
+  position: static; height: 32px; width: 30px; border: 1px solid var(--mmc-line-2); border-left: 0;
+  border-radius: 0 10px 10px 0; background: var(--mmc-surface); color: var(--mmc-dim); cursor: pointer;
+  display: grid; place-items: center; padding: 0;
+}
+.mmc-reel-family .mmc-pill { height: 32px; border-radius: 9px; border: 0; background: var(--mmc-surface-2); }
+.mmc-reel-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: var(--mmc-surface-2); }
 .mmc-reel-seg button {
-  display: inline-flex; align-items: baseline; gap: 5px; border: 0; background: none; padding: 5px 10px; border-radius: 7px;
-  color: var(--mmc-dim); font: inherit; font-size: calc(12.5px * var(--mmc-type)); cursor: pointer;
+  display: inline-flex; align-items: baseline; gap: 5px; border: 0; background: none; padding: 5px 11px; border-radius: 8px;
+  color: var(--mmc-dim); font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
-.mmc-reel-seg button small { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(10.5px * var(--mmc-type)); opacity: .8; }
+.mmc-reel-seg button small { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); opacity: .75; }
 .mmc-reel-seg button[aria-pressed="true"] { background: var(--mmc-bg); color: var(--mmc-strong); box-shadow: 0 1px 2px var(--mmc-shadow-soft); }
 .mmc-reel-seg.motion button[aria-pressed="true"] { color: var(--mmc-role-motion); }
 .mmc-reel-seg.voice button[aria-pressed="true"] { color: var(--mmc-role-voice); }
 .mmc-reel-seg button:disabled { opacity: .38; cursor: not-allowed; }
-.mmc-reel-extra { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--mmc-surface); }
-.mmc-reel-plan .mmc-reel-kept { color: var(--mmc-role-voice); }
+.mmc-reel-switch {
+  position: relative; width: 38px; height: 22px; border-radius: 11px; border: 0; padding: 0; cursor: pointer;
+  background: var(--mmc-surface-3); flex: none;
+}
+.mmc-reel-switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--mmc-dim); transition: transform .15s;
+}
+.mmc-reel-switch[aria-checked="true"] { background: var(--mmc-accent); }
+.mmc-reel-switch[aria-checked="true"]::after { transform: translateX(16px); background: var(--mmc-on-accent); }
+.mmc-reel-switch:disabled { opacity: .4; cursor: not-allowed; }
+.mmc-reel-stepper { display: inline-flex; align-items: center; border-radius: 9px; background: var(--mmc-surface-2); overflow: hidden; }
+.mmc-reel-stepper button { width: 28px; height: 30px; border: 0; background: none; color: var(--mmc-dim); cursor: pointer; font: inherit; }
+.mmc-reel-stepper button:hover { color: var(--mmc-strong); }
+.mmc-reel-stepper span { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type)); color: var(--mmc-strong); }
+.mmc-reel-seed {
+  width: 150px; height: 30px; padding: 0 10px; border-radius: 9px; border: 0; background: var(--mmc-surface-2);
+  color: var(--mmc-strong); font: inherit; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type));
+}
+.mmc-reel-seed::placeholder { color: var(--mmc-dim); }
+.mmc-reel-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.mmc-reel-thumbs img, .mmc-reel-thumb-blank, .mmc-reel-thumb-add { width: 62px; height: 40px; border-radius: 7px; object-fit: cover; }
+.mmc-reel-thumb-blank { display: grid; place-items: center; background: var(--mmc-surface-2); color: var(--mmc-dim); }
+.mmc-reel-thumb-add { display: grid; place-items: center; border: 1px dashed var(--mmc-line-3); background: none; color: var(--mmc-dim); cursor: pointer; }
+.mmc-reel-loras { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mmc-reel-lora {
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: 7px; border: 0;
+  background: color-mix(in srgb, var(--mmc-role-voice) 15%, transparent); color: var(--mmc-role-voice);
+  font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-lora small { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); opacity: .8; }
+.mmc-reel-lora.off { opacity: .45; }
+.mmc-reel-machine { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--mmc-line); font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.5; }
+.mmc-reel-compiled { white-space: pre-wrap; font-size: calc(13px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-text); margin: 0; padding: 4px 2px; }
 
-/* The reel itself: to scale, the one place lengths are compared. */
-.mmc-reel-lane {
-  flex: none; padding: 10px 12px 12px; border-radius: 14px; background: var(--mmc-surface);
-  border: 1px solid var(--mmc-line); overflow: hidden;
-}
-.mmc-reel-track { position: relative; display: flex; flex-direction: column; gap: 4px; }
-.mmc-reel-passes { position: relative; height: 18px; }
+/* The reel: to scale, the one place lengths are compared. */
+.mmc-reel-foot { flex: none; border-top: 1px solid var(--mmc-line); background: color-mix(in oklab, var(--mmc-bg) 94%, var(--mmc-media-bg)); padding: 12px 22px 0; }
+.mmc-reel-lane { overflow: hidden; }
+.mmc-reel-track-area { position: relative; display: flex; flex-direction: column; gap: 3px; }
+.mmc-reel-passes { position: relative; height: 16px; }
 .mmc-reel-pass {
-  position: absolute; top: 2px; height: 16px; border: 1px solid var(--mmc-line-3); border-bottom: 0;
+  position: absolute; top: 0; height: 16px; border: 1px solid var(--mmc-line-3); border-bottom: 0;
   border-radius: 6px 6px 0 0; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
-  padding: 0 6px; overflow: hidden; white-space: nowrap; box-sizing: border-box;
+  padding: 0 8px; overflow: hidden; white-space: nowrap; box-sizing: border-box;
 }
-.mmc-reel-picture { position: relative; height: 72px; }
+.mmc-reel-picture { position: relative; height: 84px; }
 .mmc-reel-card {
-  position: absolute; top: 0; height: 72px; padding: 0; border-radius: 7px; overflow: hidden; cursor: pointer;
+  position: absolute; top: 0; height: 84px; padding: 0; border-radius: 8px; overflow: hidden; cursor: pointer;
   border: 1px solid var(--mmc-line-2); color: var(--mmc-text); font: inherit; text-align: left;
-  background: repeating-linear-gradient(135deg, var(--mmc-surface-2) 0 8px, var(--mmc-surface-3) 8px 16px);
+  background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 9px, var(--mmc-surface-2) 9px 18px);
 }
 .mmc-reel-card.kept, .mmc-reel-card.reshoot, .mmc-reel-card.changed { background: var(--mmc-media-bg); }
-.mmc-reel-card.clip { background: var(--mmc-surface-3); }
 .mmc-reel-card.selected { box-shadow: 0 0 0 2px var(--mmc-accent); z-index: 2; }
-.mmc-reel-card.changed, .mmc-reel-card.reshoot { box-shadow: inset 0 0 0 2px var(--mmc-accent); }
-.mmc-reel-card.selected.changed, .mmc-reel-card.selected.reshoot { box-shadow: 0 0 0 2px var(--mmc-accent), inset 0 0 0 2px var(--mmc-accent); }
 .mmc-reel-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .mmc-reel-card-head {
-  position: absolute; left: 7px; top: 5px; display: flex; gap: 6px; align-items: baseline;
-  font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-strong); text-shadow: 0 1px 2px var(--mmc-shadow);
+  position: absolute; left: 8px; top: 6px; display: flex; gap: 6px; align-items: baseline;
+  font-size: calc(12.5px * var(--mmc-type)); color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
 }
-.mmc-reel-card-head span { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(10.5px * var(--mmc-type)); }
+.mmc-reel-card-head span { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); }
+.mmc-reel-card.new .mmc-reel-card-head { color: var(--mmc-strong); text-shadow: none; }
 .mmc-reel-card-text {
-  position: absolute; left: 7px; right: 10px; top: 24px; font-size: calc(11.5px * var(--mmc-type)); line-height: 1.3;
+  position: absolute; left: 8px; right: 12px; top: 26px; font-size: calc(12px * var(--mmc-type)); line-height: 1.3;
   color: var(--mmc-dim); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
 }
 .mmc-reel-card-tag {
-  position: absolute; left: 6px; bottom: 5px; z-index: 5; font-size: calc(10px * var(--mmc-type)); font-weight: 650;
-  padding: 1px 6px; border-radius: 5px; background: color-mix(in srgb, var(--mmc-media-bg) 65%, transparent); color: var(--mmc-strong);
+  position: absolute; left: 7px; bottom: 6px; z-index: 5; font-size: calc(10.5px * var(--mmc-type)); font-weight: 650;
+  padding: 1px 7px; border-radius: 5px; background: var(--mmc-accent); color: var(--mmc-on-accent);
 }
-.mmc-reel-card-tag.kept { color: var(--mmc-role-voice); }
-.mmc-reel-card-tag.changed, .mmc-reel-card-tag.reshoot { background: var(--mmc-accent); color: var(--mmc-on-accent); }
-.mmc-reel-edge { position: absolute; top: 0; right: 0; width: 9px; height: 100%; cursor: ew-resize; display: grid; place-items: center; z-index: 3; }
-.mmc-reel-edge::after { content: ""; width: 2px; height: 22px; border-radius: 1px; background: var(--mmc-line-3); }
-.mmc-reel-card:hover .mmc-reel-edge::after { background: var(--mmc-strong); }
+.mmc-reel-card-tag.gone { background: var(--mmc-bad); color: #fff; }
+.mmc-reel-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; display: grid; place-items: center; z-index: 3; }
+.mmc-reel-edge::after { content: ""; width: 2px; height: 24px; border-radius: 1px; background: rgba(255, 255, 255, .45); }
+.mmc-reel-card:hover .mmc-reel-edge::after { background: #fff; }
 .mmc-reel-blend {
-  position: absolute; top: -2px; height: 76px; z-index: 4; border-radius: 5px; pointer-events: none;
+  position: absolute; top: -3px; height: 90px; z-index: 4; border-radius: 6px; pointer-events: none;
   border: 1.5px solid var(--mmc-role-motion);
   background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--mmc-role-motion) 40%, transparent) 0 3px, transparent 3px 7px);
 }
 .mmc-reel-blend.selected { box-shadow: 0 0 0 2px var(--mmc-accent); }
 .mmc-reel-grip {
-  position: absolute; right: -6px; top: 50%; width: 11px; height: 26px; margin-top: -13px; border-radius: 4px;
+  position: absolute; right: -6px; top: 50%; width: 11px; height: 28px; margin-top: -14px; border-radius: 4px;
   background: var(--mmc-role-motion); cursor: ew-resize; pointer-events: auto;
 }
-.mmc-reel-joins { position: relative; height: 26px; }
+.mmc-reel-joins { position: relative; height: 28px; }
 .mmc-reel-join {
-  position: absolute; top: 1px; width: 24px; height: 24px; margin-left: -12px; border-radius: 50%; padding: 0;
+  position: absolute; top: 1px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; padding: 0;
   display: grid; place-items: center; cursor: pointer; background: var(--mmc-bg); color: var(--mmc-dim);
   border: 1.5px solid var(--mmc-line-3);
 }
 .mmc-reel-join.on { color: var(--mmc-role-motion); border-color: var(--mmc-role-motion); }
 .mmc-reel-join.merged { border-style: dashed; color: var(--mmc-faint); }
 .mmc-reel-join.selected { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
-.mmc-reel-sound { position: relative; height: 22px; }
+.mmc-reel-sound { position: relative; height: 26px; }
 .mmc-reel-wave {
-  position: absolute; top: 3px; height: 16px; border-radius: 3px;
-  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--mmc-role-voice) 60%, transparent) 0 2px, transparent 2px 5px);
+  position: absolute; top: 5px; height: 16px; border-radius: 3px;
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--mmc-role-voice) 55%, transparent) 0 2px, transparent 2px 5px);
 }
 .mmc-reel-sdot {
-  position: absolute; top: 4px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; padding: 0; z-index: 2;
+  position: absolute; top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; padding: 0; z-index: 2;
   background: var(--mmc-bg); border: 1.5px solid var(--mmc-line-3); cursor: pointer;
 }
 .mmc-reel-sdot.on { border-color: var(--mmc-role-voice); background: var(--mmc-role-voice); }
-
-.mmc-reel .mmc-snd.empty > :not(.mmc-snd-head) { display: none; }
+.mmc-reel-track {
+  position: absolute; top: 1px; height: 24px; border-radius: 6px; padding: 0 8px; z-index: 3; cursor: pointer;
+  border: 1px solid var(--mmc-role-voice); background: color-mix(in oklab, var(--mmc-role-voice) 26%, var(--mmc-bg));
+  color: var(--mmc-strong); font: inherit; font-size: calc(11.5px * var(--mmc-type)); text-align: left;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.mmc-reel-track.selected { box-shadow: 0 0 0 2px var(--mmc-accent); }
+.mmc-reel-status { display: flex; align-items: center; gap: 16px; padding: 8px 0 10px; }
+.mmc-reel-status .mmc-reel-link { color: var(--mmc-text); }
+.mmc-reel-status .mmc-reel-hint { margin-left: auto; }
 
 @media (max-width: 900px) {
   .mmc-reel-main { grid-template-columns: minmax(0, 1fr); }
+  .mmc-reel-script { border-right: 0; }
 }
 `;

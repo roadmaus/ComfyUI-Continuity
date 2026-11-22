@@ -151,7 +151,7 @@ loose.segments[1].prompt = "@anna by @ref-5";
 S.syncTimeline(loose);
 out.loose = await row(loose, 1);
 
-// The shelf's own readout of her picture, when a card cites the *file* and
+// Her side's readout, when a card cites her *file* and
 // not her. "in shots 1, 2" was read off the shots that write her name alone,
 // so a third card saying `@ref-1` was in the compile and off the shelf.
 {
@@ -165,7 +165,10 @@ out.loose = await row(loose, 1);
   openTimeline({ timeline, onCommit: () => {} });
   await new Promise((done) => setTimeout(done, 0));
   const modal = document.body.children.at(-1);
-  out.shelf = all(modal, "mmc-tl-pool-where").map((n) => n.text ?? n.textContent ?? "");
+  // Selected in the row above the script, her side says where she is used.
+  all(modal, "mmc-reel-face")[0].listeners.click[0]();
+  const head = all(modal, "mmc-reel-ihead")[0];
+  out.shelf = [(head?.children?.[1]?.text ?? "").split(", ").slice(1).join(", ")];
 }
 
 // ---- the member's action ----------------------------------------------------

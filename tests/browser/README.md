@@ -22,7 +22,7 @@ node (Join-Path $env:PLAYWRIGHT_MODULE 'cli.js') install chromium
 
 node tests/browser/test-style-scroll.cjs
 node tests/browser/test-reference-preview.cjs
-node tests/browser/test-timeline-sections-seams.cjs
+node tests/browser/test-timeline-reel.cjs
 ```
 
 On other operating systems, the same scripts work with the equivalent environment
@@ -49,12 +49,13 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   playback, unloading, navigation, fullscreen/Escape, focus, narrow layouts and
   read-only state. API URL resolution and model-state helpers are adapters; this
   does not establish support for every user video codec.
-- **Timeline sections and seams:** actual disclosure helper, timeline/Cast
-  methods, popover lifecycle helpers and CSS. Checks cover default-open state,
-  independent folding, sibling actions, focus, citations/additions, scoped
-  popover cleanup, seam option/capability matrices and localized layout. Backend
-  capability/state providers, picker responses and unrelated renderers are
-  fixtures, not a running ComfyUI application.
+- **Timeline reel:** the real `timeline.js`, `state.js` and CSS loaded as ES
+  modules, with ComfyUI's `api`/`app` stubbed and the family catalog dumped by
+  `tests/layout.py` (so this one needs `python3`). Checks cover the one-surface
+  layout, the piece inspector, kept takes and what an edit or a reshoot
+  releases, Shoot, Enter/Backspace in the script, cutting and blocked joins,
+  the cast and reference inspectors, and dragging a shot's length. Thumbnail
+  and take requests are answered empty by the stub and counted as `media`.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a

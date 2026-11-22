@@ -16,25 +16,36 @@ on Krea 2 feeding start frames into shots on LTX 2.5.
 **Edit timeline** opens the reel: one window for writing, joining, watching and
 reshooting the piece.
 
-- **The script**, on the left. The first paragraph is the **scene**, the
-  standing description every shot is written under (stored as the piece's
-  `prompt`). Each paragraph after it is a shot. Press **Enter** at the end of a
-  shot to start the next one; **Shift+Enter** is a line break inside a shot,
-  and **Backspace** in an empty shot takes it out again. `@` and `/` work in
-  every shot the way they do anywhere else.
-- **The side**, on the right: the selected shot's take, and every setting of
-  whatever is selected. A shot shows its length, mode, seed, motion fix and
-  face, and *References, LoRAs and more…* opens the full shot editor. A join
-  shows everything about that cut in one place.
-- **The reel**, underneath: the piece at its real length. Shots are drawn to
-  scale, so a 3 s shot is half the width of a 6 s one. Drag a shot's right edge
-  to change its length. The circles between shots are the joins: click one to
-  cut the picture there or carry it on. The thread under the shots is the
-  sound, and its own dots switch whether sound carries across. A continuing
-  join with a blend shows the blend as a hatched overlap at its real width;
-  drag its handle to change it.
+- **The header** says how long the piece is and what the next render will do
+  (how many shots it shoots, how many kept takes it plays), and **Shoot**
+  queues it.
+- **The script**, on the left. Above it, the cast and the piece's references
+  as faces and frames; click one to see it, `+` to add someone or a file. Then
+  the **scene**, the standing description every shot is written under (stored
+  as the piece's `prompt`), with its **Sound** and **Score** as two lines under
+  it. Then a paragraph per shot. Press **Enter** at the end of a shot to start
+  the next one; **Shift+Enter** is a line break inside a shot, and
+  **Backspace** in an empty shot takes it out again. The last line, *Write the
+  next shot*, does the same, and *or add a clip you already have* cuts in
+  footage. `@` and `/` work everywhere they do elsewhere.
+- **The side**, on the right: the player, and the inspector for whatever is
+  selected. With nothing selected it shows the piece: model, frame,
+  resolution, look (the piece's LoRAs), storyboards, how much sound a join
+  carries, and the rewrite. A shot shows its take and what the next render
+  does with it, its length, pictures, look, seed, motion fix and face. A join
+  shows everything about that cut. A face or a frame shows who or what it is
+  and which shots use it.
+- **The reel**, underneath: the piece at its real length. Drag a shot's right
+  edge to change its length. The circles between shots are the joins: click
+  one to cut the picture there or carry it on. The thread under the shots is
+  the sound, its dots switch whether sound carries across, and a track you lay
+  down sits on it. A continuing join with a blend shows the blend as a hatched
+  overlap at its real width; drag its handle to change it.
 
-Selecting a shot or a join anywhere selects it in all three.
+Selecting a shot or a join anywhere selects it everywhere. Some tools open as
+their own sheets for now: the LoRA library, the file picker, a cast member's
+full card, and a shot's rarer settings (*More for this shot*). See
+`specs/continuity-reel-deep-tools-spec.md`.
 
 ## Passes
 

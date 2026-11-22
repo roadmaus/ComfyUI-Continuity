@@ -1033,18 +1033,19 @@ try {
   // shot's side, so each shot is selected in turn and its switch read.
   const modal = document.body.children.at(-1);
   const readAll = async () => {
-    const texts = [];
+    const states = [];
     for (let i = 0; i < 2; i += 1) {
       find(modal, "mmc-reel-card")[i].listeners.click[0]();
       await new Promise((done) => setTimeout(done, 0));
-      texts.push(find(modal, "mmc-reel-motion")[0]?.text);
+      const toggle = find(modal, "mmc-reel-motion")[0]?.children?.[0];
+      states.push(toggle ? (toggle.attrs?.["aria-checked"] ?? toggle.getAttribute?.("aria-checked")) === "true" ? "on" : "off" : undefined);
     }
-    return texts;
+    return states;
   };
   const before = await readAll();
   find(modal, "mmc-reel-card")[0].listeners.click[0]();
   await new Promise((done) => setTimeout(done, 0));
-  find(modal, "mmc-reel-motion")[0].listeners.click[0]({ stopPropagation() {} });
+  find(modal, "mmc-reel-motion")[0].children[0].listeners.click[0]({ stopPropagation() {} });
   await new Promise((done) => setTimeout(done, 0));
   out.motionChip = {
     before, after: await readAll(),
@@ -1288,8 +1289,9 @@ try {
   openStrip({ timeline: strip.mmcBody.timeline, onCommit: () => strip.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   const sheet = document.body.children.at(-1);
-  out.loras.onStrip = all(sheet, "mmc-asset-name").map((n) => n.text.trim());
-  click(all(sheet, "mmc-asset-name")[1]);
+  // Nothing selected: the inspector is the piece, and its Look row is the stack.
+  out.loras.onStrip = all(sheet, "mmc-reel-lora").map((n) => n.children[0].text.trim());
+  click(all(sheet, "mmc-reel-lora")[1]);
   out.loras.stripMuted = strip.mmcBody.timeline.loras[1].enabled;
   // The pill over the chips counts what is in the run, so it moves with them.
   out.loras.stripActive = S.activeGlobalLoras(strip.mmcBody.timeline).length;
@@ -2410,9 +2412,13 @@ try {
   openTimelineModal({ timeline, onCommit: () => node.mmcBody.commit() });
   await new Promise((done) => setTimeout(done, 0));
   const modal = document.body.children.at(-1);
-  const shelf = () => findAll(modal, "mmc-tl-pool")[0]?.text ?? "";
+  const textOf = (n) => [n.text ?? "", ...(n.children ?? []).map(textOf)].join(" ");
+  // The reference, selected in the row above the script: its side says where it is used.
+  const frame = () => findAll(modal, "mmc-reel-face").find((n) => String(n.className).includes("frame"));
+  frame().listeners.click[0]();
+  const shelf = () => textOf(findAll(modal, "mmc-reel-inspect")[0] ?? {});
 
-  out.poolShelf = { idle: shelf().includes("cited nowhere yet") };
+  out.poolShelf = { idle: shelf().includes("not written into any shot yet") };
 
   // Open card 1 and write the citation into its box, the way a user does.
   findAll(modal, "mmc-reel-card")[0].listeners.dblclick[0]();
@@ -2422,8 +2428,8 @@ try {
   box.listeners.input.forEach((fn) => fn({ target: box }));
 
   out.poolShelf.wrote = timeline.segments[0].prompt;
-  // The whole bug: this used to still say "cited nowhere yet".
-  out.poolShelf.live = shelf().includes("in segment 1");
+  // The whole bug: this used to still say it was used nowhere.
+  out.poolShelf.live = shelf().includes("in shot 1");
 } catch (error) {
   out.errors.push(`pool shelf: ${error.message}`);
 }
@@ -2454,10 +2460,13 @@ try {
   const { openTimeline: openTimelineModal } = await import("./web/creator/timeline.js");
   openTimelineModal({ timeline: node.mmcBody.timeline, onCommit: () => {} });
   await new Promise((done) => setTimeout(done, 0));
-  const shelf = findAll(document.body.children.at(-1), "mmc-tl-pool")[0]?.text ?? "";
+  const modal = document.body.children.at(-1);
+  const textOf = (n) => [n.text ?? "", ...(n.children ?? []).map(textOf)].join(" ");
+  findAll(modal, "mmc-reel-face").find((n) => String(n.className).includes("frame")).listeners.click[0]();
+  const shelf = textOf(findAll(modal, "mmc-reel-inspect")[0] ?? {});
   out.poolDouble = {
-    says: shelf.includes("attached to segment 1 (@img-2)"),
-    notIdle: !shelf.includes("cited nowhere yet"),
+    says: shelf.includes("shot 1 (@img-2)"),
+    notIdle: !shelf.includes("not written into any shot yet"),
   };
 } catch (error) {
   out.errors.push(`pool double: ${error.message}`);
