@@ -73,7 +73,8 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     S.ensureCardIds(tl); S.syncTimeline(tl);
     S.attachTakes(tl, [1, 2, 3].map((n) => ({ segment: n, filename: `takes/s${n}.mp4`, duration_s: 5, has_audio: true })));
     window.S = S; window.tl = tl; window.queued = 0;
-    T.openTimeline({ timeline: tl, onCommit: () => {}, queue: () => { window.queued++; } });
+    T.openTimeline({ timeline: tl, onCommit: () => {}, queue: () => { window.queued++; },
+      opened: (reel) => { window.reel = reel; } });
     return 'ok';
   });
   assert.equal(opened, 'ok');
@@ -112,9 +113,38 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
            plan: 'Next render shoots 2 shots, plays 1 kept' });
   });
 
-  await check('Shoot queues the node and says so', async () => {
+  await check('Shoot queues the node, and says so once the server has it', async () => {
+    const button = () => page.evaluate(() => [window.queued, document.querySelector('.mmc-reel-shoot').textContent]);
     await page.locator('.mmc-reel-shoot').click();
-    assert.deepEqual(await page.evaluate(() => [window.queued, document.querySelector('.mmc-reel-shoot').textContent]), [1, 'Queued']);
+    assert.deepEqual(await button(), [1, 'Shoot']);
+    await page.evaluate(() => reel.accepted());
+    assert.deepEqual(await button(), [1, 'Queued']);
+  });
+
+  await check('A refused Shoot says why and can be pressed again', async () => {
+    await page.waitForTimeout(2100);
+    await page.locator('.mmc-reel-shoot').click();
+    await page.evaluate(() => reel.refused([{ what: 'Prompt has no outputs' }]));
+    assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-reel-plan').textContent,
+      document.querySelector('.mmc-reel-shoot').textContent, document.querySelector('.mmc-reel-shoot').disabled]),
+      ['Prompt has no outputs', 'Shoot', false]);
+    await page.evaluate(() => { reel.refusal = null; reel.renderHead(); });
+  });
+
+  await check('A take that lands redraws the open window', async () => {
+    const seen = await page.evaluate(() => {
+      const before = document.querySelector('.mmc-reel-plan').textContent;
+      const was = structuredClone(tl.segments.map((s) => ({ hold: s.hold, take: s.take })));
+      S.attachTakes(tl, [1, 2].map((n) => ({ segment: n, filename: `takes/new${n}.mp4`, duration_s: 5, has_audio: true })));
+      reel.landed();
+      const after = document.querySelector('.mmc-reel-plan').textContent;
+      const tags = document.querySelectorAll('.mmc-reel-card-tag').length;
+      tl.segments.forEach((s, i) => { s.take = was[i].take; if (was[i].hold) s.hold = true; else delete s.hold; });
+      reel.landed();
+      return { before, after, tags };
+    });
+    assert.deepEqual(seen, { before: 'Next render shoots 2 shots, plays 1 kept',
+      after: 'Every shot is kept. Change one, or reshoot it, to shoot again.', tags: 0 });
   });
 
   await check('Enter at the end of a shot starts the next one; Backspace in it takes it out', async () => {

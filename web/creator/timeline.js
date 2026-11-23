@@ -182,7 +182,11 @@ function aspectSourceLabel(timeline) {
  * @returns {Promise<void>} resolves when the modal closes
  */
 export function openTimeline(options) {
-  return new Promise((resolve) => new Timeline(options, resolve).mount());
+  return new Promise((resolve) => {
+    const reel = new Timeline(options, resolve);
+    options.opened?.(reel);
+    reel.mount();
+  });
 }
 
 /** A one-line text field that grows to hold what is written in it. */
@@ -324,6 +328,7 @@ class Timeline {
     // A kept take of a card that just changed no longer describes it: back in
     // the next render, with everything that follows from it. See `state.reshoot`.
     S.releaseEdited(this.timeline);
+    this.refusal = null;
     this.onCommit?.();
     this.render();
     // A handle whose asset just left the pool is no longer a chip, and one
@@ -560,6 +565,7 @@ class Timeline {
 
   close() {
     this.resize?.disconnect();
+    clearTimeout(this.shootTimer);
     this.unmount();
     this.resolve();
   }
@@ -616,8 +622,9 @@ class Timeline {
     const { shoot, kept } = S.shootPlan(this.timeline);
     const shots = shoot.reduce((n, k) => n + S.passes(this.timeline)[k].segments.length, 0);
     const problem = S.stripProblem(this.timeline);
-    this.planEl.replaceChildren(...(problem
-      ? [el("span", { class: "mmc-reel-problem", text: problem })]
+    const said = problem || this.refusal;
+    this.planEl.replaceChildren(...(said
+      ? [el("span", { class: "mmc-reel-problem", text: said })]
       : shoot.length
         ? [el("span", { text: t("Next render shoots") + " " }),
            el("b", { text: t(shots === 1 ? "{n} shot" : "{n} shots", { n: shots }) }),
@@ -631,11 +638,42 @@ class Timeline {
   /** Queue the node this window belongs to, the way its own Render does. */
   shoot() {
     if (!this.queue) return;
+    this.refusal = null;
+    this.shooting = true;
+    this.renderHead();
     this.queue();
+  }
+
+  /** The server took the node's prompt: what the press is answered with. */
+  accepted() {
+    if (!this.shooting) return;
+    this.shooting = false;
     this.shootLabel = t("Queued");
     this.renderHead();
     clearTimeout(this.shootTimer);
     this.shootTimer = setTimeout(() => { this.shootLabel = null; this.renderHead(); }, 2000);
+  }
+
+  /** ...or turned it away, and why. Said until the next press or edit. */
+  refused(items) {
+    if (!this.shooting) return;
+    this.shooting = false;
+    this.refusal = items.map((item) => item.what).join(" ");
+    this.renderHead();
+  }
+
+  /** Takes landed on the cards behind this window. A field being typed in on
+   *  the side is left standing; it redraws on its own commit. */
+  landed() {
+    const typing = this.inspectHost?.contains(document.activeElement)
+      && document.activeElement.matches("input, textarea, [contenteditable]");
+    if (!typing) { this.renderStrip(); return; }
+    this.edits = S.editedSince(this.timeline);
+    this.askTakes();
+    this.renderScript();
+    this.renderReel();
+    this.renderPlayer();
+    this.renderHead();
   }
 
   // ---- the cast and references row -----------------------------------------
@@ -2998,7 +3036,16 @@ export class TimelineBody {
     this.takeSequence = 0;
     this.offSubmitted = watchSubmittedPrompts(
       (output) => this.submittedCards(output),
-      (promptId, snapshot) => this.rememberQueued(promptId, snapshot));
+      (promptId, snapshot) => { this.rememberQueued(promptId, snapshot); this.reel?.accepted(); });
+    // The open window, while there is one: it draws the same strip, and only
+    // this body hears what the queue says about it.
+    this.reel = null;
+    this.onRefused = ({ detail }) => {
+      if (detail.items?.some((item) => this.stage.ours(item.nodeId)) || this.stage.claims(detail)) {
+        this.reel?.refused(detail.items ?? []);
+      }
+    };
+    api.addEventListener("mmc_refused", this.onRefused);
     this.stage = new Stage({
       nodeId,
       // A look for the finished render, where the family has the pass.
@@ -3034,6 +3081,7 @@ export class TimelineBody {
   destroy() {
     this.destroyed = true;
     this.offSubmitted?.();
+    api.removeEventListener("mmc_refused", this.onRefused);
     this.stage?.destroy();
     this.laneFit?.disconnect();
     this.dropFaceEditor();
@@ -3089,7 +3137,10 @@ export class TimelineBody {
       this.takeArrivals.set(card, arrival);
       return true;
     });
-    if (S.attachTakes(this.timeline, applicable, snapshot)) this.commit();
+    if (S.attachTakes(this.timeline, applicable, snapshot)) {
+      this.commit();
+      this.reel?.landed();
+    }
     const live = new Set(this.timeline.segments.map((card) => card.card_id));
     for (const card of this.takeArrivals.keys()) {
       if (!live.has(card)) this.takeArrivals.delete(card);
@@ -3405,8 +3456,9 @@ export class TimelineBody {
       edit,
       // Lent so a card's preset can carry the sampler row — see `Timeline.io`.
       io: () => this.widgetIO(),
-      ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId) } : {}),
-    });
+      ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
+      opened: (reel) => { this.reel = reel; },
+    }).then(() => { this.reel = null; });
   }
 
   value(name, fallback) {
