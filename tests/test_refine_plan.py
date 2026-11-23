@@ -130,6 +130,29 @@ check("lone card seconds", [s["seconds"] for s in lone],
       [lone[0]["seconds"]] * 2)
 check("lone card is the sampled length", 5.0 < lone[0]["seconds"] < 5.5, True)
 
+# ---- what a clip shows ------------------------------------------------------
+#
+# The rewrite of the shots beside a clip reads its words. Nothing generated does.
+
+for family in ("h3", "ltx25"):
+    described = strip([False, False, False], family=family)
+    described["segments"][1] = {"kind": "clip", "filename": "f.mp4", "duration_s": 4,
+                                "prompt": "a red kite crashes"}
+    for body in ({"kind": "timeline", "data": described},
+                 {"kind": "segment", "index": 2, "data": described}):
+        planned = routes._plan(body)
+        message = planned[0].user_message(planned[2], footage=planned[7])
+        check(f"{family} {body['kind']}: the clip's words reach the rewrite",
+              "<footage>\na red kite crashes\n</footage>" in message, True)
+        check(f"{family} {body['kind']}: and are no shot's own",
+              any("kite" in shot["text"] for shot in planned[2]), False)
+    check(f"{family}: the video model is told nothing of it",
+          "kite" in repr(compiler.timeline_payloads(described)), False)
+    del described["segments"][1]["prompt"]
+    quiet = routes._plan({"kind": "timeline", "data": described})
+    check(f"{family}: a clip with no words is still named",
+          "4.0 s before shot 2" in quiet[0].user_message(quiet[2], footage=quiet[7]), True)
+
 # ---- the seam belongs to the card that opens the pass -----------------------
 #
 # `continues` says "this shot starts on the previous generation's last frame".

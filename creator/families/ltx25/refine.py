@@ -376,18 +376,7 @@ def user_message(shots, seconds=None, shown=(), mode=None, piece=None, pool=None
             f"{len(shots)} entries in `shots`, in this order."
         )
     if footage:
-        where = ", ".join(
-            (f"{float(cut['seconds']):.1f} s after the last shot"
-             if int(cut["before"]) >= len(shots)
-             else f"{float(cut['seconds']):.1f} s before shot {int(cut['before']) + 1}")
-            for cut in footage)
-        lines.append(
-            f"The piece also cuts to footage that already exists and is played as "
-            f"it is, not generated: {where}. Do not write it and do not return an "
-            f"entry for it. Write the shots around it knowing the cut is there — "
-            f"what it shows is not yours to describe, and a shot on either side of "
-            f"it should not claim continuity through it."
-        )
+        lines += harness.footage_lines(footage, len(shots))
 
     if piece and (piece.get("rewrite") or str(piece.get("text") or "").strip()):
         text = str(piece.get("text") or "").strip()

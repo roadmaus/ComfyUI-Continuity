@@ -40,6 +40,38 @@ import re
 from .. import variations
 
 
+def footage_lines(footage, count):
+    """What the rewriter is told of the supplied clips among `count` shots.
+
+    See `user_message`'s `footage`. A clip its card describes is material for
+    the shots around it; one it does not is only a cut to write around.
+    """
+    def place(cut):
+        at = int(cut["before"])
+        if count == 1:
+            return "after this shot" if at >= count else "before this shot"
+        return "after the last shot" if at >= count else f"before shot {at + 1}"
+
+    where = ", ".join(f"{float(cut['seconds']):.1f} s {place(cut)}" for cut in footage)
+    opening = (
+        f"The piece also cuts to footage that already exists and is played as "
+        f"it is, not generated: {where}. Do not write it and do not return an "
+        f"entry for it. Write the shots around it knowing the cut is there — ")
+    told = [cut for cut in footage if cut.get("text")]
+    if not told:
+        return [opening +
+                "what it shows is not yours to describe, and a shot on either side of "
+                "it should not claim continuity through it."]
+    lines = [opening +
+             "what is known of it is below. Keep its people, place and light where a "
+             "shot shares them, and start a shot that follows it from where it ends. "
+             "Do not tell its action again: it has happened by then. Footage with no "
+             "note is not yours to describe or to claim continuity through."]
+    for cut in told:
+        lines += [f"The footage {place(cut)} shows roughly:", "<footage>", cut["text"], "</footage>"]
+    return lines
+
+
 class RefineError(RuntimeError):
     """The refiner could not produce a usable rewrite."""
 

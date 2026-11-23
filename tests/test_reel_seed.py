@@ -58,6 +58,8 @@ const timeline = S.parseTimeline(JSON.stringify({
 S.attachTakes(timeline, [{ segment: 1, filename: "lighting.mp4", subfolder: "takes",
                          duration_s: 5, seed: 123 }]);
 const initialTake = JSON.stringify(timeline.segments[0].take);
+// The window gives every card its id, which is no change to the clip.
+S.ensureCardIds(timeline);
 const initialClip = JSON.parse(S.serializeTimeline(timeline)).segments[2];
 let pieceSeed = 9001;
 const snapshots = [];

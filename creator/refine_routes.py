@@ -452,15 +452,25 @@ def _plan(body):
 
     # Where the piece cuts to footage, counted in shots rather than in cards:
     # the model is shown the shots and knows nothing about card numbers, so a
-    # clip is placed by how many written shots come before it. Only on a
-    # whole-timeline refine — a single card is shown the others as context and
-    # is not being asked to write around anything.
+    # clip is placed by how many written shots come before it. A
+    # single card is told only of the described clips it touches.
+    # What its card says about it goes along, here and nowhere else: the video
+    # model is handed the clip's frames where a shot continues from it, and
+    # being told its action as well would have it play the action again.
     footage = []
+    if kind == "segment":
+        for index, before in ((wanted[0] - 1, 0), (wanted[0] + 1, 1)):
+            if 0 <= index < len(segments) and compiler.is_clip(segments[index]):
+                text = str(segments[index].get("prompt") or "").strip()
+                if text:
+                    footage.append({"before": before, "text": text,
+                                    "seconds": compiler.clip_spec(segments[index], index)["duration"]})
     if kind == "timeline":
         written = 0
         for index, segment in enumerate(segments):
             if compiler.is_clip(segment):
                 footage.append({"before": written,
+                                "text": str(segment.get("prompt") or "").strip(),
                                 "seconds": compiler.clip_spec(segment, index)["duration"]})
             else:
                 written += 1

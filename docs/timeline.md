@@ -18,7 +18,10 @@ reshooting the piece.
 
 - **The header** says how long the piece is and what the next render will do
   (how many shots it shoots, how many kept takes it plays), and **Shoot**
-  queues it.
+  queues it. With nothing to shoot it reads **Put together**, which renders the
+  kept takes and clips as they are ordered and trimmed now. The two arrows, or
+  **Ctrl+Z** and **Ctrl+Shift+Z**, undo and redo any change made in the window
+  since it was opened; a take that lands stays.
 - **The script**, on the left. Above it, the cast and the piece's references
   as faces and frames; click one to see it, `+` to add someone or a file. Then
   the **scene**, the standing description every shot is written under (stored
@@ -27,7 +30,9 @@ reshooting the piece.
   the next one; **Shift+Enter** is a line break inside a shot, and
   **Backspace** in an empty shot takes it out again. The last line, *Write the
   next shot*, does the same, and *or add a clip you already have* cuts in
-  footage. `@` and `/` work everywhere they do elsewhere.
+  footage. A shot with nothing in it offers the same, so a piece can start with
+  a clip, and the gap above any shot has *Shot here* and *Clip here*. Drag a
+  shot by its number to move it. `@` and `/` work everywhere they do elsewhere.
 - **The side**, on the right: the player, and the inspector for whatever is
   selected. With nothing selected it shows the piece: model, frame,
   resolution, look (the piece's LoRAs), storyboards, how much sound a join
@@ -35,14 +40,32 @@ reshooting the piece.
   does with it, its length, pictures, look, seed, motion fix and face. A join
   shows everything about that cut. A face or a frame shows who or what it is
   and which shots use it.
-- **The reel**, underneath: the piece at its real length. Drag a shot's right
+- **The reel**, underneath: the piece at its real length. Drag a shot or a
+  clip to move it, here or onto the script; Escape puts it back. Drop a video
+  file on it to cut it in there. Drag a shot's right
   edge to change its length. The circles between shots are the joins: click
-  one to cut the picture there or carry it on. The thread under the shots is
-  the sound, its dots switch whether sound carries across, and a track you lay
-  down sits on it. A continuing join with a blend shows the blend as a hatched
-  overlap at its real width; drag its handle to change it.
+  one to see it, and cut or continue it on the side. The thread under the shots
+  is the sound, its dots show whether sound carries across, and a track you lay
+  down sits on it. A continuing join with a blend has a bracket over it with
+  its length, at its real width: blue ticks until both shots have a picture,
+  then the next picture comes in through widening slits. Drag its right edge to
+  change it.
 
-Selecting a shot or a join anywhere selects it everywhere. Some tools open as
+Selecting a shot or a join anywhere selects it everywhere. Click the scene, its
+Sound or Score, or *‹ The piece* on the side to get back to the piece's settings.
+
+**Refine** under a selected shot, or on its side, rewrites that shot alone. Your
+words stay in the script, dimmed, with a line saying the model reads a rewrite;
+the rewrite is on the side to edit, switch off or revert. The other shots, the
+scene, Sound and Score are not touched, so other kept takes stay unless they
+continue from it.
+
+Hover a face, a frame or a shot's picture for its ✕, or press Delete on a face
+or frame. Out of the piece, a member's files go unless something else uses them,
+their name stays in the text as a plain word, and a reference's mentions go with
+it. Out of a shot, the shot's own file goes, while a member or reference of the
+piece is only no longer named there. What the scene brings into every shot is
+taken out of the scene. Some tools open as
 their own sheets for now: the LoRA library, the file picker, a cast member's
 full card, and a shot's rarer settings (*More for this shot*). See
 `specs/continuity-reel-deep-tools-spec.md`.
@@ -339,6 +362,9 @@ A kept take stops being kept when:
   front of it. The shot reads `Changed · reshoots`. Changes to the scene, the
   canvas or anything else every shot is made under change every shot.
 - **You press Reshoot** on the shot's side.
+- **What it was made from changes.** A move, an insert or a removal puts
+  another shot in front of a shot that continues, changes the clip it runs
+  into, or changes which shots share its pass.
 
 Either way, the shots that **follow** it are reshot too: a shot that continues
 from it across a join, or that is shown it on a storyboard sheet, was made from
@@ -361,6 +387,13 @@ A clip you already have can be a card on the strip, not just a reference. It
 has a length, a place in the order and a seam on each side, and it compiles to
 no generation at all: the finished piece simply contains it. Use it for
 footage the piece should include as-is.
+
+A written shot can be given a clip instead: select it and press **Use a clip**.
+Its words stay on the clip and say what it shows; its take and its own
+references and LoRAs go. **Generate it instead** makes the clip a shot again
+from those words. The rewrite reads a clip's words when it writes the shots
+beside it. The video model never does: a shot that continues from a clip is
+given its frames, and being told the action too would make it play it again.
 
 ## While it renders
 

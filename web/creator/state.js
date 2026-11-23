@@ -2438,6 +2438,44 @@ export function releaseEdited(timeline) {
 }
 
 /**
+ * What each generated pass is made from besides its own cards' settings: the
+ * shots sharing it, the passes it reads from, and the clip it runs into.
+ *
+ * -> a Map of the pass's first card id to a string that changes when any of
+ * them does. A card's stamp cannot say this: a seam that names no source means
+ * "whatever is in front", so moving a card changes what it continues from
+ * without changing a word on it.
+ */
+export function arrangement(timeline) {
+  ensureCardIds(timeline);
+  const runs = passes(timeline);
+  const sources = passSources(timeline);
+  const film = (card) => (isClip(card)
+    ? [card.card_id, card.filename, card.trim ?? null, card.crop ?? null] : card.card_id);
+  const out = new Map();
+  runs.forEach((pass, k) => {
+    const head = pass.segments[0];
+    if (isClip(head)) return;
+    const next = runs[k + 1]?.segments[0];
+    const into = next && isClip(next) && (continues(next) || continuesAudio(next)) ? film(next) : null;
+    out.set(head.card_id, JSON.stringify([
+      pass.segments.map((card) => card.card_id),
+      [...sources[k]].sort((a, b) => a - b).map((from) => film(runs[from].segments[0])),
+      into]));
+  });
+  return out;
+}
+
+/** Release every kept pass made from something else than `before` (an earlier
+ *  `arrangement`) says it was, with everything that follows from it. */
+export function releaseRearranged(timeline, before) {
+  for (const [id, made] of arrangement(timeline)) {
+    if (!before.has(id) || before.get(id) === made) continue;
+    reshoot(timeline, timeline.segments.findIndex((card) => card.card_id === id));
+  }
+}
+
+/**
  * What the next render will shoot, for the reel's Shoot button.
  *
  * -> `{ shoot, kept }`: pass indices that will be sampled and pass indices
@@ -2730,6 +2768,12 @@ const segmentWritten = (segment) =>
     || segment.auto_duration
     || (segment.checkpoint && segment.checkpoint !== "auto")
     || faceOverride(segment));
+
+/** A shot with nothing in it to lose: a clip can take its place outright. Its
+ *  length is not counted, since a clip brings its own. */
+export const blankShot = (segment) =>
+  !isClip(segment) && !takeOn(segment)
+  && !segmentWritten({ ...segment, duration_s: DEFAULT_DURATION_S, auto_duration: false });
 
 /** Whether `clearPiece` would change anything. A piece still as it was dropped
  *  has nothing to clear, and the tool says so by being unavailable rather than
@@ -3607,6 +3651,7 @@ export function parseTimeline(raw) {
             hasAudio: true,
           });
           if (raw.sound === false) segment.sound = false;
+          if (typeof raw.prompt === "string" && raw.prompt.trim()) segment.prompt = raw.prompt;
           const start = Number(raw.trim?.start);
           const end = Number(raw.trim?.end);
           if (Number.isFinite(start) && Number.isFinite(end) && end > start) {
@@ -3798,6 +3843,9 @@ export function serializeTimeline(timeline) {
           kind: "clip",
           ...(segment.card_id ? { card_id: segment.card_id } : {}),
           filename: segment.filename,
+          // What it shows, for the rewrite of the shots beside it; nothing is
+          // generated from it.
+          ...((segment.prompt || "").trim() ? { prompt: segment.prompt } : {}),
           duration_s: round2(segment.duration_s),
           ...(segment.width && segment.height
             ? { width: segment.width, height: segment.height } : {}),
@@ -6042,6 +6090,26 @@ export function subjectCitationRe(cast) {
 export const CITING_FIELDS = ["prompt", "soundscape", "music"];
 
 /**
+ * Take `@handle` out of everything `hosts` say: their texts and their rewrites.
+ * A member's mention leaves its plain word behind (`word`), so the sentence
+ * still reads; a file's goes whole. Left written, either refuses the render.
+ */
+export function uncite(hosts, handle, word = "") {
+  const name = String(handle).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const pattern = new RegExp(`${word ? "" : "[ \\t]*"}@${name}(?![\\w-])`, "g");
+  const write = (owner, field) => {
+    if (typeof owner?.[field] !== "string") return;
+    const text = owner[field].replace(pattern, word);
+    if (text !== owner[field]) owner[field] = word ? text : text.replace(/^[ \t]+/, "");
+  };
+  for (const host of hosts) {
+    for (const field of CITING_FIELDS) write(host, field);
+    write(host.refined, "body");
+    for (const key of Object.keys(host.refined?.sections ?? {})) write(host.refined.sections, key);
+  }
+}
+
+/**
  * Rewrite `@from` as `@to` everywhere in `hosts`, in place.
  *
  * What recasting somebody is made of. The prose is where a cast member is
@@ -6696,6 +6764,43 @@ export function remapContinueFrom(timeline, map) {
   const next = map(source.card);
   if (Number.isInteger(next) && next >= 1) source.card = next;
   else delete timeline.aspect_source;
+}
+
+/**
+ * Move the card at `from` to `to`, its index once it is out of the strip.
+ * -> whether anything moved.
+ *
+ * Passes are rebuilt by who is in them rather than by the merge flags, which
+ * only mean something beside the card they were set beside. A shot leaving its
+ * pass generates alone and the rest stay together; a shot put down between two
+ * shots of one pass joins it. A clip never joins.
+ */
+export function moveSegment(timeline, from, to) {
+  const segments = timeline.segments;
+  if (from === to || !segments[from] || to < 0 || to >= segments.length) return false;
+  const was = [...segments];
+  const pass = new Map();
+  passes(timeline).forEach((run, k) => run.segments.forEach((card) => pass.set(card, k)));
+  const [moved] = segments.splice(from, 1);
+  segments.splice(to, 0, moved);
+  const before = pass.get(segments[to - 1]);
+  const after = pass.get(segments[to + 1]);
+  const own = pass.get(moved);
+  if (before !== own && after !== own) {
+    pass.set(moved, before !== undefined && before === after && !isClip(moved) ? before : -1);
+  }
+  segments.forEach((card, index) => {
+    if (index && pass.get(card) === pass.get(segments[index - 1])) card.merge = true;
+    else delete card.merge;
+  });
+  remapContinueFrom(timeline, (n) => segments.indexOf(was[n - 1]) + 1);
+  // A clip that can no longer be run into where it now stands is cut to.
+  segments.forEach((card, index) => {
+    if (!isClip(card)) return;
+    if (continues(card) && clipSeamBlocked(timeline, index, "continue")) card.continue = false;
+    if (continuesAudio(card) && clipSeamBlocked(timeline, index, "continue_audio")) card.continue_audio = false;
+  });
+  return true;
 }
 
 /** ...and one whose sound carries on from it. Not implied by the above. */

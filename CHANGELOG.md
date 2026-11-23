@@ -6,6 +6,32 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The reel refines one shot, takes things out where they are shown, and has a
+way back to the piece.** A shot has refine under its words and its rewrite on its
+side; it leaves the rest of the piece alone. Faces, frames, a shot's pictures,
+cast and LoRAs each have a ✕, and what goes takes its mentions with it. Clicking
+the scene shows the piece's settings.
+
+**A written shot can be given a clip and keep its words, and a clip can say what
+it shows.** Use a clip swaps it in and Generate it instead swaps it back. The
+words go to the rewrite of the shots beside the clip, not to the video model.
+
+**The reel has undo and redo, and a join is only changed on its side.** Ctrl+Z
+or the arrows in the header take back any change since the window opened;
+typing is one step, and a take that lands is not undone. Clicking a join or a
+sound dot selects it and no longer switches it. A blend is drawn as
+ticks under a bracket with its length, and once both shots have pictures the next
+one comes in through widening slits. A piece with nothing to shoot, all clips or all kept
+takes, can be rendered: Shoot reads Put together.
+
+**A timeline can start with a clip, and its shots and clips can be dragged.**
+A blank shot offers a clip in its place, and the gap above any shot takes a
+shot or a clip. Cards are dragged on the reel, or by their number in the
+script, and dropped on either; a video file dropped on the reel lands there as
+a clip. Moving, adding or removing a card now reshoots a kept take that was
+made from something else, instead of playing it; merged shots stay together
+when one is moved out, and a shot dropped between two of them joins.
+
 **A render made of several shots keeps them under it in the gallery.** It has an
 outline and a button that opens its shots in a row below; they are no longer
 tiles beside it. Clicking the render still plays it, and single shots and stills
