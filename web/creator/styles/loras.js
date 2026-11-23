@@ -9,7 +9,7 @@ export const css = `
    is as deep as the user's collection and the browser's own scrolling popup
    handles a hundred entries better than anything built here would. */
 .mmc-folder {
-  flex: none; max-width: calc(260px * var(--mmc-type)); height: calc(40px * var(--mmc-type)); border-radius: 12px;
+  flex: none; max-width: calc(260px * var(--mmc-type)); height: calc(40px * var(--mmc-type)); border-radius: calc(12px * var(--mmc-round));
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); color: var(--mmc-text);
   padding: 0 10px; font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer; outline: none;
 }
@@ -20,7 +20,7 @@ export const css = `
   padding: 18px 0 4px; text-align: center; line-height: 1.5;
 }
 .mmc-lora {
-  display: flex; flex-direction: column; border-radius: 12px; overflow: hidden;
+  display: flex; flex-direction: column; border-radius: calc(12px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-surface); border: 2px solid transparent;
 }
 .mmc-lora[aria-selected="true"] { border-color: var(--mmc-strong); }
@@ -63,7 +63,7 @@ export const css = `
    Pressed is lit the way a chosen trigger chip is — same "on" in the same
    panel — except that what is lit here is the LoRA being *off*. */
 .mmc-lora-mute {
-  margin-left: auto; margin-right: 8px; padding: 1px 7px; border-radius: 8px;
+  margin-left: auto; margin-right: 8px; padding: 1px 7px; border-radius: calc(8px * var(--mmc-round));
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
   font-family: inherit; font-size: calc(10px * var(--mmc-type)); cursor: pointer;
 }
@@ -78,7 +78,7 @@ export const css = `
    any value at all. */
 .mmc-lora-num {
   width: calc(46px * var(--mmc-type)); flex: none; text-align: right;
-  background: none; border: 1px solid transparent; border-radius: 7px;
+  background: none; border: 1px solid transparent; border-radius: calc(7px * var(--mmc-round));
   color: var(--mmc-text); font-family: inherit; font-size: calc(11px * var(--mmc-type));
   font-variant-numeric: tabular-nums; padding: 1px 4px; outline: none;
 }
@@ -100,7 +100,7 @@ export const css = `
    share a range and the difference has to be something you can see and change.
    Same chip as the mute beside it: they are both settings on this one row. */
 .mmc-lora-span {
-  flex: none; margin-right: 6px; padding: 1px 6px; border-radius: 8px;
+  flex: none; margin-right: 6px; padding: 1px 6px; border-radius: calc(8px * var(--mmc-round));
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
   font-family: inherit; font-size: calc(10px * var(--mmc-type));
   font-variant-numeric: tabular-nums; cursor: pointer;
@@ -115,7 +115,7 @@ export const css = `
 .mmc-vers { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; margin-top: 6px; }
 .mmc-ver {
   display: inline-flex; align-items: center; gap: 4px;
-  padding: 2px 7px; border-radius: 8px; max-width: 100%;
+  padding: 2px 7px; border-radius: calc(8px * var(--mmc-round)); max-width: 100%;
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-off);
   font-family: inherit; font-size: calc(10px * var(--mmc-type)); cursor: pointer;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -140,7 +140,7 @@ export const css = `
 .mmc-ver-pin {
   margin-left: auto; flex: none; display: inline-flex; align-items: center; justify-content: center;
   width: calc(20px * var(--mmc-type)); height: calc(20px * var(--mmc-type));
-  padding: 0; border: 0; border-radius: 7px; background: none;
+  padding: 0; border: 0; border-radius: calc(7px * var(--mmc-round)); background: none;
   color: var(--mmc-off); cursor: pointer; visibility: hidden; opacity: .45;
 }
 .mmc-lora:hover .mmc-ver-pin, .mmc-ver-pin:focus-visible, .mmc-ver-pin.on { visibility: visible; }
@@ -148,7 +148,7 @@ export const css = `
 .mmc-ver-pin.on { opacity: 1; color: var(--mmc-accent); }
 .mmc-lora-idle { font-size: calc(10px * var(--mmc-type)); color: var(--mmc-warn); }
 .mmc-seg {
-  display: flex; border: 1px solid var(--mmc-line); border-radius: 9px; overflow: hidden;
+  display: flex; border: 1px solid var(--mmc-line); border-radius: calc(9px * var(--mmc-round)); overflow: hidden;
 }
 .mmc-seg-btn {
   flex: 1; padding: 5px 0; background: none; border: 0; border-right: 1px solid var(--mmc-line);
@@ -164,7 +164,7 @@ export const css = `
 /* Off is an outline, on is filled: a sidecar word you have not taken should not
    look like one you have. */
 .mmc-trig {
-  padding: 2px 8px; border-radius: 8px; cursor: pointer; font-family: inherit;
+  padding: 2px 8px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   font-size: calc(10px * var(--mmc-type)); max-width: 100%; overflow: hidden; text-overflow: ellipsis;
   white-space: nowrap; background: none; border: 1px solid var(--mmc-line);
   color: var(--mmc-off);
@@ -200,7 +200,7 @@ export const css = `
 }
 .mmc-trig-forget:hover { opacity: 1; color: var(--mmc-warn); }
 .mmc-trig-add {
-  height: calc(24px * var(--mmc-type)); border-radius: 8px; background: var(--mmc-float); border: 1px solid var(--mmc-line);
+  height: calc(24px * var(--mmc-type)); border-radius: calc(8px * var(--mmc-round)); background: var(--mmc-float); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); padding: 0 8px; font-size: calc(11px * var(--mmc-type)); font-family: inherit; outline: none;
   width: 100%; box-sizing: border-box;
 }
@@ -249,7 +249,7 @@ export const css = `
 }
 .mmc-stack, .mmc-stack-save {
   display: flex; align-items: center; gap: 14px; padding: 12px 16px;
-  border-radius: 12px; background: var(--mmc-surface); border: 1px solid transparent;
+  border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface); border: 1px solid transparent;
 }
 /* Keeping one is the errand you arrive on this tab with, so it leads and is
    marked off from the shelf below it rather than sitting in the same list. */
@@ -262,7 +262,7 @@ export const css = `
 }
 .mmc-stack-name {
   flex: none; width: calc(200px * var(--mmc-type)); height: calc(36px * var(--mmc-type));
-  border-radius: 10px; background: var(--mmc-float); border: 1px solid var(--mmc-line);
+  border-radius: calc(10px * var(--mmc-round)); background: var(--mmc-float); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); padding: 0 12px; font-size: calc(13px * var(--mmc-type));
   font-family: inherit; outline: none;
 }

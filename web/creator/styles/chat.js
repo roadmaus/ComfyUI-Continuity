@@ -39,7 +39,7 @@ export const css = `
 .mmc-ch-model { display: flex; }
 .mmc-ch-modelpill {
   display: inline-flex; align-items: center; gap: 6px; max-width: 34vw;
-  height: 30px; padding: 0 8px 0 11px; border-radius: 15px;
+  height: 30px; padding: 0 8px 0 11px; border-radius: calc(15px * var(--mmc-round));
   background: none; border: 1px solid transparent; cursor: pointer; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
@@ -71,7 +71,7 @@ export const css = `
 .mmc-ch-msg:hover .mmc-ch-acts, .mmc-ch-acts:focus-within { opacity: 1; }
 .mmc-ch-act {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 24px; height: 18px; border-radius: 5px; border: 0; cursor: pointer;
+  width: 24px; height: 18px; border-radius: calc(5px * var(--mmc-round)); border: 0; cursor: pointer;
   background: none; color: var(--mmc-dim);
 }
 .mmc-ch-act svg { stroke: currentColor; fill: none; stroke-width: 1.8; }
@@ -93,7 +93,7 @@ export const css = `
 }
 .mmc-ch-vstep {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 22px; height: 22px; border-radius: 6px; border: 0; padding: 0;
+  width: 22px; height: 22px; border-radius: calc(6px * var(--mmc-round)); border: 0; padding: 0;
   background: none; color: var(--mmc-dim); cursor: pointer;
 }
 .mmc-ch-vstep svg { transform: rotate(-90deg); stroke: currentColor; fill: none; stroke-width: 2; }
@@ -103,7 +103,7 @@ export const css = `
 .mmc-ch-vcount { min-width: 34px; text-align: center; }
 .mmc-ch-vtakes { display: flex; gap: 4px; margin-left: 4px; }
 .mmc-ch-vtake {
-  width: 26px; height: 26px; padding: 0; border: 0; border-radius: 6px; overflow: hidden;
+  width: 26px; height: 26px; padding: 0; border: 0; border-radius: calc(6px * var(--mmc-round)); overflow: hidden;
   line-height: 0; cursor: pointer; background: var(--mmc-media-bg);
   box-shadow: 0 0 0 1px var(--mmc-line); opacity: .55; transition: opacity .12s ease;
 }
@@ -121,7 +121,7 @@ export const css = `
 .mmc-ch-revised { opacity: .4; }
 .mmc-ch-flip { max-width: 78%; display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
 .mmc-ch-user .mmc-ch-said {
-  padding: 10px 15px; border-radius: 18px 18px 6px 18px;
+  padding: 10px 15px; border-radius: calc(18px * var(--mmc-round)) calc(18px * var(--mmc-round)) calc(6px * var(--mmc-round)) calc(18px * var(--mmc-round));
   background: var(--mmc-surface-2);
 }
 .mmc-ch-bot .mmc-ch-said { max-width: 100%; color: var(--mmc-text); }
@@ -139,7 +139,7 @@ export const css = `
   width: 18px; height: 18px; flex: none; color: var(--mmc-accent);
 }
 .mmc-ch-mark i {
-  display: block; border-radius: 1px; background: currentColor;
+  display: block; border-radius: calc(1px * var(--mmc-round)); background: currentColor;
   opacity: 0; transform: scale(.55);
   transition: opacity 340ms ease, transform 340ms cubic-bezier(.2, .7, .2, 1);
 }
@@ -153,14 +153,14 @@ export const css = `
    knows it by. A button, because the handle is the thing you type next. */
 .mmc-ch-thumbs { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 .mmc-ch-thumb {
-  position: relative; width: 96px; height: 96px; padding: 0; border-radius: 12px;
+  position: relative; width: 96px; height: 96px; padding: 0; border-radius: calc(12px * var(--mmc-round));
   overflow: hidden; cursor: pointer; line-height: 0;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
 }
 .mmc-ch-thumb:hover { border-color: var(--mmc-accent); }
 .mmc-ch-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .mmc-ch-tag {
-  position: absolute; left: 6px; bottom: 6px; padding: 2px 6px; border-radius: 6px;
+  position: absolute; left: 6px; bottom: 6px; padding: 2px 6px; border-radius: calc(6px * var(--mmc-round));
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: calc(10px * var(--mmc-type)); line-height: 1.4;
   color: #fff; background: var(--mmc-scrim-2);
@@ -186,7 +186,7 @@ export const css = `
 .mmc-ch-empty p { margin: 0 0 26px; font-size: calc(14px * var(--mmc-type)); color: var(--mmc-faint); }
 .mmc-ch-tries { width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
 .mmc-ch-try {
-  max-width: 100%; padding: 8px 14px; border-radius: 16px; cursor: pointer; font-family: inherit;
+  max-width: 100%; padding: 8px 14px; border-radius: calc(16px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); text-align: left;
   background: none; border: 1px solid var(--mmc-line-3);
 }
@@ -195,7 +195,7 @@ export const css = `
 /* --- a render, from queued to landed --------------------------------------- */
 .mmc-ch-card {
   width: 100%; max-width: 520px;
-  border: 1px solid var(--mmc-line); border-radius: 16px;
+  border: 1px solid var(--mmc-line); border-radius: calc(16px * var(--mmc-round));
   background: var(--mmc-surface); overflow: hidden;
   display: flex; flex-direction: column;
 }
@@ -303,7 +303,7 @@ export const css = `
 }
 .mmc-ch-handle:hover { color: var(--mmc-accent); }
 .mmc-ch-door {
-  padding: 5px 11px; border-radius: 13px; cursor: pointer; font-family: inherit;
+  padding: 5px 11px; border-radius: calc(13px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   font-size: calc(11.5px * var(--mmc-type));
   background: none; color: var(--mmc-text);
   border: 1px solid var(--mmc-line-3);
@@ -332,7 +332,7 @@ export const css = `
 .mmc-ch-compose {
   width: var(--mmc-ch-column); margin: 0 auto;
   display: flex; flex-direction: column; gap: 4px;
-  padding: 12px 12px 10px; border-radius: 24px;
+  padding: 12px 12px 10px; border-radius: calc(24px * var(--mmc-round));
   background: var(--mmc-surface); border: 1px solid var(--mmc-line-3);
   box-shadow: 0 6px 24px var(--mmc-shadow-soft);
 }
@@ -364,7 +364,7 @@ export const css = `
 /* Director's switch: a tool that says its name, lit while the next message
    is a brief. */
 .mmc-ch-tool.mmc-ch-plan {
-  width: auto; gap: 5px; padding: 0 10px 0 8px; border-radius: 16px;
+  width: auto; gap: 5px; padding: 0 10px 0 8px; border-radius: calc(16px * var(--mmc-round));
   font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
 }
 .mmc-ch-tool.mmc-ch-plan[aria-pressed="true"] {
@@ -394,7 +394,7 @@ export const css = `
 .mmc-ch-pills { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; min-width: 0; }
 .mmc-ch-pill {
   display: inline-flex; align-items: center; gap: 6px; max-width: 22ch;
-  height: 30px; padding: 0 10px; border-radius: 15px; cursor: pointer;
+  height: 30px; padding: 0 10px; border-radius: calc(15px * var(--mmc-round)); cursor: pointer;
   background: none; border: 0; font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
@@ -415,7 +415,7 @@ export const css = `
 .mmc-ch-pins-title { padding: 4px 10px 2px; }
 .mmc-ch-pin.off .mmc-opt-label > span:first-child { color: var(--mmc-dim); text-decoration: line-through; }
 .mmc-ch-switch {
-  flex: none; position: relative; width: 26px; height: 15px; border-radius: 8px;
+  flex: none; position: relative; width: 26px; height: 15px; border-radius: calc(8px * var(--mmc-round));
   background: var(--mmc-surface-3); border: 1px solid var(--mmc-line); margin-left: 12px;
   transition: background .12s;
 }
@@ -431,10 +431,10 @@ export const css = `
 .mmc-ch-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 2px 6px 8px; }
 .mmc-ch-chips[hidden] { display: none; }
 .mmc-ch-chip {
-  position: relative; width: 64px; height: 64px; border-radius: 12px; overflow: visible;
+  position: relative; width: 64px; height: 64px; border-radius: calc(12px * var(--mmc-round)); overflow: visible;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line); line-height: 0;
 }
-.mmc-ch-chip img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: 11px; }
+.mmc-ch-chip img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: calc(11px * var(--mmc-round)); }
 .mmc-ch-unchip {
   position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
@@ -455,7 +455,7 @@ export const css = `
 .mmc-ch-asks, .mmc-ch-askrow { display: flex; flex-wrap: wrap; gap: 6px; }
 .mmc-ch-ask {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 13px; border-radius: 16px; cursor: pointer; font-family: inherit;
+  padding: 7px 13px; border-radius: calc(16px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   font-size: calc(13px * var(--mmc-type)); color: var(--mmc-text);
   background: var(--mmc-float); border: 1px solid var(--mmc-line-3);
 }
@@ -470,14 +470,14 @@ export const css = `
 .mmc-ch-found { width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); }
 .mmc-ch-inline {
   width: 100%; max-width: 520px; padding: 8px 14px 12px;
-  border: 1px solid var(--mmc-line); border-radius: 16px; background: var(--mmc-surface);
+  border: 1px solid var(--mmc-line); border-radius: calc(16px * var(--mmc-round)); background: var(--mmc-surface);
 }
 .mmc-ch-wide { max-width: 100%; }
 .mmc-ch-askhead {
   padding: 8px 0 6px; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
 .mmc-ch-askinput {
-  flex: 1; min-width: 0; max-width: 60%; height: 30px; padding: 0 10px; border-radius: 8px;
+  flex: 1; min-width: 0; max-width: 60%; height: 30px; padding: 0 10px; border-radius: calc(8px * var(--mmc-round));
   font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
   background: var(--mmc-float); border: 1px solid var(--mmc-line-2);
 }
@@ -492,7 +492,7 @@ export const css = `
 .mmc-ch-choices { display: flex; flex-direction: column; gap: 6px; }
 .mmc-ch-choice {
   display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; align-items: start;
-  padding: 10px 12px; border-radius: 12px; cursor: pointer;
+  padding: 10px 12px; border-radius: calc(12px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-float); border: 1px solid var(--mmc-line-2);
 }
 .mmc-ch-choice:hover { border-color: var(--mmc-line-3); }
@@ -572,7 +572,7 @@ export const css = `
    pin's old colour), the accent is this chat (the colour every "on" pill
    already wears), green is this machine's files, and defaults are plain. */
 .mmc-ch-src {
-  display: inline-flex; align-items: center; height: 18px; padding: 0 7px; border-radius: 9px;
+  display: inline-flex; align-items: center; height: 18px; padding: 0 7px; border-radius: calc(9px * var(--mmc-round));
   font-size: calc(11px * var(--mmc-type)); font-weight: 600; white-space: nowrap;
   border: 1px solid var(--mmc-line-2); color: var(--mmc-dim);
 }
@@ -610,7 +610,7 @@ export const css = `
 .mmc-ch-sidehead { padding: 14px 12px 6px; }
 .mmc-ch-new {
   display: flex; align-items: center; gap: 9px; width: 100%; height: 34px; padding: 0 10px;
-  border: 0; border-radius: 9px; background: none; cursor: pointer; font: inherit;
+  border: 0; border-radius: calc(9px * var(--mmc-round)); background: none; cursor: pointer; font: inherit;
   font-size: calc(13px * var(--mmc-type)); color: var(--mmc-text); text-align: left;
 }
 .mmc-ch-new:hover { background: var(--mmc-surface); }
@@ -621,7 +621,7 @@ export const css = `
   padding: 14px 10px 5px; font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint);
 }
 .mmc-ch-siderow {
-  position: relative; display: flex; align-items: center; height: 40px; border-radius: 9px;
+  position: relative; display: flex; align-items: center; height: 40px; border-radius: calc(9px * var(--mmc-round));
 }
 .mmc-ch-siderow:hover, .mmc-ch-siderow.on { background: var(--mmc-surface); }
 .mmc-ch-siderow.on { color: var(--mmc-strong); }
@@ -636,7 +636,7 @@ export const css = `
   font-size: calc(13px * var(--mmc-type)); line-height: 1.3;
 }
 .mmc-ch-cover {
-  position: relative; flex: none; width: 36px; height: 24px; border-radius: 5px; overflow: hidden;
+  position: relative; flex: none; width: 36px; height: 24px; border-radius: calc(5px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-media-bg); line-height: 0;
 }
 .mmc-ch-nocover { background: var(--mmc-line); }
@@ -655,7 +655,7 @@ export const css = `
 .mmc-ch-sideacts.on { display: flex; }
 .mmc-ch-sideact {
   display: inline-flex; align-items: center; justify-content: center; height: 26px; min-width: 26px;
-  padding: 0 6px; border: 0; border-radius: 6px; background: none; cursor: pointer; font: inherit;
+  padding: 0 6px; border: 0; border-radius: calc(6px * var(--mmc-round)); background: none; cursor: pointer; font: inherit;
   font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim);
 }
 .mmc-ch-sideact:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
@@ -664,7 +664,7 @@ export const css = `
 .mmc-ch-sidekeep { color: var(--mmc-text); }
 .mmc-ch-renaming { padding: 0 4px; background: var(--mmc-surface); }
 .mmc-ch-sidebox {
-  width: 100%; height: 30px; padding: 0 8px; border-radius: 6px;
+  width: 100%; height: 30px; padding: 0 8px; border-radius: calc(6px * var(--mmc-round));
   border: 1px solid var(--mmc-accent); background: var(--mmc-ground);
   color: var(--mmc-strong); font: inherit; font-size: calc(13px * var(--mmc-type)); outline: none;
 }
@@ -676,7 +676,7 @@ export const css = `
 /* The bar: the toggle beside the crumb, and the chat's own name after it. */
 .mmc-ch-sidetoggle {
   display: inline-flex; align-items: center; justify-content: center;
-  width: 30px; height: 30px; margin-left: 4px; border-radius: 7px; cursor: pointer;
+  width: 30px; height: 30px; margin-left: 4px; border-radius: calc(7px * var(--mmc-round)); cursor: pointer;
   background: none; border: 0; color: var(--mmc-dim);
 }
 .mmc-ch-sidetoggle:hover, .mmc-ch-sidetoggle[aria-pressed="true"] { color: var(--mmc-text); }
@@ -685,7 +685,7 @@ export const css = `
 .mmc-ch-title { display: inline-flex; align-items: center; gap: 8px; min-width: 0; }
 .mmc-ch-titlebtn {
   max-width: 28vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  padding: 3px 7px; border: 0; border-radius: 6px; background: none; cursor: text;
+  padding: 3px 7px; border: 0; border-radius: calc(6px * var(--mmc-round)); background: none; cursor: text;
   font: inherit; font-size: calc(13px * var(--mmc-type)); color: var(--mmc-text);
 }
 .mmc-ch-titlebtn:hover { background: var(--mmc-surface); }

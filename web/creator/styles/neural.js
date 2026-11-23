@@ -19,7 +19,7 @@ export const css = `
    subject of the panel. */
 .mmc-nr-switch {
   flex: none; position: relative; width: 34px; height: 19px; padding: 0;
-  border-radius: 999px; cursor: pointer; border: 1px solid var(--mmc-line-2);
+  border-radius: var(--mmc-pill-r); cursor: pointer; border: 1px solid var(--mmc-line-2);
   background: var(--mmc-wash); transition: background 140ms ease, border-color 140ms ease;
 }
 .mmc-nr-knob {
@@ -47,10 +47,10 @@ export const css = `
   background: none; cursor: pointer; margin: 0;
 }
 .mmc-nr-range::-webkit-slider-runnable-track {
-  height: 2px; border-radius: 2px; background: var(--mmc-line-2);
+  height: 2px; border-radius: calc(2px * var(--mmc-round)); background: var(--mmc-line-2);
 }
 .mmc-nr-range::-moz-range-track {
-  height: 2px; border-radius: 2px; background: var(--mmc-line-2);
+  height: 2px; border-radius: calc(2px * var(--mmc-round)); background: var(--mmc-line-2);
 }
 .mmc-nr-range::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none; width: 11px; height: 11px;
@@ -82,7 +82,7 @@ export const css = `
 .mmc-nr-row.stacked { flex-direction: column; align-items: stretch; gap: 5px; }
 .mmc-nr-row.stacked .mmc-nr-opts { justify-content: flex-start; }
 .mmc-nr-opt {
-  padding: 4px 9px; border-radius: 8px; cursor: pointer; font-family: inherit;
+  padding: 4px 9px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; border: 1px solid transparent; color: var(--mmc-dim);
   font-size: calc(11.5px * var(--mmc-type));
   transition: color 120ms ease, background 120ms ease;

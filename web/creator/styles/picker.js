@@ -8,7 +8,7 @@ export const css = `
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
 }
 .mmc-modal {
-  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: 22px;
+  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: calc(22px * var(--mmc-round));
   width: min(1100px, 100%); height: min(760px, 100%);
   display: flex; flex-direction: column; color: var(--mmc-text); overflow: hidden;
   box-shadow: 0 30px 80px var(--mmc-shadow);
@@ -28,12 +28,12 @@ export const css = `
 }
 .mmc-modal-bar { display: flex; gap: 12px; padding: 16px 24px; align-items: center; }
 .mmc-search {
-  flex: 1; height: calc(40px * var(--mmc-type)); border-radius: 12px; background: var(--mmc-surface);
+  flex: 1; height: calc(40px * var(--mmc-type)); border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface);
   border: 1px solid var(--mmc-line); color: var(--mmc-text); padding: 0 14px;
   font-size: calc(14px * var(--mmc-type)); font-family: inherit; outline: none;
 }
 .mmc-upload {
-  height: calc(40px * var(--mmc-type)); padding: 0 18px; border-radius: 20px; background: var(--mmc-ink); border: 0;
+  height: calc(40px * var(--mmc-type)); padding: 0 18px; border-radius: calc(20px * var(--mmc-round)); background: var(--mmc-ink); border: 0;
   color: var(--mmc-on-ink); font-size: calc(14px * var(--mmc-type)); font-weight: 500; font-family: inherit; cursor: pointer;
 }
 /* padding-bottom clears the floating Add/Cancel bar, which is positioned over
@@ -57,11 +57,11 @@ export const css = `
 .mmc-pager {
   position: absolute; bottom: 34px; left: 44px;
   display: flex; align-items: center; gap: 4px; padding: 8px 10px;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   box-shadow: 0 12px 32px var(--mmc-shadow-soft);
 }
 .mmc-page {
-  min-width: calc(28px * var(--mmc-type)); height: calc(28px * var(--mmc-type)); padding: 0 6px; border-radius: 8px;
+  min-width: calc(28px * var(--mmc-type)); height: calc(28px * var(--mmc-type)); padding: 0 6px; border-radius: calc(8px * var(--mmc-round));
   background: none; border: 0; color: var(--mmc-dim);
   font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
@@ -78,7 +78,7 @@ export const css = `
 .mmc-cell {
   position: relative; display: block; box-sizing: border-box;
   height: 0; padding: 0 0 100%;
-  border-radius: 12px; overflow: hidden;
+  border-radius: calc(12px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-surface); border: 2px solid transparent; cursor: pointer;
 }
 .mmc-cell[aria-selected="true"] { border-color: var(--mmc-strong); }
@@ -108,7 +108,7 @@ export const css = `
 .mmc-cell-trim {
   position: absolute; top: 8px; left: 8px; display: none;
   align-items: center; gap: 5px; max-width: calc(100% - 44px);
-  padding: 3px 8px 3px 6px; border-radius: 9px; border: 1px solid var(--mmc-line);
+  padding: 3px 8px 3px 6px; border-radius: calc(9px * var(--mmc-round)); border: 1px solid var(--mmc-line);
   background: var(--mmc-scrim-3); color: var(--mmc-text);
   font-size: calc(10px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap; overflow: hidden;
@@ -137,7 +137,7 @@ export const css = `
 .mmc-shelf {
   display: flex; align-items: center; gap: 6px; height: calc(30px * var(--mmc-type)); padding: 0 12px; flex: none;
   max-width: calc(220px * var(--mmc-type));
-  border-radius: 15px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
+  border-radius: calc(15px * var(--mmc-round)); background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   transition: background .12s ease, color .12s ease, transform .12s ease;
 }
@@ -150,7 +150,7 @@ export const css = `
 .mmc-crumbs { display: flex; align-items: center; gap: 1px; flex: 0 1 auto; min-width: 0; max-width: 45%; }
 .mmc-crumb {
   display: block; max-width: calc(130px * var(--mmc-type)); padding: 0 8px; height: calc(28px * var(--mmc-type)); flex: 0 1 auto;
-  border-radius: 8px; background: none; border: 0; color: var(--mmc-dim);
+  border-radius: calc(8px * var(--mmc-round)); background: none; border: 0; color: var(--mmc-dim);
   font-size: calc(12px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
@@ -197,7 +197,7 @@ export const css = `
   color: var(--mmc-strong); background: var(--mmc-bad-solid); border-color: transparent;
 }
 .mmc-shelf-input {
-  height: calc(30px * var(--mmc-type)); width: calc(140px * var(--mmc-type)); border-radius: 15px; background: var(--mmc-surface);
+  height: calc(30px * var(--mmc-type)); width: calc(140px * var(--mmc-type)); border-radius: calc(15px * var(--mmc-round)); background: var(--mmc-surface);
   border: 1px solid var(--mmc-accent); color: var(--mmc-text); padding: 0 12px;
   font-size: calc(12px * var(--mmc-type)); font-family: inherit; outline: none;
 }
@@ -245,7 +245,7 @@ export const css = `
    is mixed together. Sits above the name gradient. */
 .mmc-cell-home {
   position: absolute; left: 6px; bottom: 22px; max-width: calc(100% - 12px);
-  padding: 2px 8px; border-radius: 8px; background: var(--mmc-scrim-2);
+  padding: 2px 8px; border-radius: calc(8px * var(--mmc-round)); background: var(--mmc-scrim-2);
   color: var(--mmc-text); font-size: calc(10px * var(--mmc-type)); pointer-events: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
@@ -255,7 +255,7 @@ export const css = `
    not an action you fire — and lit like a selected shelf while it is on. */
 .mmc-organize, .mmc-reveal {
   display: flex; align-items: center; gap: 7px; height: calc(40px * var(--mmc-type)); padding: 0 16px;
-  border-radius: 20px; background: none; border: 1px solid var(--mmc-line);
+  border-radius: calc(20px * var(--mmc-round)); background: none; border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-size: calc(14px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   white-space: nowrap;
 }
@@ -275,7 +275,7 @@ export const css = `
 .mmc-del:hover { color: var(--mmc-warn); }
 .mmc-del:disabled { color: var(--mmc-off); cursor: not-allowed; }
 .mmc-del.armed {
-  height: 36px; padding: 0 14px; border-radius: 10px;
+  height: 36px; padding: 0 14px; border-radius: calc(10px * var(--mmc-round));
   background: var(--mmc-bad-solid); color: var(--mmc-strong);
 }
 .mmc-del.armed:hover { color: var(--mmc-strong); background: var(--mmc-bad-solid-hover); }
@@ -284,12 +284,12 @@ export const css = `
   position: absolute; right: 44px; bottom: 100px; z-index: 5;
   display: flex; flex-direction: column; gap: 2px;
   min-width: 210px; max-height: 320px; overflow-y: auto; padding: 8px;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 12px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(12px * var(--mmc-round));
   box-shadow: 0 12px 32px var(--mmc-shadow-soft);
 }
 .mmc-move-opt {
   display: flex; align-items: center; gap: 8px; padding: 8px 10px;
-  border-radius: 8px; background: none; border: 0; color: var(--mmc-text);
+  border-radius: calc(8px * var(--mmc-round)); background: none; border: 0; color: var(--mmc-text);
   font-size: calc(13px * var(--mmc-type)); font-family: inherit; cursor: pointer; text-align: left;
 }
 .mmc-move-opt:hover { background: var(--mmc-surface-3); }
@@ -304,7 +304,7 @@ export const css = `
 .mmc-plate-edit {
   width: min(760px, 94vw); max-height: 92vh; overflow: auto;
   display: flex; flex-direction: column; gap: 12px;
-  padding: 18px 20px 16px; border-radius: 12px;
+  padding: 18px 20px 16px; border-radius: calc(12px * var(--mmc-round));
   background: var(--mmc-surface); border: 1px solid var(--mmc-line-3);
   box-shadow: 0 18px 50px rgba(0, 0, 0, .5);
 }
@@ -322,7 +322,7 @@ export const css = `
 .mmc-plate-stage-wrap { display: flex; justify-content: center; }
 .mmc-plate-stage {
   position: relative; width: 100%; overflow: hidden;
-  border: 1px solid var(--mmc-line-3); border-radius: 8px;
+  border: 1px solid var(--mmc-line-3); border-radius: calc(8px * var(--mmc-round));
   touch-action: none;
 }
 .mmc-plate-stage.clicking .mmc-st-panel { cursor: crosshair; }
@@ -336,7 +336,7 @@ export const css = `
   pointer-events: none;
 }
 .mmc-st-no {
-  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: 5px;
+  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: calc(5px * var(--mmc-round));
   background: var(--mmc-scrim-3); color: var(--mmc-strong);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-numeric: tabular-nums;
@@ -347,7 +347,7 @@ export const css = `
    panel only: nine of them at once is a stage of thumbtacks. */
 .mmc-st-grip {
   position: absolute; right: -5px; bottom: -5px; width: 12px; height: 12px;
-  border-radius: 3px; cursor: nwse-resize; display: none;
+  border-radius: calc(3px * var(--mmc-round)); cursor: nwse-resize; display: none;
   background: var(--mmc-blue); border: 1px solid var(--mmc-strong);
 }
 .mmc-st-panel.picked .mmc-st-grip { display: block; }
@@ -396,7 +396,7 @@ export const css = `
   display: flex; align-items: center; gap: 8px; overflow-x: auto; padding-bottom: 4px;
 }
 .mmc-pl-cell {
-  position: relative; flex: none; width: 62px; height: 62px; border-radius: 8px;
+  position: relative; flex: none; width: 62px; height: 62px; border-radius: calc(8px * var(--mmc-round));
   overflow: hidden; border: 1px solid var(--mmc-line-2); background: var(--mmc-surface-2);
 }
 .mmc-pl-cell.cut { border-color: var(--mmc-blue); }
@@ -405,7 +405,7 @@ export const css = `
 /* Which cell of the sheet this is. The number is the citation — panel 3 in the
    caption is this one — so it is set in the same tabular face the caliper is. */
 .mmc-pl-no {
-  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: 5px;
+  position: absolute; top: 2px; left: 3px; padding: 0 4px; border-radius: calc(5px * var(--mmc-round));
   background: var(--mmc-scrim-3); color: var(--mmc-strong);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-numeric: tabular-nums;
@@ -414,7 +414,7 @@ export const css = `
 .mmc-pl-cut {
   position: absolute; bottom: 3px; left: 3px; width: 20px; height: 20px;
   display: flex; align-items: center; justify-content: center; padding: 0;
-  border: 0; border-radius: 6px; cursor: pointer;
+  border: 0; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-scrim-3); color: var(--mmc-faint);
 }
 .mmc-pl-cut svg { width: 12px; height: 12px; }
@@ -423,7 +423,7 @@ export const css = `
 .mmc-pl-x {
   position: absolute; top: 2px; right: 3px; width: 18px; height: 18px;
   display: flex; align-items: center; justify-content: center; padding: 0;
-  border: 0; border-radius: 5px; cursor: pointer;
+  border: 0; border-radius: calc(5px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-scrim-3); color: var(--mmc-faint);
   font-size: calc(10px * var(--mmc-type)); font-family: inherit;
 }
@@ -433,7 +433,7 @@ export const css = `
 /* Paired: this grid cell is a panel of the connected sheet, and the number is
    where it sits — the numbering the sheet editor and the caption share. */
 .mmc-cell-sheet {
-  position: absolute; top: 8px; left: 8px; padding: 0 5px; border-radius: 5px;
+  position: absolute; top: 8px; left: 8px; padding: 0 5px; border-radius: calc(5px * var(--mmc-round));
   background: var(--mmc-blue); color: var(--mmc-strong);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-variant-numeric: tabular-nums;
@@ -458,8 +458,8 @@ export const css = `
   padding: 3px 14px; border: 1px solid var(--mmc-line-3); border-radius: 0;
   font-size: calc(12.5px * var(--mmc-type));
 }
-.mmc-subject-pol .mmc-tool:first-child { border-radius: 7px 0 0 7px; }
-.mmc-subject-pol .mmc-tool:last-child { border-radius: 0 7px 7px 0; margin-left: -1px; }
+.mmc-subject-pol .mmc-tool:first-child { border-radius: calc(7px * var(--mmc-round)) 0 0 calc(7px * var(--mmc-round)); }
+.mmc-subject-pol .mmc-tool:last-child { border-radius: 0 calc(7px * var(--mmc-round)) calc(7px * var(--mmc-round)) 0; margin-left: -1px; }
 .mmc-subject-pol .mmc-tool.on {
   background: var(--mmc-blue); border-color: var(--mmc-blue);
   color: var(--mmc-strong);

@@ -117,7 +117,7 @@ export const css = `
 /* Which half is which. Without them a wipe sat halfway across a low-contrast
    frame is two pictures nobody can name. */
 .mmc-lp-tag {
-  position: absolute; bottom: 8px; padding: 3px 8px; border-radius: 7px;
+  position: absolute; bottom: 8px; padding: 3px 8px; border-radius: calc(7px * var(--mmc-round));
   background: var(--mmc-scrim-3); color: var(--mmc-dim); pointer-events: none;
   font-size: calc(10px * var(--mmc-type)); letter-spacing: .12em; text-transform: uppercase;
   max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -146,7 +146,7 @@ export const css = `
 }
 .mmc-lp-step {
   display: flex; align-items: center; justify-content: center;
-  width: 28px; height: 28px; border-radius: 8px; cursor: pointer;
+  width: 28px; height: 28px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-dim);
   transition: color 120ms ease, border-color 120ms ease;
 }
@@ -157,7 +157,7 @@ export const css = `
   font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-dim);
 }
 .mmc-lp-jump {
-  padding: 5px 11px; border-radius: 8px; cursor: pointer; font-family: inherit;
+  padding: 5px 11px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; border: 1px solid transparent; color: var(--mmc-dim);
   font-size: calc(11.5px * var(--mmc-type));
   transition: color 120ms ease, background 120ms ease;
@@ -168,7 +168,7 @@ export const css = `
    is allowed to be amber — and only once it is on. */
 .mmc-lp-compare {
   display: flex; align-items: center; gap: 7px;
-  padding: 6px 13px; border-radius: 10px; cursor: pointer; font-family: inherit;
+  padding: 6px 13px; border-radius: calc(10px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(12px * var(--mmc-type)); font-weight: 600;
   transition: border-color 120ms ease, color 120ms ease, background 120ms ease;
@@ -205,13 +205,13 @@ export const css = `
    monospace-free readout, indented off the note above it by a rule. */
 .mmc-lp-was {
   font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-text); line-height: 1.5;
-  padding: 9px 11px; border-radius: 9px; background: var(--mmc-wash);
+  padding: 9px 11px; border-radius: calc(9px * var(--mmc-round)); background: var(--mmc-wash);
 }
 
 /* The press that spends a model pass. The only filled button in the room. */
 .mmc-lp-run {
   display: flex; align-items: center; justify-content: center; gap: 8px;
-  padding: 10px 14px; border-radius: 10px; cursor: pointer; font-family: inherit;
+  padding: 10px 14px; border-radius: calc(10px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: var(--mmc-accent); border: none; color: var(--mmc-on-accent);
   font-size: calc(12.5px * var(--mmc-type)); font-weight: 600;
 }
@@ -228,7 +228,7 @@ export const css = `
 .mmc-lp-shelftop { display: flex; align-items: center; justify-content: space-between; }
 .mmc-lp-profiles { display: flex; flex-wrap: wrap; gap: 5px; }
 .mmc-lp-profile {
-  padding: 4px 10px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 4px 10px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   background: var(--mmc-wash); border: 1px solid transparent; color: var(--mmc-text);
   font-size: calc(11.5px * var(--mmc-type));
   transition: border-color 120ms ease, color 120ms ease;
@@ -236,7 +236,7 @@ export const css = `
 .mmc-lp-profile:hover { border-color: var(--mmc-line-2); }
 .mmc-lp-profile.on { color: var(--mmc-accent); border-color: var(--mmc-accent); }
 .mmc-lp-save, .mmc-lp-start {
-  padding: 4px 10px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 4px 10px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   background: none; border: 1px dashed var(--mmc-line-2); color: var(--mmc-dim);
   font-size: calc(11.5px * var(--mmc-type));
   transition: color 120ms ease, border-color 120ms ease;
@@ -244,7 +244,7 @@ export const css = `
 .mmc-lp-save:hover, .mmc-lp-start:hover { color: var(--mmc-text); border-color: var(--mmc-line-3); }
 .mmc-lp-start.on { color: var(--mmc-accent); border-style: solid; border-color: var(--mmc-accent); }
 .mmc-lp-namefield {
-  flex: 1; min-width: 120px; padding: 4px 10px; border-radius: 999px;
+  flex: 1; min-width: 120px; padding: 4px 10px; border-radius: var(--mmc-pill-r);
   background: var(--mmc-bg); border: 1px solid var(--mmc-accent); color: var(--mmc-text);
   font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
 }

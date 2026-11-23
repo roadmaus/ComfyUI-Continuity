@@ -6,6 +6,17 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Slate: a black-and-white look for the fullscreen editor.** *Settings →
+Interface → Colour* has a third choice beside following ComfyUI and the pinned
+dark. Slate keeps a near-black neutral ground, draws the accent in white
+instead of amber, lifts the dim text to a contrast that holds on every
+surface, and squares the corners, so the only colour on screen is in the
+picture. Like the pinned dark it applies while the fullscreen editor is up;
+node faces still follow the palette. To make the corners something a theme
+can turn, every `border-radius` in the stylesheet now goes through two
+tokens, `--mmc-round` and `--mmc-pill-r`, which leave the other two looks
+exactly as they were.
+
 **Refine on Flux 3 Klein keeps the cast's names.** BFL's upsampler cannot
 know that `@anna` is somebody, so it described her and dropped the name, and
 the queued render lost her pictures and her LoRAs with it, since the compile

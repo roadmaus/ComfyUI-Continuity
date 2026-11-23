@@ -1,0 +1,74 @@
+<!doctype html>
+<!-- The page the harness serves: ComfyUI's default dark palette, one Continuity
+     node mounted the way the frontend mounts it. `?theme=light` drops the dark
+     palette; `openFullscreen()` in the console (or from Playwright) opens the
+     fullscreen editor. -->
+<html class="dark-theme">
+<head>
+<meta charset="utf-8">
+<title>Continuity UI harness</title>
+<style>
+  :root { --fg-color:#fff; --bg-color:#202020; --comfy-menu-bg:#353535; --comfy-menu-secondary-bg:#303030;
+    --comfy-input-bg:#222; --input-text:#ddd; --descrip-text:#999; --drag-text:#ccc; --error-text:#ff4444;
+    --border-color:#4e4e4e; --tr-even-bg-color:#222; --tr-odd-bg-color:#353535; --content-bg:#4e4e4e;
+    --content-fg:#fff; --content-hover-bg:#222; --content-hover-fg:#fff; --primary-background:#0b8ce9;
+    --destructive-background:#b91c1c; --destructive-background-hover:#dc2626; }
+  :root.light { --fg-color:#222; --bg-color:#d9d9d9; --comfy-menu-bg:#f5f5f5; --comfy-menu-secondary-bg:#ededed;
+    --comfy-input-bg:#c9c9c9; --input-text:#222; --descrip-text:#444; --drag-text:#555; --error-text:#f44336;
+    --border-color:#888; --tr-even-bg-color:#f9f9f9; --tr-odd-bg-color:#fff; --content-bg:#e0e0e0;
+    --content-fg:#222; --content-hover-bg:#adadad; --content-hover-fg:#222; }
+  html, body { margin:0; height:100%; background:var(--bg-color); color:var(--input-text); font-family:Inter,system-ui,sans-serif; }
+  #graph { position:relative; padding:40px; }
+  .node { background:var(--comfy-menu-bg); border-radius:8px; position:relative; }
+</style>
+</head>
+<body>
+<div id="graph"></div>
+<script type="module">
+import { app } from "/scripts/app.js";
+
+if (new URLSearchParams(location.search).get("theme") === "light") {
+  document.documentElement.classList.remove("dark-theme");
+  document.documentElement.classList.add("light");
+}
+
+await import("/extensions/continuity/creator.js");
+const extension = app.extensions.find((e) => e.name === "continuity");
+
+const widget = (name, value, type = "number") => ({ name, value, type, options: {} });
+
+function makeNode(comfyClass, blob, id) {
+  const node = {
+    id, comfyClass, title: "Continuity", properties: {}, pos: [600, 100], size: [620, 520], graph: app.graph,
+    widgets: [widget(blob, "", "customtext"), widget("seed", 1), widget("control_after_generate", "fixed", "combo"),
+      widget("steps", 20), widget("cfg", 1), widget("sampler_name", "euler", "combo"),
+      widget("scheduler", "simple", "combo"), widget("shift_video", 5), widget("shift_audio", 5)],
+    addDOMWidget(name, type, element) {
+      const box = document.createElement("div");
+      box.className = "node";
+      box.style.cssText = `width:${this.size[0]}px;min-height:${this.size[1]}px`;
+      box.append(element);
+      document.getElementById("graph").append(box);
+      return { name, element };
+    },
+    setDirtyCanvas() {},
+    setSize(size) { this.size = size; },
+  };
+  app.graph._nodes.push(node);
+  return node;
+}
+
+const node = makeNode("MiniMaxH3Creator", "creator_data", 1);
+await extension.setup?.();
+await extension.nodeCreated(node);
+
+globalThis.node = node;
+globalThis.openFullscreen = async () => {
+  const { openFullscreen } = await import("/extensions/continuity/creator/fullscreen.js");
+  openFullscreen(node);
+};
+// What a driver waits on before touching the page.
+globalThis.harnessReady = true;
+</script>
+</body>
+</html>
