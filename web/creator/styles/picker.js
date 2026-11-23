@@ -81,6 +81,8 @@ export const css = `
   border-radius: 12px; overflow: hidden;
   background: var(--mmc-surface); border: 2px solid transparent; cursor: pointer;
 }
+.mmc-cell.piece { outline: 1px solid var(--mmc-accent); outline-offset: -1px; }
+.mmc-cell.piece[aria-selected="true"], .mmc-cell.piece:focus-visible { outline: none; }
 .mmc-cell[aria-selected="true"] { border-color: var(--mmc-strong); }
 .mmc-cell:focus-visible { outline: none; border-color: var(--mmc-edge-2); }
 .mmc-cell img, .mmc-cell video, .mmc-cell-fallback {
@@ -248,6 +250,24 @@ export const css = `
   padding: 2px 8px; border-radius: 8px; background: var(--mmc-scrim-2);
   color: var(--mmc-text); font-size: calc(10px * var(--mmc-type)); pointer-events: none;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* A render made of several shots: the button that opens them, and the row of
+   the grid they open into. */
+.mmc-cell-shots {
+  position: absolute; right: 6px; bottom: 6px; display: flex; align-items: center; gap: 5px;
+  height: calc(28px * var(--mmc-type)); padding: 0 9px; border: 0; border-radius: 9px;
+  background: var(--mmc-scrim-3); color: var(--mmc-accent); cursor: pointer;
+  font-size: calc(11px * var(--mmc-type)); font-family: inherit; font-weight: 600;
+}
+.mmc-cell-shots[aria-expanded="true"] { background: var(--mmc-accent); color: var(--mmc-bg); }
+.mmc-cell-shots[aria-expanded="true"] svg { transform: rotate(180deg); }
+.mmc-cell.piece .mmc-cell-name { padding-right: calc(86px * var(--mmc-type)); }
+.mmc-cell.piece .mmc-cell-home { bottom: calc(38px * var(--mmc-type)); }
+.mmc-shots {
+  grid-column: 1 / -1; display: grid; gap: 14px; padding: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  border: 1px solid var(--mmc-accent); border-radius: 14px; background: var(--mmc-surface);
 }
 
 /* --- organize mode --------------------------------------------------------- */

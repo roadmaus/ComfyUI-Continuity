@@ -362,6 +362,41 @@
     }
   },
   "30": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "shot": [
+        "13",
+        1
+      ]
+    }
+  },
+  "31": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "before": [
+        "30",
+        0
+      ],
+      "shot": [
+        "20",
+        1
+      ]
+    }
+  },
+  "32": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "before": [
+        "31",
+        0
+      ],
+      "shot": [
+        "29",
+        1
+      ]
+    }
+  },
+  "33": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
@@ -369,6 +404,10 @@
       "fps": 24.0,
       "reel": [
         "28",
+        0
+      ],
+      "shots": [
+        "32",
         0
       ],
       "takes": ""

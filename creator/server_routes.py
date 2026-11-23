@@ -34,7 +34,7 @@ import folder_paths
 from server import PromptServer
 
 from . import (assets, compile as compiler, crop as framing, latents, lift, lorameta, media,
-               models, refmod, preview, settings, vdn)
+               models, refmod, preview, renders, settings, vdn)
 from .guard import same_origin
 from .screens import spec as screen_spec
 
@@ -542,6 +542,8 @@ async def list_assets(request):
     # on a network share, and the event loop is also the prompt queue.
     loop = asyncio.get_running_loop()
     found, folders = await loop.run_in_executor(None, assets.scan, root, annotation)
+    if annotation:
+        await loop.run_in_executor(None, renders.annotate, root, found, annotation)
     found.sort(key=lambda a: a["mtime"], reverse=True)
     truncated = len(found) > MAX_ASSETS
     # Not capped with the files. `MAX_ASSETS` is there so a folder of ten
@@ -610,6 +612,8 @@ async def move_asset(request):
     os.makedirs(target_dir, exist_ok=True)
     os.rename(source, target)
     relative = os.path.relpath(target, root).replace(os.sep, "/")
+    if annotation:
+        renders.moved(os.path.relpath(source, root).replace(os.sep, "/"), relative)
     # Annotated on the way back out, so the moved file is still addressable as
     # the same kind of thing it was: an attached render has to keep saying
     # `[output]` or `media.resolve` would look for it under input/.
@@ -636,11 +640,13 @@ async def delete_asset(request):
     if rooted is None:
         return web.json_response({"error": "that file is not in a folder the picker browses"},
                                  status=400)
-    root, filename, _ = rooted
+    root, filename, annotation = rooted
     path = os.path.realpath(os.path.join(root, filename))
     if not folder_paths.is_within_directory(root, path) or not os.path.isfile(path):
         return web.json_response({"error": "no such file"}, status=404)
     os.remove(path)
+    if annotation:
+        renders.removed(os.path.relpath(path, root).replace(os.sep, "/"))
     return web.json_response({"ok": True})
 
 

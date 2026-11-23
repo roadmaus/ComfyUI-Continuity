@@ -56,7 +56,7 @@ import logging
 from comfy_api.latest import io
 
 from . import (compile as compiler, guide, keystone, lora, media, mux,
-               outputs, settings, spill)
+               outputs, settings, spill, renders)
 
 def announce(unique_id, progress):
     """Broadcast which segment is being built, keyed to the emitting node.
@@ -950,7 +950,10 @@ class ContinuityTake(io.ComfyNode):
             ],
             # Never wired to anything: `core.emit.expanded` exports it so the
             # node that expanded this graph waits for the file (#97).
-            outputs=[io.Boolean.Output("done")],
+            # `file` is the take under output/, for the render's own list of
+            # its shots: a cached take replays it, so a shot that was not made
+            # again is still named.
+            outputs=[io.Boolean.Output("done"), io.String.Output("file")],
         )
 
     @classmethod
@@ -969,9 +972,34 @@ class ContinuityTake(io.ComfyNode):
         except Exception as exc:      # noqa: BLE001 - see the docstring
             logging.warning("MiniMax: could not write the take for segment "
                             "%s: %s", card, exc)
-            return io.NodeOutput(True, ui={})
-        return io.NodeOutput(True, ui={"mmc_takes": [reported_take(
+            return io.NodeOutput(True, "", ui={})
+        return io.NodeOutput(True, f"{subfolder}/{filename}" if subfolder else filename, ui={"mmc_takes": [reported_take(
             {"pass": source}, int(card), filename, subfolder, fps, int(seed))]})
+
+
+class ContinuityShots(io.ComfyNode):
+    """One more shot on the list a render keeps of its own. See `renders.py`.
+
+    A list built a link at a time rather than takes chained to each other: a
+    take that depended on the one before it would be written again whenever
+    that one was.
+    """
+
+    @classmethod
+    def define_schema(cls):
+        return io.Schema(
+            node_id="ContinuityShots",
+            display_name="Continuity Shots",
+            category="Continuity/internal",
+            is_dev_only=True,
+            inputs=[io.String.Input("shot", default=""),
+                    io.String.Input("before", default="", optional=True)],
+            outputs=[io.String.Output("shots")],
+        )
+
+    @classmethod
+    def execute(cls, shot, before="") -> io.NodeOutput:
+        return io.NodeOutput("\n".join(part for part in (before, shot) if part))
 
 
 class MiniMaxH3Save(io.ComfyNode):
@@ -1018,6 +1046,9 @@ class MiniMaxH3Save(io.ComfyNode):
                 # Which card each part of the reel is and what seed it ran on,
                 # or empty on a render with nothing to keep. See `_takes`.
                 io.String.Input("takes", default="", optional=True),
+                # The files its passes were written to, one a line, where they
+                # wrote their own. See `ContinuityShots`.
+                io.String.Input("shots", default="", optional=True),
             ],
             # Never wired to anything: `core.emit.expanded` exports it so the
             # node that expanded this graph waits for the file (#97).
@@ -1027,7 +1058,7 @@ class MiniMaxH3Save(io.ComfyNode):
 
     @classmethod
     def execute(cls, reel, fps, filename_prefix,
-                crf=settings.DEFAULT_CRF, takes="") -> io.NodeOutput:
+                crf=settings.DEFAULT_CRF, takes="", shots="") -> io.NodeOutput:
         import os
 
         import folder_paths
@@ -1069,6 +1100,11 @@ class MiniMaxH3Save(io.ComfyNode):
                           piece=(filename, subfolder))
         if kept:
             report["mmc_takes"] = kept
+        made = shots.split("\n") if shots else [
+            f"{take['subfolder']}/{take['filename']}" if take["subfolder"] else take["filename"]
+            for take in kept]
+        if len(made) > 1:
+            renders.record(f"{subfolder}/{filename}" if subfolder else filename, made)
         return io.NodeOutput(True, ui=report)
 
     @classmethod
@@ -1162,4 +1198,4 @@ NODES = [ContinuityStoryboard, MiniMaxH3Reel,
          ContinuityKeystoneLock, ContinuityKeystoneAttention, ContinuityKeystoneRestore,
          ContinuityKeystoneRaySample,
          ContinuityGuideFrames,
-         ContinuityTake, MiniMaxH3Save]
+         ContinuityTake, ContinuityShots, MiniMaxH3Save]

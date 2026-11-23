@@ -128,6 +128,7 @@ export class Picker {
     this.page = 0;
     this.visibleCount = PAGE_SIZE;
     this.cells = new Map();
+    this.openPiece = null;   // the render whose shots are open under its row
 
     // ---- the sheet ---------------------------------------------------------
     //
@@ -179,6 +180,11 @@ export class Picker {
 
   mount() {
     this.grid = el("div", { class: "mmc-grid" });
+    // The shots row sits under a line of cells, and a resize moves the lines.
+    if (typeof ResizeObserver !== "undefined") {
+      this.resize = new ResizeObserver(() => { if (this.shotsRow) this.renderShots(); });
+      this.resize.observe(this.grid);
+    }
     this.search = el("input", {
       class: "mmc-search",
       type: "search",
@@ -909,9 +915,13 @@ export class Picker {
       // clips and stills, and nothing else in the input folder.
       : this.kind === "guides" ? isGuide
       : (asset) => asset.kind === this.kind;
-    return this.activeAssets().filter((asset) =>
+    const rows = this.activeAssets().filter((asset) =>
       onKind(asset) && onShelf(asset)
       && (!this.query || asset.path.toLowerCase().includes(this.query)));
+    // A shot's working file is shown under the render it went into, wherever
+    // that render is in the same listing; on its own shelf it is a row.
+    const under = new Set(rows.flatMap((asset) => asset.shots ?? []));
+    return under.size ? rows.filter((asset) => !(asset.take && under.has(asset.path))) : rows;
   }
 
   /** The slot a selection will actually take. A video kept for its soundtrack
@@ -1059,6 +1069,7 @@ export class Picker {
       this.cells.set(asset.path, cell);
       this.grid.appendChild(cell);
     }
+    this.renderShots();
     if (to >= this.gridRows.length) {
       // The very end of the listing: if the server capped it, this is the one
       // place a browsing user can be told the folder holds more.
@@ -1083,11 +1094,48 @@ export class Picker {
     this.observer.observe(sentinel);
   }
 
+  /** The open render's shots, as a row of ordinary cells across the grid, under
+   *  the line of cells the render sits on. */
+  renderShots() {
+    this.shotsRow?.remove();
+    this.shotsRow = null;
+    const piece = this.gridRows.find((asset) => asset.path === this.openPiece);
+    const home = piece && this.cells.get(piece.path);
+    if (!home?.parentNode) return;
+    const files = new Map(this.activeAssets().map((asset) => [asset.path, asset]));
+    const shots = piece.shots.map((path) => files.get(path)).filter(Boolean);
+    this.shotsRow = el("div", { class: "mmc-shots" }, shots.map((asset, index) => {
+      const cell = this.cell(asset);
+      cell.querySelector(".mmc-cell-home")?.remove();
+      cell.querySelector(".mmc-cell-shots")?.remove();
+      cell.querySelector(".mmc-cell-name")?.replaceChildren(t("Shot {n}", { n: index + 1 }));
+      if (!this.gridRows.some((row) => row.path === asset.path)) this.cells.set(asset.path, cell);
+      return cell;
+    }));
+    let last = home;
+    while (last.nextElementSibling?.classList.contains("mmc-cell")
+           && last.nextElementSibling.offsetTop === home.offsetTop) last = last.nextElementSibling;
+    last.after(this.shotsRow);
+  }
+
+  toggleShots(asset) {
+    const was = this.gridRows.find((row) => row.path === this.openPiece);
+    this.openPiece = this.openPiece === asset.path ? null : asset.path;
+    // The closing row's cells go with it, all but a file that is also a row.
+    for (const path of was?.shots ?? []) {
+      if (!this.gridRows.some((row) => row.path === path)) this.cells.delete(path);
+    }
+    for (const row of new Set([was, asset])) if (row) this.refreshCell(row);
+    this.renderShots();
+    if (this.openPiece) this.shotsRow?.scrollIntoView({ block: "nearest" });
+  }
+
   /** Rebuild one cell in place — for a change that lives inside it, like its
    *  star or segment badge. Cells not yet materialised have nothing to show. */
   refreshCell(asset) {
     const old = this.cells.get(asset.path);
     if (!old) return;
+    if (this.shotsRow?.contains(old)) { this.renderShots(); return; }
     const fresh = this.cell(asset);
     this.cells.set(asset.path, fresh);
     old.replaceWith(fresh);
@@ -1220,6 +1268,16 @@ export class Picker {
       if (asset.kind !== "audio") cell.appendChild(this.cropBadge(asset));
     }
     if (asset.kind !== "audio") cell.appendChild(el("div", { class: "mmc-cell-name", text: asset.name }));
+    if (asset.shots) {
+      const open = this.openPiece === asset.path;
+      cell.classList.add("piece");
+      cell.appendChild(el("button", {
+        class: "mmc-cell-shots", "aria-expanded": String(open),
+        title: open ? t("Close its shots") : t("Show its shots"),
+        onclick: (event) => { event.stopPropagation(); this.toggleShots(asset); },
+        onkeydown: (event) => event.stopPropagation(),
+      }, [el("span", { text: t("{count} shots", { count: asset.shots.length }) }), icon("chevron", 12)]));
+    }
 
     // Stars and dragging on every tab, renders included: a finished clip is the
     // thing most worth starring, and where a render was *written* is not where
@@ -2306,6 +2364,7 @@ export class Picker {
       if (held.url) URL.revokeObjectURL(held.url);
     }
     this.cutUrls.clear();
+    this.resize?.disconnect();
     this.observer?.disconnect();
     this.unmount();
     this.resolve(result);

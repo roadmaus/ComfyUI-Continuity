@@ -6,6 +6,13 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A render made of several shots keeps them under it in the gallery.** It has an
+outline and a button that opens its shots in a row below; they are no longer
+tiles beside it. Clicking the render still plays it, and single shots and stills
+are as they were. A render records its shots as it is written; older ones are
+matched once, by when their shots were written and by their lengths, and a shot
+that matches none stays a tile.
+
 **Every shot of a new piece runs on a seed of its own.** The piece's inspector
 has the seed pill and its mark, and a choice of one seed per shot or the same
 for all of them. Per shot counts up from the piece's seed, so the first shot is

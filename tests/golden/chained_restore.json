@@ -312,6 +312,47 @@
     }
   },
   "28": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "shot": [
+        "10",
+        1
+      ]
+    }
+  },
+  "29": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "before": [
+        "28",
+        0
+      ],
+      "shot": [
+        "21",
+        1
+      ]
+    }
+  },
+  "3": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "h3/video_vae.safetensors"
+    }
+  },
+  "30": {
+    "class_type": "ContinuityShots",
+    "inputs": {
+      "before": [
+        "29",
+        0
+      ],
+      "shot": [
+        "27",
+        1
+      ]
+    }
+  },
+  "31": {
     "class_type": "MiniMaxH3Save",
     "inputs": {
       "crf": 23,
@@ -321,13 +362,11 @@
         "26",
         0
       ],
+      "shots": [
+        "30",
+        0
+      ],
       "takes": ""
-    }
-  },
-  "3": {
-    "class_type": "VAELoader",
-    "inputs": {
-      "vae_name": "h3/video_vae.safetensors"
     }
   },
   "4": {

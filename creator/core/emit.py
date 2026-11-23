@@ -71,6 +71,7 @@ CLIP_FRAMES_NODE = "MiniMaxH3ClipFrames"
 CLIP_AUDIO_NODE = "MiniMaxH3ClipAudio"
 SAVE_NODE = "MiniMaxH3Save"
 TAKE_NODE = "ContinuityTake"
+SHOTS_NODE = "ContinuityShots"
 STORYBOARD_NODE = "ContinuityStoryboard"
 IMAGE_SAVE_NODE = "MiniMaxH3SaveImage"
 
@@ -382,6 +383,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         return sampling.seed if seed is None else int(seed)
 
     graph = GraphBuilder()
+    shots = []              # every shot's file: a kept take's, or its take node's
     links = family.emit_loaders(graph, weights, set(where))
     reel = None             # the reel link holding every pass emitted so far
     decoded = []            # every payload as (kind, what to read it back from,
@@ -412,6 +414,10 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
             reel = graph.node(CLIP_NODE, **clip_inputs).out(0)
             decoded.append(("clip", spec, None))
             roots.append(None)
+            # A kept take is a shot of this render; footage out of input/ is
+            # not a file the gallery's output grid could show.
+            if per_pass_takes and str(spec.get("filename", "")).endswith(" [output]"):
+                shots.append(spec["filename"][:-len(" [output]")])
             continue
 
         # The seams, wired here because they are the loop's own bookkeeping —
@@ -626,6 +632,7 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                               crf=settings.video_crf(),
                               card=int(cards[index]), seed=seed_for(index))
             take.set_override_display_id(unique_id)
+            shots.append(take.out(1))
 
     # The re-detail pass, on the finished reel. After the loop and not inside it,
     # which is the opposite of where the face pass goes and for the same reason
@@ -691,11 +698,11 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
                         "seeds": [seed_for(index) for index in range(len(payloads))]},
                        sort_keys=True) if cards and not per_pass_takes else ""
     emit_tail(graph, reel, unique_id, filename_prefix, takes,
-              fps=float(family.rules.fps))
+              fps=float(family.rules.fps), shots=shots if len(shots) > 1 else ())
     return graph
 
 
-def emit_tail(graph, reel, unique_id, filename_prefix, takes, fps):
+def emit_tail(graph, reel, unique_id, filename_prefix, takes, fps, shots=()):
     """Write the reel to a file, and report it against `unique_id`.
 
     An AV family generates picture and sound together and they should leave
@@ -726,9 +733,13 @@ def emit_tail(graph, reel, unique_id, filename_prefix, takes, fps):
     input for the same reason the quality target is one, so that keeping a take
     and re-queueing writes the files again instead of hitting the cache.
     """
+    listed = {}
+    for shot in shots:
+        listed = {"before": graph.node(SHOTS_NODE, shot=shot, **listed).out(0)}
     save = graph.node(SAVE_NODE, reel=reel,
                       fps=float(fps), filename_prefix=filename_prefix,
-                      crf=settings.video_crf(), takes=takes)
+                      crf=settings.video_crf(), takes=takes,
+                      **({"shots": listed["before"]} if listed else {}))
     save.set_override_display_id(unique_id)
     return save
 
