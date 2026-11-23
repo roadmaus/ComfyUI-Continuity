@@ -126,6 +126,24 @@ fire(shared.modal.querySelectorAll(".mmc-reel-card")[1], "click");
 out.sharedShown = shared.inspectHost.querySelector(".mmc-reel-seed").value;
 fire(shared.inspectHost.querySelector(".mmc-reel-seed"), "change", "404");
 out.shared = { seeds: sharedTimeline.segments.map(S.segmentSeed), passes: S.passes(sharedTimeline).length };
+
+// One seed per shot: the piece's counted up, a shot's own standing, a merged
+// shot on its pass's. The piece's side holds the pill and the choice.
+const many = (extra) => S.parseTimeline(JSON.stringify({ version: 2, ...extra, segments: [
+  { prompt: "a", duration_s: 3 }, { prompt: "b", duration_s: 3, continue: true },
+  { prompt: "c", duration_s: 3, seed: 5 }, { prompt: "d", duration_s: 3, merge: true }, { prompt: "e", duration_s: 3 }] }));
+const seedsOf = (piece) => piece.segments.map((_, i) => S.shotSeed(piece, i, 100));
+const each = many({ seeds: "each" });
+out.each = seedsOf(each);
+out.same = seedsOf(many({}));
+out.kept = [JSON.parse(S.serializeTimeline(each)).seeds, "seeds" in JSON.parse(S.serializeTimeline(many({}))),
+            S.emptyTimeline().seeds];
+const pieceSide = new Timeline({ timeline: each, widgets: { seed: {} },
+  io: () => ({ value: (name, fallback) => name === "seed" ? 100 : fallback, set() {} }), onCommit: () => {} }, () => {});
+pieceSide.mount();
+await settle();
+out.pill = [pieceSide.inspectHost.querySelectorAll(".mmc-seed-pill").length,
+            pieceSide.inspectHost.querySelectorAll(".mmc-seed-mark").length];
 console.log(JSON.stringify(out));
 '''
 
@@ -149,6 +167,20 @@ check("an imported clip has no seed", got["clipInputs"], 0)
 check("seed actions leave the imported clip unchanged", got["clipUnchanged"], True)
 check("the shot's editor does not repeat the seed control", got["editorSeedCount"], 0)
 check("the generic editor still writes a seed when asked to", got["generic"], {"seed": 99, "commits": 1})
+check("one per shot counts up from the piece's seed, by pass", got["each"], [100, 101, 5, 5, 104])
+check("a piece without the choice keeps one seed", got["same"], [100, 100, 5, 5, 100])
+check("...which is what saves say; a new piece has one per shot", got["kept"], ["each", False, "each"])
+check("the piece's side has the seed pill and its mark", got["pill"], [1, 1])
+compiler = layout.load("compile").compile
+five = [{"prompt": p} for p in "abcde"]
+five[2]["seed"], five[3]["merge"] = 5, True
+check("the compiler agrees on every pass",
+      [compiler.shot_seed({"seeds": "each", "segments": five}, five[i], i, 100) or 100 for i in (0, 1, 2, 4)],
+      [100, 101, 5, 104])
+check("a part render seeds a shot by its place on the strip",
+      compiler.shot_seed({"seeds": "each", "segments": five}, {"prompt": "e", "card_no": 5}, 1, 100), 104)
+check("no choice leaves the piece's seed to the node",
+      compiler.shot_seed({"segments": five}, five[1], 1, 100), None)
 check("a shot in a shared pass shows its own seed", got["sharedShown"], "202")
 check("...and setting it leaves the pass whole", got["shared"],
       {"seeds": [101, 404], "passes": 1})

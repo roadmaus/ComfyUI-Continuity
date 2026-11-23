@@ -6,6 +6,11 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Every shot of a new piece runs on a seed of its own.** The piece's inspector
+has the seed pill and its mark, and a choice of one seed per shot or the same
+for all of them. Per shot counts up from the piece's seed, so the first shot is
+unchanged; a piece saved before the choice renders as it did.
+
 **The timeline opens as the reel: the script, the take and the piece at its
 real length, in one window. Takes are kept by default.** The window is one
 surface. The header says how long the piece is and what the next render will

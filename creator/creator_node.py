@@ -66,6 +66,8 @@ from .families.krea2 import edit as krea2edit
 
 DEFAULT_DATA = json.dumps({
     "version": 2,
+    # Every shot on noise of its own; see `compile.shot_seed`.
+    "seeds": "each",
     # The standing description every segment inherits. Empty on a fresh node,
     # and on a piece of one shot there is nothing for it to stand over — the
     # writing happens on the card.
@@ -119,7 +121,7 @@ def _schema(node_id, display_name, blob, deprecated=False):
             # see that module for why that is better than five wires.
             io.String.Input(blob, multiline=True, default=DEFAULT_DATA),
             io.Int.Input("seed", default=0, min=0, max=0xffffffffffffffff, control_after_generate=True,
-                tooltip="The seed for the whole piece: every segment, chained or single, and every refine and face pass inside them, runs on this number. What separates consecutive shots is their prompts and their seams, not their noise."),
+                tooltip="The seed for the whole piece: every segment, chained or single, and every refine and face pass inside them, runs on this number, or on one counted up from it where the piece gives every shot its own."),
             io.Int.Input("steps", default=20, min=1, max=10000),
             # The released H3 checkpoints are CFG-distilled, so guidance is
             # already in the weights and 1.0 is the value they were trained
@@ -325,7 +327,7 @@ def _render(blob, seed, steps, cfg, sampler_name, scheduler,
         # with one seed, and it is the one card the strip would send you to.
         cards=[int(segments[start].get("card_no") or start + 1)
                for start, _ in runs],
-        seeds=[compiler.segment_seed(segments[start], start) for start, _ in runs],
+        seeds=[compiler.shot_seed(piece, segments[start], start, sampler.seed) for start, _ in runs],
         # See `core.emit.emit`: a card shot by itself is one payload and is still
         # one card of a piece, so the take it makes is worth keeping and the
         # number it announces is worth saying.

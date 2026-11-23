@@ -2244,6 +2244,18 @@ export function segmentSeed(segment) {
   return Number.isInteger(seed) && seed >= 0 ? seed : null;
 }
 
+/** The seed the card at `index` has from the piece: the piece's, or that plus
+ *  its pass's place where every shot has one of its own. */
+export function inheritedSeed(timeline, index, piece) {
+  return timeline.seeds === "each" ? piece + passOf(timeline, index).start : piece;
+}
+
+/** The seed the card at `index` samples on: its pass's own, or the inherited
+ *  one. Mirrors `compile.shot_seed`. */
+export function shotSeed(timeline, index, piece) {
+  return segmentSeed(passOf(timeline, index).segments[0]) ?? inheritedSeed(timeline, index, piece);
+}
+
 /**
  * The takes a finished render reported, onto the cards that made them.
  *
@@ -2590,6 +2602,9 @@ export function emptyTimeline() {
     // How the segments become video. Chained by default: it is the mode with no
     // length limit, and it is what every timeline saved before this existed was.
     render: "chained",
+    // Every shot on noise of its own; absent is one seed for all of them, which
+    // is every piece saved before there was a choice. See `compile.shot_seed`.
+    seeds: "each",
     prompt: "",
     // The two Context-IR audio fields, global because a soundscape and a score
     // belong to the piece rather than to one shot. See contextir.py.
@@ -3528,6 +3543,7 @@ export function parseTimeline(raw) {
       // which is what `compile.piece_family` will do with them anyway.
       timeline.family = pieceFamily(timeline);
       if (!RENDER_MODES.includes(timeline.render)) timeline.render = "chained";
+      if (parsed.seeds !== "each") delete timeline.seeds;
       // The piece form is "pill" or {card?, handle?}. A bare handle is a
       // hand-written blob's shorthand for the first card's asset (a lone
       // generation, usually), read as such; anything else is dropped and
@@ -3717,6 +3733,7 @@ export function serializeTimeline(timeline) {
     // and `aspect_source` follow, and the one `compile.piece_family` reads.
     ...(pieceFamily(timeline) !== DEFAULT_VIDEO_FAMILY ? { family: timeline.family } : {}),
     render: timeline.render === "single" ? "single" : "chained",
+    ...(timeline.seeds === "each" ? { seeds: "each" } : {}),
     prompt: timeline.prompt ?? "",
     // Absent means the field is not emitted at all, which is not the same as
     // "N/A" — see contextir.compose — so an empty box writes nothing.

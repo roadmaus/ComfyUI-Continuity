@@ -30,7 +30,7 @@ import { openPicture, editPicture, asPick, cropLabel } from "./picture.js";
 import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill, neuralPill, guideLoraPill,
          resolutionPillText } from "./pills.js";
 import { refine, refineButton, chosenModel as refineModel } from "./refine.js";
-import { adopted, blobIO, samplingBar } from "./sampling.js";
+import { adopted, blobIO, samplingBar, seedMark, seedPill } from "./sampling.js";
 import { Stage, stageSource } from "./stage.js";
 import { watchSubmittedPrompts, submittedPrompt, queueNode } from "./queue.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights, rememberedWeights } from "./models.js";
@@ -262,7 +262,7 @@ async function compiledFor(timeline, card, seed) {
 }
 
 class Timeline {
-  constructor({ timeline, onCommit, edit = null, io = null, queue = null }, resolve) {
+  constructor({ timeline, onCommit, edit = null, io = null, widgets = null, queue = null }, resolve) {
     this.timeline = timeline;
     // Queue the node this window belongs to: the header's Shoot. Absent where
     // nothing lent it, and then there is no button.
@@ -274,6 +274,7 @@ class Timeline {
     // not to one shot — so this is lent by the body that opened the strip. Absent
     // where nothing lent it, and then a speed section simply writes nowhere.
     this.io = io ?? (() => ({ value: (_name, fallback) => fallback, set: () => {} }));
+    this.widgets = widgets ?? {};
     // A card to open a window on as soon as the strip is up. Set when the strip
     // was opened *by* growing a shot into it: the new card is where the writing
     // is going, so it opens ready rather than waiting to be found.
@@ -2060,6 +2061,14 @@ class Timeline {
           el("small", { text: entry.enabled === false ? t("off") : String(entry.strength ?? 1) })])),
       el("button", { class: "mmc-reel-link", text: loras.length ? t("Edit") : t("Add a LoRA"), onclick: () => this.openLoras() }),
     ])));
+    const io = this.io();
+    rows.push(this.irow(t("Seed"), el("div", { class: "mmc-reel-inline" }, [
+      ...seedPill({ widgets: this.widgets, ...io, set: (name, v) => { io.set(name, v); this.renderSide(); } }),
+      this.segmented([["each", t("One per shot")], [null, t("Same for every shot")]], this.timeline.seeds ?? null,
+        (next) => { if (next) this.timeline.seeds = next; else delete this.timeline.seeds; this.commit(); }),
+    ]), this.timeline.seeds
+      ? t("The first shot runs on this seed and each later one counts up from it.")
+      : t("Every shot starts from the same noise, so a continued shot can fall back to the one before.")));
     if (S.canDo(this.timeline, "storyboard") && passes.length > 1) {
       const policy = S.storyboardPolicy(this.timeline);
       rows.push(this.irow(t("Storyboards"), this.segmented(
@@ -2157,7 +2166,7 @@ class Timeline {
     const own = S.segmentSeed(segment);
     const seedInput = el("input", {
       class: "mmc-reel-seed", inputmode: "numeric", spellcheck: "false",
-      placeholder: t("piece seed, {n}", { n: this.pieceSeed() }),
+      placeholder: t("piece seed, {n}", { n: S.inheritedSeed(this.timeline, index, this.pieceSeed()) }),
       title: take?.seed != null ? t("Its take was made on {n}.", { n: take.seed }) : "",
       onchange: (event) => {
         const raw = String(event.target.value).trim();
@@ -2193,6 +2202,7 @@ class Timeline {
         el("button", { class: "mmc-reel-link", text: t("Add a LoRA"), onclick: () => this.edit(index) }),
       ])),
       this.irow(t("Seed"), el("div", { class: "mmc-reel-inline" }, [
+        seedMark(S.shotSeed(this.timeline, index, this.pieceSeed())),
         seedInput,
         el("button", { class: "mmc-reel-link mmc-reel-seed-new", text: t("New seed"),
           onclick: () => { segment.seed = Math.floor(Math.random() * 2147483647); this.commit(); } }),
@@ -3456,6 +3466,7 @@ export class TimelineBody {
       edit,
       // Lent so a card's preset can carry the sampler row — see `Timeline.io`.
       io: () => this.widgetIO(),
+      widgets: this.widgets,
       ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
       opened: (reel) => { this.reel = reel; },
     }).then(() => { this.reel = null; });

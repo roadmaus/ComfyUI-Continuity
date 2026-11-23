@@ -2332,6 +2332,24 @@ def segment_seed(segment, index):
     return seed
 
 
+def shot_seed(data, segment, index, seed):
+    """The seed the pass headed by this card samples on, or None for the piece's.
+
+    The card's own where it has one. Otherwise, on a piece whose `seeds` is
+    "each", the piece's plus the card's place on the strip: the first shot keeps
+    the piece's number and every later one starts from noise of its own. Shared
+    noise is what lets a chained turbo shot redraw the ending of the one before.
+
+    `card_no` where the render holds cards back, so a shot's seed is the same
+    whether the strip is rendered whole or in part.
+    """
+    own = segment_seed(segment, index)
+    place = int(segment.get("card_no") or index + 1) - 1
+    if own is not None or not place or as_piece(data).get("seeds") != "each":
+        return own
+    return (int(seed) + place) & 0xffffffffffffffff
+
+
 def rendered_piece(data):
     """The piece as the next render will make it: holds resolved, takes spliced.
 

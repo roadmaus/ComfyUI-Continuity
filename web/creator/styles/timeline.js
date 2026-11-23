@@ -962,6 +962,7 @@ export const css = `
 .mmc-reel-irow { display: grid; grid-template-columns: 136px minmax(0, 1fr); align-items: center; gap: 12px; min-height: 34px; }
 .mmc-reel-ilabel { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
 .mmc-reel-icontrol { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.mmc-reel .mmc-seed-pill, .mmc-reel .mmc-seed-ghost { display: flex; }
 .mmc-reel-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 .mmc-reel-note { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.45; }
 .mmc-reel-mono { font-variant-numeric: tabular-nums; color: var(--mmc-text); }

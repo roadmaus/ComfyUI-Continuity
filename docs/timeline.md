@@ -57,6 +57,15 @@ over a pass of several shots, and the cut inside it has **Split into two
 passes here**. A piece merged end to end is one pass, which is what one-pass
 mode always was.
 
+## Seeds
+
+With nothing selected, the side has the piece's **Seed**: roll it, type one,
+or keep it, and choose **One per shot** or **Same for every shot**. One per
+shot, the default on a new piece, counts up from the piece's seed, the first
+shot keeping it. A shot given a seed of its own always runs on that. Pieces
+saved before the choice keep one seed for every shot. On a chained turbo piece
+that can make a shot fall back to the ending of the one before.
+
 ## Seams
 
 A seam can continue from any earlier segment's last frame, at
