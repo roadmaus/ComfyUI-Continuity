@@ -2181,8 +2181,7 @@ export function clipSegment({ filename, duration, width, height, hasAudio }) {
     filename,
     duration_s: Number(duration) || 0,
     ...(width && height ? { width, height } : {}),
-    // Not serialized — a fact about the file, re-read when it is re-attached,
-    // and only ever used to grey out a control the file cannot honour.
+    // Serialized only when false: a seam out of it has no sound to carry.
     has_audio: hasAudio !== false,
     // The seam in front of a clip runs backwards: the shot before it ends on
     // this clip's opening frame. Off on a new card, unlike a new shot's seam,
@@ -3393,6 +3392,8 @@ function syncCanvas(timeline) {
       segment.continue_audio = false;
       delete segment.feather;
     }
+    // Nor does one that plays no sound have any to carry forwards.
+    if (silentSource(timeline, index)) segment.continue_audio = false;
     // A clip with no soundtrack has none to carry backwards across the seam.
     if (isClip(segment) && segment.has_audio === false) segment.continue_audio = false;
     // A storyboard naming a card at or past this one is a leftover from
@@ -3648,7 +3649,7 @@ export function parseTimeline(raw) {
             // Unknown until the file is probed again. Assumed present so a
             // stored sound seam is not silently dropped on load; the card
             // re-probes and corrects it.
-            hasAudio: true,
+            hasAudio: raw.has_audio !== false,
           });
           if (raw.sound === false) segment.sound = false;
           if (typeof raw.prompt === "string" && raw.prompt.trim()) segment.prompt = raw.prompt;
@@ -3855,6 +3856,7 @@ export function serializeTimeline(timeline) {
           // Only the deliberate choice is written: sound on is what a clip
           // comes with, so an absent key reads as it always would.
           ...(clipSound(segment) ? {} : { sound: false }),
+          ...(segment.has_audio === false ? { has_audio: false } : {}),
           // The seam in front of it, which acts on the card behind it. Same
           // keys as any other seam, and never on the first card — there is
           // nothing in front of it to run into this one.
@@ -6736,6 +6738,14 @@ export function maxFeather(segment, piece) {
 export function continueSource(segment, index) {
   const from = segment.continue_from;
   return Number.isInteger(from) && from >= 1 && from < index ? from : index;
+}
+
+/** Whether the shot at `index` continues from a clip that plays no sound. */
+export function silentSource(timeline, index) {
+  const segment = timeline.segments[index];
+  if (!index || isClip(segment)) return false;
+  const source = timeline.segments[continueSource(segment, index) - 1];
+  return isClip(source) && (source.has_audio === false || !clipSound(source));
 }
 
 /** Rewrite every seam source through `map` (1-based number in the old order ->

@@ -19,7 +19,10 @@ reshooting the piece.
 - **The header** says how long the piece is and what the next render will do
   (how many shots it shoots, how many kept takes it plays), and **Shoot**
   queues it. With nothing to shoot it reads **Put together**, which renders the
-  kept takes and clips as they are ordered and trimmed now. The two arrows, or
+  kept takes and clips as they are ordered and trimmed now. While a render
+  runs it says which shot is being made and how far it is, with **Cancel**, and
+  the player shows the preview; select a shot to watch its take instead, and
+  click the header's line to go back. A failed render's reason is shown there too. The two arrows, or
   **Ctrl+Z** and **Ctrl+Shift+Z**, undo and redo any change made in the window
   since it was opened; a take that lands stays.
 - **The script**, on the left. Above it, the cast and the piece's references

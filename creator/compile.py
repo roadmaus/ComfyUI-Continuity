@@ -3331,6 +3331,13 @@ def timeline_payloads(data, image_size_lookup=None):
         # an ordinary thing to want, and so is a match cut that resets the
         # sound. Two switches on the seam rather than one with three states.
         payload["continue_audio"] = live and bool(head.get("continue_audio"))
+        # A clip that plays no sound has none to carry over, so the shot after
+        # it starts its own. Whether a file has any is the UI's probe to say.
+        if payload["continue_audio"]:
+            source = _continue_source(head.get("continue_from"), start)
+            donor = segments[start - 1 if source is None else source]
+            if is_clip(donor) and (donor.get("sound") is False or donor.get("has_audio") is False):
+                payload["continue_audio"] = False
 
         # Which earlier segment the seam inherits from — 1-based in the segment
         # data because that is the number on the card, a payload index here

@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The reel shows the render.** The player has the live preview, with the shot,
+the step and the time; the shot is marked on the reel and in the script, and the
+header says what is happening with a Cancel beside it. Loading and waiting are
+said too, and the finished piece plays when it lands.
+
+**The reel says why a render failed.** The node's own failure card is shown in
+the player, and the header leads back to it.
+
+**A clip with no sound no longer fails the shot after it.** A shot continuing
+from a silent clip, or a file without an audio stream, starts its own sound.
+
+**Small fixes from walking through the reel.** Someone new opens a new member's
+card. A file uploaded in the picker is selected, and the upload button names the
+shelf it lands on. The header counts clips apart from shots, the player shows a
+clip when nothing is shot, "shot again" is only said of shots with a take, and a
+card's words stop before the next blend.
+
 **The reel refines one shot, takes things out where they are shown, and has a
 way back to the piece.** A shot has refine under its words and its rewrite on its
 side; it leaves the rest of the piece alone. Faces, frames, a shot's pictures,

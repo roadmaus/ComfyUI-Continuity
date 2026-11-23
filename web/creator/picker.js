@@ -413,7 +413,9 @@ export class Picker {
     // A mod is imported rather than uploaded: it is a file made elsewhere,
     // and it lands in the model folder, not the input folder.
     if (this.kind === "refmods") return t("+  Import RefMod");
-    return t("+  Upload {kind}", { kind: t(KIND_LABEL[this.kind].toLowerCase()) });
+    const kind = t(KIND_LABEL[this.kind].toLowerCase());
+    // On a shelf it lands there, so the button says where.
+    return this.here() ? t("+  Upload {kind} to {shelf}", { kind, shelf: this.here() }) : t("+  Upload {kind}", { kind });
   }
 
   /** Take the rows an upload just produced into the input listing, newest
@@ -423,6 +425,12 @@ export class Picker {
     this.assets = [...added, ...this.assets.filter((a) => !added.some((b) => b.path === a.path))];
     this.renderShelves();
     this.renderGrid();
+    // Uploaded here is picked here, as far as there is room for it.
+    if (!this.organize) {
+      for (const asset of added) {
+        if (asset.kind === this.kind && !this.selected.some((a) => a.path === asset.path)) this.toggle(asset);
+      }
+    }
   }
 
   /** Which root the tab is browsing, as the server names it. */
@@ -523,6 +531,9 @@ export class Picker {
       return;
     }
     this.shelfRow.style.display = "";
+    if (!this.uploadButton.disabled && this.kind !== "renders" && this.kind !== "meshes") {
+      this.uploadButton.textContent = this.uploadLabel();
+    }
     // The renders tab is not a kind, so it counts everything the output folder
     // holds; an input tab counts only its own kind, because that is the slice
     // its grid is showing.

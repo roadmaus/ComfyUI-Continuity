@@ -532,6 +532,107 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.evaluate(async () => { (await import('/scripts/api.js')).api.fetchApi = window.realFetch; });
   });
 
+  await check('The header counts clips apart, and a piece with one shows it', async () => {
+    await reset(['one', 'two'], "tl.segments[0] = S.clipSegment({ filename: 'c.mp4', duration: 5, hasAudio: true });");
+    assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-reel-meta').textContent.replace(/^[^,]*, /, ''),
+      document.querySelector('.mmc-reel-plabel').textContent]), ['1 shot, 1 clip', 'Clip 1']);
+  });
+
+  await check('Shot again is only said of what has been shot', async () => {
+    await reset(['one', 'two', 'three']);
+    await page.locator('.mmc-reel-card').first().click();
+    assert.equal(await page.locator('.mmc-reel-why').first().textContent(), 'The next render shoots it.');
+  });
+
+  await check('A card\'s words end before the blend after it', async () => {
+    await reset(['a long line of words that runs on and on to the far end of its card and past it', 'two']);
+    assert.ok(await page.evaluate(() => document.querySelector('.mmc-reel-card-text').getBoundingClientRect().right
+      <= document.querySelector('.mmc-reel-blend').getBoundingClientRect().left));
+  });
+
+  await check('Someone new is a new member, named at once', async () => {
+    await reset(['one']);
+    await page.evaluate(() => { tl.subjects = []; reel.render(); });
+    await page.locator('.mmc-reel-face-add').click();
+    await page.locator('.mmc-pop').getByText('Someone new').click();
+    assert.deepEqual(await page.evaluate(() => [tl.subjects.length, document.activeElement.className]), [1, 'mmc-cast-name']);
+    await page.locator('.mmc-overlay').last().locator('.mmc-close').click();
+  });
+
+  await check('A failed render says in the reel what the node says, until something is selected', async () => {
+    await reset(['one', 'two']);
+    const seen = await page.evaluate(async () => {
+      const { Stage } = await import('/ext/web/creator/stage.js');
+      const stage = new Stage({ nodeId: () => 1 });
+      reel.stage = stage;
+      stage.onChange = () => reel.staged();
+      reel.shooting = true;
+      stage.fail([{ where: 'Clip', what: 'No audio stream found in the file.' }], { started: true });
+      const same = stage.media.querySelector('.mmc-stage-slate').textContent === document.querySelector('.mmc-reel-player').textContent;
+      const head = document.querySelector('.mmc-reel-plan').textContent;
+      reel.select({ kind: 'shot', index: 0 });
+      const away = document.querySelector('.mmc-reel-player .mmc-stage-slate');
+      document.querySelector('.mmc-reel-plan button').click();
+      const back = document.querySelector('.mmc-reel-player .mmc-stage-slate').textContent;
+      stage.clearRender(); stage.render();
+      const after = [document.querySelector('.mmc-reel-plan').textContent, document.querySelector('.mmc-reel-player .mmc-stage-slate')];
+      reel.stage = null;
+      return { same, head, away, back, after };
+    });
+    assert.deepEqual(seen, { same: true, head: 'The render failed.', away: null,
+      back: 'The render failed.ClipNo audio stream found in the file.', after: ['Next render shoots 2 shots', null] });
+  });
+
+  await check('A render is shown as it runs: queued, loading, sampling, landed', async () => {
+    await reset(['one', 'two', 'three'], "tl.segments[2].continue = tl.segments[2].continue_audio = false; tl.segments[2].take = { filename: 'c.mp4 [output]', duration_s: 5 }; tl.segments[2].hold = true;");
+    const seen = await page.evaluate(async () => {
+      const { Stage } = await import('/ext/web/creator/stage.js');
+      const stage = new Stage({ nodeId: () => 1 });
+      reel.stage = stage;
+      stage.onChange = () => reel.staged();
+      let run = null;
+      reel.run = () => run;
+      const cards = tl.segments.map((s) => s.card_id);
+      const head = () => document.querySelector('.mmc-reel-plan').textContent.replace(/ · \d+:\d\d$/, '');
+      const out = [];
+      run = { id: 'p', state: 'queued', cards }; reel.staged(); out.push(head());
+      run.state = 'running'; stage.handle('execution_start', { prompt_id: 'p' }); reel.staged(); out.push(head());
+      stage.handle('mmc_segment', { node: '1.0.0.5', index: 2 }); out.push(head());
+      stage.handle('progress_state', { prompt_id: 'p', nodes: { a: { parent_node_id: '1', state: 'running', value: 3, max: 20 } } }); out.push(head());
+      const button = document.querySelector('.mmc-reel-live-said');
+      stage.handle('mmc_preview', { node_id: '1.0.0.6', prompt_id: 'p', step: 4, total: 20, image: 'aGk=', mime: 'image/png' });
+      out.push(head(), document.querySelector('.mmc-reel-player img').src, button === document.querySelector('.mmc-reel-live-said'));
+      out.push(document.querySelectorAll('.mmc-reel-shot .mmc-reel-tag')[1].textContent,
+        document.querySelector('.mmc-reel-progress').style.getPropertyValue('--done'),
+        document.querySelector('.mmc-reel-head .mmc-reel-btn').hidden);
+      reel.select({ kind: 'shot', index: 2 }); out.push(document.querySelector('.mmc-reel-plabel').textContent);
+      reel.select({ kind: 'shot', index: 0 }); out.push(Boolean(document.querySelector('.mmc-reel-live-media')));
+      reel.select({ kind: 'shot', index: 2 }); button.click(); out.push(Boolean(document.querySelector('.mmc-reel-live-media')));
+      run = null;
+      stage.handle('executed', { display_node: '1', prompt_id: 'p', output: { mmc_video: [{ filename: 'f.mp4', subfolder: '', type: 'output' }] } });
+      out.push(document.querySelector('.mmc-reel-plabel').textContent, document.querySelector('.mmc-reel-progress'),
+        document.querySelector('.mmc-reel-head .mmc-reel-btn').hidden, document.querySelector('.mmc-reel-plan').textContent);
+      stage.destroy(); reel.stage = null; reel.run = () => null; reel.renderStrip();
+      return out;
+    });
+    assert.deepEqual(seen, ['Waiting in the queue', 'Getting ready', 'Getting shot 2 ready', 'Shooting shot 2 · 3 / 20',
+      'Shooting shot 2 · 4 / 20', 'data:image/png;base64,aGk=', true, 'Shooting, 4 / 20', '0.2', false,
+      'Shot 3', true, true, 'The last render', null, true, 'Next render shoots 2 shots, plays 1 kept']);
+  });
+
+  await check('A clip that plays no sound hands none to the shot after it, saved or not', async () => {
+    await reset(['one', 'two'], "tl.segments[0] = S.clipSegment({ filename: 'c.mp4', duration: 5, hasAudio: false });");
+    const silent = await page.evaluate(() => [tl.segments[1].continue, tl.segments[1].continue_audio,
+      S.parseTimeline(S.serializeTimeline(tl)).segments[0].has_audio]);
+    await reset(['one', 'two'], "tl.segments[0] = S.clipSegment({ filename: 'c.mp4', duration: 5, hasAudio: true });");
+    const plays = await page.evaluate(() => tl.segments[1].continue_audio);
+    await page.locator('.mmc-reel-card').first().click();
+    await page.locator('.mmc-reel-inspect').getByText('Silent').click();
+    assert.deepEqual([silent, plays, await page.evaluate(() => tl.segments[1].continue_audio)], [[true, false, false], true, false]);
+    await page.locator('.mmc-reel-join').first().click();
+    assert.ok(await page.locator('.mmc-reel-seg.voice button').first().isDisabled());
+  });
+
   if (process.env.SHOT) {
     await reset(['', 'He wades in.', 'Close on the skull.']);
     const target = await page.locator('.mmc-reel-card').nth(2).boundingBox();

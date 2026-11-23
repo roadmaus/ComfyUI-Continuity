@@ -838,7 +838,7 @@ export const css = `
 .mmc-snd-snap.on { opacity: .9; }
 
 @media (prefers-reduced-motion: reduce) {
-  .mmc-reel-blend::after, .mmc-snd-block, .mmc-snd-grip, .mmc-snd-shot { transition: none; }
+  .mmc-reel-live-rule, .mmc-reel-progress::after, .mmc-reel-blend::after, .mmc-snd-block, .mmc-snd-grip, .mmc-snd-shot { transition: none; }
 }
 
 /* --- the reel ----------------------------------------------------------------
@@ -976,6 +976,24 @@ export const css = `
 .mmc-reel-chip-x { border: 0; padding: 0 2px; background: none; color: var(--mmc-dim); cursor: pointer; font: inherit; font-size: calc(10px * var(--mmc-type)); }
 .mmc-reel-chip-x:hover { color: var(--mmc-bad); }
 .mmc-reel-stood-in .mmc-prompt { opacity: .6; }
+.mmc-reel-player .mmc-stage-slate { height: 100%; box-sizing: border-box; padding: 22px; background: var(--mmc-media-bg); }
+.mmc-reel-live-media { position: absolute; inset: 0; }
+.mmc-reel-live-media .mmc-reel-media { object-fit: contain; }
+.mmc-reel-live-said { font-variant-numeric: tabular-nums; color: var(--mmc-accent); }
+.mmc-reel-live-rule {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--mmc-accent); transform-origin: left; transition: transform .2s;
+}
+.mmc-reel-progress {
+  position: absolute; top: 0; height: 84px; box-sizing: border-box; z-index: 5; pointer-events: none; border-radius: 8px;
+  border: 2px solid var(--mmc-accent); overflow: hidden;
+}
+.mmc-reel-progress::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--mmc-accent);
+  transform: scaleX(var(--done, 0)); transform-origin: left; transition: transform .2s;
+}
+.mmc-reel-tag.shooting { color: var(--mmc-accent); font-variant-numeric: tabular-nums; }
+.mmc-reel-shoot.quiet { background: none; color: var(--mmc-text); border: 1px solid var(--mmc-line-3); }
+.mmc-reel-btn[hidden] { display: none; }
 .mmc-reel-offers { display: flex; gap: 16px; }
 .mmc-reel-ghost.mmc-reel-rewritten { color: var(--mmc-accent); }
 .mmc-reel-back { align-self: flex-start; margin-bottom: 6px; }
@@ -1135,7 +1153,7 @@ export const css = `
 .mmc-reel-card-head span { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); }
 .mmc-reel-card.new .mmc-reel-card-head { color: var(--mmc-strong); text-shadow: none; }
 .mmc-reel-card-text {
-  position: absolute; left: calc(8px + var(--lead, 0px)); right: 12px; top: 26px; font-size: calc(12px * var(--mmc-type)); line-height: 1.3;
+  position: absolute; left: calc(8px + var(--lead, 0px)); right: calc(12px + var(--tail, 0px)); top: 26px; font-size: calc(12px * var(--mmc-type)); line-height: 1.3;
   color: var(--mmc-dim); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
 }
 .mmc-reel-card-tag {

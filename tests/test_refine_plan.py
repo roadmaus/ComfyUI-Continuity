@@ -153,6 +153,16 @@ for family in ("h3", "ltx25"):
     check(f"{family}: a clip with no words is still named",
           "4.0 s before shot 2" in quiet[0].user_message(quiet[2], footage=quiet[7]), True)
 
+# ---- sound out of a silent clip -----------------------------------------------
+
+for key, carries in ((None, True), ("sound", False), ("has_audio", False)):
+    quiet = strip([False, False])
+    quiet["segments"][0] = {"kind": "clip", "filename": "f.mp4", "duration_s": 4,
+                            **({key: False} if key else {})}
+    quiet["segments"][1].update({"continue": True, "continue_audio": True})
+    after = compiler.timeline_payloads(quiet)[1]
+    check(f"a shot after a clip, {key}", (after["continue"], after["continue_audio"]), (True, carries))
+
 # ---- the seam belongs to the card that opens the pass -----------------------
 #
 # `continues` says "this shot starts on the previous generation's last frame".

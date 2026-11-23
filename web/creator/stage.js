@@ -124,6 +124,9 @@ export function stageSource(result) {
   };
 }
 
+export const failureLead = (failure) =>
+  (failure?.started ? t("The render failed.") : t("The render did not start."));
+
 export class Stage {
   /**
    * @param {object} spec
@@ -157,6 +160,9 @@ export class Stage {
     this.onState = onState;
     this.onGallery = onGallery;
     this.onRestyle = onRestyle;
+    // Fired whenever what is shown changes, a step and a second included: the
+    // reel stands over this stage and shows the same thing.
+    this.onChange = null;
     this.resultChips = resultChips;
     this.segmentLabel = segmentLabel;
     // What each pass of this render wrote, for the body that owns a strip to
@@ -461,6 +467,7 @@ export class Stage {
         if (!this.ours(detail.node)) break;
         this.news();
         this.segment = detail.index ?? null;
+        this.segmentPrompt = this.promptId;
         this.renderReadout();
         break;
 
@@ -659,7 +666,10 @@ export class Stage {
     if (this.state === "sampling" && this.renderPromptId === this.promptId) return;
     // The first word that this queue is ours, and so the moment the last one's
     // picture stops being the answer — see `execution_start`.
+    // The first segment announces itself before its first step does.
+    const segment = this.segmentPrompt === this.promptId ? this.segment : null;
     this.clearRender();
+    this.segment = segment;
     this.state = "sampling";
     this.renderPromptId = this.promptId;
     this.timing.get(this.renderPromptId);
@@ -877,6 +887,7 @@ export class Stage {
     // when the stage stops showing, and that is the transition a Cancel
     // button most needs to hear.
     this.onState?.(this.state, this.progress);
+    this.onChange?.();
     if (!showing) return;
 
     if (this.state === "done" && this.result) {
@@ -909,6 +920,7 @@ export class Stage {
    * became the answer was the one reading the row could not give you.
    */
   renderReadout() {
+    this.onChange?.();
     if (!this.showing()) return;
     // Built as two lists and hung on the row at the end, so the empty case is
     // an empty row — which is what `.mmc-stage-readout:empty` hides, and the
@@ -1017,7 +1029,7 @@ export class Stage {
       onwheel: (event) => event.stopPropagation(),
     }, [
       el("div", { class: "mmc-stage-slate-lead",
-                  text: this.failure?.started ? t("The render failed.") : t("The render did not start.") }),
+                  text: failureLead(this.failure) }),
       ...items.map((item) => el("div", { class: "mmc-stage-slate-item" }, [
         item.where ? el("div", { class: "mmc-stage-slate-where", text: item.where }) : null,
         el("div", { class: "mmc-stage-slate-what", text: item.what }),

@@ -31,8 +31,8 @@ import { openAspectPopover, openResolutionPopover, openChoicePopover, facesPill,
          resolutionPillText } from "./pills.js";
 import { refine, refineButton, RefinePanel, chosenModel as refineModel } from "./refine.js";
 import { adopted, blobIO, samplingBar, seedMark, seedPill } from "./sampling.js";
-import { Stage, stageSource } from "./stage.js";
-import { watchSubmittedPrompts, submittedPrompt, queueNode } from "./queue.js";
+import { Stage, elapsed, failureLead, stageSource } from "./stage.js";
+import { cancelPrompt, watchSubmittedPrompts, submittedPrompt, queueNode } from "./queue.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights, rememberedWeights } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
@@ -277,8 +277,14 @@ async function compiledFor(timeline, card, seed) {
 }
 
 class Timeline {
-  constructor({ timeline, onCommit, edit = null, io = null, widgets = null, queue = null }, resolve) {
+  constructor({ timeline, onCommit, edit = null, io = null, widgets = null, queue = null, stage = null, run = null }, resolve) {
     this.timeline = timeline;
+    // The node's stage, for what it says when a render fails. See `failed`.
+    this.stage = stage;
+    // `{ id, state, cards }` of the node's prompt on the queue, or null.
+    this.run = run ?? (() => null);
+    // Whether the player follows the render, rather than what is selected.
+    this.watching = true;
     // Queue the node this window belongs to: the header's Shoot. Absent where
     // nothing lent it, and then there is no button.
     this.queue = queue;
@@ -333,6 +339,26 @@ class Timeline {
         this.gone.add(take.filename);
         this.render();
       });
+    }
+  }
+
+  /** Ask whether each clip has sound: a fact about the file, and older pieces
+   *  do not say it. Once per file, when the window opens or a clip arrives. */
+  askClips() {
+    for (const clip of this.timeline.segments.filter(S.isClip)) {
+      if (this.asked.has(clip.filename)) continue;
+      this.asked.add(clip.filename);
+      probe(clip.filename).then((answer) => {
+        if (answer.hasAudio !== false || !this.modal?.isConnected) return;
+        let changed = false;
+        for (const card of this.timeline.segments) {
+          if (S.isClip(card) && card.filename === clip.filename && card.has_audio !== false) {
+            card.has_audio = false;
+            changed = true;
+          }
+        }
+        if (changed) this.commit();
+      }).catch(() => {});
     }
   }
 
@@ -534,6 +560,17 @@ class Timeline {
       onclick: () => this.step(this.done, this.undone) }, [icon("rewind", 16)]);
     this.redoButton = el("button", { class: "mmc-reel-step redo", title: t("Redo (Ctrl+Shift+Z)"), disabled: true,
       onclick: () => this.step(this.undone, this.done) }, [icon("rewind", 16)]);
+    // Held, not rebuilt: they are repainted on every step, and a button that
+    // is replaced under a press loses it.
+    this.liveButton = el("button", { class: "mmc-reel-link mmc-reel-live-said", title: t("Watch the render"),
+      onclick: () => { this.watching = true; this.renderPlayer(); } });
+    this.cancelButton = el("button", { class: "mmc-reel-btn quiet", text: t("Cancel"), hidden: true,
+      onclick: () => this.cancel() });
+    this.progressBar = el("span", { class: "mmc-reel-progress" });
+    this.liveImage = el("img", { class: "mmc-reel-media", alt: "" });
+    this.liveMedia = el("div", { class: "mmc-reel-live-media" });
+    this.liveLabel = el("span", { class: "mmc-reel-plabel" });
+    this.liveRule = el("span", { class: "mmc-reel-live-rule" });
     this.castRow = el("div", { class: "mmc-reel-castrow" });
     this.scriptHost = el("div", { class: "mmc-reel-shots" });
     this.dropMark = el("div", { class: "mmc-reel-drop" });
@@ -574,6 +611,7 @@ class Timeline {
         this.undoButton,
         this.redoButton,
         this.planEl,
+        this.cancelButton,
         ...(this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
@@ -603,6 +641,7 @@ class Timeline {
     this.unmount = mountOverlay(this.overlay, () => this.close());
     this.onUndoKey = (event) => this.undoKey(event);
     window.addEventListener("keydown", this.onUndoKey, true);
+    this.toldFailure = this.stage?.failure ?? null;
     // The reel is laid out to the width it has, so a resized window redraws it.
     if (typeof ResizeObserver !== "undefined") {
       this.resize = new ResizeObserver(() => this.renderReel());
@@ -789,13 +828,34 @@ class Timeline {
     const seconds = S.timelineSeconds(this.timeline);
     const auto = S.hasAutoDuration(this.timeline);
     const count = this.timeline.segments.length;
-    this.titleMeta.textContent = t(count === 1 ? "{s} s, {count} shot" : "{s} s, {count} shots",
-      { s: (auto ? "~" : "") + seconds.toFixed(1), count });
+    const clips = this.timeline.segments.filter(S.isClip).length;
+    const made = count - clips;
+    this.titleMeta.textContent = [
+      t("{s} s", { s: (auto ? "~" : "") + seconds.toFixed(1) }),
+      ...(made || !clips ? [t(made === 1 ? "{n} shot" : "{n} shots", { n: made })] : []),
+      ...(clips ? [t(clips === 1 ? "{n} clip" : "{n} clips", { n: clips })] : []),
+    ].join(", ");
     const { shoot, kept } = S.shootPlan(this.timeline);
     const shots = shoot.reduce((n, k) => n + S.passes(this.timeline)[k].segments.length, 0);
     const problem = S.stripProblem(this.timeline);
     const said = problem || this.refusal;
-    this.planEl.replaceChildren(...(said
+    const failure = this.stage?.failure;
+    const busy = this.busy();
+    this.cancelButton.hidden = !busy;
+    this.shootButton.classList.toggle("quiet", busy);
+    if (busy) {
+      this.liveButton.textContent = this.refusal ? `${this.busyText()}. ${this.refusal}` : this.busyText();
+      if (this.liveButton.parentNode !== this.planEl || this.planEl.children.length !== 1) this.planEl.replaceChildren(this.liveButton);
+      this.shootButton.textContent = this.shootLabel ?? t("Queue another");
+      this.shootButton.title = t("Queue another render behind this one");
+      this.shootButton.disabled = Boolean(problem) || !count;
+      return;
+    }
+    this.shootButton.title = "";
+    this.planEl.replaceChildren(...(failure && !problem
+      ? [el("button", { class: "mmc-reel-link mmc-reel-problem", text: failureLead(failure),
+           title: t("Show why"), onclick: () => { this.failureSeen = null; this.playerKey = null; this.renderPlayer(); } })]
+      : said
       ? [el("span", { class: "mmc-reel-problem", text: said })]
       : shoot.length
         ? [el("span", { text: t("Next render shoots") + " " }),
@@ -811,6 +871,124 @@ class Timeline {
     this.shootButton.disabled = Boolean(problem) || !count;
   }
 
+  // ---- the render under way --------------------------------------------------
+
+  busy() {
+    return Boolean(this.run()) || this.stage?.state === "sampling";
+  }
+
+  /** The strip index of the shot being made, or null where nothing has said.
+   *  The announce names a card by its number on the strip that was queued. */
+  shootingIndex() {
+    const stage = this.stage;
+    const run = this.run();
+    if (!stage || !(stage.state === "sampling" || (run?.state === "running" && stage.segmentPrompt === run.id))) return null;
+    const segments = this.timeline.segments;
+    if (!stage.segment) return S.passes(this.timeline).length === 1 && !S.isClip(segments[0]) ? 0 : null;
+    const id = run?.cards?.[stage.segment - 1];
+    const index = id ? segments.findIndex((card) => card.card_id === id) : stage.segment - 1;
+    return segments[index] ? index : null;
+  }
+
+  busyText() {
+    const index = this.shootingIndex();
+    if (this.stage?.state === "sampling") {
+      const { step, total } = this.stage.progress ?? {};
+      return [
+        index === null ? t("Rendering") : t("Shooting shot {n}", { n: index + 1 }),
+        ...(total ? [`${step} / ${total}`] : []),
+        ...(this.stage.startedAt ? [elapsed(Date.now() - this.stage.startedAt)] : []),
+      ].join(" · ");
+    }
+    if (this.run()?.state === "queued") return t("Waiting in the queue");
+    return index === null ? t("Getting ready") : t("Getting shot {n} ready", { n: index + 1 });
+  }
+
+  /** The stage or the queue has something new to say. */
+  staged() {
+    if (!this.modal?.isConnected) return;
+    if ((this.stage?.failure ?? null) !== (this.toldFailure ?? null)) {
+      this.toldFailure = this.stage.failure;
+      this.failed();
+    }
+    // A run that just began is watched from its first word.
+    const busy = this.busy();
+    if (busy && !this.wasBusy) this.watching = true;
+    this.wasBusy = busy;
+    this.renderHead();
+    this.renderPlayer();
+    this.paintShooting();
+  }
+
+  /** The pass being made, on the reel and beside its words. */
+  paintShooting() {
+    const index = this.shootingIndex();
+    const row = index === null ? null : this.rowFor(index);
+    if (this.shootingRow && this.shootingRow !== row) {
+      const was = this.timeline.segments.indexOf(this.shootingRow.segment);
+      if (was >= 0) this.updateRow(this.shootingRow, was);
+    }
+    this.shootingRow = row;
+    this.progressBar.remove();
+    if (index === null || !this.lay) return;
+    const { step, total } = this.stage.progress ?? {};
+    if (row) {
+      row.tag.className = "mmc-reel-tag shooting";
+      row.tag.textContent = total ? t("Shooting, {step} / {total}", { step, total }) : t("Shooting");
+    }
+    const pass = S.passOf(this.timeline, index);
+    const { x, seconds, pps } = this.lay;
+    const left = x[pass.start];
+    const right = x[pass.end - 1] + seconds[pass.end - 1] * pps;
+    this.progressBar.style.left = `${left}px`;
+    this.progressBar.style.width = `${right - left}px`;
+    this.progressBar.style.setProperty("--done", total ? String(step / total) : "0");
+    this.reelHost.querySelector(".mmc-reel-picture")?.append(this.progressBar);
+  }
+
+  async cancel() {
+    const id = this.run()?.id ?? this.stage?.renderPromptId;
+    if (!id) return;
+    try { await cancelPrompt(id); } catch (error) { this.refuse(String(error.message || error)); }
+  }
+
+  /** The stage's newest frame, in the player. */
+  renderLive() {
+    const { frame, frameIsClip, progress } = this.stage ?? {};
+    if (this.playerKey !== "live") {
+      this.playerKey = "live";
+      this.liveFrame = undefined;
+      this.playerHost.replaceChildren(this.liveMedia, this.liveLabel, this.liveRule);
+    }
+    this.liveLabel.textContent = this.busyText();
+    this.liveRule.style.transform = `scaleX(${progress?.total ? Math.min(1, progress.step / progress.total) : 0})`;
+    if (frame === this.liveFrame) return;
+    this.liveFrame = frame;
+    if (!frame) {
+      this.liveMedia.replaceChildren(el("div", { class: "mmc-reel-blank" }, [
+        el("span", { text: t("The preview starts here with the first steps.") })]));
+    } else if (frameIsClip) {
+      const clip = this.stage.previewFrame();
+      clip.className = "mmc-reel-media";
+      this.liveMedia.replaceChildren(clip);
+    } else {
+      this.liveImage.src = frame;
+      if (this.liveImage.parentNode !== this.liveMedia) this.liveMedia.replaceChildren(this.liveImage);
+    }
+  }
+
+  /** The stage put a slate up, or took one down. The player shows the same one
+   *  until something is selected; the header keeps the way back to it. */
+  failed() {
+    this.shooting = false;
+    this.refusal = null;
+    clearTimeout(this.shootTimer);
+    this.shootLabel = null;
+    this.failureSeen = null;
+    this.renderHead();
+    this.renderPlayer();
+  }
+
   /** Queue the node this window belongs to, the way its own Render does. */
   shoot() {
     if (!this.queue) return;
@@ -822,6 +1000,7 @@ class Timeline {
 
   /** The server took the node's prompt: what the press is answered with. */
   accepted() {
+    this.staged();
     if (!this.shooting) return;
     this.shooting = false;
     this.shootLabel = t("Queued");
@@ -1005,6 +1184,7 @@ class Timeline {
       onClose: () => this.render(),
     });
     if (handle) shelf.openMember(handle, { forceOpen: true });
+    else shelf.addSubject();
   }
 
   /**
@@ -1647,6 +1827,7 @@ class Timeline {
     if (!this.scriptHost) return;
     this.edits = S.editedSince(this.timeline);
     this.askTakes();
+    this.askClips();
     this.renderScript();
     this.renderReel();
     this.renderSide();
@@ -1665,6 +1846,8 @@ class Timeline {
 
   select(sel, { reveal = true } = {}) {
     this.sel = sel;
+    this.watching = !sel;
+    this.failureSeen = this.stage?.failure ?? null;
     this.armed = null;
     this.keepRefused = null;
     this.renderCastRow();
@@ -2164,11 +2347,13 @@ class Timeline {
     segments.forEach((segment, i) => {
       const state = this.shotState(i);
       const thumb = thumbs[i];
+      const lead = half[i] && span(i) > half[i] + 50 ? half[i] : 0;
+      const tail = half[i + 1] ?? 0;
       const tag = this.stateTag(state);
       const card = el("button", {
         class: `mmc-reel-card ${state}${thumb ? " filmed" : ""}${half[i] ? " runs-in" : ""}${half[i + 1] ? " runs-on" : ""}${sel?.kind === "shot" && sel.index === i ? " selected" : ""}`,
         style: { left: `${at(i)}px`, width: `${Math.max(4, span(i) - (half[i + 1] ? 0 : 2))}px`,
-                 "--lead": `${half[i] && span(i) > half[i] + 50 ? half[i] : 0}px` },
+                 "--lead": `${lead}px`, "--tail": `${tail && span(i) > lead + tail + 50 ? tail : 0}px` },
         title: (segment.prompt || segment.filename || "").trim(),
         onclick: () => this.select({ kind: "shot", index: i }),
         onpointerdown: (event) => this.dragCard(event, segment),
@@ -2292,6 +2477,7 @@ class Timeline {
 
     host.replaceChildren(el("div", { class: "mmc-reel-track-area", style: { width: `${width}px` } },
       [passLane, picture, joins, sound]));
+    this.paintShooting();
     this.renderStatus();
   }
 
@@ -2401,6 +2587,13 @@ class Timeline {
    *  changes, so typing does not restart it. */
   renderPlayer() {
     const sel = this.sel;
+    const failure = this.stage?.failure;
+    if (failure && failure !== this.failureSeen) {
+      if (this.playerKey === failure) return;
+      this.playerKey = failure;
+      this.playerHost.replaceChildren(this.stage.slate());
+      return;
+    }
     const segments = this.timeline.segments;
     let key = "none";
     let media = null;
@@ -2436,8 +2629,22 @@ class Timeline {
         media = { video: takeOf(latest).filename };
         label = t("Latest take, shot {n}", { n: latest + 1 });
       } else {
-        label = t("Nothing shot yet");
+        const clip = segments.findIndex(S.isClip);
+        if (clip >= 0) media = { video: segments[clip].filename };
+        label = clip >= 0 ? t("Clip {n}", { n: clip + 1 }) : t("Nothing shot yet");
       }
+    }
+    const selected = sel?.kind === "shot" ? S.passIndexOf(this.timeline, sel.index) : -1;
+    const shooting = this.shootingIndex();
+    if (this.busy() && (this.watching || !media
+        || (shooting !== null && selected === S.passIndexOf(this.timeline, shooting)))) {
+      this.renderLive();
+      return;
+    }
+    const made = this.stage?.state === "done" && (this.watching || !sel) ? stageSource(this.stage.result) : null;
+    if (made) {
+      media = { [made.kind]: made.path };
+      label = t("The last render");
     }
     key = `${label}|${media?.video ?? media?.image ?? ""}`;
     if (this.playerKey === key) return;
@@ -2633,7 +2840,9 @@ class Timeline {
     const state = this.shotState(index);
     const runs = S.passes(this.timeline);
     const passIndex = S.passIndexOf(this.timeline, index);
-    const followNames = S.followers(this.timeline, passIndex).map((k) => runs[k].start + 1);
+    // "Again" is only said of what has been shot.
+    const followNames = S.followers(this.timeline, passIndex)
+      .filter((k) => S.takeOn(runs[k].segments[0])).map((k) => runs[k].start + 1);
     const tagText = this.stateTag(state);
     const ripple = followNames.length
       ? t(followNames.length === 1 ? "Shot {list} continues from it and is shot again too."
@@ -2646,7 +2855,7 @@ class Timeline {
       reshoot: t("The next render shoots it again. Its current take stays until the new one lands."),
       new: t("The next render shoots it."),
       gone: t("Its take's file is not under output/ any more, so the next render shoots it again."),
-    }[state] + (state === "kept" ? "" : " " + ripple);
+    }[state] + (state === "kept" || (state === "new" && !followNames.length) ? "" : " " + ripple);
     const take = S.takeOn(runs[passIndex].segments[0]);
     const film = [];
     if (state === "kept") {
@@ -2920,7 +3129,9 @@ class Timeline {
     const on = S.continues(segment);
     const sound = S.continuesAudio(segment);
     const blocked = on ? null : intoClip ? S.clipSeamBlocked(this.timeline, index, "continue") : S.blockedReason(segment, "continue");
-    const soundBlocked = sound ? null : intoClip ? S.clipSeamBlocked(this.timeline, index, "continue_audio") : S.blockedReason(segment, "continue_audio");
+    const soundBlocked = sound ? null : intoClip ? S.clipSeamBlocked(this.timeline, index, "continue_audio")
+      : S.silentSource(this.timeline, index) ? t("The clip it continues from has no sound playing to carry over.")
+      : S.blockedReason(segment, "continue_audio");
     const commit = () => this.commit();
     const rows = [
       this.ihead(title, intoClip ? t("into a clip you added") : afterClip ? t("out of a clip you added") : null),
@@ -3629,6 +3840,8 @@ class Timeline {
  * hidden, and now only the fallback that carries a workflow saved before the
  * move. The seed alone is still really a widget.
  */
+const RUN_EVENTS = ["execution_start", "execution_success", "execution_error", "execution_interrupted", "status"];
+
 export class TimelineBody {
   /** `preStage` and `face` are wiring the node supplies — see creator.js.
    *  `face` is where the piece-view pin is kept, which is a preference about
@@ -3685,7 +3898,26 @@ export class TimelineBody {
     this.takeSequence = 0;
     this.offSubmitted = watchSubmittedPrompts(
       (output) => this.submittedCards(output),
-      (promptId, snapshot) => { this.rememberQueued(promptId, snapshot); this.reel?.accepted(); });
+      (promptId, snapshot) => {
+        this.rememberQueued(promptId, snapshot);
+        this.runs.set(String(promptId), "queued");
+        this.reel?.accepted();
+      });
+    // Where this node's prompts are on the queue, which the stage does not say
+    // until a sampler runs: the reel has loading and waiting to report too.
+    this.runs = new Map();
+    this.onRun = ({ type, detail }) => {
+      if (type === "status") {
+        if (detail?.exec_info?.queue_remaining !== 0 || !this.runs.size) return;
+        this.runs.clear();
+      } else {
+        const id = String(detail?.prompt_id);
+        if (!this.runs.has(id)) return;
+        if (type === "execution_start") this.runs.set(id, "running"); else this.runs.delete(id);
+      }
+      this.reel?.staged();
+    };
+    for (const name of RUN_EVENTS) api.addEventListener(name, this.onRun);
     // The open window, while there is one: it draws the same strip, and only
     // this body hears what the queue says about it.
     this.reel = null;
@@ -3731,9 +3963,20 @@ export class TimelineBody {
     this.destroyed = true;
     this.offSubmitted?.();
     api.removeEventListener("mmc_refused", this.onRefused);
+    for (const name of RUN_EVENTS) api.removeEventListener(name, this.onRun);
     this.stage?.destroy();
     this.laneFit?.disconnect();
     this.dropFaceEditor();
+  }
+
+  /** The prompt of this node's that is running, else the next one waiting. */
+  currentRun() {
+    const all = [...this.runs];
+    const [id, state] = all.find((run) => run[1] === "running") ?? all[0] ?? [];
+    if (id) return { id, state, cards: this.queued.get(id)?.ids };
+    // A run found already going, after a reload.
+    return this.stage.state === "sampling" && this.queued.has(this.stage.renderPromptId)
+      ? { id: this.stage.renderPromptId, state: "running", cards: this.queued.get(this.stage.renderPromptId).ids } : null;
   }
 
   /** Only this node's submitted blob, not the strip currently on screen. */
@@ -4107,8 +4350,10 @@ export class TimelineBody {
       io: () => this.widgetIO(),
       widgets: this.widgets,
       ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
-      opened: (reel) => { this.reel = reel; },
-    }).then(() => { this.reel = null; });
+      stage: this.stage,
+      run: () => this.currentRun(),
+      opened: (reel) => { this.reel = reel; this.stage.onChange = () => reel.staged(); },
+    }).then(() => { this.reel = null; this.stage.onChange = null; });
   }
 
   value(name, fallback) {
