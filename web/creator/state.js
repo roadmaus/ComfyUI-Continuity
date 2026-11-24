@@ -2628,7 +2628,7 @@ function stampsOf(timeline) {
     // stamps exactly as it always did and no old take is released by this.
     const staged = rest.staging && rest.set
       ? JSON.stringify([setStamped((sets ?? []).find((set) => set.id === rest.set)),
-                        stagingPass(blob, rest)])
+                        stagingPass(blob, rest), ...(staging_clip ? [staging_clip] : [])])
       : "";
     const guided = (rest.assets ?? []).some((asset) => asset.role === "guide")
       ? JSON.stringify(guide ?? null) : "";
@@ -2838,10 +2838,25 @@ export const setOf = (timeline, segment) =>
 export const isStaged = (timeline, segment) =>
   !isClip(segment) && Boolean(segment?.staging) && Boolean(setOf(timeline, segment));
 
+/** Whether a staged shot's clip goes to the model as a reference video: a family
+ *  that reads one is shown the blockout as it is. Any other is given a guide. */
+export const stagesByReference = (timeline) =>
+  (referenceOf(pieceFamily(timeline)).max?.video ?? 0) > 0;
+
+/** Whether a staged shot's reference clip is written at the render's own size.
+ *  Half of it is the default: the clip rides through every sampling step, and
+ *  boxes read as well small. */
+export const fullStagingClip = (timeline) => timeline?.staging_clip === "full";
+
+/** The pass a piece sends where it says nothing: the clay itself as a reference,
+ *  depth as a guide. */
+export const defaultStagingPass = (timeline) =>
+  stagesByReference(timeline) ? "as_staged" : DEFAULT_STAGING_PASS;
+
 /** The piece's default pass. */
 export const pieceStagingPass = (timeline) =>
   (timeline?.staging_pass === "none" || STAGING_PASSES.includes(timeline?.staging_pass))
-    ? timeline.staging_pass : DEFAULT_STAGING_PASS;
+    ? timeline.staging_pass : defaultStagingPass(timeline);
 
 /** The pass a staged shot sends: its own, or the piece's. */
 export const stagingPass = (timeline, segment) =>
@@ -2875,6 +2890,7 @@ export function stagingStamp(timeline, index) {
     staging, serializeSets([setStamped(setOf(timeline, segment))])[0]?.objects ?? [],
     pass, timeline.aspect, timeline.short_edge, pieceFamily(timeline),
     segment.duration_s,
+    stagesByReference(timeline) ? (fullStagingClip(timeline) ? "full" : "half") : "",
   ]));
 }
 
@@ -2886,8 +2902,23 @@ export const stagedGuideName = (timeline, index) => {
 
 /** Whether a guide asset is one the bench derived, rather than one somebody picked. */
 export const isStagedGuide = (asset) =>
-  asset?.role === "guide"
+  (asset?.role === "guide" || asset?.role === "reference")
   && String(asset.filename ?? "").startsWith(`${STAGED_GUIDE_DIR}/${STAGED_GUIDE_PREFIX}`);
+
+/** The clip the bench derived for a shot, or null. */
+export const stagedClip = (segment) => (segment?.assets ?? []).find(isStagedGuide) ?? null;
+
+/** Put a derived clip on a shot as a reference video, in place of the last one:
+ *  the same handle, at the render's own size, and silent. */
+export function attachStagedReference(segment, path) {
+  const before = stagedClip(segment);
+  const assets = segment.assets.filter((asset) => !isStagedGuide(asset));
+  assets.push({
+    handle: before?.handle ?? nextHandle(segment, "video"),
+    kind: "video", role: "reference", filename: path, track: "picture", ref_size: "match",
+  });
+  segment.assets = assets;
+}
 
 /**
  * A scene the old bench saved beside a guide (`{objects, marks, duration, ...}`),
@@ -3944,8 +3975,9 @@ export function parseTimeline(raw) {
       timeline.guide = parseGuide(timeline.guide, pieceFamily(timeline));
       timeline.sets = parseSets(parsed.sets);
       if (!timeline.sets.length) delete timeline.sets;
-      if (pieceStagingPass(parsed) !== DEFAULT_STAGING_PASS) timeline.staging_pass = parsed.staging_pass;
+      if (pieceStagingPass(parsed) !== defaultStagingPass(parsed)) timeline.staging_pass = parsed.staging_pass;
       else delete timeline.staging_pass;
+      if (parsed.staging_clip !== "full") delete timeline.staging_clip;
       // A blob with no `segments` key — a fresh node's widget is "{}" — keeps
       // `emptyTimeline`'s blank shot. One saved with an empty list stays empty:
       // that is a strip whose cards were all deleted, and opening it must not
@@ -4168,8 +4200,11 @@ export function serializeTimeline(timeline) {
     // unless they say otherwise. Absent when nothing is staged, so a piece
     // that never met the bench round-trips to the bytes it always did.
     ...(timeline.sets?.length ? { sets: serializeSets(timeline.sets) } : {}),
-    ...(timeline.staging_pass && pieceStagingPass(timeline) !== DEFAULT_STAGING_PASS
+    ...(timeline.staging_pass && pieceStagingPass(timeline) !== defaultStagingPass(timeline)
       ? { staging_pass: pieceStagingPass(timeline) } : {}),
+    ...(fullStagingClip(timeline) ? { staging_clip: "full" } : {}),
+    // What the last finished film was made from; see `cutStamp`.
+    ...(timeline.cut ? { cut: timeline.cut } : {}),
     segments: timeline.segments.map((segment, index) => {
       if (isClip(segment)) {
         return {
@@ -4202,9 +4237,6 @@ export function serializeTimeline(timeline) {
       }
       const out = serializeCommon(segment, pieceFamily(timeline));
       if (segment.card_id) out.card_id = segment.card_id;
-    ...(fullStagingClip(timeline) ? { staging_clip: "full" } : {}),
-    // What the last finished film was made from; see `cutStamp`.
-    ...(timeline.cut ? { cut: timeline.cut } : {}),
       // Which pass this segment belongs to, said as "the same one as the
       // segment before me" — so a pass survives inserting, moving and deleting
       // with no numbers to keep in step. Never on the first segment, which is

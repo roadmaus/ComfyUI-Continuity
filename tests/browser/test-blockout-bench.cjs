@@ -228,8 +228,8 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent),
       document.querySelector('.mmc-reel-inspect .mmc-reel-compiled').textContent.split('\n')[0].replace(/staged-[0-9a-z]+-/, 'staged-#-'),
     ]), ['Shot 2', '4.0 s · the kitchen set',
-      ['Length', 'Camera', 'Marks', 'Lens', 'Staging', 'Guide', 'Guide holds', 'Seed'],
-      'input/continuity/blockout/staged-#-depth.mp4 · 96 frames · Depth']);
+      ['Length', 'Camera', 'Marks', 'Lens', 'Staging', 'Guide', 'Seed'],
+      'input/continuity/blockout/staged-#-as_staged.mp4 · 96 frames · As staged']);
   });
 
   await check('Shoot draws the guide of the shot it shoots, attaches it, and queues', async () => {
@@ -237,16 +237,16 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.locator('.mmc-reel-shoot').click();
     await page.waitForFunction(() => window.queued === 1, null, { timeout: 15000 });
     const guide = await page.evaluate(() => {
-      const asset = S.guideAsset(tl.segments[2]);
-      return { asset: asset && { role: asset.role, strength: asset.strength, op: asset.op, staged: S.isStagedGuide(asset) },
-               words: tl.segments[2].staging.words, others: [S.guideAsset(tl.segments[0]), S.guideAsset(tl.segments[1])],
+      const asset = S.stagedClip(tl.segments[2]);
+      return { asset: asset && { role: asset.role, ref_size: asset.ref_size, track: asset.track, staged: S.isStagedGuide(asset) },
+               words: tl.segments[2].staging.words, others: [S.stagedClip(tl.segments[0]), S.stagedClip(tl.segments[1])],
                kept: tl.segments.map((seg) => S.isKept(seg)) };
     });
     assert.equal(writes.length - before, 1);
-    assert.equal(writes[writes.length - 1].op, 'depth');
-    assert.match(writes[writes.length - 1].name, /^staged-[0-9a-z]+-depth$/);
+    assert.equal(writes[writes.length - 1].op, 'as_staged');
+    assert.match(writes[writes.length - 1].name, /^staged-[0-9a-z]+-as_staged$/);
     assert.ok(guideFrames >= 5, `frames sent ${guideFrames}`);
-    assert.deepEqual(guide.asset, { role: 'guide', strength: 1, op: 'depth', staged: true });
+    assert.deepEqual(guide.asset, { role: 'reference', ref_size: 'match', track: 'picture', staged: true });
     assert.match(guide.words, /@anna/);
     assert.deepEqual(guide.others, [null, null]);
     assert.deepEqual(guide.kept, [true, true, false]);
@@ -479,6 +479,24 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.waitForTimeout(100);
     // Closing sweeps the derived guides nothing points at, keeping those the piece names.
     assert.ok(sweeps.length >= 1 && Array.isArray(sweeps[sweeps.length - 1]));
+  });
+
+  await check('A set is removed, asking twice; its shots stay, unstaged', async () => {
+    await open();
+    await page.evaluate(() => bench.select({ kind: 'set', id: 'street' }));
+    await page.getByText('Remove the set', { exact: true }).click();
+    assert.equal(await page.evaluate(() => tl.sets.length), 2);
+    await page.getByText('Really remove?', { exact: true }).click();
+    assert.deepEqual(await page.evaluate(() => [tl.sets.map((s) => s.id), tl.segments.length, tl.segments[2].set ?? null, tl.segments[2].staging ?? null]),
+      [['kitchen'], 3, null, null]);
+  });
+
+  await check('A shot is removed from the bench, asking twice', async () => {
+    await open();
+    await page.evaluate(() => bench.select({ kind: 'shot', index: 2 }));
+    await page.locator('.mmc-reel-inspect-body .mmc-asset-x').click();
+    await page.getByText('Really remove?', { exact: true }).click();
+    assert.equal(await page.evaluate(() => tl.segments.length), 2);
   });
 
   if (process.env.SHOT) {

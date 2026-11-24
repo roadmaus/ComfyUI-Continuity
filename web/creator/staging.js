@@ -27,7 +27,7 @@ import {
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
-  joinGap, lineUp, stagingFrom, postureChanges, postureOf, writeGuide,
+  referenceSize, joinGap, lineUp, stagingFrom, postureChanges, postureOf, writeGuide,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
 
@@ -77,7 +77,7 @@ export function openBlockout(options = {}) {
     return piece.openBlockout({ targets: options.targets ?? [], back: options.back ?? null });
   }
   const timeline = S.parseTimeline(JSON.stringify({
-    version: 2, prompt: "", aspect: "16:9",
+    version: 2, prompt: "", aspect: "16:9", staging_pass: "depth",
     ...(options.family ? { family: options.family } : {}),
     subjects: (options.cast ?? []).filter((handle) => typeof handle === "string" && handle)
       .map((handle) => ({ handle, takes: "person" })),
@@ -546,6 +546,39 @@ class Blockout extends Reel {
     segment.set = id;
     segment.staging = { camera: [{ ...end, t: 0 }], people: {} };
     this.commit();
+  }
+
+  /** Take a shot's staging off it, and the guide drawn from it. */
+  clearStaging(segment) {
+    delete segment.set;
+    delete segment.staging;
+    segment.assets = (segment.assets ?? []).filter((asset) => !S.isStagedGuide(asset));
+  }
+
+  unstage(index) {
+    this.clearStaging(this.timeline.segments[index]);
+    this.commit();
+  }
+
+  /** Take a set off the piece. The shots staged on it stay, unstaged. */
+  removeSet(id) {
+    this.armed = null;
+    for (const index of S.shotsOnSet(this.timeline, id)) this.clearStaging(this.timeline.segments[index]);
+    this.timeline.sets = this.timeline.sets.filter((set) => set.id !== id);
+    this.sel = null;
+    this.commit();
+  }
+
+  /** The set's remove button, which asks twice, as a shot's does. */
+  removeSetButton(id) {
+    const armed = this.armed === `set:${id}`;
+    return el("button", { class: "mmc-reel-btn quiet danger", text: armed ? t("Really remove?") : t("Remove the set"),
+      title: t("The shots staged on it stay in the piece, with no staging."),
+      onclick: () => {
+        if (armed) { this.removeSet(id); return; }
+        this.armed = `set:${id}`;
+        this.renderSide();
+      } });
   }
 
   newSetId() {
@@ -1605,7 +1638,10 @@ class Blockout extends Reel {
     const control = S.controlOf(family);
     const sets = this.timeline.sets ?? [];
     const pass = S.pieceStagingPass(this.timeline);
-    const passNote = !control
+    const reference = S.stagesByReference(this.timeline);
+    const passNote = reference && !this.single && pass !== "none"
+      ? t("Each shot is shown its blockout as a reference video, silent and with no ControlNet.")
+      : !control && !reference
       ? t("{family} has no guide to follow, so a staged shot sends the words alone.", { family: S.FAMILY_LABEL[family] ?? family })
       : pass === "none"
         ? t("No shot carries a guide unless it says so itself. The stage still writes the staging and the camera into the words.")
@@ -1616,9 +1652,15 @@ class Blockout extends Reel {
       this.ihead(t("The piece"), `${t(this.timeline.segments.length === 1 ? "{n} shot" : "{n} shots", { n: this.timeline.segments.length })} · ${secondsText(S.timelineSeconds(this.timeline))}`),
       ...this.canvasRows().slice(0, 2),
       this.irow(t("Guide"), this.segmented(this.passOptions(), pass, (value) => {
-        if (value === S.DEFAULT_STAGING_PASS) delete this.timeline.staging_pass; else this.timeline.staging_pass = value;
+        if (value === S.defaultStagingPass(this.timeline)) delete this.timeline.staging_pass; else this.timeline.staging_pass = value;
         this.commit();
       }), passNote),
+      ...(reference && pass !== "none" && !this.single ? [this.irow(t("Clip size"), this.segmented(
+        [["half", t("Small")], ["full", t("Full")]], S.fullStagingClip(this.timeline) ? "full" : "half",
+        (value) => { if (value === "full") this.timeline.staging_clip = "full"; else delete this.timeline.staging_clip; this.commit(); }),
+      S.fullStagingClip(this.timeline)
+        ? t("{w} × {h}, the render's own size. Four times the tokens of Small, so much slower.", referenceSize(this.timeline))
+        : t("{w} × {h}, half the render's size. Much faster.", referenceSize(this.timeline)))] : []),
       this.irow(t("Sets"), el("div", { class: "mmc-reel-inline" }, sets.length
         ? sets.map((set) => el("button", { class: "mmc-reel-value", onclick: () => this.select({ kind: "set", id: set.id }) }, [
             el("span", { text: set.name }), el("small", { text: rangeText(S.shotsOnSet(this.timeline, set.id)) })]))
@@ -1648,6 +1690,13 @@ class Blockout extends Reel {
         text: t("None yet. The glass offers a set to stage it on.") })));
     }
     rows.push(this.seedRow(index));
+    if (!this.single || set) {
+      rows.push(el("div", { class: "mmc-reel-actions quiet" }, [
+        ...(set ? [el("button", { class: "mmc-reel-btn quiet", text: t("Take off the set"),
+          title: t("The shot stays, with no staging. The set stays too."), onclick: () => this.unstage(index) })] : []),
+        ...(!this.single ? [this.removeButton(index, t("Remove this shot"))] : []),
+      ]));
+    }
     if (set) {
       const pass = S.stagingPass(this.timeline, segment);
       const guide = S.stagedGuideName(this.timeline, index);
@@ -1696,6 +1745,7 @@ class Blockout extends Reel {
     const lens = Math.round(cameraAt(marks, index === this.index() ? this.at.t : 0).mm);
     const family = S.pieceFamily(this.timeline);
     const control = S.controlOf(family);
+    const reference = S.stagesByReference(this.timeline);
     const pass = S.stagingPass(this.timeline, segment);
     const own = staging.pass !== undefined;
     const loose = staging.hold === "loose";
@@ -1719,10 +1769,10 @@ class Blockout extends Reel {
       this.irow(t("Guide"), this.segmented(this.passOptions(), pass, (value) => {
         if (value === S.pieceStagingPass(this.timeline)) delete staging.pass; else staging.pass = value;
         this.commit();
-      }), !control ? t("This model has no guide to follow: the shot is given the words alone.")
+      }), !control && !reference ? t("This model has no guide to follow: the shot is given the words alone.")
         : own ? t("Differs from the piece, which sends {pass}.", { pass: t(PASSES.find((p) => p.id === S.pieceStagingPass(this.timeline))?.label ?? "None").toLowerCase() })
           : null),
-      ...(pass !== "none" && control ? [this.irow(t("Guide holds"), this.segmented(
+      ...(pass !== "none" && control && !reference ? [this.irow(t("Guide holds"), this.segmented(
         [["loose", t("Loosely"), "0.6"], ["firm", t("Firmly"), "1.0"]], loose ? "loose" : "firm",
         (value) => { if (value === "loose") staging.hold = "loose"; else delete staging.hold; this.commit(); }),
       loose ? t("The blocks are a suggestion. More life, less exact marks.")
@@ -1752,6 +1802,7 @@ class Blockout extends Reel {
       this.irow(t("Add"), el("div", { class: "mmc-reel-inline" }, ["person", "block", "wall", "post"].map((kind) =>
         el("button", { class: "mmc-reel-btn", text: this.kindLabel(kind), onclick: () => { this.onSet(set.id); this.addThing(kind); } })))),
       el("div", { class: "mmc-reel-machine", text: t("A piece that is named or plays someone is put into the staging sentence. Unnamed pieces only shape the depth pass.") }),
+      el("div", { class: "mmc-reel-actions quiet" }, [this.removeSetButton(set.id)]),
     ]);
   }
 

@@ -46,7 +46,7 @@ NodeClass.prototype.toBlob = function (callback) {
 async function sample(edit, still = false) {
   written = null; uploaded = null; captures = []; mutate = edit;
   piece = S.parseTimeline(JSON.stringify({
-    version: 2, prompt: "", aspect: "16:9",
+    version: 2, prompt: "", aspect: "16:9", staging_pass: "depth",
     sets: [{ id: "s1", name: "Set", objects: [{ id: 1, kind: "block", x: 0, z: 4, word: "original object" }] }],
     segments: [{ prompt: "", duration_s: 1, assets: [], loras: [], set: "s1",
       staging: { camera: still ? [{ t: 0, x: 0, y: 1.6, z: 0, yaw: 0, pitch: 0, mm: 32 }]

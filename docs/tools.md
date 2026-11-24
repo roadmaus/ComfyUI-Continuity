@@ -52,8 +52,10 @@ right, and the piece at its real length underneath. It works the way the reel
 works (a script of shots, joins, kept takes, reshoots, one **Shoot**) and the
 two are windows on the same piece: a shot staged and shot here is a kept take
 in the timeline, and a shot written there is in this script, with no staging
-until it is given one. **Open the timeline** goes across. Nothing selected
-means the piece is selected.
+until it is given one. **Open the timeline** goes across and **Open the
+blockout** comes back. Nothing selected means the piece is selected. A set is
+taken off the piece from its own page in the inspector; its shots stay, with no
+staging.
 
 ![The blockout bench: the script on the left, the kitchen set on the stage with @ben selected and his handles out, his blocking in the inspector, and the piece underneath with the sets over the film and shot 3's guide on its card](img/blockout.png)
 

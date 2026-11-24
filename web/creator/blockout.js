@@ -946,6 +946,15 @@ export function guideSize(timeline) {
   return { w, h };
 }
 
+/** The pixels a reference clip is written at: half the render's short edge, or
+ *  all of it where the piece asks (`state.fullStagingClip`). */
+export function referenceSize(timeline) {
+  const { w, h } = guideSize(timeline);
+  const scale = Math.min(1, timeline.short_edge / (S.fullStagingClip(timeline) ? 1 : 2) / Math.min(w, h));
+  const snap = (edge) => Math.max(32, Math.round((edge * scale) / 32) * 32);
+  return { w: snap(w), h: snap(h) };
+}
+
 /**
  * The words a staged shot sends: who stands where and how the camera moves,
  * from the bench's own sentences, at the first frame of the shot.
@@ -957,8 +966,11 @@ export function stagingWords(timeline, index) {
   const marks = segment.staging.camera;
   const { w, h } = guideSize(timeline);
   const seconds = Number(segment.duration_s) || 0;
-  return stagingSentence(stagedAt(set, segment.staging, 0), marks, seconds, cameraAt(marks, 0), { w, h },
-                         { ends: stagedAt(set, segment.staging, seconds) });
+  const words = stagingSentence(stagedAt(set, segment.staging, 0), marks, seconds, cameraAt(marks, 0), { w, h },
+                                { ends: stagedAt(set, segment.staging, seconds) });
+  const clip = S.stagedClip(segment);
+  if (clip?.role !== "reference") return words;
+  return `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot. ${words}`.trim();
 }
 
 /**
@@ -1068,11 +1080,12 @@ export function guidesWanted(timeline) {
       const segment = timeline.segments[index];
       if (!S.isStaged(timeline, segment)) continue;
       const name = S.stagedGuideName(timeline, index);
-      const guide = S.guideAsset(segment);
-      const derived = S.isStagedGuide(guide);
-      if (!name) { if (derived) out.push({ index, name: null }); continue; }
+      const reference = S.stagesByReference(timeline);
+      const guide = reference ? S.stagedClip(segment) : S.guideAsset(segment);
+      if (!name) { if (S.stagedClip(segment)) out.push({ index, name: null }); continue; }
       const path = `${S.STAGED_GUIDE_DIR}/${name}.mp4`;
-      if (guide?.filename !== path || Math.abs((guide.strength ?? 1) - S.stagingStrength(segment)) > 1e-6) {
+      if (guide?.filename !== path || guide.role !== (reference ? "reference" : "guide")
+          || (!reference && Math.abs((guide.strength ?? 1) - S.stagingStrength(segment)) > 1e-6)) {
         out.push({ index, name, path });
       } else {
         out.push({ index, name, path, check: true });
@@ -1107,7 +1120,7 @@ export async function deriveGuides(timeline, { step = () => {} } = {}) {
   const wanted = guidesWanted(timeline);
   if (!wanted.length) return changed;
   const rules = rulesFor(S.pieceFamily(timeline));
-  const { w, h } = guideSize(timeline);
+  const { w, h } = S.stagesByReference(timeline) ? referenceSize(timeline) : guideSize(timeline);
   let raster = null, canvas = null, context = null;
   for (const { index, name, path, check } of wanted) {
     const segment = timeline.segments[index];
@@ -1145,13 +1158,17 @@ export async function deriveGuides(timeline, { step = () => {} } = {}) {
     }
     step(t("Writing the guide for shot {n}…", { n: index + 1 }));
     const written = await blockoutWrite({ token, fps: rules.fps, op: pass, name });
-    S.attachGuide(segment, timeline, {
-      path: written.path, kind: "video", op: PASS_BY_ID[pass]?.opId ?? pass,
-      strength: S.stagingStrength(segment),
-    });
+    if (S.stagesByReference(timeline)) S.attachStagedReference(segment, written.path);
+    else {
+      S.attachGuide(segment, timeline, {
+        path: written.path, kind: "video", op: PASS_BY_ID[pass]?.opId ?? pass,
+        strength: S.stagingStrength(segment),
+      });
+    }
     changed = true;
   }
-  return changed;
+  // The words cite the clip, which may only just have been given its handle.
+  return syncStagingWords(timeline) || changed;
 }
 
 /**

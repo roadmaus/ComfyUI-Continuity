@@ -235,14 +235,6 @@ export class Timeline extends Reel {
     }
     this.playerHost.replaceChildren(...children, el("span", { class: "mmc-reel-plabel", text: label }));
   }
-}
-
-/** After-generate modes, in the order ComfyUI lists them. */
-
-/**
- * The Timeline node's body in the graph: the piece at a glance, the way in, and
- * the sampler settings.
- *
 
   /** Play the first shot from `index` on that there is film of. */
   playFrom(index) {
@@ -255,6 +247,14 @@ export class Timeline extends Reel {
     this.select({ kind: "shot", index: next });
     this.playerHost.querySelector("video")?.play().catch(() => {});
   }
+}
+
+/** After-generate modes, in the order ComfyUI lists them. */
+
+/**
+ * The Timeline node's body in the graph: the piece at a glance, the way in, and
+ * the sampler settings.
+ *
  * The strip itself lives in the modal — it needs room the node does not have,
  * and drawing an editable one here would be a second implementation to keep in
  * step. What the node shows is the global prompt, the segments at their real
