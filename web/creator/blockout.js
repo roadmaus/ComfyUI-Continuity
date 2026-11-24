@@ -77,6 +77,7 @@ import { el } from "./dom.js";
 import { upload, blockoutFrames, blockoutWrite, probe } from "./api.js";
 import { rulesFor, resolveCanvas, framesForSeconds } from "./canvas.js";
 import * as S from "./state.js";
+import { modelTriangles } from "./setmodels.js";
 import { t } from "./i18n.js";
 
 /** Where a written blockout lands. The server owns it (`blockout.SUBFOLDER`);
@@ -223,7 +224,7 @@ export const PRESETS = [
     make: () => ({
       objects: [
         { kind: "person", x: 0, z: 3.6, w: 0.52, h: 1.78, d: 0.42 },
-        { kind: "block", x: 0, z: 2.75, w: 1.6, h: 0.74, d: 0.75, word: "table" },
+        { kind: "block", x: 0, z: 2.75, w: 1.6, h: 0.74, d: 0.75, word: "table", model: "table" },
         { kind: "wall", x: 0, z: 5.1, w: 5, h: 2.7 },
       ],
       marks: [
@@ -239,9 +240,9 @@ export const PRESETS = [
       objects: [
         { kind: "wall", x: -5.2, z: 9.5, w: 11, h: 7, d: 0.4, ry: 0.16, word: "building" },
         { kind: "wall", x: 5.6, z: 12, w: 12, h: 8.5, d: 0.4, ry: -0.22, word: "building" },
-        { kind: "post", x: 1.7, z: 4.8, w: 0.18, h: 3.6, d: 0.18, word: "lamp post" },
+        { kind: "block", x: 1.7, z: 4.8, w: 0.5, h: 3.6, d: 1.2, ry: -Math.PI / 2, word: "lamp post", model: "streetlamp" },
         { kind: "person", x: -1.3, z: 5.4, w: 0.5, h: 1.75, d: 0.4 },
-        { kind: "block", x: 2.9, z: 7.2, w: 1.9, h: 1.35, d: 4.1, ry: 0.1, word: "parked car" },
+        { kind: "block", x: 2.9, z: 7.2, w: 1.9, h: 1.35, d: 4.1, ry: 0.1, word: "parked car", model: "car" },
       ],
       marks: [
         { x: -2.6, y: 1.55, z: 0.4, yaw: 0.36, pitch: 0.03, mm: 32 },
@@ -383,17 +384,33 @@ export class Raster {
     this.z = new Float32Array(count);       // 1/z; bigger is nearer
     this.id = new Uint8Array(count);        // which piece owns the pixel
     this.lit = new Uint8Array(count);       // lambert, per flat face
+    this.part = new Uint8Array(count);      // which part of a model; 0 for a box
     this.wx = new Float32Array(count);      // world x/z, ground pixels only —
     this.wz = new Float32Array(count);      // what the grid is drawn from
     this.image = null;                      // made against a 2d context on demand
   }
 
-  /** World triangles for one piece. A piece is a box on its own three turns. */
+  /** World triangles for one piece: a box on its own three turns, or the model
+   *  it looks like, filling that box. */
   static tris(out, piece) {
     const { id } = piece;
     const m = basisOf(piece);
     const [ox, oy, oz] = centreOf(piece);
     const hx = piece.w / 2, hy = piece.h / 2, hz = piece.d / 2;
+    const model = modelTriangles(piece);
+    if (model) {
+      for (const tri of model) {
+        const v = tri.v.map(([ux, uy, uz]) => {
+          const at = applyM(m, [ux * hx, uy * hy, uz * hz]);
+          return [ox + at[0], oy + at[1], oz + at[2]];
+        });
+        const [a, b, c] = v;
+        // Wound like the boxes below: the cross of two edges points inward.
+        const n = norm3(cross3([c[0] - a[0], c[1] - a[1], c[2] - a[2]], [b[0] - a[0], b[1] - a[1], b[2] - a[2]]));
+        out.push({ id, part: tri.part, lit: clamp(0.28 + 0.72 * Math.max(0, dot3(n, LIGHT)), 0, 1), v });
+      }
+      return;
+    }
     for (const face of FACES) {
       const wn = applyM(m, face.n);
       const lam = Math.max(0, dot3(wn, LIGHT));
@@ -431,6 +448,7 @@ export class Raster {
     this.z.fill(0);
     this.id.fill(SKY_ID);
     this.lit.fill(0);
+    this.part.fill(0);
     const sy = Math.sin(cam.yaw), cy = Math.cos(cam.yaw);
     const sp = Math.sin(cam.pitch), cp = Math.cos(cam.pitch);
     const fl = (h / 2) / Math.tan(vfovOf(cam.mm) / 2);
@@ -471,6 +489,7 @@ export class Raster {
         if (minX > maxX || minY > maxY) continue;
         const lit = Math.round(tri.lit * 255);
         const isGround = Boolean(tri.ground);
+        const piecePart = tri.part ?? 0;
         for (let y = minY; y <= maxY; y++) {
           const py = y + 0.5;
           const row = y * w;
@@ -487,6 +506,7 @@ export class Raster {
             this.z[at] = iz;
             this.id[at] = tri.id;
             this.lit[at] = lit;
+            this.part[at] = piecePart;
             if (isGround) {
               // Perspective-correct: the attribute rode in divided by view z.
               this.wx[at] = (l0 * a.wxz + l1 * b.wxz + l2 * d.wxz) / iz;
@@ -624,6 +644,8 @@ export class Raster {
       const next = at + step;
       if ((step === 1 && x + 1 >= this.w) || (step !== 1 && y + 1 >= this.h)) continue;
       if (this.id[next] !== id) return true;
+      // Inside a model, where one part meets another and where a face turns.
+      if (this.part[at] && (this.part[next] !== this.part[at] || Math.abs(this.lit[next] - this.lit[at]) > 40)) return true;
       if (id !== SKY_ID && id !== GROUND_ID) {
         const zNext = this.z[next] > 0 ? 1 / this.z[next] : 1e9;
         if (Math.abs(zNext - zHere) > 0.3 + zHere * 0.02) return true;
@@ -1166,8 +1188,10 @@ const TURN_SECONDS = 0.4;
  *  the two ends it could lead with, the one nearer `now`. */
 export function facingOf(piece, dx, dz, now = 0) {
   const ahead = Math.atan2(dx, dz);
-  if (piece.kind === "person" || piece.w <= piece.d) {
-    return piece.kind === "person" || Math.abs(shortest(ahead, now)) <= Math.PI / 2 ? ahead : shortest(0, ahead + Math.PI);
+  // A person and a model have a front; a box goes whichever end first.
+  const fronted = piece.kind === "person" || Boolean(piece.model);
+  if (fronted || piece.w <= piece.d) {
+    return fronted || Math.abs(shortest(ahead, now)) <= Math.PI / 2 ? ahead : shortest(0, ahead + Math.PI);
   }
   const side = shortest(0, ahead - Math.PI / 2);
   return Math.abs(shortest(side, now)) <= Math.PI / 2 ? side : shortest(0, side + Math.PI);

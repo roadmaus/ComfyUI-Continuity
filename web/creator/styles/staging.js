@@ -36,6 +36,14 @@ export const css = `
   padding: 24px; text-align: center; color: #d6d3cc; font-size: calc(13.5px * var(--mmc-type, 1)); line-height: 1.5; background: rgba(14, 15, 17, .72); }
 .mmc-st .mmc-st-blank[hidden] { display: none; }
 .mmc-st .mmc-st-blank p { margin: 0; max-width: 44ch; }
+.mmc-st-shelf { position: absolute; inset: 48px 12px 52px; z-index: 5; overflow: auto; padding: 14px; border-radius: 12px; background: rgba(20, 21, 24, .95); color: #f0ede7; }
+.mmc-st-shelf .mmc-close { position: sticky; float: right; top: 0; }
+.mmc-st-shelfname { margin: 10px 0 6px; font-weight: 600; font-size: calc(12.5px * var(--mmc-type, 1)); }
+.mmc-st-models { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
+.mmc-st-model { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; border: 1px solid transparent; border-radius: 10px;
+  background: rgba(255, 255, 255, .05); color: inherit; font: inherit; font-size: calc(12px * var(--mmc-type, 1)); cursor: pointer; }
+.mmc-st-model:hover, .mmc-st-model:focus-visible { border-color: var(--mmc-accent); }
+.mmc-st-model canvas { position: static; width: 100%; height: auto; border-radius: 6px; }
 .mmc-st-starts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 560px; }
 .mmc-st .mmc-bo-hud > * { pointer-events: auto; }
 .mmc-st .mmc-bo-hud .mmc-bn-gap { flex: 1; pointer-events: none; }

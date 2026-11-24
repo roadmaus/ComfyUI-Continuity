@@ -115,6 +115,12 @@ knobs either side of a stop to say how the curve passes it. They move on their
 own level; with **Lift** they go up and down. People face along the curve. At a
 stop, **Sharp corner** and **Smooth again** are beside the speed.
 
+**+ Model** opens a shelf of simple things (furniture, parts of buildings, street,
+nature), all drawn in code. Each fills its piece's own box. **Detail** shows it as
+a block, a rough shape or in detail, piece by piece or, on the set's page, for
+everything on it; size and place never change. **Looks like** gives a block a
+model or takes it away.
+
 **Moves in this shot** lets a thing, a car say, have stops like a person. It is
 then moved in that shot alone; the other shots keep it where it is.
 

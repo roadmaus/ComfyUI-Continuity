@@ -20,6 +20,7 @@
 import { el, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { viewUrl, blockoutSweep } from "./api.js";
+import { MODEL_GROUPS, MODELS } from "./setmodels.js";
 import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
@@ -296,6 +297,7 @@ class Blockout extends Reel {
   }
 
   select(sel, options) {
+    if (this.shelf) this.closeShelf();
     if (sel?.kind === "shot" || sel?.kind === "join") {
       if (sel.index !== this.at.index) this.goTo(sel.index, 0);
     }
@@ -609,6 +611,8 @@ class Blockout extends Reel {
   /** The HUD over the glass. */
   paintHud() {
     if (!this.hudTop) return;
+    // The shelf belongs to the stage being worked: not to a guide, a take or playing.
+    if (this.shelf && (this.view !== "stage" || !this.set() || this.playing)) { this.closeShelf(); return; }
     const seg = (label, on, onclick, extra = {}) => el("button", {
       class: `mmc-bo-seg${on ? " on" : ""}`, "aria-pressed": String(Boolean(on)), onclick, ...extra,
     }, [el("span", { text: label })]);
@@ -1138,7 +1142,8 @@ class Blockout extends Reel {
   hudAdds(seg) {
     return [
       el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("Add to the set") },
-        ["person", "block", "wall", "post"].map((kind) => seg(`+ ${this.kindLabel(kind)}`, false, () => this.addThing(kind)))),
+        ["person", "block", "wall", "post"].map((kind) => seg(`+ ${this.kindLabel(kind)}`, false, () => this.addThing(kind)))
+          .concat(seg(`+ ${t("Model")}…`, Boolean(this.shelf), () => this.openShelf((model) => this.addThing("block", model))))),
       ...(!this.lens ? [el("div", { class: "mmc-bo-switch" }, [seg(t("Put the camera here"), false, () => this.cameraHere())])] : []),
     ];
   }
@@ -1507,17 +1512,83 @@ class Blockout extends Reel {
 
   /** A piece of the set, where free look is centred. Its name is the kind's
    *  until it is given one; a person plays nobody until told. */
-  addThing(kind) {
+  addThing(kind, model = null) {
     const set = this.set();
     if (!set) return;
     const view = set.view ?? this.defaultView(set);
     const id = Math.max(0, ...set.objects.map((piece) => piece.id)) + 1;
     if (id > 253) { this.say(t("A set holds at most 253 pieces.")); return; }
-    set.objects.push(S.setPiece({ kind, x: Math.round(view.x * 4) / 4, z: Math.round(view.z * 4) / 4 }, id));
+    set.objects.push(S.setPiece({ kind, ...(model ? { model: model.id, word: model.word, w: model.w, h: model.h, d: model.d,
+      // As the last one added was, so a set is built at one level.
+      detail: set.objects.findLast((piece) => piece.model)?.detail } : {}), x: Math.round(view.x * 4) / 4, z: Math.round(view.z * 4) / 4 }, id));
     this.sel = { kind: "thing", id };
+    this.closeShelf();
     this.commit();
     this.say(t("Added to the {name} set: {range} will reshoot.", { name: set.name.toLowerCase(),
       range: rangeText(S.shotsOnSet(this.timeline, set.id).filter((i) => S.takeOn(this.timeline.segments[i]))) }));
+  }
+
+  // ---- the shelf of models -----------------------------------------------------
+
+  /** The models, over the glass. `pick` is given the one pressed, or null for a
+   *  plain block where there is one to go back to. */
+  openShelf(pick, { plain = false } = {}) {
+    if (this.shelf) { this.closeShelf(); return; }
+    const card = (label, onclick, model = null) => {
+      const canvas = el("canvas", { width: "208", height: "156" });
+      const raster = new Raster(208, 156);
+      const box = { id: 1, x: 0, y: 0, z: 0, ry: 0.5 + Math.PI, w: model?.w ?? 1, h: model?.h ?? 0.8, d: model?.d ?? 0.8, model: model?.id, detail: "detailed" };
+      const far = Math.max(box.h * 1.35, Math.hypot(box.w, box.d)) * 1.75;
+      raster.raster([box], { x: 0, y: box.h / 2 + far * 0.3, z: -far, yaw: 0, pitch: -Math.atan(0.3), mm: 40 });
+      raster.shade(canvas.getContext("2d"), "as_staged");
+      return el("button", { class: "mmc-st-model", onclick }, [canvas, el("span", { text: label })]);
+    };
+    this.shelf = el("div", { class: "mmc-st-shelf", role: "dialog", "aria-label": t("Models") }, [
+      el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.closeShelf() }),
+      ...(plain ? [el("div", { class: "mmc-st-models" }, [card(t("Plain block"), () => pick(null))])] : []),
+      ...MODEL_GROUPS.flatMap((group) => [
+        el("div", { class: "mmc-st-shelfname", text: t(group.label) }),
+        el("div", { class: "mmc-st-models" }, group.models.map((model) => card(t(model.label), () => pick(model), model))),
+      ]),
+    ]);
+    this.glass.append(this.shelf);
+    this.paintHud();
+  }
+
+  closeShelf() {
+    this.shelf?.remove();
+    this.shelf = null;
+    this.paintHud();
+  }
+
+  /** What each level of detail is called. */
+  detailOptions() {
+    return [["block", t("Block")], ["shape", t("Shape")], ["detailed", t("Detailed")]];
+  }
+
+  /** What a thing looks like, and in how much detail. Its size is its own. */
+  modelRows(set, base) {
+    const model = MODELS.get(base.model);
+    const rows = [this.irow(t("Looks like"), el("button", { class: "mmc-reel-btn", text: model ? t(model.label) : t("Plain block"),
+      onclick: () => this.openShelf((picked) => {
+        if (!base.word || base.word === model?.word) base.word = picked?.word ?? "";
+        if (picked) {
+          // A model longer the other way is turned a quarter, so the box it fills
+          // stands exactly where it stood.
+          if ((base.w - base.d) * (picked.w - picked.d) < 0) {
+            [base.w, base.d] = [base.d, base.w];
+            for (const at of [base, ...S.shotsOnSet(this.timeline, set.id)
+              .flatMap((i) => this.timeline.segments[i].staging?.people?.[base.id] ?? [])]) at.ry = wrapTurn((at.ry ?? 0) + Math.PI / 2);
+          }
+          Object.assign(base, { model: picked.id, detail: base.detail ?? "shape" });
+        }
+        else { delete base.model; delete base.detail; }
+        this.closeShelf();
+        this.commit();
+      }, { plain: Boolean(model) }) }))];
+    if (model) rows.push(this.irow(t("Detail"), this.segmented(this.detailOptions(), base.detail, (detail) => { base.detail = detail; this.commit(); }),
+      t("How much of it the model is shown. Its size and place stay.")));
+    return rows;
   }
 
   /** Take the selected piece off the set, and out of every shot's blocking. */
@@ -2012,10 +2083,26 @@ class Blockout extends Reel {
         el("span", { text: this.labelOf(piece) })]))),
       rest ? t(rest === 1 ? "One unnamed wall or block besides." : "{n} unnamed walls and blocks besides.", { n: rest }) : null),
       this.irow(t("Add"), el("div", { class: "mmc-reel-inline" }, ["person", "block", "wall", "post"].map((kind) =>
-        el("button", { class: "mmc-reel-btn", text: this.kindLabel(kind), onclick: () => { this.onSet(set.id); this.addThing(kind); } })))),
+        el("button", { class: "mmc-reel-btn", text: this.kindLabel(kind), onclick: () => { this.onSet(set.id); this.addThing(kind); } }))
+        .concat(el("button", { class: "mmc-reel-btn", text: `${t("Model")}…`,
+          onclick: () => { this.onSet(set.id); this.openShelf((model) => this.addThing("block", model)); } })))),
+      ...this.setDetailRows(set, used),
       el("div", { class: "mmc-reel-machine", text: t("A piece that is named or plays someone is put into the staging sentence. Unnamed pieces only shape the depth pass.") }),
       el("div", { class: "mmc-reel-actions quiet" }, [this.removeSetButton(set.id)]),
     ]);
+  }
+
+  /** Every model on the set at one level of detail. */
+  setDetailRows(set, used) {
+    const models = set.objects.filter((piece) => piece.model);
+    if (!models.length) return [];
+    const level = models.every((piece) => piece.detail === models[0].detail) ? models[0].detail : null;
+    const taken = used.filter((i) => S.takeOn(this.timeline.segments[i]));
+    return [this.irow(t("Detail"), this.segmented(this.detailOptions(), level, (detail) => {
+      for (const piece of models) piece.detail = detail;
+      this.commit();
+    }), taken.length ? t("For everything on the set. Changing it reshoots {range}.", { range: rangeText(taken) })
+      : level ? t("For everything on the set.") : t("For everything on the set. Now it is mixed."))];
   }
 
   /** Put the glass on a shot staged on this set, if it is not on one already. */
@@ -2086,6 +2173,7 @@ class Blockout extends Reel {
             "aria-label": t("What this piece is called"),
             onchange: (event) => edit(() => { base.word = event.target.value.trim().toLowerCase().slice(0, 48); }) }),
           base.word ? t("Named in the staging sentence.") : t("Unnamed: it only shapes the depth pass.")),
+      ...(person ? [] : this.modelRows(set, base)),
       this.irow(t("Place"), vec([
         ["X", now.x, (v) => { this.holdOf(id).target.x = clamp(v, -FAR, FAR); }],
         ["Y", now.y ?? 0, (v) => { this.holdOf(id).target.y = clamp(v, 0, BIG); }],

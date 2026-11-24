@@ -6,6 +6,9 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout has models.** Cars, chairs, trees, doorways and the like, as a block, a
+rough shape or in detail, switched for one piece or the whole set.
+
 **The blockout's camera can shake.** Barely, held in hand, walking or running, with
 how much and how fast; it carries on across a continuing join.
 

@@ -160,6 +160,34 @@ out.shakeWords = B.stagingWords(tl, 0);
 out.shakePlain = moveSentence([at(0, 0), at(4, 2)], 4, null, { plain: true, shake: { kind: "hand" } });
 out.shakeKept = S.serializeStaging({ camera: [], people: {}, shake: { kind: "running", amount: 99, seed: 3 } }).shake;
 
+// The models: every one fills its box and no more, is closed and faces outward,
+// stays light, and shows through the renderer at each level.
+const M = await import("./web/creator/setmodels.js");
+const bad = [];
+let heaviest = 0;
+for (const model of M.MODELS.values()) {
+  for (const detail of ["shape", "detailed"]) {
+    const tris = M.modelTriangles({ model: model.id, detail });
+    heaviest = Math.max(heaviest, tris.length);
+    const reach = [0, 1, 2].map((k) => [Math.min(...tris.flatMap((tri) => tri.v.map((v) => v[k]))), Math.max(...tris.flatMap((tri) => tri.v.map((v) => v[k])))]);
+    if (reach.some(([low, high], k) => low < (k === 1 ? -1.41 : -1.001) || high > 1.001)) bad.push([model.id, detail, "outside", reach]);
+    if (detail === "detailed" && reach.some(([low, high], k) => high - low < (k === 1 ? 1.9 : 1.5))) bad.push([model.id, "small", reach]);
+    const parts = new Map();
+    for (const tri of tris) {
+      const [a, b, c] = tri.v;
+      const volume = (a[0] * (b[1] * c[2] - b[2] * c[1]) - a[1] * (b[0] * c[2] - b[2] * c[0]) + a[2] * (b[0] * c[1] - b[1] * c[0])) / 6;
+      parts.set(tri.part, (parts.get(tri.part) ?? 0) + volume);
+    }
+    if ([...parts.values()].some((volume) => volume >= -1e-9)) bad.push([model.id, detail, "inside out"]);
+  }
+}
+out.models = { bad, light: heaviest < 420, many: M.MODELS.size >= 30 };
+const still = S.setPiece({ kind: "block", model: "car", w: 1.8, h: 1.45, d: 4.3, z: 8, detail: "nonsense" }, 1);
+const seen = (detail) => { const raster = new B.Raster(160, 90); raster.raster([{ ...still, detail }], at(0, 0)); return raster.id.filter((id) => id === 1).length; };
+out.modelSeen = [still.detail, seen("block") > seen("shape"), seen("shape") > 50, seen("detailed") > 50];
+out.modelKept = S.serializeSets([{ id: "a", name: "A", objects: [still, { id: 2, kind: "person", model: "car" }] }])[0].objects.map((o) => [o.model ?? null, o.detail ?? null]);
+out.modelFront = r(B.facingOf(still, 0, -1, 0));
+
 console.log(JSON.stringify(out));
 """
 
@@ -231,5 +259,10 @@ check("the guide's stamp knows the shake it goes on from", said["shakeStamp"], [
 check("the words say it", said["shakeWords"].split(". ")[-1], "The camera stays in place, handheld with a natural sway.")
 check("...and on the bench", said["shakePlain"], "The camera moves forward, held in hand.")
 check("the shake is kept, and clamped", said["shakeKept"], {"kind": "running", "amount": 3, "rate": 1, "seed": 3})
+
+check("every model fills its box, is closed, and is light", said["models"], {"bad": [], "light": True, "many": True})
+check("a model shows, at each level", said["modelSeen"], ["shape", True, True, True])
+check("what it looks like is kept, and a person is never one", said["modelKept"], [["car", "shape"], [None, None]])
+check("a car drives front first", abs(said["modelFront"]), 3.14)
 
 passed("the blockout says who is where, and the move in the model's own words")

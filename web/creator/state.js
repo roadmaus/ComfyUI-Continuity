@@ -2685,6 +2685,15 @@ const finiteIn = (value, fallback, low, high) => {
 };
 const turn = (value) => finiteIn(value, 0, -Math.PI, Math.PI);
 
+/** How much of a model is drawn: the box it fills, its rough shape, or all of it. */
+export const SET_DETAILS = ["block", "shape", "detailed"];
+
+/** What a piece looks like, where it is more than a box. A person never is. */
+const lookOf = (raw) => (raw.kind !== "person" && raw.model ? {
+  model: String(raw.model).slice(0, 32),
+  detail: SET_DETAILS.includes(raw.detail) ? raw.detail : "shape",
+} : {});
+
 /** One piece of a set, filled in and clamped. -> null for a kind nobody draws. */
 export function setPiece(raw, id = raw?.id) {
   const spec = SET_KINDS[raw?.kind];
@@ -2706,6 +2715,7 @@ export function setPiece(raw, id = raw?.id) {
     rz: turn(raw.rz),
     plays: String(raw.plays ?? "").slice(0, 32),
     word: String(raw.word ?? "").slice(0, 48),
+    ...lookOf(raw),
   };
 }
 
