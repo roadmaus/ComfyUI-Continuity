@@ -202,6 +202,7 @@ class Blockout extends Reel {
   // ---- the window ------------------------------------------------------------
 
   mount() {
+    this.guidesSeen = new Set(this.guidesNamed());
     this.buildParts();
     this.canvas = el("canvas", { "aria-label": t("The stage"), draggable: "false" });
     this.context = this.canvas.getContext("2d");
@@ -270,12 +271,12 @@ class Blockout extends Reel {
 
   close() {
     if (open === this) open = null;
-    // The derived guides no shot in the open graph points at any more. Every
-    // piece in the graph is asked, not only this one: a guide is a file in the
-    // input folder, and another node's shot may be the one that names it.
-    const pieces = (globalThis.app?.graph?._nodes ?? []).map((node) => node.mmcBody?.timeline).filter(Boolean);
-    if (!pieces.includes(this.timeline)) pieces.push(this.timeline);
-    if (pieces.some((piece) => (piece.sets ?? []).length)) blockoutSweep(pieces.flatMap(stagedGuidesOf));
+    // The derived guides this window's pieces named while it was open and name no
+    // longer. Never the rest of the folder: another window, or a workflow that
+    // is not open, may be what the other files belong to.
+    const named = new Set(this.guidesNamed());
+    const drop = [...this.guidesSeen].filter((path) => !named.has(path));
+    if (drop.length) blockoutSweep(drop);
     this.stopPlay();
     this.endDrag?.(false);
     window.removeEventListener("keydown", this.onUndoKey, true);
@@ -289,10 +290,19 @@ class Blockout extends Reel {
     this.resolve?.();
   }
 
+  /** Every derived guide the open graph's pieces point at: a guide is a file in
+   *  the input folder, and another node's shot may be the one that names it. */
+  guidesNamed() {
+    const pieces = (globalThis.app?.graph?._nodes ?? []).map((node) => node.mmcBody?.timeline).filter(Boolean);
+    if (!pieces.includes(this.timeline)) pieces.push(this.timeline);
+    return pieces.flatMap(stagedGuidesOf);
+  }
+
   /** Every edit ends here: the words follow the staging before the piece is
    *  stamped, so a take is released by what changed and not by the prose. */
   commit() {
     syncStagingWords(this.timeline);
+    for (const path of this.guidesNamed()) this.guidesSeen.add(path);
     super.commit();
   }
 

@@ -92,18 +92,17 @@ async def write_clip(request):
 @PromptServer.instance.routes.post("/continuity/blockout/sweep")
 @same_origin
 async def sweep_guides(request):
-    """Remove the derived guides no shot in the open graph points at. -> `{gone}`."""
+    """Remove the derived guides a window has stopped using. -> `{gone}`."""
     try:
         body = await request.json()
     except (json.JSONDecodeError, ValueError):
         return web.json_response({"error": "expected a JSON body"}, status=400)
-    keep = body.get("keep")
-    if not isinstance(keep, list):
-        return web.json_response({"error": "keep has to be a list"}, status=400)
+    drop = body.get("drop")
+    if not isinstance(drop, list):
+        return web.json_response({"error": "drop has to be a list"}, status=400)
     # A queued prompt still has to read its guides, whichever tab queued it.
     running, pending = PromptServer.instance.prompt_queue.get_current_queue()
     queued = blockout.staged_in(json.dumps([item[2] for item in running + pending]))
     loop = asyncio.get_running_loop()
-    gone = await loop.run_in_executor(
-        None, blockout.sweep, [str(item) for item in keep] + queued)
+    gone = await loop.run_in_executor(None, blockout.sweep, drop, queued)
     return web.json_response({"gone": gone})

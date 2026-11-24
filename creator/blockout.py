@@ -132,7 +132,7 @@ def take_frames(token, frames):
 # never touch a guide somebody wrote by hand.
 _STAGED = re.compile(r"^staged-[0-9a-z]{1,16}-[a-z_]{1,16}$")
 
-# How long an unreferenced derived guide is left alone: a tab that has just
+# How long a dropped derived guide is left alone: a tab that has just
 # written one may not have saved the piece that names it yet.
 SWEEP_AFTER = 600
 
@@ -148,33 +148,35 @@ def staged_in(text):
     return re.findall(r"staged-[0-9a-z]{1,16}-[a-z_]{1,16}", text)
 
 
-def sweep(keep):
-    """Remove the derived guides no shot points at. -> how many went.
+def sweep(drop, keep=()):
+    """Remove the derived guides a window has stopped using. -> how many went.
 
-    `keep` is every derived guide the open graph names, as `staged-…` stems or
-    paths. Only files the bench derived are ever considered, and only once they
-    are old enough not to belong to a write still on its way to a saved piece.
-    A guide swept by mistake costs nothing but time: a staged shot that needs it
-    derives it again before it renders.
+    `drop` is what the window once named and no longer does, as `staged-…` stems
+    or paths: a window knows what it has finished with, and not what another
+    window, or a workflow that is not open, still names. `keep` is never
+    removed. Only files the bench derived are ever considered, and only once
+    they are old enough not to belong to a write still on its way to a saved
+    piece. A guide swept by mistake costs nothing but time: a staged shot that
+    needs it derives it again before it renders.
     """
-    kept = {os.path.splitext(os.path.basename(str(item)))[0] for item in keep or []}
+    def stems(items):
+        return {os.path.splitext(os.path.basename(str(item)))[0] for item in items or []}
+
     out_dir = os.path.join(folder_paths.get_input_directory(), *SUBFOLDER.split("/"))
-    if not os.path.isdir(out_dir):
-        return 0
     now = time.time()
     gone = 0
-    for name in os.listdir(out_dir):
-        stem, ext = os.path.splitext(name)
-        if ext not in (".mp4", ".png") or not _STAGED.match(stem) or stem in kept:
+    for stem in stems(drop) - stems(keep):
+        if not _STAGED.fullmatch(stem):
             continue
-        path = os.path.join(out_dir, name)
-        try:
-            if now - os.path.getmtime(path) < SWEEP_AFTER:
+        for ext in (".mp4", ".png"):
+            path = os.path.join(out_dir, stem + ext)
+            try:
+                if now - os.path.getmtime(path) < SWEEP_AFTER:
+                    continue
+                os.remove(path)
+                gone += 1
+            except OSError:
                 continue
-            os.remove(path)
-            gone += 1
-        except OSError:
-            continue
     return gone
 
 

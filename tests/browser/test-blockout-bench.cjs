@@ -82,7 +82,7 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ name: 'blockout-depth.png', subfolder: 'continuity/blockout' }) });
     }
     if (url.origin === ORIGIN && url.pathname === '/continuity/blockout/sweep') {
-      sweeps.push(JSON.parse(route.request().postData() || '{}').keep);
+      sweeps.push(JSON.parse(route.request().postData() || '{}').drop);
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ gone: 0 }) });
     }
     if (url.origin === ORIGIN && url.pathname === '/continuity/probe') {
@@ -477,8 +477,9 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.locator('.mmc-reel-head').getByText('Open the timeline').click();
     assert.deepEqual(await page.evaluate(() => [window.timelineOpened, document.querySelectorAll('.mmc-st-bench').length]), [1, 0]);
     await page.waitForTimeout(100);
-    // Closing sweeps the derived guides nothing points at, keeping those the piece names.
-    assert.ok(sweeps.length >= 1 && Array.isArray(sweeps[sweeps.length - 1]));
+    // Closing drops only what this window named and no longer does.
+    const named = await page.evaluate(() => tl.segments.flatMap((s) => s.assets.map((a) => a.filename)));
+    assert.ok(sweeps.every((drop) => Array.isArray(drop) && drop.length && drop.every((path) => !named.includes(path))));
   });
 
   await check('A set is removed, asking twice; its shots stay, unstaged', async () => {

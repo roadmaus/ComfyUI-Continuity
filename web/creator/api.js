@@ -1452,15 +1452,15 @@ export async function blockoutWrite(body) {
   return answer;
 }
 
-/** Remove the derived guides nothing points at any more. `keep` is every one
- *  the open graph names. Never fails loudly: a guide left behind is disk, and
+/** Remove the derived guides this window has stopped using: `drop` names them,
+ *  so nothing another window still needs is ever asked about. Never fails loudly: a guide left behind is disk, and
  *  one swept by mistake is derived again before it is needed. */
-export async function blockoutSweep(keep) {
+export async function blockoutSweep(drop) {
   try {
     const response = await api.fetchApi("/continuity/blockout/sweep", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ keep }),
+      body: JSON.stringify({ drop }),
     });
     return (await response.json().catch(() => ({}))).gone ?? 0;
   } catch {

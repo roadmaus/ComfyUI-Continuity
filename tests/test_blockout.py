@@ -21,6 +21,7 @@ import json
 import os
 import sys
 import tempfile
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -131,6 +132,31 @@ with tempfile.TemporaryDirectory() as temp_root, \
         blockout.take_frames(token, [(0, png_bytes()), (1, png_bytes())])
         again = blockout.write(token, 24, "depth")
         check("the counter moved", again["path"] != answer["path"], True)
+
+        # ---- the sweep takes what it is told, and nothing else ---------------
+        shelf = os.path.join(input_root, *blockout.SUBFOLDER.split("/"))
+        old = time.time() - blockout.SWEEP_AFTER - 60
+
+        def shelve(stem, fresh=False):
+            path = os.path.join(shelf, stem + ".mp4")
+            with open(path, "wb") as out:
+                out.write(b"x")
+            if not fresh:
+                os.utime(path, (old, old))
+
+        for stem in ("staged-mine-depth", "staged-theirs-depth", "staged-queued-depth"):
+            shelve(stem)
+        shelve("staged-new-depth", fresh=True)
+        shelve("blockout-hand")
+        gone = blockout.sweep(
+            ["continuity/blockout/staged-mine-depth.mp4", "staged-queued-depth", "staged-new-depth",
+             "blockout-hand", "../../staged-mine-depth/..", "staged-missing-depth"],
+            ["staged-queued-depth"])
+        left = [name for name in os.listdir(shelf) if name.startswith(("staged-", "blockout-hand"))]
+        check("one window's dropped clip goes", gone, 1)
+        check("another's, a queued, a new and a hand-written one stay", sorted(left),
+              ["blockout-hand.mp4", "staged-new-depth.mp4", "staged-queued-depth.mp4", "staged-theirs-depth.mp4"])
+        check("dropping nothing removes nothing", blockout.sweep([]), 0)
     finally:
         folder_paths.get_temp_directory = held_temp
         folder_paths.get_input_directory = held_input

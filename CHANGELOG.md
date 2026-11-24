@@ -6,6 +6,9 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Closing a blockout window no longer deletes another's clips.** It removes only the
+clips it used while it was open and has stopped using, not every one it does not know.
+
 **The blockout has models.** Cars, chairs, trees, doorways and the like, as a block, a
 rough shape or in detail, switched for one piece or the whole set.
 
