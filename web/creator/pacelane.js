@@ -31,10 +31,12 @@ export class PaceLane {
     this.ways = el("div", { class: "mmc-reel-seg", role: "group", "aria-label": t("How this stretch is taken") });
     this.wait = el("button", { class: "mmc-reel-btn quiet", text: t("Wait until here"),
       title: t("Stay at the last stop until the playhead, then go"), onclick: () => this.waitHere() });
+    this.remove = el("button", { class: "mmc-reel-btn quiet", text: t("Remove this stop"),
+      title: t("Go straight from the stop before it to the one after"), onclick: () => this.removeStop() });
     this.now = el("span", { class: "mmc-st-pacenow" });
     this.canvas = el("canvas", { "aria-label": t("Speed"), onpointerdown: (event) => this.press(event) });
     this.node = el("div", { class: "mmc-st-pace", hidden: true }, [
-      el("div", { class: "mmc-st-pacehead" }, [this.title, this.ways, this.wait]),
+      el("div", { class: "mmc-st-pacehead" }, [this.title, this.ways, this.wait, this.remove]),
       this.canvas,
       this.now,
     ]);
@@ -62,6 +64,12 @@ export class PaceLane {
     let i = 0;
     while (i < marks.length - 2 && marks[i + 1].t <= this.bench.at.t) i++;
     return i;
+  }
+
+  /** The stop at the playhead, where there is more than one to choose from. */
+  stopHere(marks) {
+    if (marks.length < 2) return null;
+    return marks.find((mark) => Math.abs(mark.t - this.bench.at.t) < 0.07) ?? null;
   }
 
   speedAt(mover, unit, at) {
@@ -179,6 +187,7 @@ export class PaceLane {
     const out = marks[leg]?.out, into = marks[leg + 1]?.in;
     const current = !moves ? null : out === undefined && into === undefined ? "natural"
       : WAYS.find((way) => same(way[2], out) && same(way[3], into))?.[0] ?? null;
+    this.remove.hidden = !this.stopHere(marks);
     // Rebuilt only when it would differ: this runs with every frame played.
     const key = `${leg}|${current}`;
     if (key === this.headKey) return;
@@ -214,6 +223,20 @@ export class PaceLane {
     this.bench.commit();
   }
 
+  /** Take out the stop at the playhead. The end of a wait hands the way it was
+   *  left back to the stop the wait was at. */
+  removeStop() {
+    const mover = this.mover();
+    const stop = mover && this.stopHere(mover.marks);
+    if (!stop) return;
+    this.bench.stopPlay();
+    const k = mover.marks.indexOf(stop);
+    const before = mover.marks[k - 1];
+    if (before && stop.out !== undefined && before.out === undefined && strideOf(mover.marks, k - 1, "m") < 0.02) before.out = stop.out;
+    mover.marks.splice(k, 1);
+    this.bench.commit();
+  }
+
   press(event) {
     const mover = this.mover();
     if (event.button || !mover) return;
@@ -235,11 +258,16 @@ export class PaceLane {
         changed = true;
       } else {
         const along = (at.clientX - rect.left - PAD.left) / Math.max(1, width - PAD.left - PAD.right);
-        this.bench.goTo(this.bench.index(), clamp(along, 0, 1) * this.bench.seconds());
+        const when = clamp(along, 0, 1) * this.bench.seconds();
+        // Onto a stop, where the pointer is all but on one.
+        const stop = mover.marks.find((mark) => Math.abs(this.xOf(mark.t, width) - this.xOf(when, width)) < 7);
+        this.bench.goTo(this.bench.index(), stop ? stop.t : when);
       }
       this.bench.paint();
     };
     const up = () => {
+      // A point pressed and not dragged is its stop.
+      if (grab && !changed) this.bench.goTo(this.bench.index(), grab.t);
       this.canvas.removeEventListener("pointermove", move);
       this.canvas.removeEventListener("pointerup", up);
       this.canvas.removeEventListener("pointercancel", up);

@@ -114,8 +114,9 @@ stop keeps its time; the curve says how fast the stretch between two is taken,
 and dragging a point up there slows it elsewhere, so it still arrives when it
 did. The buttons take the stretch the playhead is in: **Natural**, **Steady**,
 **Start gently**, **Stop gently**, **Rush in**, **Rush off**. **Wait until here**
-stays at the last stop until the playhead. Clicking off a point moves the
-playhead.
+stays at the last stop until the playhead. Clicking a
+stop puts the playhead on it and offers **Remove this stop**; clicking anywhere
+else moves the playhead.
 
 ### What a shot sends
 
