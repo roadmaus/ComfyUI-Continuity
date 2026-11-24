@@ -6,6 +6,10 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Paths in the blockout bend.** Pull a person's or the camera's path into a curve,
+drag its stops, or make one a sharp corner; people face along it. A thing can move
+in a shot, and the camera can keep looking at somebody.
+
 **The blockout has a speed curve.** Under the glass, for the camera or the person
 selected: drag how fast a stop is reached and left, or pick a way to take the
 stretch. Stops keep their times.

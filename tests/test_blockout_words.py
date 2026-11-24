@@ -112,6 +112,31 @@ const kept = S.serializeStaging({ camera: bent, people: { 1: [{ ...pm(0, 0, 0), 
 out.kept = [kept.camera.map((m) => [m.in ?? null, m.out ?? null]), kept.people[1].map((m) => [m.in ?? null, m.out ?? null])];
 out.reads = Object.keys(cameraAt(bent, 0)).includes("out");
 
+// Bent by hand: stops stay, the pace is even, a corner is straight, and whoever
+// faced the way they went faces along the curve.
+const B = await import("./web/creator/blockout.js");
+const turnedWalk = [{ ...pm(0, 0, 0), bend: { x: 2, y: 0, z: 0 } }, { ...pm(4, 0, 6), bend: { x: -2, y: 0, z: 0 } }];
+B.faceArrival(turnedWalk, 1, { kind: "person" });
+const gait = Array.from({ length: 9 }, (_, k) => { const t = 0.4 + k * 0.4;
+  const a = poseAt(turnedWalk, t - 0.02), b = poseAt(turnedWalk, t + 0.02); return Math.hypot(b.x - a.x, b.z - a.z); });
+out.bentStops = [0, 4].map((t) => [r(poseAt(turnedWalk, t).x), r(poseAt(turnedWalk, t).z)]);
+out.bentEven = Math.max(...gait) / Math.min(...gait) < 1.05;
+const a0 = poseAt(turnedWalk, 1.4), b0 = poseAt(turnedWalk, 1.6);
+out.bentFaces = Math.abs(poseAt(turnedWalk, 1.5).ry - Math.atan2(b0.x - a0.x, b0.z - a0.z)) < 0.05;
+let jump = 0;
+for (let t = 0.02; t < 4; t += 0.02) jump = Math.max(jump, Math.abs(poseAt(turnedWalk, t).ry - poseAt(turnedWalk, t - 0.02).ry));
+out.bentJump = jump < 0.15;
+const corner = [at(0, 0), { ...at(2, 2), corner: true }, at(4, 2, 2)];
+out.corner = [r(cameraAt(corner, 1.5).x), r(cameraAt(corner, 2.5).z)];
+const set = { id: "s", objects: [{ ...anna }, { id: 2, kind: "block", x: 0, y: 0, z: 5, w: 4, h: 1.4, d: 1.8, plays: "", word: "car" }] };
+const drive = { camera: [at(0, -3)], people: { 2: [pm(0, -4, 5), pm(4, 4, 5)] }, look: 2 };
+out.car = [r(B.stagedAt(set, drive, 2)[1].x), r(B.facingOf(set.objects[1], 1, 0, 0))];
+out.look = [0, 2, 4].map((t) => r(B.lensAt(set, drive, t).yaw));
+out.lookWords = B.stagedSentence(set, drive, 4, { w: 16, h: 9 });
+out.lookPlain = moveSentence(B.aimedMarks(set, drive, 4), 4, null, { plain: true, keeping: B.lookName(set, drive) });
+const shaped = S.serializeStaging({ camera: corner, people: { 1: turnedWalk }, look: 2 });
+out.shaped = [shaped.camera[1].corner, shaped.people[1][0].bend, shaped.look];
+
 console.log(JSON.stringify(out));
 """
 
@@ -160,5 +185,18 @@ check("so does a person", said["person"], 0.31)
 check("the pace is kept on the mark, and clamped", said["kept"],
       [[[None, 0], [2, None], [None, None]], [[None, 0], [3, None]]])
 check("a moment read off the path carries no pace", said["reads"], False)
+
+check("a bent path keeps its stops", said["bentStops"], [[0, 0], [0, 6]])
+check("...and an even pace", said["bentEven"], True)
+check("...and is faced along, without a jump", [said["bentFaces"], said["bentJump"]], [True, True])
+check("a corner is straight in and straight out", said["corner"], [0, 2])
+check("a thing moves, lengthways", said["car"], [0, 0])
+check("the camera keeps on it", said["look"], [-0.46, 0, 0.46])
+check("...and says so", said["lookWords"],
+      "@anna stands at frame right in the midground; a car starts at centre in the midground and moves to the right. "
+      "The camera pans right with large amplitude, keeping the car in frame.")
+check("...in everyday words on the bench", said["lookPlain"],
+      "The camera turns right, always looking at the car.")
+check("the shape is kept", said["shaped"], [True, {"x": 2, "y": 0, "z": 0}, 2])
 
 passed("the blockout says who is where, and the move in the model's own words")

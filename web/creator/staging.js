@@ -24,7 +24,7 @@ import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
 import {
-  Raster, project, cameraAt, poseAt, stagedAt, guideSize, stagingSentence, moveSentence,
+  Raster, project, cameraAt, lensAt, poseAt, reachAt, facingOf, facesAlong, faceArrival, aimedMarks, lookName, stagedSentence, stagedAt, guideSize, stagingSentence, moveSentence,
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
@@ -153,7 +153,7 @@ class Blockout extends Reel {
 
   /** The shot camera at the playhead. */
   lensCam() {
-    return cameraAt(this.staging()?.camera ?? [], this.at.t);
+    return lensAt(this.set(), this.staging(), this.at.t);
   }
 
   /** The set as it stands at the playhead. */
@@ -543,7 +543,7 @@ class Blockout extends Reel {
     const index = this.index();
     const before = S.shotsOnSet(this.timeline, id).filter((i) => i < index && this.timeline.segments[i].staging).pop();
     const from = before != null ? this.timeline.segments[before] : null;
-    const end = from ? cameraAt(from.staging.camera, this.seconds(before)) : { ...START_CAMERA };
+    const end = from ? lensAt(S.setOf(this.timeline, from), from.staging, this.seconds(before)) : { ...START_CAMERA };
     delete end.t;
     segment.set = id;
     segment.staging = { camera: [{ ...end, t: 0 }], people: {} };
@@ -668,6 +668,7 @@ class Blockout extends Reel {
     this.inkWalks(context, cam, scale);
     if (this.lens) this.inkThirds(context, scale);
     else { this.inkPath(context, cam, scale); this.inkCamera(context, cam, scale); }
+    if (!this.lens) this.inkBends(context, cam, scale);
     this.inkNames(context, cam, scale, objects);
     this.inkGizmo?.(context, cam, scale);
     context.restore();
@@ -707,14 +708,14 @@ class Blockout extends Reel {
     const { w, h } = this.raster;
     for (const piece of set.objects) {
       const marks = staging.people?.[piece.id];
-      if (piece.kind !== "person" || !marks || marks.length < 2) continue;
+      if (!marks || marks.length < 2) continue;
       const [r, g, b] = piece.plays ? tagRGB(S.tagIndex(piece.plays)) : [189, 184, 174];
       context.strokeStyle = `rgb(${r},${g},${b})`;
       context.fillStyle = context.strokeStyle;
       context.lineWidth = 2 * scale;
       context.setLineDash([5 * scale, 5 * scale]);
       const from = marks[0].t, over = marks[marks.length - 1].t - from;
-      const along = Array.from({ length: 49 }, (_, k) => poseAt(marks, from + (over * k) / 48));
+      const along = Array.from({ length: 49 }, (_, k) => poseAt(marks, from + (over * k) / 48, piece));
       this.polyline(context, cam, along.map((at) => [at.x, at.y + 0.02, at.z]));
       context.setLineDash([]);
       for (const mark of marks) {
@@ -753,6 +754,147 @@ class Blockout extends Reel {
       context.fillRect(-side / 2, -side / 2, side, side);
       context.restore();
     }
+  }
+
+  // ---- bending a path --------------------------------------------------------------
+  //
+  // The path of whatever is selected, or the camera's, is worked by hand in free
+  // look: a stop is dragged to somewhere else, the line between two stops is
+  // pulled into a curve, and the knob either side of a stop says how the curve
+  // passes it. On the level it is at; Lift takes it up and down.
+
+  /** Whose path is worked: `{ marks, piece }`, the camera's having no piece. */
+  pathHeld() {
+    const staging = this.staging();
+    if (!staging) return null;
+    const piece = this.selectedThing();
+    const marks = piece ? staging.people?.[piece.id] : staging.camera;
+    return marks?.length > 1 ? { marks, piece } : null;
+  }
+
+  /** Where the held path can be taken hold of, as the glass sees it. */
+  pathParts(cam) {
+    const held = this.pathHeld();
+    if (!held) return null;
+    const { w, h } = this.raster;
+    const { marks, piece } = held;
+    const lift = piece ? 0.02 : 0;
+    const see = (x, y, z) => project(cam, [x, y + lift, z], w, h);
+    const stops = [], knobs = [], legs = [];
+    marks.forEach((mark, k) => {
+      const at = see(mark.x, mark.y ?? 0, mark.z);
+      if (at) stops.push({ k, at });
+      if (mark.corner) return;
+      for (const i of [k - 1, k]) {
+        if (i < 0 || i > marks.length - 2) continue;
+        const reach = reachAt(marks, k, i);
+        if (Math.hypot(reach.x, reach.y, reach.z) < 0.02) continue;
+        const end = see(mark.x + reach.x, (mark.y ?? 0) + reach.y, mark.z + reach.z);
+        if (at && end) knobs.push({ k, i, at: end, from: at });
+      }
+    });
+    for (let i = 0; i < marks.length - 1; i++) {
+      const pts = [];
+      for (let n = 0; n <= 24; n++) {
+        const when = marks[i].t + ((marks[i + 1].t - marks[i].t) * n) / 24;
+        const p = piece ? poseAt(marks, when, piece) : cameraAt(marks, when);
+        const at = see(p.x, p.y, p.z);
+        pts.push(at ? [at.x, at.y] : null);
+      }
+      legs.push({ i, pts });
+    }
+    return { ...held, stops, knobs, legs };
+  }
+
+  inkBends(context, cam, scale) {
+    const parts = this.pathParts(cam);
+    if (!parts) return;
+    context.strokeStyle = "rgba(255,255,255,.55)";
+    context.lineWidth = scale;
+    for (const knob of parts.knobs) {
+      context.beginPath();
+      context.moveTo(knob.from.x, knob.from.y);
+      context.lineTo(knob.at.x, knob.at.y);
+      context.stroke();
+    }
+    context.lineWidth = 1.6 * scale;
+    for (const spot of [...parts.knobs, ...parts.stops]) {
+      const stop = spot.i === undefined;
+      context.beginPath();
+      context.arc(spot.at.x, spot.at.y, (stop ? 7 : 4.5) * scale, 0, Math.PI * 2);
+      if (!stop) { context.fillStyle = "#1b1d20"; context.fill(); }
+      context.strokeStyle = "#fff";
+      context.stroke();
+    }
+  }
+
+  /** What of the held path is under the pointer, knobs before stops before lines. */
+  grabbedPath(cam, px, py, scale) {
+    const parts = this.pathParts(cam);
+    if (!parts) return null;
+    const nearest = (spots) => spots.map((spot) => ({ ...spot, away: Math.hypot(spot.at.x - px, spot.at.y - py) }))
+      .filter((spot) => spot.away <= 9 * scale).sort((a, b) => a.away - b.away)[0];
+    const knob = nearest(parts.knobs);
+    if (knob) return { ...parts, kind: "knob", k: knob.k, i: knob.i };
+    const stop = nearest(parts.stops);
+    if (stop) return { ...parts, kind: "stop", k: stop.k };
+    for (const leg of parts.legs) {
+      if (nearPolyline(leg.pts, px, py) > 7 * scale) continue;
+      let n = 0, best = Infinity;
+      leg.pts.forEach((at, k) => {
+        const away = at ? Math.hypot(at[0] - px, at[1] - py) : Infinity;
+        if (away < best) { best = away; n = k; }
+      });
+      return { ...parts, kind: "leg", i: leg.i, u: clamp(n / 24, 0.2, 0.8) };
+    }
+    return null;
+  }
+
+  dragPath(grab, event, cam) {
+    const { piece, kind, k, i, u } = grab;
+    const { marks } = grab;
+    const start = structuredClone(marks);
+    const along = piece ? start.map((mark, n) => n > 0 && facesAlong(start, n - 1, piece)) : [];
+    const reach = kind === "knob" ? reachAt(start, k, i) : null;
+    const ends = kind === "leg" ? [reachAt(start, i, i), reachAt(start, i + 1, i)] : null;
+    const level = kind === "leg" ? ((start[i].y ?? 0) + (start[i + 1].y ?? 0)) / 2
+      : (start[k].y ?? 0) + (reach ? reach.y : 0);
+    const at0 = this.glassPoint(event);
+    const from = this.floorPoint(at0.px, at0.py, cam, level);
+    const lifting = this.tool === "lift";
+    if (!lifting && !from) return () => {};
+    const round = (value) => Math.round(value * 100) / 100;
+    return (moved) => {
+      const d = { x: 0, y: 0, z: 0 };
+      if (lifting) d.y = (event.clientY - moved.clientY) * 0.012;
+      else {
+        const point = this.glassPoint(moved);
+        const to = this.floorPoint(point.px, point.py, cam, level);
+        if (!to) return;
+        d.x = to.x - from.x;
+        d.z = to.z - from.z;
+      }
+      const put = (mark, side, by) => {
+        delete mark.corner;
+        mark.bend = {};
+        for (const key of ["x", "y", "z"]) mark.bend[key] = round(clamp(by[key] * side, -FAR, FAR));
+      };
+      const plus = (a, by, n = 1) => ({ x: a.x + by.x * n, y: a.y + by.y * n, z: a.z + by.z * n });
+      if (kind === "stop") {
+        const mark = marks[k];
+        mark.x = round(clamp(start[k].x + d.x, -FAR, FAR));
+        mark.y = round(clamp((start[k].y ?? 0) + d.y, piece ? 0 : 0.2, piece ? BIG : 6));
+        mark.z = round(clamp(start[k].z + d.z, -FAR, FAR));
+      } else if (kind === "knob") put(marks[k], k === i ? 1 : -1, plus(reach, d));
+      else {
+        // Both ends reach the same way further, as far as puts the line under the pointer.
+        const n = 1 / (3 * u * (1 - u));
+        put(marks[i], 1, plus(ends[0], d, n));
+        put(marks[i + 1], -1, plus(ends[1], d, n));
+      }
+      if (piece) along.forEach((faced, n) => { if (faced) faceArrival(marks, n, piece); });
+      this.paint();
+    };
   }
 
   /** The shot camera where it stands at the playhead: a frustum of the piece's
@@ -907,7 +1049,7 @@ class Blockout extends Reel {
       const pass = S.stagingPass(this.timeline, segment);
       for (let k = 0; k < tiles; k++) {
         const at = ((k + 0.5) / tiles) * this.seconds(index);
-        raster.raster(stagedAt(set, segment.staging, at), cameraAt(segment.staging.camera, at));
+        raster.raster(stagedAt(set, segment.staging, at), lensAt(set, segment.staging, at));
         raster.shade(scratchContext, pass === "none" ? "as_staged" : pass);
         context.drawImage(scratch, Math.max(0, (tile.w - each) / 2), 0, Math.min(tile.w, each), tile.h, k * each, 0, each, tile.h);
       }
@@ -955,7 +1097,7 @@ class Blockout extends Reel {
           ? t("Turn: drag a ring to turn a piece on that axis. It snaps to 15° and rests on the floor whichever way up it is.")
           : this.tool === "lift"
             ? t("Lift: drag a piece up to take it off the floor, down to put it back. Move the playhead first and it rises or falls between the two marks.")
-            : t("Move: drag a person to block them, drag a wall or the table to change the set. Drag the floor to orbit, shift-drag to slide, wheel to zoom.");
+            : t("Move: drag a person to block them, drag a wall or the table to change the set. Pull a path to bend it. Drag the floor to orbit, shift-drag to slide, wheel to zoom.");
     }
     this.statusHost.replaceChildren(
       el("button", { class: "mmc-reel-link", text: t("The piece"), onclick: () => this.select(null) }),
@@ -1107,8 +1249,8 @@ class Blockout extends Reel {
     const set = this.set();
     const piece = set?.objects.find((candidate) => candidate.id === id);
     if (!piece) return null;
-    if (piece.kind !== "person") return { piece, target: piece, person: false };
     const staging = this.staging();
+    if (piece.kind !== "person" && !staging.people[id]) return { piece, target: piece, person: false };
     const t = snapTime(this.at.t, this.seconds());
     const marks = staging.people[id] ?? (staging.people[id] = [restMark(piece, 0)]);
     let mark = marks.find((candidate) => Math.abs(candidate.t - t) < 0.14);
@@ -1150,6 +1292,8 @@ class Blockout extends Reel {
     if (!this.lens && !slide) {
       const grab = this.grabbed(this.gizmo(cam), px, py, scale);
       if (grab) { move = this.dragHandle(grab, event, cam); edits = Boolean(move); }
+      const path = move ? null : this.grabbedPath(cam, px, py, scale);
+      if (path) { move = this.dragPath(path, event, cam); edits = true; }
     }
     let pressedThing = false;
     if (!move && !this.lens && !slide) {
@@ -1266,7 +1410,7 @@ class Blockout extends Reel {
       if (hold.person) {
         const marks = this.staging().people[id];
         const before = marks[marks.indexOf(target) - 1];
-        if (before && Math.hypot(x - before.x, z - before.z) > 0.3) target.ry = Math.atan2(x - before.x, z - before.z);
+        if (before && Math.hypot(x - before.x, z - before.z) > 0.3) target.ry = facingOf(hold.piece, x - before.x, z - before.z, target.ry);
       }
       target.x = x;
       target.z = z;
@@ -1287,12 +1431,11 @@ class Blockout extends Reel {
     };
   }
 
-  /** Where a glass pixel's ray meets the floor, or null. */
-  floorPoint(px, py, cam) {
+  /** Where a glass pixel's ray meets the level `height` off the floor, or null. */
+  floorPoint(px, py, cam, height = 0) {
     const ray = this.raster.ray(px, py, cam);
-    if (cam.y <= 0 || ray[1] >= -0.001) return null;
-    const along = -cam.y / ray[1];
-    return along > 400 ? null : { x: cam.x + ray[0] * along, z: cam.z + ray[2] * along };
+    const along = (height - cam.y) / (ray[1] || 1e-9);
+    return along <= 0 || along > 400 ? null : { x: cam.x + ray[0] * along, z: cam.z + ray[2] * along };
   }
 
   /** The camera, operated. Free look orbits round the set's pivot and slides
@@ -1303,6 +1446,10 @@ class Blockout extends Reel {
       const dx = at.clientX - last.x, dy = at.clientY - last.y;
       last = { x: at.clientX, y: at.clientY };
       const sliding = slide || at.shiftKey;
+      if (this.lens && !sliding && this.staging().look) {
+        this.say(t("The camera keeps looking at {who}. Choose Nobody in the shot's settings to aim it yourself.", { who: lookName(this.set(), this.staging()) }));
+        return;
+      }
       if (this.lens) {
         const mark = this.cameraMark();
         if (sliding) {
@@ -1376,6 +1523,7 @@ class Blockout extends Reel {
     for (const index of S.shotsOnSet(this.timeline, set.id)) {
       const people = this.timeline.segments[index].staging?.people;
       if (people) delete people[id];
+      if (this.timeline.segments[index].staging?.look === id) delete this.timeline.segments[index].staging.look;
     }
     this.sel = { kind: "set", id: set.id };
     this.commit();
@@ -1735,9 +1883,7 @@ class Blockout extends Reel {
     if (!set) return "";
     const { w, h } = guideSize(this.timeline);
     const seconds = Number(segment.duration_s) || 0;
-    return stagingSentence(stagedAt(set, segment.staging, 0), segment.staging.camera, seconds,
-                           cameraAt(segment.staging.camera, 0), { w, h },
-                           { ends: stagedAt(set, segment.staging, seconds), people: segment.staging.people });
+    return stagedSentence(set, segment.staging, seconds, { w, h });
   }
 
   /** A staged shot's own rows: the move, the marks, the lens, who stands where,
@@ -1758,7 +1904,11 @@ class Blockout extends Reel {
     const loose = staging.hold === "loose";
     const posture = this.postureChanges(index);
     return [
-      this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(marks, this.seconds(index), null, { plain: true }) })),
+      this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(aimedMarks(set, staging, this.seconds(index)), this.seconds(index), null,
+        { plain: true, keeping: lookName(set, staging) }) })),
+      this.irow(t("Keep looking at"), this.segmented([[0, t("Nobody")], ...this.lookable(set, staging).map((piece) => [piece.id, this.labelOf(piece)])],
+        staging.look ?? 0, (id) => this.keepLooking(index, id)),
+      staging.look ? t("The camera turns by itself. Moving it and bending its path still work.") : null),
       this.irow(t("Marks"), el("div", { class: "mmc-reel-inline" }, [
         ...marks.map((mark) => el("button", { class: "mmc-reel-value", title: t("Go to this mark"),
           onclick: () => { this.goTo(index, mark.t); this.renderSide(); } }, [
@@ -1770,8 +1920,7 @@ class Blockout extends Reel {
         [24, 28, 35, 50, 85].includes(lens) ? lens : null,
         (mm) => { for (const mark of staging.camera) mark.mm = mm; this.commit(); })),
       this.irow(t("Staging"), el("span", { class: "mmc-reel-note",
-        text: stagingSentence(stagedAt(set, staging, 0), marks, this.seconds(index), cameraAt(marks, 0), { w, h },
-          { withMove: false, ends: stagedAt(set, staging, this.seconds(index)), people: staging.people })
+        text: stagedSentence(set, staging, this.seconds(index), { w, h }, { withMove: false })
           || t("Nothing named is in frame.") })),
       this.irow(t("Guide"), this.segmented(this.passOptions(), pass, (value) => {
         if (value === S.pieceStagingPass(this.timeline)) delete staging.pass; else staging.pass = value;
@@ -1786,6 +1935,30 @@ class Blockout extends Reel {
         : posture ? t("Someone changes posture or leaves the floor in this shot: Loosely may suit it better.")
           : t("The blocks are where things are."))] : []),
     ];
+  }
+
+  /** What a camera can be kept on: whoever and whatever is named, and what moves. */
+  lookable(set, staging) {
+    return set.objects.filter((piece) => piece.kind === "person" || piece.plays || piece.word || staging.people?.[piece.id] || piece.id === staging.look);
+  }
+
+  /** Keep the camera on something, or on nothing: then it stays turned the way it
+   *  was turned at each of its marks. */
+  keepLooking(index, id) {
+    const segment = this.timeline.segments[index];
+    const { staging } = segment;
+    const set = S.setOf(this.timeline, segment);
+    if (id) staging.look = id;
+    else {
+      const aimed = staging.camera.map((mark) => lensAt(set, staging, mark.t));
+      staging.camera.forEach((mark, k) => {
+        const before = staging.camera[k - 1]?.yaw ?? aimed[k].yaw;
+        mark.yaw = before + wrapTurn(aimed[k].yaw - before);
+        mark.pitch = aimed[k].pitch;
+      });
+      delete staging.look;
+    }
+    this.commit();
   }
 
   /** A set: its name, what is on it, and what can be added. Shared by every
@@ -1834,6 +2007,8 @@ class Blockout extends Reel {
     const base = set.objects.find((piece) => piece.id === id);
     const now = this.selectedThing();
     const person = base.kind === "person";
+    const moves = !person && Boolean(this.staging().people?.[id]);
+    const blocked = person || moves;
     const index = this.index();
     const marks = this.staging().people?.[id];
     const used = S.shotsOnSet(this.timeline, set.id);
@@ -1861,11 +2036,16 @@ class Blockout extends Reel {
       ? Math.hypot(marks[0].x - marks[marks.length - 1].x, marks[0].z - marks[marks.length - 1].z, marks[0].y - marks[marks.length - 1].y) : 0;
     const others = (handle) => set.objects.some((piece) => piece.plays === handle && piece.id !== id);
     const rows = [
-      this.ihead(this.labelOf(base), person ? t("in shot {n} at {s}", { n: index + 1, s: secondsText(this.at.t) })
+      this.ihead(this.labelOf(base), blocked ? t("in shot {n} at {s}", { n: index + 1, s: secondsText(this.at.t) })
         : `${t("the {name} set", { name: set.name.toLowerCase() })} · ${rangeText(used)}`),
       el("p", { class: "mmc-reel-why", text: person
         ? t("Drag them to block this shot: Move slides them, Turn tips them over, Lift takes them off the floor. Move the playhead first to give them a second mark, and they go from one to the other.")
-        : t("Part of the set. Moving it reshoots {range}.", { range: rangeText(used) }) }),
+        : moves ? t("It moves in this shot alone. Move the playhead, then drag it, and it goes there. Its size and name belong to the set.")
+          : t("Part of the set. Moving it reshoots {range}.", { range: rangeText(used) }) }),
+      ...(person ? [] : [this.irow(t("Moves in this shot"), this.switchControl(moves, (on) => edit(() => {
+        const { people } = this.staging();
+        if (on) people[id] = [restMark(base, 0)]; else delete people[id];
+      })), moves ? null : t("Like a car that drives off. The other shots keep it where it is."))]),
       person
         ? this.irow(t("Plays"), this.segmented([["", t("Nobody")], ...(this.timeline.subjects ?? []).map((subject) => [subject.handle, `@${subject.handle}`, null,
             others(subject.handle) ? t("@{who} already stands on this set", { who: subject.handle }) : null])], base.plays,
@@ -1887,17 +2067,17 @@ class Blockout extends Reel {
           onclick: () => edit(() => { Object.assign(this.holdOf(id).target, { rx: 0, rz: 0, y: 0 }); }) })] : []),
       ]), posture ? `${posture.charAt(0).toUpperCase()}${posture.slice(1)}. ${t("The staging sentence says so.")}`
         : person ? t("Standing.") : t("Upright.")),
-      person
-        ? this.irow(t("In this shot"), el("div", { class: "mmc-reel-inline" }, [
+      ...(blocked
+        ? [this.irow(t("In this shot"), el("div", { class: "mmc-reel-inline" }, [
             el("span", { class: "mmc-reel-note", text: walk > 0.3 ? t("Travels {m} m between {n} marks.", { m: walk.toFixed(1), n: marks.length })
-              : marks && marks.length > 1 ? t("Changes where they stand, on the spot.") : t("Holds one mark.") }),
+              : marks && marks.length > 1 ? t("Turns on the spot.") : t("Holds one mark.") }),
             ...(marks && marks.length > 1 ? [el("button", { class: "mmc-reel-btn", text: t("Hold the first mark"),
               onclick: () => edit(() => { this.staging().people[id] = [marks[0]]; }) })] : []),
-          ]))
-        : this.irow(t("Size"), vec([
+          ]))] : []),
+      ...(person ? [] : [this.irow(t("Size"), vec([
             ["W", base.w, (v) => { base.w = clamp(v, 0.05, BIG); }],
             ["H", base.h, (v) => { base.h = clamp(v, 0.05, BIG); }],
-            ["D", base.d, (v) => { base.d = clamp(v, 0.05, BIG); }]])),
+            ["D", base.d, (v) => { base.d = clamp(v, 0.05, BIG); }]]))]),
       el("div", { class: "mmc-reel-actions quiet" }, [el("button", { class: "mmc-reel-btn quiet danger", text: t("Take off the set"),
         onclick: () => this.removeThing() })]),
     ];
@@ -1946,7 +2126,7 @@ class Blockout extends Reel {
       segment.staging = { camera: segment.staging?.camera?.length ? segment.staging.camera : [], people: {} };
       lineUp(this.timeline, index);
       if (!segment.staging.camera.length) {
-        const end = cameraAt(before.staging.camera, this.seconds(index - 1));
+        const end = lensAt(S.setOf(this.timeline, before), before.staging, this.seconds(index - 1));
         delete end.t;
         segment.staging.camera = [{ ...end, t: 0 }];
       }

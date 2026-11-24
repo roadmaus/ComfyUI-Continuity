@@ -7,7 +7,7 @@
 
 import { el } from "./dom.js";
 import { t } from "./i18n.js";
-import { clamp, cameraAt, poseAt, legSpeed, legEnds, strideOf, MOST_PACE } from "./blockout.js";
+import { clamp, cameraAt, poseAt, legSpeed, legEnds, strideOf, shapedMark, MOST_PACE } from "./blockout.js";
 
 /** Ways to take a stretch: [id, label, speed leaving, speed arriving], the
  *  speeds as multiples of the stretch's average. */
@@ -33,10 +33,14 @@ export class PaceLane {
       title: t("Stay at the last stop until the playhead, then go"), onclick: () => this.waitHere() });
     this.remove = el("button", { class: "mmc-reel-btn quiet", text: t("Remove this stop"),
       title: t("Go straight from the stop before it to the one after"), onclick: () => this.removeStop() });
+    this.corner = el("button", { class: "mmc-reel-btn quiet", text: t("Sharp corner"),
+      title: t("Go straight to this stop and straight on from it"), onclick: () => this.shape(true) });
+    this.smooth = el("button", { class: "mmc-reel-btn quiet", text: t("Smooth again"),
+      title: t("Undo the bending at this stop"), onclick: () => this.shape(false) });
     this.now = el("span", { class: "mmc-st-pacenow" });
     this.canvas = el("canvas", { "aria-label": t("Speed"), onpointerdown: (event) => this.press(event) });
     this.node = el("div", { class: "mmc-st-pace", hidden: true }, [
-      el("div", { class: "mmc-st-pacehead" }, [this.title, this.ways, this.wait, this.remove]),
+      el("div", { class: "mmc-st-pacehead" }, [this.title, this.ways, this.wait, this.corner, this.smooth, this.remove]),
       this.canvas,
       this.now,
     ]);
@@ -47,15 +51,15 @@ export class PaceLane {
     const staging = this.bench.staging();
     if (!staging) return null;
     const thing = this.bench.selectedThing();
-    if (thing?.kind === "person") {
-      return { marks: staging.people?.[thing.id] ?? [], person: true, name: this.bench.labelOf(thing) };
+    if (thing?.kind === "person" || staging.people?.[thing?.id]) {
+      return { marks: staging.people?.[thing.id] ?? [], person: thing.kind === "person", thing: true, name: this.bench.labelOf(thing) };
     }
-    return { marks: staging.camera, person: false, name: t("Camera") };
+    return { marks: staging.camera, person: false, thing: false, name: t("Camera") };
   }
 
   /** Metres for a mover that goes anywhere, degrees for a camera that only turns. */
-  unitOf({ marks, person }) {
-    if (person) return "m";
+  unitOf({ marks, thing }) {
+    if (thing) return "m";
     return marks.some((mark, k) => k && strideOf(marks, k - 1, "m") > 0.1) ? "m" : "deg";
   }
 
@@ -74,7 +78,7 @@ export class PaceLane {
 
   speedAt(mover, unit, at) {
     const { marks } = mover;
-    const read = (when) => (mover.person ? poseAt(marks, when) : cameraAt(marks, when));
+    const read = (when) => (mover.thing ? poseAt(marks, when) : cameraAt(marks, when));
     const from = Math.max(marks[0].t, at - 0.02), to = Math.min(marks[marks.length - 1].t, at + 0.02);
     if (to - from < 1e-4) return 0;
     return legSpeed(read(from), read(to), to - from, unit);
@@ -131,8 +135,8 @@ export class PaceLane {
     context.fillStyle = ink;
     if (!moves) {
       context.globalAlpha = 0.7;
-      context.fillText(mover.person
-        ? t("Stays put. Move the playhead, then drag them somewhere, and they walk there.")
+      context.fillText(mover.thing
+        ? t("Stays put. Move the playhead, then drag them somewhere, and they go there.")
         : t("Stays still. Move the playhead, then move the camera, and it travels there."), PAD.left, height / 2 + 4);
       context.globalAlpha = 1;
       return;
@@ -187,7 +191,10 @@ export class PaceLane {
     const out = marks[leg]?.out, into = marks[leg + 1]?.in;
     const current = !moves ? null : out === undefined && into === undefined ? "natural"
       : WAYS.find((way) => same(way[2], out) && same(way[3], into))?.[0] ?? null;
-    this.remove.hidden = !this.stopHere(marks);
+    const stop = this.stopHere(marks);
+    this.remove.hidden = !stop;
+    this.corner.hidden = !stop || Boolean(stop.corner);
+    this.smooth.hidden = !stop || !shapedMark(stop);
     // Rebuilt only when it would differ: this runs with every frame played.
     const key = `${leg}|${current}`;
     if (key === this.headKey) return;
@@ -220,6 +227,17 @@ export class PaceLane {
     held.t = Math.round(this.bench.at.t * 20) / 20;
     delete before.out;
     mover.marks.splice(i + 1, 0, held);
+    this.bench.commit();
+  }
+
+  /** Make the stop at the playhead a corner, or give it back its own curve. */
+  shape(corner) {
+    const mover = this.mover();
+    const stop = mover && this.stopHere(mover.marks);
+    if (!stop) return;
+    this.bench.stopPlay();
+    delete stop.bend;
+    if (corner) stop.corner = true; else delete stop.corner;
     this.bench.commit();
   }
 

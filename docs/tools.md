@@ -109,6 +109,18 @@ lowest point sits at its height off the floor, so a figure laid flat lies on
 it. **+ Person**, **+ Block**, **+ Wall** and **+ Post** add to the set, and
 Delete takes the selection off it.
 
+In free look, the path of whoever is selected, or the camera's, can be worked by
+hand. Pull the line to bend it, drag a ringed stop somewhere else, or drag the
+knobs either side of a stop to say how the curve passes it. They move on their
+own level; with **Lift** they go up and down. People face along the curve. At a
+stop, **Sharp corner** and **Smooth again** are beside the speed.
+
+**Moves in this shot** lets a thing, a car say, have stops like a person. It is
+then moved in that shot alone; the other shots keep it where it is.
+
+**Keep looking at** turns the shot camera to somebody or something for the whole
+shot, whatever path it takes.
+
 Under the glass is the **speed** of whoever is selected, or of the camera. Each
 stop keeps its time; the curve says how fast the stretch between two is taken,
 and dragging a point up there slows it elsewhere, so it still arrives when it

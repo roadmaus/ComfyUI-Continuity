@@ -2666,7 +2666,7 @@ export const STAGED_GUIDE_DIR = "continuity/blockout";
 export const STAGED_GUIDE_PREFIX = "staged-";
 /** How marks are walked between. Moves when that changes, so a guide drawn the
  *  old way is drawn again. */
-const STAGING_MOTION = 2;
+const STAGING_MOTION = 3;
 /** Whatever a piece of a set can be, with the size a new one starts at. */
 export const SET_KINDS = {
   person: { w: 0.5, h: 1.75, d: 0.35 },
@@ -2750,10 +2750,14 @@ export function parseSets(raw) {
   return out;
 }
 
-/** How fast a mark is arrived at and left, as multiples of the stretch's average.
- *  Absent where it was never set. */
-function paceOfMark(raw) {
+/** How fast a mark is arrived at and left, as multiples of the stretch's average,
+ *  and how the curve bends there. Absent where it was never set. */
+function shapeOfMark(raw) {
   const out = {};
+  if (raw?.bend && typeof raw.bend === "object") {
+    out.bend = Object.fromEntries(["x", "y", "z"].map((key) => [key, finiteIn(raw.bend[key], 0, -SET_FAR, SET_FAR)]));
+  }
+  if (raw?.corner === true) out.corner = true;
   for (const key of ["in", "out"]) if (Number.isFinite(raw?.[key])) out[key] = finiteIn(raw[key], 1, 0, 3);
   return out;
 }
@@ -2767,7 +2771,7 @@ function cameraMark(raw) {
     yaw: finiteIn(raw?.yaw, 0, -100, 100),
     pitch: finiteIn(raw?.pitch, 0, -1.5, 1.5),
     mm: finiteIn(raw?.mm, 32, 8, 300),
-    ...paceOfMark(raw),
+    ...shapeOfMark(raw),
   };
 }
 
@@ -2780,7 +2784,7 @@ function personMark(raw) {
     rx: turn(raw?.rx),
     ry: turn(raw?.ry),
     rz: turn(raw?.rz),
-    ...paceOfMark(raw),
+    ...shapeOfMark(raw),
   };
 }
 
@@ -2802,12 +2806,15 @@ export function parseStaging(raw) {
   const out = { camera, people };
   if (raw.pass === "none" || STAGING_PASSES.includes(raw.pass)) out.pass = raw.pass;
   if (raw.hold === "loose") out.hold = "loose";
+  const look = Math.round(Number(raw.look));
+  if (look >= 1) out.look = look;
   if (typeof raw.words === "string" && raw.words.trim()) out.words = raw.words.slice(0, 2000);
   return out;
 }
 
 const roundAll = (object) => Object.fromEntries(
-  Object.entries(object).map(([key, value]) => [key, typeof value === "number" ? round3(value) : value]));
+  Object.entries(object).map(([key, value]) => [key, typeof value === "number" ? round3(value)
+    : key === "bend" ? roundAll(value) : value]));
 
 export function serializeSets(sets) {
   return parseSets(sets).map((set) => ({
@@ -2839,6 +2846,7 @@ export function serializeStaging(staging) {
     ...(Object.keys(people).length ? { people } : {}),
     ...(picked.pass ? { pass: picked.pass } : {}),
     ...(picked.hold ? { hold: picked.hold } : {}),
+    ...(picked.look ? { look: picked.look } : {}),
     ...(picked.words ? { words: picked.words } : {}),
   };
 }
@@ -2942,7 +2950,7 @@ export function attachStagedReference(segment, path) {
 export function sceneAsStaging(scene, { id = "s1", name = "" } = {}) {
   if (!scene || typeof scene !== "object") return null;
   const objects = (Array.isArray(scene.objects) ? scene.objects : [])
-    .map((piece, at) => setPiece(piece, at + 1)).filter(Boolean);
+    .map((piece, at) => setPiece(piece, piece?.id ?? at + 1)).filter(Boolean);
   const duration = finiteIn(scene.duration, 4, 1, 60);
   const raw = Array.isArray(scene.marks) && scene.marks.length
     ? scene.marks : scene.shot ? [scene.shot] : [];
@@ -2953,6 +2961,7 @@ export function sceneAsStaging(scene, { id = "s1", name = "" } = {}) {
   const camera = raw.map((mark, at) => cameraMark({ ...mark,
     t: times ? Number(times[at]) || 0 : raw.length > 1 ? (at / last) * duration : 0 }));
   const staging = { camera, people: parseStaging({ camera: [], people: scene.people })?.people ?? {} };
+  if (Number(scene.look) >= 1) staging.look = Math.round(scene.look);
   if (STAGING_PASSES.includes(scene.pass)) staging.pass = scene.pass;
   const set = { id, name: name || id, objects };
   const view = setView(scene.view && { yaw: scene.view.yaw, pitch: scene.view.pitch });

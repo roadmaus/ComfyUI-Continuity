@@ -739,7 +739,8 @@ function walkClause(piece, end, walk, from, to, cam) {
   if (!from && !to) return "";
   const who = piece.plays ? `@${piece.plays}` : articled(piece.word);
   const posture = postureOf(piece);
-  const how = posture || postureOf(end) ? t("moves")
+  const how = piece.kind !== "person" ? (walk.pace > 5 ? t("moves fast") : walk.pace < 0.5 ? t("moves slowly") : t("moves"))
+    : posture || postureOf(end) ? t("moves")
     : walk.pace > 3.2 ? t("runs") : walk.pace > 2 ? t("jogs") : walk.pace < 0.5 ? t("walks slowly") : t("walks");
   if (!from) return t("{who} {how} into frame, to {to}", { who, how, to: to.to });
   const start = posture ? t("{who} is {posture} {place} and", { who, posture, place: from.words })
@@ -765,7 +766,7 @@ function walkClause(piece, end, walk, from, to, cam) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null } = {}) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null, keeping = "" } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
   const entering = [];
@@ -774,7 +775,7 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const piece of objects) {
     if (!piece.plays && !piece.word) continue;
     const here = placeOf(piece, first, size.w, size.h);
-    const walk = piece.kind === "person" ? walkOf(people?.[piece.id]) : null;
+    const walk = walkOf(people?.[piece.id]);
     if (walk) {
       walkers.push({ piece, walk, here });
       continue;
@@ -816,7 +817,7 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const piece of entering) {
     clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
   }
-  const move = withMove ? moveSentence(marks, duration, moveTarget(objects, marks, cam, size.w, size.h)) : "";
+  const move = withMove ? moveSentence(marks, duration, moveTarget(ends ?? objects, marks, cam, size.w, size.h), { keeping }) : "";
   if (!clauses.length) return move;
   const staging = clauses.join("; ") + ".";
   return `${staging.charAt(0).toUpperCase()}${staging.slice(1)}${move ? ` ${move}` : ""}`;
@@ -879,8 +880,9 @@ function movesBetween(a, b, target, plain) {
   return moves.sort((p, q) => q.mag - p.mag);
 }
 
-export function moveSentence(marks, duration, target = null, { plain = false } = {}) {
-  const still = plain ? t("The camera stays still.") : t("The camera holds a static shot.");
+export function moveSentence(marks, duration, target = null, { plain = false, keeping = "" } = {}) {
+  const held = !keeping ? "." : `${plain ? t(", always looking at {who}", { who: keeping }) : t(", keeping {who} in frame", { who: keeping })}.`;
+  const still = (plain ? t("The camera stays still") : t("The camera holds a static shot")) + held;
   if (!marks || marks.length < 2) return still;
   const a = marks[0], b = marks[marks.length - 1];
   // A camera that goes somewhere and comes back has no move from end to end.
@@ -906,13 +908,13 @@ export function moveSentence(marks, duration, target = null, { plain = false } =
   let sentence = t("The camera {moves}", { moves: said.join(t(", then ")) });
   if (plain) {
     if (rate > 0.55) sentence += " " + t("quickly"); else if (rate < 0.1) sentence += " " + t("slowly");
-    return sentence + ".";
+    return sentence + held;
   }
   const amp = mag > 1.7 ? t("large") : mag < 0.42 ? t("small") : "";
   const speed = rate > 0.55 ? t("fast") : rate < 0.1 ? t("slow") : "";
   if (amp) sentence += " " + t("with {amp} amplitude", { amp });
   if (speed) sentence += " " + t("at {speed} speed", { speed });
-  return sentence + ".";
+  return sentence + held;
 }
 
 // ---- the path -----------------------------------------------------------------
@@ -987,6 +989,46 @@ function through(times, values, i, t) {
     + (-2 * u3 + 3 * u2) * values[i + 1] + (u3 - u2) * span * slopeAt(times, values, i + 1);
 }
 
+/** Whether a mark's curve was shaped by hand: bent, or made a corner. */
+export const shapedMark = (mark) => Boolean(mark.bend || mark.corner);
+const shapedLeg = (marks, i) => shapedMark(marks[i]) || shapedMark(marks[i + 1]);
+
+/** How far mark `k`'s curve reaches on the side of leg `i`, as an offset from
+ *  the mark: a third of the curve's own slope there. */
+export function reachAt(marks, k, i) {
+  const mark = marks[k];
+  const sign = k === i ? 1 : -1;
+  const out = {};
+  for (const key of ["x", "y", "z"]) {
+    if (mark.corner) out[key] = (sign * ((marks[i + 1][key] ?? 0) - (marks[i][key] ?? 0))) / 3;
+    else if (mark.bend) out[key] = sign * mark.bend[key];
+    else {
+      const span = marks[i + 1].t - marks[i].t;
+      out[key] = (sign * span * slopeAt(marks.map((m) => m.t), marks.map((m) => m[key] ?? 0), k)) / 3;
+    }
+  }
+  return out;
+}
+
+/** Where leg `i` has got to at `t`: through its marks, or along the curve they
+ *  were bent into. */
+function placeOn(marks, i, t) {
+  const out = {};
+  if (!shapedLeg(marks, i)) {
+    const times = marks.map((mark) => mark.t);
+    for (const key of ["x", "y", "z"]) out[key] = through(times, marks.map((mark) => mark[key] ?? 0), i, t);
+    return out;
+  }
+  const a = marks[i], b = marks[i + 1];
+  const u = clamp((t - a.t) / Math.max(1e-6, b.t - a.t), 0, 1), v = 1 - u;
+  const p = reachAt(marks, i, i), q = reachAt(marks, i + 1, i);
+  for (const key of ["x", "y", "z"]) {
+    const from = a[key] ?? 0, to = b[key] ?? 0;
+    out[key] = v * v * v * from + 3 * v * v * u * (from + p[key]) + 3 * v * u * u * (to + q[key]) + u * u * u * to;
+  }
+  return out;
+}
+
 /** The fastest a stretch may be left or arrived at, as a multiple of its
  *  average. Past three the progress below could run backwards. */
 export const MOST_PACE = 3;
@@ -1002,14 +1044,13 @@ const LEG_STEPS = 64;
 /** The length of leg `i` so far, at even steps of its own parameter. */
 function legLengths(marks, i, unit) {
   const times = marks.map((mark) => mark.t);
-  const keys = unit === "m" ? ["x", "y", "z"] : ["yaw", "pitch"];
-  const values = keys.map((key) => marks.map((mark) => mark[key] ?? 0));
   const span = times[i + 1] - times[i];
+  const turns = unit === "m" ? null : ["yaw", "pitch"].map((key) => [key, marks.map((mark) => mark[key] ?? 0)]);
   const lengths = [0];
   let last = null;
   for (let k = 0; k <= LEG_STEPS; k++) {
-    const at = {};
-    keys.forEach((key, n) => { at[key] = through(times, values[n], i, times[i] + (span * k) / LEG_STEPS); });
+    const when = times[i] + (span * k) / LEG_STEPS;
+    const at = turns ? Object.fromEntries(turns.map(([key, values]) => [key, through(times, values, i, when)])) : placeOn(marks, i, when);
     if (last) lengths.push(lengths[k - 1] + apart(last, at, unit));
     last = at;
   }
@@ -1027,6 +1068,23 @@ export const strideOf = (marks, i, unit) => legLengths(marks, i, unit)[LEG_STEPS
 export function legEnds(marks, i, lengths = legLengths(marks, i, unitOfLeg(marks, i))) {
   const total = lengths[LEG_STEPS];
   if (total < 1e-6) return [marks[i].out ?? 1, marks[i + 1].in ?? 1];
+  // A bent leg's slope is its shape. Its speed is the one its marks would have
+  // had unbent, or where the mark itself was bent, that of the legs either side.
+  if (shapedLeg(marks, i)) {
+    const span = marks[i + 1].t - marks[i].t;
+    const average = total / Math.max(1e-6, span);
+    const speed = (k) => {
+      const other = k === i ? i - 1 : i + 1;
+      if (other < 0 || other > marks.length - 2) return 1;
+      const times = marks.map((mark) => mark.t);
+      if (!shapedMark(marks[k])) {
+        return Math.hypot(...["x", "y", "z"].map((key) => slopeAt(times, marks.map((mark) => mark[key] ?? 0), k))) / average;
+      }
+      const beside = strideOf(marks, other, "m") / Math.max(1e-6, marks[other + 1].t - marks[other].t);
+      return beside < 1e-6 ? 0 : (2 * beside) / (average + beside);
+    };
+    return [marks[i].out ?? clamp(speed(i), 0, MOST_PACE), marks[i + 1].in ?? clamp(speed(i + 1), 0, MOST_PACE)];
+  }
   // The end slope of a cubic, from its first two steps.
   const slope = (one, two) => clamp((LEG_STEPS * (4 * one - two)) / (2 * total), 0, MOST_PACE);
   return [
@@ -1039,7 +1097,7 @@ export function legEnds(marks, i, lengths = legLengths(marks, i, unitOfLeg(marks
  *  given a pace. Then distance along the curve follows a cubic whose end slopes
  *  are the pace, so the shape of the path has no say in the speed. */
 function pacedTime(marks, i, t) {
-  if (marks[i].out === undefined && marks[i + 1].in === undefined) return t;
+  if (marks[i].out === undefined && marks[i + 1].in === undefined && !shapedLeg(marks, i)) return t;
   const span = marks[i + 1].t - marks[i].t;
   if (span < 1e-6) return t;
   const lengths = legLengths(marks, i, unitOfLeg(marks, i));
@@ -1055,8 +1113,8 @@ function pacedTime(marks, i, t) {
   return marks[i].t + span * along;
 }
 
-/** A mark as a moment: where it is, without how it is arrived at and left. */
-const momentOf = ({ in: _in, out: _out, ...mark }) => mark;
+/** A mark as a moment: where it is, without how it is arrived at, left or bent. */
+const momentOf = ({ in: _in, out: _out, bend: _bend, corner: _corner, ...mark }) => mark;
 
 /** The leg `t` falls in. `t` is inside the marks. */
 function legAt(marks, t) {
@@ -1077,8 +1135,8 @@ export function cameraAt(marks, t) {
   const i = legAt(marks, t);
   const times = marks.map((mark) => mark.t);
   const when = pacedTime(marks, i, t);
-  const out = { t };
-  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) out[key] = through(times, marks.map((mark) => mark[key]), i, when);
+  const out = { t, ...placeOn(marks, i, when) };
+  for (const key of ["yaw", "pitch", "mm"]) out[key] = through(times, marks.map((mark) => mark[key]), i, when);
   return out;
 }
 
@@ -1092,11 +1150,23 @@ const shortest = (a, b) => {
 /** How long somebody setting off takes to turn the way they walk, at most. */
 const TURN_SECONDS = 0.4;
 
-/** Where one person stands at `t`: along a curve through their marks, turning
- *  the short way round. Somebody whose mark faces the way they walk turns as
- *  they set off; any other turn is spread over the leg, as it was placed. Null
- *  where the shot gives them no marks. */
-export function poseAt(marks, t) {
+/** The way something facing along `(dx, dz)` is turned, or the same a quarter
+ *  turn off for a thing longer across than deep: a car drives lengthways. Of
+ *  the two ends it could lead with, the one nearer `now`. */
+export function facingOf(piece, dx, dz, now = 0) {
+  const ahead = Math.atan2(dx, dz);
+  if (piece.kind === "person" || piece.w <= piece.d) {
+    return piece.kind === "person" || Math.abs(shortest(ahead, now)) <= Math.PI / 2 ? ahead : shortest(0, ahead + Math.PI);
+  }
+  const side = shortest(0, ahead - Math.PI / 2);
+  return Math.abs(shortest(side, now)) <= Math.PI / 2 ? side : shortest(0, side + Math.PI);
+}
+
+/** Where something stands at `t`: along the curve through its marks, turning
+ *  the short way round. Somebody whose mark faces the way they go keeps facing
+ *  along the path, turning as they set off; any other turn is spread over the
+ *  leg, as it was placed. Null where the shot gives it no marks. */
+export function poseAt(marks, t, piece = { kind: "person" }) {
   if (!marks?.length) return null;
   if (marks.length === 1 || t <= marks[0].t) return momentOf(marks[0]);
   const last = marks[marks.length - 1];
@@ -1106,23 +1176,100 @@ export function poseAt(marks, t) {
   const span = Math.max(1e-6, b.t - a.t);
   const when = pacedTime(marks, i, t);
   const u = (when - a.t) / span;
-  const times = marks.map((mark) => mark.t);
-  const out = { t };
-  for (const key of ["x", "y", "z"]) out[key] = through(times, marks.map((mark) => mark[key] ?? 0), i, when);
-  const dx = b.x - a.x, dz = b.z - a.z;
-  const facing = Math.hypot(dx, dz) > 0.3 && Math.abs(shortest(Math.atan2(dx, dz), b.ry ?? 0)) < 0.35;
-  const turned = facing ? Math.min(1, (t - a.t) / Math.min(TURN_SECONDS, span / 2)) : u;
+  const out = { t, ...placeOn(marks, i, when) };
   for (const key of ["rx", "rz"]) out[key] = (a[key] ?? 0) + shortest(a[key] ?? 0, b[key] ?? 0) * u;
-  out.ry = (a.ry ?? 0) + shortest(a.ry ?? 0, b.ry ?? 0) * turned;
+  const from = a.ry ?? 0, to = b.ry ?? 0;
+  if (!facesAlong(marks, i, piece)) {
+    out.ry = from + shortest(from, to) * u;
+    return out;
+  }
+  const turning = Math.min(TURN_SECONDS, span / 2);
+  const ahead = headingAt(marks, i, when, piece, to);
+  const set = from + shortest(from, ahead) * Math.min(1, (t - a.t) / turning);
+  out.ry = set + shortest(set, to) * Math.max(0, 1 - (b.t - t) / turning);
   return out;
 }
 
-/** The set as it stands at `t` in a shot: everyone on their marks. */
+/** The way something on leg `i` faces where the curve has got to at `when`. */
+function headingAt(marks, i, when, piece, now) {
+  const step = (marks[i + 1].t - marks[i].t) / 50;
+  const p = placeOn(marks, i, Math.max(marks[i].t, when - step)), q = placeOn(marks, i, Math.min(marks[i + 1].t, when + step));
+  if (Math.hypot(q.x - p.x, q.z - p.z) < 1e-3) return facingOf(piece, marks[i + 1].x - marks[i].x, marks[i + 1].z - marks[i].z, now);
+  return facingOf(piece, q.x - p.x, q.z - p.z, now);
+}
+
+/** Whether whoever walks leg `i` faces the way they go: their mark says so,
+ *  by the line between the two marks or by the curve they arrive on. */
+export function facesAlong(marks, i, piece) {
+  const a = marks[i], b = marks[i + 1];
+  if (strideOf(marks, i, "m") <= 0.3) return false;
+  const to = b.ry ?? 0;
+  const near = (angle) => Math.abs(shortest(angle, to)) < 0.35;
+  return (Math.hypot(b.x - a.x, b.z - a.z) > 0.3 && near(facingOf(piece, b.x - a.x, b.z - a.z, to)))
+    || near(headingAt(marks, i, b.t, piece, to));
+}
+
+/** Face mark `k` the way its leg arrives there. */
+export function faceArrival(marks, k, piece) {
+  if (k > 0 && strideOf(marks, k - 1, "m") > 0.3) marks[k].ry = headingAt(marks, k - 1, marks[k].t, piece, marks[k].ry ?? 0);
+}
+
+/** The set as it stands at `t` in a shot: everything on its marks. */
 export function stagedAt(set, staging, t) {
   return (set?.objects ?? []).map((piece) => {
-    const at = piece.kind === "person" ? poseAt(staging?.people?.[piece.id], t) : null;
+    const at = poseAt(staging?.people?.[piece.id], t, piece);
     return at ? { ...piece, x: at.x, y: at.y, z: at.z, rx: at.rx, ry: at.ry, rz: at.rz } : piece;
   });
+}
+
+/** Where the camera looks on a piece: a person's face, or the middle of a thing. */
+function lookPoint(piece) {
+  const at = centreOf(piece);
+  if (piece.kind !== "person") return at;
+  const up = applyM(basisOf(piece), [0, piece.h * 0.35, 0]);
+  return [at[0] + up[0], at[1] + up[1], at[2] + up[2]];
+}
+
+/** The shot camera at `t`, turned to what the shot keeps looking at. */
+export function lensAt(set, staging, t) {
+  const cam = cameraAt(staging?.camera ?? [], t);
+  const piece = staging?.look ? stagedAt(set, staging, t).find((candidate) => candidate.id === staging.look) : null;
+  if (!piece) return cam;
+  const at = lookPoint(piece);
+  const dx = at[0] - cam.x, dy = at[1] - cam.y, dz = at[2] - cam.z;
+  const flat = Math.hypot(dx, dz);
+  // Straight over or under it there is no telling which way to face.
+  if (flat < 0.05) return cam;
+  return { ...cam, yaw: cam.yaw + shortest(cam.yaw, Math.atan2(dx, dz)), pitch: clamp(Math.atan2(dy, flat), -1.5, 1.5) };
+}
+
+/** The camera's marks as it is really turned: what the sentences read. A camera
+ *  following somebody turns even where it has nothing but its first mark. */
+export function aimedMarks(set, staging, seconds) {
+  const marks = staging?.camera ?? [];
+  if (!staging?.look || !marks.length) return marks;
+  const times = [...new Set([0, ...marks.map((mark) => mark.t), seconds])].filter((at) => at <= seconds).sort((a, b) => a - b);
+  const out = [];
+  for (const at of times) {
+    const cam = { ...lensAt(set, staging, at), t: at };
+    const before = out[out.length - 1];
+    if (before) cam.yaw = before.yaw + shortest(before.yaw, cam.yaw);
+    out.push(cam);
+  }
+  return out;
+}
+
+/** What the camera keeps looking at, as the sentences name it. */
+export function lookName(set, staging) {
+  const piece = staging?.look ? set?.objects.find((candidate) => candidate.id === staging.look) : null;
+  if (!piece) return "";
+  return piece.plays ? `@${piece.plays}` : piece.word ? t("the {word}", { word: piece.word }) : t("the subject");
+}
+
+/** The sentence a staged shot's camera and people make, read as a whole. */
+export function stagedSentence(set, staging, seconds, size, { withMove = true } = {}) {
+  return stagingSentence(stagedAt(set, staging, 0), aimedMarks(set, staging, seconds), seconds, lensAt(set, staging, 0), size,
+    { withMove, ends: stagedAt(set, staging, seconds), people: staging.people, keeping: lookName(set, staging) });
 }
 
 /** The pixels a piece's guide is written at: the family's native canvas at the
@@ -1152,11 +1299,9 @@ export function stagingWords(timeline, index) {
   const segment = timeline.segments[index];
   const set = S.setOf(timeline, segment);
   if (!set || !segment.staging) return "";
-  const marks = segment.staging.camera;
   const { w, h } = guideSize(timeline);
   const seconds = Number(segment.duration_s) || 0;
-  const words = stagingSentence(stagedAt(set, segment.staging, 0), marks, seconds, cameraAt(marks, 0), { w, h },
-                                { ends: stagedAt(set, segment.staging, seconds), people: segment.staging.people });
+  const words = stagedSentence(set, segment.staging, seconds, { w, h });
   const clip = S.stagedClip(segment);
   if (clip?.role !== "reference") return words;
   return `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot. ${words}`.trim();
@@ -1178,14 +1323,14 @@ export function joinGap(timeline, index) {
   if (!S.isStaged(timeline, segment) || !S.isStaged(timeline, before) || segment.set !== before.set) return null;
   const set = S.setOf(timeline, segment);
   const end = Number(before.duration_s) || 0;
-  const a = cameraAt(before.staging.camera, end), b = cameraAt(segment.staging.camera, 0);
+  const a = lensAt(set, before.staging, end), b = lensAt(set, segment.staging, 0);
   const camera = Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
   let turn = Math.abs(((b.yaw - a.yaw + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI) * DEG;
   turn = Math.max(turn, Math.abs(b.pitch - a.pitch) * DEG);
   const left = stagedAt(set, before.staging, end), starts = stagedAt(set, segment.staging, 0);
   const who = [];
   for (const piece of starts) {
-    if (piece.kind !== "person") continue;
+    if (piece.kind !== "person" && !before.staging.people?.[piece.id] && !segment.staging.people?.[piece.id]) continue;
     const was = left.find((other) => other.id === piece.id);
     const metres = Math.hypot(was.x - piece.x, was.z - piece.z, (was.y ?? 0) - (piece.y ?? 0));
     const posture = postureOf(was) !== postureOf(piece);
@@ -1206,13 +1351,14 @@ export function lineUp(timeline, index) {
   if (!S.isStaged(timeline, before) || !segment?.staging) return false;
   const set = S.setOf(timeline, before);
   const end = Number(before.duration_s) || 0;
-  const camera = cameraAt(before.staging.camera, end);
-  // Where it starts changes; how fast it sets off is this shot's own.
-  const leaving = (marks) => (marks?.[0]?.out === undefined ? {} : { out: marks[0].out });
+  const camera = lensAt(set, before.staging, end);
+  // Where it starts changes; how it sets off is this shot's own.
+  const leaving = (marks) => Object.fromEntries(["out", "bend", "corner"]
+    .filter((key) => marks?.[0]?.[key] !== undefined).map((key) => [key, marks[0][key]]));
   segment.staging.camera = [{ ...camera, ...leaving(segment.staging.camera), t: 0 }, ...segment.staging.camera.filter((mark) => mark.t > 0.14)];
   const left = stagedAt(set, before.staging, end);
   for (const piece of set.objects) {
-    if (piece.kind !== "person") continue;
+    if (piece.kind !== "person" && !before.staging.people?.[piece.id] && !segment.staging.people?.[piece.id]) continue;
     const was = left.find((other) => other.id === piece.id);
     const rest = (segment.staging.people[piece.id] ?? []).filter((mark) => mark.t > 0.14);
     const moved = before.staging.people?.[piece.id]?.length || segment.staging.people[piece.id]?.length;
@@ -1289,7 +1435,7 @@ export function guidesWanted(timeline) {
 
 /** One frame of a staged shot, drawn at `size` in `pass`, as a PNG blob. */
 export function drawStaged(raster, canvas, context, set, staging, at, pass) {
-  raster.raster(stagedAt(set, staging, at), cameraAt(staging.camera, at));
+  raster.raster(stagedAt(set, staging, at), lensAt(set, staging, at));
   raster.shade(context, pass);
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded")))), "image/png");
@@ -1413,10 +1559,10 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   step(t("Writing the clip…"));
   // The scene the old bench saved, so a set written here opens again there.
   const scene = {
-    objects: set.objects.map(({ id, ...piece }) => piece),
+    objects: set.objects,
     marks: staging.camera.map(({ t: _t, ...mark }) => mark),
     times: staging.camera.map((mark) => mark.t),
-    people: staging.people, duration: seconds, aspect: timeline.aspect, pass: passId,
+    people: staging.people, ...(staging.look ? { look: staging.look } : {}), duration: seconds, aspect: timeline.aspect, pass: passId,
   };
   const written = await blockoutWrite({ token, fps: rules.fps, op: passId, scene });
   return { ...written, ...meta };
