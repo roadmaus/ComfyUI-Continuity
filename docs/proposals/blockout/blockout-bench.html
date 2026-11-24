@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Continuity Reel Stage</title>
+<title>Continuity Blockout Bench</title>
 <style>
 /* Layout: Continuity's reel window, as the branch draws it, with the 3D stage as a view of its player.
    Single dark look on purpose: these are the pack's own tokens (web/creator/styles/base.js) on the
@@ -546,7 +546,16 @@ button:focus-visible, [contenteditable]:focus-visible, input:focus-visible { out
 /* Direct: the stage takes the script's place, the shot's own line stays under it */
 .mmc-st-col { min-height: 0; display: none; flex-direction: column; gap: 10px; padding: 16px 20px 12px 18px; border-right: 1px solid var(--mmc-line); }
 .mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: 14px; overflow: hidden; background: var(--mmc-media-bg); }
-.mmc-reel-main.direct .mmc-reel-script { display: none; }
+/* The bench: the script as a column, the stage in the middle, the inspector on the right.
+   The script is the reel's own, set a size smaller so a shot still reads in a narrow column. */
+.mmc-tl-modal { width: min(1800px, 100%); height: 100%; }
+.mmc-reel-main.direct { grid-template-columns: minmax(270px, 0.4fr) minmax(0, 1fr) minmax(340px, 0.46fr); }
+.mmc-reel-main.direct .mmc-reel-script { --mmc-type: .86; padding: 14px 14px 20px 8px; }
+.mmc-reel-main.direct .mmc-reel-row { grid-template-columns: 46px minmax(0, 1fr); }
+.mmc-reel-main.direct .mmc-reel-shot .mmc-reel-tag { grid-column: 2; justify-self: start; margin-top: 2px; }
+.mmc-reel-main.direct .mmc-reel-castrow, .mmc-reel-main.direct .mmc-st-cuthint { padding-left: 46px; }
+.mmc-reel-main.direct .mmc-reel-rule { margin-left: 46px; }
+.mmc-reel-main.direct .mmc-st-col { padding: 14px 16px 14px; }
 .mmc-reel-main.direct .mmc-st-col { display: flex; }
 .mmc-reel-main.direct .mmc-reel-player { display: none; }
 .mmc-st-line { flex: none; }
@@ -573,7 +582,7 @@ button:focus-visible, [contenteditable]:focus-visible, input:focus-visible { out
   .mmc-tl-modal { height: auto; }
   .mmc-reel-head { height: auto; flex-wrap: wrap; padding: 10px 14px; row-gap: 8px; }
   .mmc-reel-main { display: flex; flex-direction: column; }
-  .mmc-reel-side { order: -1; }
+  .mmc-st-col { order: -1; }
   .mmc-st-col { border-right: 0; }
   .mmc-st-glass { min-height: 0; aspect-ratio: 16 / 9; flex: none; }
   .mmc-reel-irow { grid-template-columns: 96px minmax(0, 1fr); }
@@ -587,7 +596,7 @@ button:focus-visible, [contenteditable]:focus-visible, input:focus-visible { out
 <div class="mmc-reel-head" id="headbar"></div>
 <div class="mmc-reel-main" id="main">
 <div class="mmc-reel-script" id="script"></div>
-<div class="mmc-st-col"><div class="mmc-st-glass" id="glass"></div><div class="mmc-st-line" id="stageline"></div></div>
+<div class="mmc-st-col"><div class="mmc-st-glass" id="glass"></div></div>
 <div class="mmc-reel-side"><div class="mmc-reel-player" id="player"></div><div class="mmc-reel-inspect" id="inspect"></div></div>
 </div>
 <div class="mmc-reel-foot"><div class="mmc-reel-lane" id="lane"><div class="mmc-reel-track-area">
@@ -903,7 +912,7 @@ const P = {
       block: { 5: [{ t: 0, x: -2.2, z: 6.7, r: Math.PI }, { t: 5, x: -0.9, z: 4.9, r: 2.5 }] } },
   ],
 };
-const U = { tool: "move", sel: { type: "shot", id: 2 }, cur: 1, t: 0, view: "stage", lens: false, mode: "write", playing: false, shooting: null, still: null, said: "" };
+const U = { tool: "move", sel: { type: "shot", id: 2 }, cur: 1, t: 0, view: "stage", lens: false, mode: "direct", playing: false, shooting: null, still: null, said: "" };
 
 const sceneById = (id) => P.scenes.find((s) => s.id === id);
 const sceneOf = (shot) => sceneById(shot.scene);
@@ -1394,16 +1403,13 @@ function renderHead() {
   let plan;
   if (U.shooting) plan = h("span", { class: "mmc-reel-plan", id: "plan" }, [document.createTextNode("Shooting…")]);
   else plan = h("span", { class: "mmc-reel-plan", id: "plan", html: todo ? "Shoots <b>" + todo + (todo === 1 ? " shot" : " shots") + "</b>" + (kept ? " · plays <i>" + kept + " kept " + (kept === 1 ? "take" : "takes") + "</i>" : "") : "Plays <i>" + kept + " kept takes</i>" });
-  const seg = h("div", { class: "mmc-reel-seg", role: "group", "aria-label": "Write or direct" }, [
-    h("button", { type: "button", "aria-pressed": U.mode === "write" ? "true" : "false", text: "Write", onclick: () => setMode("write") }),
-    h("button", { type: "button", "aria-pressed": U.mode === "direct" ? "true" : "false", text: "Direct", onclick: () => setMode("direct") })]);
   $("#headbar").replaceChildren(
-    h("span", { class: "mmc-reel-title", text: "Timeline" }),
+    h("span", { class: "mmc-reel-title", text: "Blockout" }),
     h("span", { class: "mmc-reel-meta", text: P.shots.length + (P.shots.length === 1 ? " shot · " : " shots · ") + secs(total()) }),
-    seg,
     h("button", { class: "mmc-reel-step", type: "button", "aria-label": "Undo", title: "Undo (Ctrl+Z)", disabled: !hist.past.length || !!U.shooting, onclick: undo }, [ICON.undo()]),
     h("button", { class: "mmc-reel-step redo", type: "button", "aria-label": "Redo", title: "Redo (Ctrl+Shift+Z)", disabled: !hist.future.length || !!U.shooting, onclick: redo }, [ICON.undo()]),
     plan,
+    h("button", { class: "mmc-reel-btn quiet", type: "button", text: "Open the timeline", title: "The reel, on the same piece", onclick: () => say("In the pack this opens the reel on the same piece: the same shots and the same takes, without the stage.") }),
     U.shooting ? h("button", { class: "mmc-reel-shoot quiet", type: "button", text: "Cancel", onclick: cancelShoot })
       : h("button", { class: "mmc-reel-shoot", type: "button", text: todo ? "Shoot" : "Put together", onclick: shoot }));
 }
@@ -1536,7 +1542,6 @@ function renderInspector() {
     kids.push(back(), h("div", { class: "mmc-reel-ihead" }, [h("b", { text: "Shot " + (i + 1) }), h("span", { text: secs(s.secs) + " · the " + sc.name.toLowerCase() + " set" }), tag ? h("span", { class: "mmc-reel-tag " + cls, text: tag }) : null]),
       h("p", { class: "mmc-reel-why", text: why }),
       h("div", { class: "mmc-reel-actions" }, [
-        U.mode === "write" ? btn("Direct this shot", "primary", () => setMode("direct")) : btn("Back to the script", "", () => setMode("write")),
         s.state === "kept" ? btn("Reshoot", "", edited(() => { s.state = "changed"; for (let j = i + 1; j < P.shots.length && P.shots[j].cont; j++) if (P.shots[j].state === "kept") P.shots[j].state = "follows"; })) : null]),
       irow("Length", stepper(secs(s.secs), edited(() => setLength(i, s.secs - 0.5)), edited(() => setLength(i, s.secs + 0.5)))),
       irow("Camera", note(moveSentence(s))),
@@ -1704,7 +1709,7 @@ function cardDown(e, i, card, pps) {
 }
 function renderStatus() {
   const host = $("#status"); if (!host) return;
-  let hint = "Drag across a shot to scrub it, or its edge to change its length. Click a join to change it.";
+  let hint = "Stage shows the set as you handle it. Guide is the pass as the model gets it, Take is what came back.";
   if (U.view === "stage" && U.mode === "direct") hint = U.lens ? "Through the lens: drag pans and tilts, shift-drag trucks and pedestals, the wheel pushes in. Each writes a camera mark at the playhead."
     : U.tool === "turn" ? "Turn: drag a piece sideways to turn it, up or down to tip it over, shift-drag to roll it. It snaps to 15° and rests on the floor whichever way up it is."
     : U.tool === "lift" ? "Lift: drag a piece up to take it off the floor, down to put it back. Move the playhead first and it rises or falls between the two marks."
