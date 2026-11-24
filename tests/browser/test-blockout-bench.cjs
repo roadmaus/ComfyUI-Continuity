@@ -367,6 +367,49 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       ['Continues', 'Blend']);
   });
 
+  await check('A continuing join that does not line up says so, wears the accent, and is fixed', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => bench.select({ kind: 'join', index: 1 }));
+    assert.deepEqual(await page.evaluate(() => [document.querySelectorAll('.mmc-reel-join.mmc-st-jump').length,
+      [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-irow')].pop().textContent]),
+    [0, 'StagingLines up. The camera and everyone on set start where shot 1 leaves them.']);
+    await page.evaluate(() => { tl.segments[1].staging.camera[0].x = 0.4; tl.segments[1].staging.people[8][0].z = 3; bench.commit(); });
+    assert.deepEqual(await page.evaluate(() => [document.querySelectorAll('.mmc-reel-join.mmc-st-jump').length,
+      document.querySelector('.mmc-reel-inspect .mmc-st-warn').textContent]),
+    [1, 'Does not line up: the camera starts 1.2 m from where shot 1 leaves it, and @ben stands 1.1 m from where they stopped. The model will be handed frames that contradict the guide.']);
+    await page.locator('.mmc-reel-inspect').getByText('Start shot 2 where shot 1 ends').click();
+    assert.deepEqual(await page.evaluate(() => [document.querySelectorAll('.mmc-reel-join.mmc-st-jump').length,
+      tl.segments[1].staging.camera[0].x, tl.segments[1].staging.people[8][0].z]), [0, -0.8, 1.9]);
+  });
+
+  await check('Enter at the end of a shot starts the next one where it ended', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    const box = page.locator('.mmc-reel-shot .mmc-prompt').nth(1);
+    await box.click();
+    await page.evaluate(() => {
+      const root = document.querySelectorAll('.mmc-reel-shot .mmc-prompt')[1];
+      const range = document.createRange();
+      range.selectNodeContents(root);
+      range.collapse(false);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+    });
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(80);
+    assert.deepEqual(await page.evaluate(() => {
+      const shot = tl.segments[2];
+      const end = tl.segments[1].staging.camera.at(-1);
+      return [tl.segments.length, shot.set, shot.continue, shot.staging.camera.length,
+        shot.staging.camera[0].x === end.x && shot.staging.camera[0].z === end.z,
+        Object.keys(shot.staging.people).sort(), document.querySelector('.mmc-reel-status .mmc-reel-hint').textContent,
+        tl.segments.map((seg) => S.isKept(seg))];
+    }), [4, 'kitchen', true, 1, true, ['7', '8'],
+      'Shot 3 starts where shot 2 ends: same set, same marks, the camera where it stopped.', [true, true, false, false]]);
+  });
+
   await check('Open the timeline closes the bench and opens the reel on the same piece', async () => {
     await open();
     await page.waitForTimeout(100);

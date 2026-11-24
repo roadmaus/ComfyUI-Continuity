@@ -27,6 +27,7 @@ import {
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
+  joinGap, lineUp, stagingFrom, postureChanges, postureOf,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
 
@@ -1319,6 +1320,67 @@ class Blockout extends Reel {
     event.preventDefault();
   }
 
+  // ---- continuity ------------------------------------------------------------
+
+  /** A new shot after a staged one starts where it ended: the same set, the
+   *  camera where it stopped, everyone on their last marks (spec 3.2). */
+  prepareShot(segment, at) {
+    if (!at || !S.continues(segment)) return;
+    const from = stagingFrom(this.timeline, at);
+    if (!from) return;
+    segment.set = from.set;
+    segment.staging = from.staging;
+    this.at = { index: at, t: 0 };
+    this.said = t("Shot {n} starts where shot {m} ends: same set, same marks, the camera where it stopped.", { n: at + 1, m: at });
+    clearTimeout(this.sayTimer);
+    this.sayTimer = setTimeout(() => { this.said = ""; this.renderStatus(); }, 2600);
+  }
+
+  /** A continuing join that does not line up wears the accent on the strip. */
+  joinFlag(index) {
+    return joinGap(this.timeline, index) ? " mmc-st-jump" : "";
+  }
+
+  /** Start shot `index` where the shot before it ends. */
+  lineUp(index, { commit = true } = {}) {
+    if (lineUp(this.timeline, index) && commit) this.commit();
+  }
+
+  /** The join's own check: what does not line up, said, and the fix offered. */
+  lineUpRows(index) {
+    const gap = joinGap(this.timeline, index);
+    const segment = this.timeline.segments[index];
+    if (!S.isStaged(this.timeline, segment) || !S.isStaged(this.timeline, this.timeline.segments[index - 1])) return [];
+    if (!gap) {
+      return [this.irow(t("Staging"), el("span", { class: "mmc-reel-note",
+        text: t("Lines up. The camera and everyone on set start where shot {n} leaves them.", { n: index }) }))];
+    }
+    const parts = [];
+    if (gap.camera >= 0.2) parts.push(t("the camera starts {m} m from where shot {n} leaves it", { m: gap.camera.toFixed(1), n: index }));
+    else if (gap.turn >= 5) parts.push(t("the camera starts turned {d}° from how shot {n} leaves it", { d: Math.round(gap.turn), n: index }));
+    else if (gap.lens >= 2) parts.push(t("the lens changes at the join"));
+    for (const { piece, metres, posture } of gap.who) {
+      const who = this.labelOf(piece);
+      if (metres >= 0.2) parts.push(t("{who} stands {m} m from where they stopped", { who, m: metres.toFixed(1) }));
+      if (posture) parts.push(t("{who} changes posture", { who }));
+    }
+    return [this.irow(t("Staging"), el("div", { class: "mmc-reel-inline" }, [
+      el("span", { class: "mmc-st-warn", text: t("Does not line up: {what}. The model will be handed frames that contradict the guide.", { what: parts.join(t(", and ")) }) }),
+      el("button", { class: "mmc-reel-btn", text: t("Start shot {n} where shot {m} ends", { n: index + 1, m: index }),
+        onclick: () => this.lineUp(index) }),
+    ]))];
+  }
+
+  /** Whether someone changes posture or leaves the floor in a shot. */
+  postureChanges(index) {
+    return postureChanges(this.timeline, index);
+  }
+
+  /** A piece's posture, in words. */
+  postureOf(piece) {
+    return postureOf(piece);
+  }
+
   // ---- the sets on the strip -------------------------------------------------
 
   /** The lane over the film: one bracket per run of shots on one set. */
@@ -1473,7 +1535,7 @@ class Blockout extends Reel {
     const pass = S.stagingPass(this.timeline, segment);
     const own = staging.pass !== undefined;
     const loose = staging.hold === "loose";
-    const posture = this.postureChanges?.(index) ?? false;
+    const posture = this.postureChanges(index);
     return [
       this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(marks, this.seconds(index)) })),
       this.irow(t("Marks"), el("div", { class: "mmc-reel-inline" }, [
@@ -1487,7 +1549,8 @@ class Blockout extends Reel {
         [24, 28, 35, 50, 85].includes(lens) ? lens : null,
         (mm) => { for (const mark of staging.camera) mark.mm = mm; this.commit(); })),
       this.irow(t("Staging"), el("span", { class: "mmc-reel-note",
-        text: stagingSentence(stagedAt(set, staging, 0), marks, this.seconds(index), cameraAt(marks, 0), { w, h }, { withMove: false })
+        text: stagingSentence(stagedAt(set, staging, 0), marks, this.seconds(index), cameraAt(marks, 0), { w, h },
+          { withMove: false, ends: stagedAt(set, staging, this.seconds(index)) })
           || t("Nothing named is in frame.") })),
       this.irow(t("Guide"), this.segmented(this.passOptions(), pass, (value) => {
         if (value === S.pieceStagingPass(this.timeline)) delete staging.pass; else staging.pass = value;
@@ -1571,7 +1634,7 @@ class Blockout extends Reel {
       el("input", { class: "mmc-bo-num", type: "number", step: "0.05", value: String(Math.round(value * 100) / 100), "aria-label": axis,
         onchange: (event) => { const v = parseFloat(event.target.value); if (Number.isFinite(v)) edit(() => write(v)); } }),
     ])));
-    const posture = this.postureOf?.(now) ?? "";
+    const posture = this.postureOf(now);
     const walk = marks && marks.length > 1
       ? Math.hypot(marks[0].x - marks[marks.length - 1].x, marks[0].z - marks[marks.length - 1].z, marks[0].y - marks[marks.length - 1].y) : 0;
     const others = (handle) => set.objects.some((piece) => piece.plays === handle && piece.id !== id);
@@ -1637,7 +1700,7 @@ class Blockout extends Reel {
     ];
     if (on) {
       rows.push(this.blendRow(index));
-      if (this.lineUpRows) rows.push(...this.lineUpRows(index));
+      rows.push(...this.lineUpRows(index));
     } else {
       const sets = this.timeline.sets ?? [];
       if (sets.length) {
@@ -1659,7 +1722,7 @@ class Blockout extends Reel {
     if (on && S.isStaged(this.timeline, before) && segment.set !== before.set) {
       segment.set = before.set;
       segment.staging = { camera: segment.staging?.camera?.length ? segment.staging.camera : [], people: {} };
-      this.lineUp?.(index, { commit: false });
+      lineUp(this.timeline, index);
       if (!segment.staging.camera.length) {
         const end = cameraAt(before.staging.camera, this.seconds(index - 1));
         delete end.t;

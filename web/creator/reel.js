@@ -1917,6 +1917,7 @@ export class Reel {
     // Between two shots of one pass it is one of them, rather than a split.
     const after = this.timeline.segments[at];
     if (at && after && S.merged(after)) segment.merge = true;
+    this.prepareShot(segment, at);
     this.placeSegment(segment, at);
     this.focusShot(at);
   }
@@ -2431,6 +2432,9 @@ export class Reel {
     }
     return passLane;
   }
+
+  /** Anything a window gives a new shot before it goes in at `at`. Nothing here. */
+  prepareShot() {}
 
   /** A line a window puts above a shot's row in the script. None here. */
   rowLead() {

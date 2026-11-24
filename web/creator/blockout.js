@@ -342,7 +342,16 @@ export const applyM = (m, v) => [
 /** The centre of a piece's box, in world. `y` is the bottom, so the centre is
  *  half a height above it — which is also what every placement word is measured
  *  from, and what the gizmo hangs off. */
-export const centreOf = (piece) => [piece.x, (piece.y ?? 0) + piece.h / 2, piece.z];
+export const centreOf = (piece) => [piece.x, (piece.y ?? 0) + restHeight(piece), piece.z];
+
+/** How far a piece's centre sits above its lowest point, whichever way up it
+ *  is: the box's half-extent along the world's up, turned. So `y` is always how
+ *  far the lowest point is off the floor, and a figure laid flat rests on it
+ *  rather than sinking into it. Upright, it is half the height, as it was. */
+export function restHeight(piece) {
+  const m = basisOf(piece);
+  return (Math.abs(m[3]) * piece.w + Math.abs(m[4]) * piece.h + Math.abs(m[5]) * piece.d) / 2;
+}
 
 /** The eight corners of a piece's box, in world. */
 export function cornersOf(piece) {
@@ -704,6 +713,23 @@ function placeOf(piece, cam, width, height) {
   return { words: `${third} ${band}`, depth: at.z };
 }
 
+/**
+ * A piece's posture, in words, or "" for standing on the floor: how far it is
+ * tipped off upright, and how far its lowest point is off the ground. The words
+ * carry the action; the guide only places the body (spec 3.4).
+ */
+export function postureOf(piece, person = piece?.kind === "person") {
+  if (!piece) return "";
+  const m = basisOf(piece);
+  const tipped = Math.acos(clamp(m[4], -1, 1)) * DEG;
+  const off = piece.y ?? 0;
+  const lift = off > 0.3 ? t("{m} m off the ground", { m: off.toFixed(1) }) : "";
+  if (tipped > 150) return lift ? `${t("upside down")}, ${lift}` : t("upside down");
+  if (tipped > 60) return lift ? t("lying {lift}", { lift }) : t("lying on the floor");
+  if (tipped > 20) return lift ? `${t("leaning")}, ${lift}` : t("leaning");
+  return lift || "";
+}
+
 /** A word with its article, unless it arrived wearing one. */
 function articled(word) {
   const said = String(word).trim();
@@ -736,7 +762,7 @@ function moveTarget(objects, marks, cam, width, height) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true } = {}) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
   const entering = [];
@@ -755,9 +781,22 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   placed.sort((p, q) => ((q.piece.plays ? 1 : 0) - (p.piece.plays ? 1 : 0))
     || (p.here.depth - q.here.depth));
   for (const { piece, here } of placed) {
+    const posture = postureOf(piece);
     clauses.push(piece.plays
-      ? t("@{who} stands {place}", { who: piece.plays, place: here.words })
-      : t("{what} {place}", { what: articled(piece.word), place: here.words }));
+      ? (posture ? t("@{who} is {posture} {place}", { who: piece.plays, posture, place: here.words })
+                 : t("@{who} stands {place}", { who: piece.plays, place: here.words }))
+      : posture ? t("{what}, {posture}, {place}", { what: articled(piece.word), posture, place: here.words })
+        : t("{what} {place}", { what: articled(piece.word), place: here.words }));
+  }
+  // A change of posture within the shot, said once at the end: "@anna ends
+  // standing". `ends` is the set as it stands at the shot's last frame.
+  for (const end of ends ?? []) {
+    const start = objects.find((piece) => piece.id === end.id);
+    if (!start || (!end.plays && !end.word)) continue;
+    const was = postureOf(start), now = postureOf(end);
+    if (was === now) continue;
+    const who = end.plays ? `@${end.plays}` : articled(end.word);
+    clauses.push(t("{who} ends {posture}", { who, posture: now || (end.kind === "person" ? t("standing") : t("upright")) }));
   }
   for (const piece of entering) {
     clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
@@ -975,8 +1014,92 @@ export function stagingWords(timeline, index) {
   if (!set || !segment.staging) return "";
   const marks = segment.staging.camera;
   const { w, h } = guideSize(timeline);
-  return stagingSentence(stagedAt(set, segment.staging, 0), marks,
-                         Number(segment.duration_s) || 0, cameraAt(marks, 0), { w, h });
+  const seconds = Number(segment.duration_s) || 0;
+  return stagingSentence(stagedAt(set, segment.staging, 0), marks, seconds, cameraAt(marks, 0), { w, h },
+                         { ends: stagedAt(set, segment.staging, seconds) });
+}
+
+/**
+ * What does not line up at a continuing join: the frames handed over come from
+ * the previous shot's end, so a next shot whose first marks put the camera or a
+ * person somewhere else has a guide that contradicts them (spec 3.3).
+ *
+ * -> null where it lines up (or there is no such join), else `{ camera, turn,
+ * who: [{ piece, metres, posture }] }`: the camera's distance in metres and its
+ * turn in degrees, and each person who moved or changed posture.
+ */
+export function joinGap(timeline, index) {
+  const segment = timeline.segments[index];
+  const before = timeline.segments[index - 1];
+  if (!index || !before || !S.continues(segment) || S.merged(segment)) return null;
+  if (!S.isStaged(timeline, segment) || !S.isStaged(timeline, before) || segment.set !== before.set) return null;
+  const set = S.setOf(timeline, segment);
+  const end = Number(before.duration_s) || 0;
+  const a = cameraAt(before.staging.camera, end), b = cameraAt(segment.staging.camera, 0);
+  const camera = Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z);
+  let turn = Math.abs(((b.yaw - a.yaw + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI) * DEG;
+  turn = Math.max(turn, Math.abs(b.pitch - a.pitch) * DEG);
+  const left = stagedAt(set, before.staging, end), starts = stagedAt(set, segment.staging, 0);
+  const who = [];
+  for (const piece of starts) {
+    if (piece.kind !== "person") continue;
+    const was = left.find((other) => other.id === piece.id);
+    const metres = Math.hypot(was.x - piece.x, was.z - piece.z, (was.y ?? 0) - (piece.y ?? 0));
+    const posture = postureOf(was) !== postureOf(piece);
+    if (metres >= 0.2 || posture) who.push({ piece, metres, posture });
+  }
+  if (camera < 0.2 && turn < 5 && Math.abs(a.mm - b.mm) < 2 && !who.length) return null;
+  return { camera, turn, lens: Math.abs(a.mm - b.mm), who };
+}
+
+/**
+ * Start shot `index` where shot `index - 1` ends: its first camera mark becomes
+ * the camera the last shot stopped on, and everyone's first mark the mark they
+ * stopped on. Later marks are left where they are. -> whether anything moved.
+ */
+export function lineUp(timeline, index) {
+  const segment = timeline.segments[index];
+  const before = timeline.segments[index - 1];
+  if (!S.isStaged(timeline, before) || !segment?.staging) return false;
+  const set = S.setOf(timeline, before);
+  const end = Number(before.duration_s) || 0;
+  const camera = cameraAt(before.staging.camera, end);
+  segment.staging.camera = [{ ...camera, t: 0 }, ...segment.staging.camera.filter((mark) => mark.t > 0.14)];
+  const left = stagedAt(set, before.staging, end);
+  for (const piece of set.objects) {
+    if (piece.kind !== "person") continue;
+    const was = left.find((other) => other.id === piece.id);
+    const rest = (segment.staging.people[piece.id] ?? []).filter((mark) => mark.t > 0.14);
+    const moved = before.staging.people?.[piece.id]?.length || segment.staging.people[piece.id]?.length;
+    if (!moved) continue;
+    segment.staging.people[piece.id] = [{ t: 0, x: was.x, y: was.y ?? 0, z: was.z,
+                                          rx: was.rx ?? 0, ry: was.ry ?? 0, rz: was.rz ?? 0 }, ...rest];
+  }
+  return true;
+}
+
+/** A staging continuing from shot `index - 1`'s end: same set, the camera
+ *  where it stopped, everyone on their last marks (spec 3.2). Null where that
+ *  shot has no staging. */
+export function stagingFrom(timeline, index) {
+  const before = timeline.segments[index - 1];
+  if (!S.isStaged(timeline, before)) return null;
+  const segment = { staging: { camera: [], people: {} } };
+  const scratch = { ...timeline, segments: [before, segment] };
+  lineUp(scratch, 1);
+  return { set: before.set, staging: segment.staging };
+}
+
+/** Whether anyone changes posture or leaves the floor in shot `index`: what
+ *  makes Loosely the better hold. */
+export function postureChanges(timeline, index) {
+  const segment = timeline.segments[index];
+  const set = S.setOf(timeline, segment);
+  if (!set || !segment.staging) return false;
+  const start = stagedAt(set, segment.staging, 0);
+  const end = stagedAt(set, segment.staging, Number(segment.duration_s) || 0);
+  return start.some((piece, k) => piece.kind === "person"
+    && (postureOf(piece) !== postureOf(end[k]) || (piece.y ?? 0) > 0.3 || (end[k].y ?? 0) > 0.3));
 }
 
 /** Bring every staged shot's words in line with its staging. -> changed. */
