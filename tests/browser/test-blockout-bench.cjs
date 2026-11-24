@@ -348,7 +348,7 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await dragBy(middle, 80, 0);
     assert.equal(await noView(), before);
     assert.deepEqual(await page.evaluate(() => tl.segments.map((seg) => S.isKept(seg))), [true, true, false]);
-    await page.locator('.mmc-bo-hud.top').getByText('Through the lens').click();
+    await page.locator('.mmc-bo-hud.top').getByText('What the camera sees').click();
     await page.evaluate(() => { bench.at.t = 2.5; bench.paint(); });
     await dragBy(middle, 40, 0);
     assert.deepEqual(await page.evaluate(() => [tl.segments[0].staging.camera.map((m) => m.t), S.isKept(tl.segments[0]), S.isKept(tl.segments[1])]),

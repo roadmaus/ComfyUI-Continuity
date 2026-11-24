@@ -94,10 +94,10 @@ people walk, names), **Guide** (the pass exactly as the file will hold it),
 yet) and **Take** (what came back, at the playhead). Play runs the shot's time;
 dragging across a shot on the strip scrubs it.
 
-**Free look** flies around the set and changes nothing: drag orbits, shift-drag
-slides, the wheel zooms. **Through the lens** stands you in the shot camera,
-where every gesture writes a camera mark at the playhead: drag pans and tilts,
-shift-drag trucks and pedestals, the wheel pushes in. **Put the camera here**
+**Look around** flies around the set and changes nothing: drag orbits, shift-drag
+slides, the wheel zooms. **What the camera sees** stands you in the shot camera,
+where every gesture writes a camera mark at the playhead: drag turns it,
+shift-drag moves it sideways and up, the wheel moves it forward. **Put the camera here**
 moves the shot camera to where you stand.
 
 Click a piece to select it; its handles hang off it. **Move** (`1`) slides it
@@ -109,7 +109,7 @@ lowest point sits at its height off the floor, so a figure laid flat lies on
 it. **+ Person**, **+ Block**, **+ Wall** and **+ Post** add to the set, and
 Delete takes the selection off it.
 
-In free look, the path of whoever is selected, or the camera's, can be worked by
+In Look around, the path of whoever is selected, or the camera's, can be worked by
 hand. Pull the line to bend it, drag a ringed stop somewhere else, or drag the
 knobs either side of a stop to say how the curve passes it. They move on their
 own level; with **Lift** they go up and down. People face along the curve. At a
@@ -120,6 +120,12 @@ then moved in that shot alone; the other shots keep it where it is.
 
 **Keep looking at** turns the shot camera to somebody or something for the whole
 shot, whatever path it takes.
+
+**Camera shake** is for the whole shot: Barely, Held in hand, Walking or Running,
+with how much and how fast. It is laid over the path and seen in What the camera
+sees, in Guide and in the file; the path stays smooth. The same shot always
+shakes the same way until **Another shake**, and a shot continuing from another
+goes on with its shake.
 
 Under the glass is the **speed** of whoever is selected, or of the camera. Each
 stop keeps its time; the curve says how fast the stretch between two is taken,

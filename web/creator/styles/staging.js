@@ -69,6 +69,7 @@ export const css = `
 .mmc-st-bench .mmc-reel-icontrol .mmc-bo-vec { width: 100%; max-width: 300px; min-width: 0; }
 .mmc-st-bench .mmc-reel-icontrol .mmc-bo-vecslot { flex: 1 1 0; min-width: 0; padding: 0 5px; gap: 4px; }
 .mmc-st-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.45; }
+.mmc-st-range { width: 100%; max-width: 240px; accent-color: var(--mmc-accent); }
 .mmc-st-words { white-space: pre-wrap; }
 
 @media (max-width: 900px) {

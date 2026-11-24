@@ -26,7 +26,7 @@ from harness import FAILURES, check, passed
 layout.skip_without_node()
 
 SCRIPT = """
-const { moveSentence, stagingSentence, cameraAt, poseAt } = await import("./web/creator/blockout.js");
+const { moveSentence, stagingSentence, cameraAt, poseAt, filmAt } = await import("./web/creator/blockout.js");
 const out = {};
 
 out.static = moveSentence([], 4);
@@ -137,6 +137,29 @@ out.lookPlain = moveSentence(B.aimedMarks(set, drive, 4), 4, null, { plain: true
 const shaped = S.serializeStaging({ camera: corner, people: { 1: turnedWalk }, look: 2 });
 out.shaped = [shaped.camera[1].corner, shaped.people[1][0].bend, shaped.look];
 
+// A shake: drawn, not staged; the same every time; one camera across a join.
+const piece = (second = {}) => S.parseTimeline(JSON.stringify({ version: 2, aspect: "16:9", short_edge: 768, prompt: "",
+  sets: [{ id: "s", name: "S", objects: [{ id: 1, kind: "person", x: 0, z: 4, plays: "anna" }] }],
+  segments: [0, 1].map((n) => ({ prompt: "a", duration_s: 4, assets: [], loras: [], set: "s", ...(n ? { continue: true, continue_audio: true } : {}),
+    staging: { camera: [at(0, 0)], people: {}, shake: { kind: "hand", seed: 5 + n }, ...(n ? second : {}) } })) }));
+const film = (tl, n, t) => filmAt(S.setOf(tl, tl.segments[n]), tl.segments[n].staging, t, S.shakeRun(tl, n));
+const tl = piece(), calm = piece({ shake: null });
+const apart2 = (a, b) => Math.abs(a.yaw - b.yaw) + Math.abs(a.pitch - b.pitch) + Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+out.shakeSame = apart2(film(tl, 0, 1.3), film(piece(), 0, 1.3));
+out.shakeMoves = apart2(film(tl, 0, 1), film(tl, 0, 2)) > 1e-3;
+out.shakeJoins = [tl, calm].map((which) => apart2(film(which, 0, 4), film(which, 1, 0)) < 1e-9);
+out.shakeEnds = apart2(film(calm, 1, 0.6), B.lensAt(S.setOf(calm, calm.segments[1]), calm.segments[1].staging, 0.6));
+out.shakeGap = B.joinGap(tl, 1);
+let most = 0;
+for (let t = 0; t < 30; t += 0.05) most = Math.max(most, Math.abs(film(tl, 0, t).yaw) * 57.3);
+out.shakeMost = most > 0.2 && most <= 0.76;
+const stampOf = (which) => S.stagingStamp(which, 1);
+const other = piece(); other.segments[0].staging.shake.seed = 9;
+out.shakeStamp = [stampOf(tl) === stampOf(piece()), stampOf(tl) === stampOf(other)];
+out.shakeWords = B.stagingWords(tl, 0);
+out.shakePlain = moveSentence([at(0, 0), at(4, 2)], 4, null, { plain: true, shake: { kind: "hand" } });
+out.shakeKept = S.serializeStaging({ camera: [], people: {}, shake: { kind: "running", amount: 99, seed: 3 } }).shake;
+
 console.log(JSON.stringify(out));
 """
 
@@ -198,5 +221,15 @@ check("...and says so", said["lookWords"],
 check("...in everyday words on the bench", said["lookPlain"],
       "The camera turns right, always looking at the car.")
 check("the shape is kept", said["shaped"], [True, {"x": 2, "y": 0, "z": 0}, 2])
+
+check("a shake is the same each time it is drawn", [said["shakeSame"], said["shakeMoves"]], [0, True])
+check("a join does not jump, into a shake or out of one", said["shakeJoins"], [True, True])
+check("and it dies down where the shot has none", said["shakeEnds"], 0)
+check("the path under it still lines up", said["shakeGap"], None)
+check("held in hand stays within its size", said["shakeMost"], True)
+check("the guide's stamp knows the shake it goes on from", said["shakeStamp"], [True, False])
+check("the words say it", said["shakeWords"].split(". ")[-1], "The camera stays in place, handheld with a natural sway.")
+check("...and on the bench", said["shakePlain"], "The camera moves forward, held in hand.")
+check("the shake is kept, and clamped", said["shakeKept"], {"kind": "running", "amount": 3, "rate": 1, "seed": 3})
 
 passed("the blockout says who is where, and the move in the model's own words")

@@ -24,7 +24,7 @@ import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
 import {
-  Raster, project, cameraAt, lensAt, poseAt, reachAt, facingOf, facesAlong, faceArrival, aimedMarks, lookName, stagedSentence, stagedAt, guideSize, stagingSentence, moveSentence,
+  Raster, project, cameraAt, lensAt, filmAt, poseAt, reachAt, facingOf, facesAlong, faceArrival, aimedMarks, lookName, stagedSentence, stagedAt, guideSize, stagingSentence, moveSentence,
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
@@ -156,6 +156,12 @@ class Blockout extends Reel {
     return lensAt(this.set(), this.staging(), this.at.t);
   }
 
+  /** The shot camera as the frame at the playhead is drawn: with its shake. */
+  filmCam() {
+    const run = this.set() ? S.shakeRun(this.timeline, this.index()) : null;
+    return filmAt(this.set(), this.staging(), this.at.t, run);
+  }
+
   /** The set as it stands at the playhead. */
   objectsNow() {
     const set = this.set();
@@ -183,7 +189,7 @@ class Blockout extends Reel {
 
   /** Whichever camera the glass is looking through. */
   eye() {
-    return this.view === "stage" && !this.lens ? this.freeCam() : this.lensCam();
+    return this.view === "stage" && !this.lens ? this.freeCam() : this.filmCam();
   }
 
   /** Move the glass to a shot, keeping the playhead where it is if it is the same one. */
@@ -445,14 +451,14 @@ class Blockout extends Reel {
     if (this.view === "guide" || this.view === "still") {
       const pass = S.stagingPass(this.timeline, segment);
       if (this.view === "still" || pass === "none") {
-        this.raster.raster(this.objectsNow(), this.lensCam());
+        this.raster.raster(this.objectsNow(), this.filmCam());
         this.raster.shade(this.context, "as_staged");
         this.showBlank(this.view === "still"
           ? t("One frame of this shot, rendered by the image model from the depth pass. Not built yet.")
           : t("This shot carries no guide. The model gets the words alone."));
         return;
       }
-      this.raster.raster(this.objectsNow(), this.lensCam());
+      this.raster.raster(this.objectsNow(), this.filmCam());
       this.raster.shade(this.context, pass);
       return;
     }
@@ -619,8 +625,8 @@ class Blockout extends Reel {
       ...(this.toolSwitch && stageView && !this.lens ? [this.toolSwitch(seg)] : []),
       el("span", { class: "mmc-bn-gap" }),
       ...(stageView ? [el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("Which camera") }, [
-        seg(t("Free look"), !this.lens, () => this.setLens(false), { title: t("Fly around the set. The shot camera stays where it is.") }),
-        seg(t("Through the lens"), this.lens, () => this.setLens(true), { title: t("Stand in the shot camera. Every gesture writes a camera mark at the playhead.") }),
+        seg(t("Look around"), !this.lens, () => this.setLens(false), { title: t("Fly around the set. The shot camera stays where it is.") }),
+        seg(t("What the camera sees"), this.lens, () => this.setLens(true), { title: t("Stand in the shot camera. Every gesture writes a camera mark at the playhead.") }),
       ])] : []),
     ]);
     const play = el("button", { class: "mmc-bo-seg", "aria-label": this.playing ? t("Pause") : t("Play"),
@@ -1092,7 +1098,7 @@ class Blockout extends Reel {
     let hint = t("Stage shows the set as you handle it. Guide is the pass as the model gets it, Take is what came back.");
     if (this.view === "stage" && this.set()) {
       hint = this.lens
-        ? t("Through the lens: drag pans and tilts, shift-drag trucks and pedestals, the wheel pushes in. Each writes a camera mark at the playhead.")
+        ? t("What the camera sees: drag turns it, shift-drag moves it sideways and up, the wheel moves it forward. Each makes a stop at the playhead.")
         : this.tool === "turn"
           ? t("Turn: drag a ring to turn a piece on that axis. It snaps to 15° and rests on the floor whichever way up it is.")
           : this.tool === "lift"
@@ -1905,10 +1911,11 @@ class Blockout extends Reel {
     const posture = this.postureChanges(index);
     return [
       this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(aimedMarks(set, staging, this.seconds(index)), this.seconds(index), null,
-        { plain: true, keeping: lookName(set, staging) }) })),
+        { plain: true, keeping: lookName(set, staging), shake: staging.shake ?? null }) })),
       this.irow(t("Keep looking at"), this.segmented([[0, t("Nobody")], ...this.lookable(set, staging).map((piece) => [piece.id, this.labelOf(piece)])],
         staging.look ?? 0, (id) => this.keepLooking(index, id)),
       staging.look ? t("The camera turns by itself. Moving it and bending its path still work.") : null),
+      ...this.shakeRows(index),
       this.irow(t("Marks"), el("div", { class: "mmc-reel-inline" }, [
         ...marks.map((mark) => el("button", { class: "mmc-reel-value", title: t("Go to this mark"),
           onclick: () => { this.goTo(index, mark.t); this.renderSide(); } }, [
@@ -1935,6 +1942,31 @@ class Blockout extends Reel {
         : posture ? t("Someone changes posture or leaves the floor in this shot: Loosely may suit it better.")
           : t("The blocks are where things are."))] : []),
     ];
+  }
+
+  /** How the shot camera shakes: which way, how much, how fast. */
+  shakeRows(index) {
+    const { staging } = this.timeline.segments[index];
+    const { shake } = staging;
+    const slider = (label, key, low, high) => this.irow(label, el("input", { class: "mmc-st-range", type: "range",
+      min: String(low), max: String(high), step: "0.05", value: String(shake[key]), "aria-label": label,
+      oninput: (event) => { shake[key] = Number(event.target.value); this.paint(); },
+      onchange: () => this.commit() }));
+    const rows = [this.irow(t("Camera shake"), this.segmented([["", t("None")], ["barely", t("Barely")], ["hand", t("Held in hand")],
+      ["walking", t("Walking")], ["running", t("Running")]], shake?.kind ?? "", (kind) => {
+      if (kind) staging.shake = { ...(shake ?? { amount: 1, rate: 1, seed: Math.floor(Math.random() * 0xffffff) }), kind };
+      else delete staging.shake;
+      this.commit();
+    }), shake ? t("Play it in What the camera sees. The path itself stays smooth.") : null)];
+    if (!shake) return rows;
+    const { owner } = S.shakeRun(this.timeline, index);
+    rows.push(slider(t("How much"), "amount", 0.1, 3), slider(t("How fast"), "rate", 0.25, 3),
+      this.irow("", el("button", { class: "mmc-reel-btn", text: t("Another shake"), title: t("The same feel, shaken differently"),
+        onclick: () => {
+          this.timeline.segments[owner].staging.shake.seed = Math.floor(Math.random() * 0xffffff);
+          this.commit();
+        } }), owner === index ? null : t("It goes on from shot {n}, so that one changes too.", { n: owner + 1 })));
+    return rows;
   }
 
   /** What a camera can be kept on: whoever and whatever is named, and what moves. */

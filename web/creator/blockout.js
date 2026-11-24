@@ -766,7 +766,7 @@ function walkClause(piece, end, walk, from, to, cam) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null, keeping = "" } = {}) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null, keeping = "", shake = null } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
   const entering = [];
@@ -817,7 +817,7 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const piece of entering) {
     clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
   }
-  const move = withMove ? moveSentence(marks, duration, moveTarget(ends ?? objects, marks, cam, size.w, size.h), { keeping }) : "";
+  const move = withMove ? moveSentence(marks, duration, moveTarget(ends ?? objects, marks, cam, size.w, size.h), { keeping, shake }) : "";
   if (!clauses.length) return move;
   const staging = clauses.join("; ") + ".";
   return `${staging.charAt(0).toUpperCase()}${staging.slice(1)}${move ? ` ${move}` : ""}`;
@@ -880,9 +880,20 @@ function movesBetween(a, b, target, plain) {
   return moves.sort((p, q) => q.mag - p.mag);
 }
 
-export function moveSentence(marks, duration, target = null, { plain = false, keeping = "" } = {}) {
-  const held = !keeping ? "." : `${plain ? t(", always looking at {who}", { who: keeping }) : t(", keeping {who} in frame", { who: keeping })}.`;
-  const still = (plain ? t("The camera stays still") : t("The camera holds a static shot")) + held;
+const SHAKE_WORDS = {
+  barely: { film: "handheld with a barely perceptible sway", plain: "barely shaking" },
+  hand: { film: "handheld with a natural sway", plain: "held in hand" },
+  walking: { film: "handheld, bobbing with each walking step", plain: "shaking with someone's steps" },
+  running: { film: "handheld, shaking hard with each running step", plain: "shaking as someone runs" },
+};
+
+export function moveSentence(marks, duration, target = null, { plain = false, keeping = "", shake = null } = {}) {
+  const how = SHAKE_WORDS[shake?.kind];
+  const held = (!keeping ? "" : plain ? t(", always looking at {who}", { who: keeping }) : t(", keeping {who} in frame", { who: keeping }))
+    + (how ? `, ${t(plain ? how.plain : how.film)}` : "") + ".";
+  // A shaken camera is not a static one, wherever it stays.
+  const still = (plain ? (how ? t("The camera stays in place") : t("The camera stays still"))
+    : how ? t("The camera stays in place") : t("The camera holds a static shot")) + held;
   if (!marks || marks.length < 2) return still;
   const a = marks[0], b = marks[marks.length - 1];
   // A camera that goes somewhere and comes back has no move from end to end.
@@ -1243,6 +1254,68 @@ export function lensAt(set, staging, t) {
   return { ...cam, yaw: cam.yaw + shortest(cam.yaw, Math.atan2(dx, dz)), pitch: clamp(Math.atan2(dy, flat), -1.5, 1.5) };
 }
 
+// ---- a camera held by somebody -----------------------------------------------------
+//
+// Laid over the path and never part of it: a join, a mark and a sentence read
+// the path, and only a frame that is drawn is shaken. It is made of a seed and
+// the time, so the same shot shakes the same way however often it is drawn.
+
+/** What each shake does: degrees turned, metres carried, how often a second,
+ *  and the steps of whoever is carrying it. */
+const SHAKE_FEEL = {
+  barely: { turn: 0.25, drift: 0.006, often: 0.45 },
+  hand: { turn: 0.75, drift: 0.015, often: 0.8 },
+  walking: { turn: 0.8, drift: 0.015, often: 0.9, steps: 1.8, bob: 0.03, nod: 0.35 },
+  running: { turn: 1.6, drift: 0.03, often: 1.5, steps: 2.8, bob: 0.07, nod: 0.9 },
+};
+
+/** A smooth wander between -1 and 1 over time, its own for each seed and channel. */
+function wander(seed, channel, time) {
+  const at = (n) => {
+    let h = Math.imul(seed + 1, 0x9e3779b1) ^ Math.imul(channel + 1, 0x85ebca6b) ^ Math.imul(n, 0xc2b2ae35);
+    h = Math.imul(h ^ (h >>> 15), 0x2c1b3c6d);
+    h = Math.imul(h ^ (h >>> 12), 0x297a2d39);
+    return ((h ^ (h >>> 15)) >>> 0) / 0x7fffffff - 1;
+  };
+  const one = (x) => {
+    const n = Math.floor(x), f = x - n;
+    return at(n) + (at(n + 1) - at(n)) * f * f * f * (f * (f * 6 - 15) + 10);
+  };
+  return (one(time) + 0.45 * one(time * 2.3 + 17.5)) / 1.45;
+}
+
+/** One shake at a moment: turned, and carried along the camera's right and up. */
+function shakeAt(shake, seed, time) {
+  if (!shake) return [0, 0, 0, 0];
+  const feel = SHAKE_FEEL[shake.kind], k = shake.amount;
+  const x = time * feel.often * 2 * shake.rate;
+  const step = time * (feel.steps ?? 0) * shake.rate * 2 * Math.PI;
+  return [
+    (wander(seed, 0, x) * feel.turn * k) / DEG,
+    ((wander(seed, 1, x) * feel.turn * 0.8 + Math.sin(step + 0.8) * (feel.nod ?? 0)) * k) / DEG,
+    (wander(seed, 2, x) * feel.drift + Math.sin(step / 2) * (feel.bob ?? 0) * 0.6) * k,
+    (wander(seed, 3, x) * feel.drift - Math.cos(step) * (feel.bob ?? 0)) * k,
+  ];
+}
+
+/** How long a shot takes to come out of the shake it continues from. */
+const SHAKE_HANDOVER = 0.5;
+
+/** The shot camera as the frame at `t` is drawn: `lensAt`, shaken. `run` is
+ *  `state.shakeRun`'s. */
+export function filmAt(set, staging, t, run) {
+  const cam = lensAt(set, staging, t);
+  if (!run) return cam;
+  let by = shakeAt(run.shake, run.seed, run.from + t);
+  if (run.before && t < SHAKE_HANDOVER) {
+    const was = shakeAt(run.before, run.seed, run.from + t);
+    by = by.map((value, k) => was[k] + (value - was[k]) * (t / SHAKE_HANDOVER));
+  }
+  const right = rightOf(cam), up = upOf(cam);
+  return { ...cam, yaw: cam.yaw + by[0], pitch: clamp(cam.pitch + by[1], -1.5, 1.5),
+    x: cam.x + right[0] * by[2] + up[0] * by[3], y: cam.y + right[1] * by[2] + up[1] * by[3], z: cam.z + right[2] * by[2] + up[2] * by[3] };
+}
+
 /** The camera's marks as it is really turned: what the sentences read. A camera
  *  following somebody turns even where it has nothing but its first mark. */
 export function aimedMarks(set, staging, seconds) {
@@ -1269,7 +1342,7 @@ export function lookName(set, staging) {
 /** The sentence a staged shot's camera and people make, read as a whole. */
 export function stagedSentence(set, staging, seconds, size, { withMove = true } = {}) {
   return stagingSentence(stagedAt(set, staging, 0), aimedMarks(set, staging, seconds), seconds, lensAt(set, staging, 0), size,
-    { withMove, ends: stagedAt(set, staging, seconds), people: staging.people, keeping: lookName(set, staging) });
+    { withMove, ends: stagedAt(set, staging, seconds), people: staging.people, keeping: lookName(set, staging), shake: staging.shake ?? null });
 }
 
 /** The pixels a piece's guide is written at: the family's native canvas at the
@@ -1379,6 +1452,7 @@ export function stagingFrom(timeline, index) {
   const segment = { staging: { camera: [], people: {} } };
   const scratch = { ...timeline, segments: [before, segment] };
   lineUp(scratch, 1);
+  if (before.staging.shake) segment.staging.shake = { ...before.staging.shake };
   return { set: before.set, staging: segment.staging };
 }
 
@@ -1434,8 +1508,8 @@ export function guidesWanted(timeline) {
 }
 
 /** One frame of a staged shot, drawn at `size` in `pass`, as a PNG blob. */
-export function drawStaged(raster, canvas, context, set, staging, at, pass) {
-  raster.raster(stagedAt(set, staging, at), lensAt(set, staging, at));
+export function drawStaged(raster, canvas, context, set, staging, at, pass, run = null) {
+  raster.raster(stagedAt(set, staging, at), filmAt(set, staging, at, run));
   raster.shade(context, pass);
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded")))), "image/png");
@@ -1480,6 +1554,7 @@ export async function deriveGuides(timeline, { step = () => {} } = {}) {
     }
     const set = S.setOf(timeline, segment);
     const pass = S.stagingPass(timeline, segment);
+    const run = S.shakeRun(timeline, index);
     const seconds = Number(segment.duration_s) || 1;
     const count = Math.max(2, framesForSeconds(seconds, rules));
     const token = crypto.getRandomValues(new Uint32Array(4))
@@ -1488,7 +1563,7 @@ export async function deriveGuides(timeline, { step = () => {} } = {}) {
     for (let frame = 0; frame < count; frame++) {
       step(t("Drawing the guide for shot {n}, frame {f} of {count}…", { n: index + 1, f: frame + 1, count }));
       const at = (frame / (count - 1)) * seconds;
-      batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, segment.staging, at, pass) });
+      batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, segment.staging, at, pass, run) });
       if (batch.length >= BATCH || frame === count - 1) {
         await blockoutFrames(token, batch);
         batch = [];
@@ -1525,6 +1600,7 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   const segment = timeline.segments[index];
   const set = structuredClone(S.setOf(timeline, segment));
   const staging = structuredClone(segment.staging);
+  const run = structuredClone(S.shakeRun(timeline, index));
   const passId = S.stagingPass(timeline, segment) === "none" ? "as_staged" : S.stagingPass(timeline, segment);
   const pass = PASS_BY_ID[passId];
   const seconds = Number(segment.duration_s) || 4;
@@ -1538,7 +1614,7 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   const meta = { op: t(pass.label), opId: pass.opId, words };
   if (still || staging.camera.length < 2) {
     step(t("Tracing the frame…"));
-    const blob = await drawStaged(raster, canvas, context, set, staging, at, passId);
+    const blob = await drawStaged(raster, canvas, context, set, staging, at, passId, run);
     const asset = await upload(new File([blob], `blockout-${passId}.png`, { type: "image/png" }), WRITES.slice(0, -1));
     return { path: asset.path, kind: "image", ...meta };
   }
@@ -1549,7 +1625,7 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   let batch = [];
   for (let frame = 0; frame < count; frame++) {
     step(t("Drawing frame {n} of {count}…", { n: frame + 1, count }));
-    batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, staging, (frame / (count - 1)) * seconds, passId) });
+    batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, staging, (frame / (count - 1)) * seconds, passId, run) });
     if (batch.length >= BATCH || frame === count - 1) {
       step(t("Sending frame {n} of {count}…", { n: frame + 1, count }));
       await blockoutFrames(token, batch);
@@ -1562,7 +1638,8 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
     objects: set.objects,
     marks: staging.camera.map(({ t: _t, ...mark }) => mark),
     times: staging.camera.map((mark) => mark.t),
-    people: staging.people, ...(staging.look ? { look: staging.look } : {}), duration: seconds, aspect: timeline.aspect, pass: passId,
+    people: staging.people, ...(staging.look ? { look: staging.look } : {}),
+    ...(staging.shake ? { shake: staging.shake } : {}), duration: seconds, aspect: timeline.aspect, pass: passId,
   };
   const written = await blockoutWrite({ token, fps: rules.fps, op: passId, scene });
   return { ...written, ...meta };

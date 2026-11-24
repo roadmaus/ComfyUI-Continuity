@@ -6,6 +6,9 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout's camera can shake.** Barely, held in hand, walking or running, with
+how much and how fast; it carries on across a continuing join.
+
 **Paths in the blockout bend.** Pull a person's or the camera's path into a curve,
 drag its stops, or make one a sharp corner; people face along it. A thing can move
 in a shot, and the camera can keep looking at somebody.

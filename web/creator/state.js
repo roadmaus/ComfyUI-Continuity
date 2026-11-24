@@ -2790,6 +2790,20 @@ function personMark(raw) {
 
 const byTime = (a, b) => a.t - b.t;
 
+/** How a shot camera can shake. None is the absence of one. */
+export const SHAKES = ["barely", "hand", "walking", "running"];
+
+/** A camera's shake, as read off a blob, or null. */
+function parseShake(raw) {
+  if (!SHAKES.includes(raw?.kind)) return null;
+  return {
+    kind: raw.kind,
+    amount: finiteIn(raw.amount ?? 1, 1, 0.1, 3),
+    rate: finiteIn(raw.rate ?? 1, 1, 0.25, 3),
+    seed: Math.round(finiteIn(raw.seed, 1, 0, 0xffffff)),
+  };
+}
+
 /** A shot's staging, as read off a blob, or null where it has none. */
 export function parseStaging(raw) {
   if (!raw || typeof raw !== "object") return null;
@@ -2808,6 +2822,8 @@ export function parseStaging(raw) {
   if (raw.hold === "loose") out.hold = "loose";
   const look = Math.round(Number(raw.look));
   if (look >= 1) out.look = look;
+  const shake = parseShake(raw.shake);
+  if (shake) out.shake = shake;
   if (typeof raw.words === "string" && raw.words.trim()) out.words = raw.words.slice(0, 2000);
   return out;
 }
@@ -2847,6 +2863,7 @@ export function serializeStaging(staging) {
     ...(picked.pass ? { pass: picked.pass } : {}),
     ...(picked.hold ? { hold: picked.hold } : {}),
     ...(picked.look ? { look: picked.look } : {}),
+    ...(picked.shake ? { shake: roundAll(picked.shake) } : {}),
     ...(picked.words ? { words: picked.words } : {}),
   };
 }
@@ -2896,6 +2913,26 @@ export const shotsOnSet = (timeline, id) =>
 const setStamped = (set) => (set ? { id: set.id, name: set.name, objects: set.objects } : null);
 
 /**
+ * How shot `index` shakes, as part of the run of shots it continues from: shots
+ * joined without a cut are one camera, so its shake goes on from shot to shot
+ * rather than starting again. -> `{ shake, owner, seed, from, before }`: its own
+ * shake or null, the shot whose seed the run goes by, the seconds of the run
+ * before it, and the shake it takes over from. Null where nothing shakes.
+ */
+export function shakeRun(timeline, index) {
+  const joined = (at) => at > 0 && (continues(timeline.segments[at]) || merged(timeline.segments[at]))
+    && isStaged(timeline, timeline.segments[at - 1]);
+  const shakeOf = (at) => timeline.segments[at]?.staging?.shake ?? null;
+  const shake = shakeOf(index), before = joined(index) ? shakeOf(index - 1) : null;
+  if (!shake && !before) return null;
+  let owner = shake ? index : index - 1;
+  while (joined(owner) && shakeOf(owner - 1)) owner -= 1;
+  let from = 0;
+  for (let at = index; joined(at); at -= 1) from += Number(timeline.segments[at - 1].duration_s) || 0;
+  return { shake, owner, seed: shakeOf(owner).seed, from, before };
+}
+
+/**
  * What the derived guide of shot `index` is drawn from, hashed: the staging,
  * the set, the pass, the canvas and the length. The guide's file is named after
  * it, so a shot whose stamp has not moved reuses the file it already has.
@@ -2907,12 +2944,14 @@ export function stagingStamp(timeline, index) {
   const pass = stagingPass(timeline, segment);
   if (pass === "none") return null;
   const { words, ...staging } = serializeStaging(segment.staging);
+  const run = shakeRun(timeline, index);
   return hash(JSON.stringify([
     STAGING_MOTION,
     staging, serializeSets([setStamped(setOf(timeline, segment))])[0]?.objects ?? [],
     pass, timeline.aspect, timeline.short_edge, pieceFamily(timeline),
     segment.duration_s,
     stagesByReference(timeline) ? (fullStagingClip(timeline) ? "full" : "half") : "",
+    ...(run ? [run] : []),
   ]));
 }
 
@@ -2961,6 +3000,8 @@ export function sceneAsStaging(scene, { id = "s1", name = "" } = {}) {
   const camera = raw.map((mark, at) => cameraMark({ ...mark,
     t: times ? Number(times[at]) || 0 : raw.length > 1 ? (at / last) * duration : 0 }));
   const staging = { camera, people: parseStaging({ camera: [], people: scene.people })?.people ?? {} };
+  const shake = parseShake(scene.shake);
+  if (shake) staging.shake = shake;
   if (Number(scene.look) >= 1) staging.look = Math.round(scene.look);
   if (STAGING_PASSES.includes(scene.pass)) staging.pass = scene.pass;
   const set = { id, name: name || id, objects };
