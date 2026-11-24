@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Continuity Reel Stage</title>
+<style>
+/* Layout: Continuity's reel window, as the branch draws it, with the 3D stage as a view of its player.
+   Single dark look on purpose: these are the pack's own tokens (web/creator/styles/base.js) on the
+   ground it pins for fullscreen, which is ComfyUI's Dark palette. Nothing here is a new colour. */
+:root {
+  color-scheme: dark;
+  --mmc-ground: #171718;
+  --mmc-ink: #fff;
+  --mmc-lift: 1;
+  --mmc-bg: var(--mmc-ground);
+  --mmc-float: color-mix(in oklab, var(--mmc-ground) calc(100% - 3% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-surface: color-mix(in oklab, var(--mmc-ground) calc(100% - 6% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-surface-2: color-mix(in oklab, var(--mmc-ground) calc(100% - 10% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-surface-3: color-mix(in oklab, var(--mmc-ground) calc(100% - 14% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-line: color-mix(in srgb, var(--mmc-ink) 9%, transparent);
+  --mmc-line-2: color-mix(in srgb, var(--mmc-ink) 18%, transparent);
+  --mmc-line-3: color-mix(in srgb, var(--mmc-ink) 28%, transparent);
+  --mmc-edge: color-mix(in oklab, var(--mmc-ground) calc(100% - 24% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-edge-2: color-mix(in oklab, var(--mmc-ground) calc(100% - 43% * var(--mmc-lift)), var(--mmc-ink));
+  --mmc-tint: color-mix(in srgb, var(--mmc-ink) 2%, transparent);
+  --mmc-wash: color-mix(in srgb, var(--mmc-ink) 6%, transparent);
+  --mmc-wash-2: color-mix(in srgb, var(--mmc-ink) 12%, transparent);
+  --mmc-wash-3: color-mix(in srgb, var(--mmc-ink) 22%, transparent);
+  --mmc-strong: var(--mmc-ink);
+  --mmc-text: #ddd;
+  --mmc-dim: #999;
+  --mmc-faint: color-mix(in oklab, var(--mmc-ground) 51%, var(--mmc-ink));
+  --mmc-off: color-mix(in oklab, var(--mmc-ground) 66%, var(--mmc-ink));
+  --mmc-on-ink: #202020;
+  --mmc-scrim: color-mix(in srgb, var(--mmc-ground) 50%, transparent);
+  --mmc-scrim-2: color-mix(in srgb, var(--mmc-ground) 65%, transparent);
+  --mmc-scrim-3: color-mix(in srgb, var(--mmc-ground) 85%, transparent);
+  --mmc-shadow: color-mix(in srgb, black 55%, transparent);
+  --mmc-shadow-soft: color-mix(in srgb, black 40%, transparent);
+  --mmc-media-bg: black;
+  --mmc-accent: #f0a63c;
+  --mmc-on-accent: #141414;
+  --mmc-warn: color-mix(in oklab, #b33a3a 70%, var(--mmc-ink));
+  --mmc-bad: #ff4444;
+  --mmc-bad-solid: #b33a3a;
+  --mmc-bad-solid-hover: #e04e48;
+  --mmc-blue: color-mix(in oklab, #0b8ce9 72%, var(--mmc-ink));
+  --mmc-type: 1;
+  --mmc-pill-h: calc(38px * var(--mmc-type));
+  --mmc-role-motion: #6ebeff;
+  --mmc-role-voice: #a8c858;
+  --mmc-role-replaces: var(--mmc-accent);
+  --mmc-tag-0: #5cb8f0;
+  --mmc-tag-1: #63c98e;
+  --mmc-tag-2: #9d95f5;
+  --mmc-tag-3: #f07da0;
+  --mmc-tag-4: #45c4c0;
+  --mmc-tag-5: #f0906b;
+  --mmc-tag-6: #d57de8;
+  --mmc-tag-7: #a8c858;
+}
+[class^="mmc-"], [class*=" mmc-"] { scrollbar-width: none; }
+[class^="mmc-"]::-webkit-scrollbar, [class*=" mmc-"]::-webkit-scrollbar { display: none; }
+:where([class^="mmc-"], [class*=" mmc-"]) { user-select: none; -webkit-user-select: none; }
+:where(input, textarea, [contenteditable="true"], [contenteditable="true"] *) { user-select: auto; -webkit-user-select: auto; }
+.mmc-tl-modal { width: min(1800px, 100%); height: 100%; }
+
+/* ---- Continuity: web/creator/styles/picker.js (the window) ---- */
+.mmc-overlay {
+  position: fixed; inset: 0; z-index: 1400; background: var(--mmc-scrim-2);
+  display: flex; align-items: center; justify-content: center; padding: 40px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+.mmc-modal {
+  background: var(--mmc-float); border: 1px solid var(--mmc-line); border-radius: 22px;
+  width: min(1100px, 100%); height: min(760px, 100%);
+  display: flex; flex-direction: column; color: var(--mmc-text); overflow: hidden;
+  box-shadow: 0 30px 80px var(--mmc-shadow);
+}
+/* ---- Continuity: web/creator/styles/timeline.js (the reel), verbatim ---- */
+/* --- the reel ----------------------------------------------------------------
+   The timeline as one window: one line of header, the script on the left, the
+   player over the inspector on the right, and the piece at its real length
+   underneath. Nothing is boxed that is not a separate thing: the script is set
+   as text, the inspector as rows. Blue is a continuing picture, green is sound
+   that carries over, the accent is the selection and anything that needs a
+   look. */
+.mmc-reel { display: flex; flex-direction: column; overflow: hidden; }
+.mmc-reel-head {
+  flex: none; display: flex; align-items: center; gap: 14px; height: 58px; padding: 0 18px 0 24px;
+  border-bottom: 1px solid var(--mmc-line);
+}
+.mmc-reel-title { font-size: calc(17px * var(--mmc-type)); font-weight: 650; color: var(--mmc-strong); }
+.mmc-reel-meta { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); font-variant-numeric: tabular-nums; }
+.mmc-reel-plan { margin-left: auto; color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-plan b { color: var(--mmc-text); font-weight: 550; }
+.mmc-reel-plan i { font-style: normal; color: var(--mmc-role-voice); }
+.mmc-reel-problem { color: var(--mmc-warn); font-size: calc(13px * var(--mmc-type)); }
+.mmc-reel-shoot {
+  height: 36px; padding: 0 18px; border-radius: 10px; border: 0; cursor: pointer;
+  background: var(--mmc-accent); color: var(--mmc-on-accent); font: inherit; font-weight: 650;
+  font-size: calc(14px * var(--mmc-type));
+}
+.mmc-reel-head .mmc-close { margin-left: 0; }
+.mmc-reel-step {
+  display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 8px;
+  background: none; color: var(--mmc-text); cursor: pointer;
+}
+.mmc-reel-step + .mmc-reel-step { margin-left: -10px; }
+.mmc-reel-step.redo svg { transform: scaleX(-1); }
+.mmc-reel-step:hover { background: var(--mmc-surface-2); }
+.mmc-reel-step:disabled { opacity: .35; cursor: default; background: none; }
+.mmc-reel-shoot:disabled { opacity: .45; cursor: default; }
+
+.mmc-reel-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 0.72fr); }
+.mmc-reel-script { min-height: 0; overflow: auto; padding: 16px 24px 24px 18px; border-right: 1px solid var(--mmc-line); }
+.mmc-reel-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: baseline; gap: 6px; padding: 7px 10px 7px 0; border-radius: 12px; }
+.mmc-reel-shot.selected { background: var(--mmc-tint); }
+.mmc-reel-shot.merged .mmc-reel-gutter { border-left: 2px dotted var(--mmc-line-3); }
+.mmc-reel-gutter { display: flex; flex-direction: column; align-items: flex-start; padding-left: 12px; }
+.mmc-reel-label { font-size: calc(13px * var(--mmc-type)); color: var(--mmc-dim); }
+.mmc-reel-num {
+  font: inherit; font-weight: 650; font-size: calc(16px * var(--mmc-type)); color: var(--mmc-strong);
+  background: none; border: 0; padding: 0; cursor: pointer; text-align: left;
+}
+.mmc-reel-num.ghost { color: var(--mmc-faint); cursor: default; }
+.mmc-reel-shot.selected .mmc-reel-num { color: var(--mmc-accent); }
+.mmc-reel-secs { font-variant-numeric: tabular-nums; font-size: calc(11.5px * var(--mmc-type)); color: var(--mmc-faint); margin-top: 1px; }
+/* The prompt box, set as text: no frame, no fill, the same box underneath. */
+.mmc-reel-plain, .mmc-reel-plain .mmc-prompt { border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; min-height: 0 !important; }
+.mmc-reel-plain .mmc-prompt { font-size: calc(16.5px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-text); }
+.mmc-reel-scene .mmc-reel-plain .mmc-prompt { font-size: calc(18.5px * var(--mmc-type)); line-height: 1.5; color: var(--mmc-strong); }
+.mmc-reel-plain .mmc-prompt:focus { outline: none; }
+.mmc-reel-quiet { padding-top: 1px; padding-bottom: 1px; }
+.mmc-reel-line-text {
+  width: 100%; resize: none; overflow: hidden; border: 0; background: none; padding: 0; margin: 0;
+  color: var(--mmc-dim); font: inherit; font-size: calc(15px * var(--mmc-type)); line-height: 1.5;
+}
+.mmc-reel-line-text:focus { outline: none; color: var(--mmc-text); }
+.mmc-reel-line-text::placeholder { color: var(--mmc-faint); }
+.mmc-reel-rule { height: 1px; background: var(--mmc-line); margin: 10px 0 10px 64px; }
+.mmc-reel-clipname { font: inherit; text-align: left; background: none; border: 0; padding: 0; color: var(--mmc-dim); cursor: pointer; font-size: calc(15px * var(--mmc-type)); }
+.mmc-reel-tag {
+  align-self: center; white-space: nowrap; font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
+  padding: 2px 8px; border-radius: 6px;
+}
+.mmc-reel-tag:empty { display: none; }
+.mmc-reel-tag.changed, .mmc-reel-tag.reshoot { color: var(--mmc-on-accent); background: var(--mmc-accent); }
+.mmc-reel-tag.gone { color: var(--mmc-bad); background: color-mix(in srgb, var(--mmc-bad) 14%, transparent); }
+.mmc-reel-next-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.mmc-reel-ghost {
+  font: inherit; font-size: calc(16.5px * var(--mmc-type)); color: var(--mmc-faint); background: none; border: 0;
+  padding: 0; cursor: text; text-align: left;
+}
+.mmc-reel-ghost:hover { color: var(--mmc-dim); }
+.mmc-reel-ghost.small { font-size: calc(13.5px * var(--mmc-type)); color: var(--mmc-dim); cursor: pointer; }
+.mmc-reel-ghost[hidden] { display: none; }
+.mmc-reel-words { display: flex; flex-direction: column; align-items: stretch; gap: 3px; min-width: 0; }
+.mmc-reel-words .mmc-reel-ghost { align-self: flex-start; }
+
+/* The gap above a row, where a shot or a clip can be put in. */
+.mmc-reel-shots, .mmc-reel-shot { position: relative; }
+.mmc-reel-gap {
+  position: absolute; left: 64px; right: 10px; top: -6px; height: 12px; z-index: 3;
+  display: flex; align-items: center; justify-content: flex-end; gap: 6px;
+}
+.mmc-reel-gap::before { content: ""; flex: 1; height: 1px; background: var(--mmc-line-3); opacity: 0; }
+.mmc-reel-gap-add {
+  font: inherit; font-size: calc(12px * var(--mmc-type)); line-height: 20px; padding: 0 9px; border-radius: 10px;
+  border: 1px solid var(--mmc-line-3); background: var(--mmc-bg); color: var(--mmc-text); cursor: pointer;
+  opacity: 0; pointer-events: none;
+}
+.mmc-reel-gap:hover::before, .mmc-reel-gap:focus-within::before { opacity: 1; }
+.mmc-reel-gap:hover .mmc-reel-gap-add, .mmc-reel-gap:focus-within .mmc-reel-gap-add { opacity: 1; pointer-events: auto; }
+.mmc-reel-gap-add:hover { border-color: var(--mmc-accent); }
+
+/* Moving a card: the handle, the line it would land on, what is being held. */
+.mmc-reel-handle { cursor: grab; touch-action: none; user-select: none; }
+.mmc-reel-handle .mmc-reel-num { cursor: grab; }
+.mmc-reel-dragging, .mmc-reel-dragging * { cursor: grabbing !important; user-select: none; }
+.mmc-reel-dragging .mmc-reel-gap { display: none; }
+.mmc-reel-drop { position: absolute; z-index: 6; pointer-events: none; background: var(--mmc-accent); border-radius: 2px; }
+.mmc-reel-drop.reel { top: -3px; height: 90px; width: 4px; margin-left: -2px; }
+.mmc-reel-drop.script { left: 0; right: 0; height: 3px; margin-top: -2px; }
+.mmc-reel-ghostcard {
+  position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none; max-width: 260px; display: flex; gap: 8px;
+  padding: 7px 11px; border-radius: 8px; background: var(--mmc-surface-2); color: var(--mmc-text);
+  border: 1px solid var(--mmc-accent); font-size: calc(13px * var(--mmc-type));
+}
+.mmc-reel-ghostcard span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mmc-reel-ghost:disabled { cursor: not-allowed; opacity: .5; }
+
+/* The cast and references, as faces and frames above the script. */
+.mmc-reel-castrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 2px 0 14px 64px; }
+.mmc-reel-face {
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 3px; border-radius: 999px;
+  border: 0; background: var(--mmc-surface); color: var(--mmc-accent); font: inherit; font-weight: 550;
+  font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-face.frame { color: var(--mmc-role-motion); padding-left: 4px; }
+.mmc-reel-face img, .mmc-reel-face-blank { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--mmc-surface-3); display: grid; place-items: center; color: var(--mmc-dim); }
+.mmc-reel-face.frame img, .mmc-reel-face.frame .mmc-reel-face-blank { width: 38px; height: 26px; border-radius: 6px; }
+.mmc-reel-face-wrap, .mmc-reel-thumb-wrap { position: relative; display: inline-flex; }
+.mmc-reel-x {
+  position: absolute; top: -6px; right: -6px; z-index: 2; width: 20px; height: 20px; padding: 0; border-radius: 50%;
+  border: 1px solid var(--mmc-line-3); background: var(--mmc-bg); color: var(--mmc-text); cursor: pointer;
+  font: inherit; font-size: calc(10px * var(--mmc-type)); line-height: 1; opacity: 0;
+}
+.mmc-reel-face-wrap:hover .mmc-reel-x, .mmc-reel-thumb-wrap:hover .mmc-reel-x, .mmc-reel-x:focus-visible,
+.mmc-reel-face:focus-visible + .mmc-reel-x { opacity: 1; }
+.mmc-reel-x:hover { border-color: var(--mmc-bad); color: var(--mmc-bad); }
+@media (hover: none) { .mmc-reel-x { opacity: 1; } }
+.mmc-reel-chip-x { border: 0; padding: 0 2px; background: none; color: var(--mmc-dim); cursor: pointer; font: inherit; font-size: calc(10px * var(--mmc-type)); }
+.mmc-reel-chip-x:hover { color: var(--mmc-bad); }
+.mmc-reel-stood-in .mmc-prompt { opacity: .6; }
+.mmc-reel-player .mmc-stage-slate { height: 100%; box-sizing: border-box; padding: 22px; background: var(--mmc-media-bg); }
+.mmc-reel-live-media { position: absolute; inset: 0; }
+.mmc-reel-live-media .mmc-reel-media { object-fit: contain; }
+.mmc-reel-live-said { font-variant-numeric: tabular-nums; color: var(--mmc-accent); }
+.mmc-reel-live-rule {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--mmc-accent); transform-origin: left; transition: transform .2s;
+}
+.mmc-reel-progress {
+  position: absolute; top: 0; height: 84px; box-sizing: border-box; z-index: 5; pointer-events: none; border-radius: 8px;
+  border: 2px solid var(--mmc-accent); overflow: hidden;
+}
+.mmc-reel-progress::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--mmc-accent);
+  transform: scaleX(var(--done, 0)); transform-origin: left; transition: transform .2s;
+}
+.mmc-reel-tag.shooting { color: var(--mmc-accent); font-variant-numeric: tabular-nums; }
+.mmc-reel-shoot.quiet { background: none; color: var(--mmc-text); border: 1px solid var(--mmc-line-3); }
+.mmc-reel-btn[hidden] { display: none; }
+.mmc-reel-offers { display: flex; gap: 16px; }
+.mmc-reel-ghost.mmc-reel-rewritten { color: var(--mmc-accent); }
+.mmc-reel-back { align-self: flex-start; margin-bottom: 6px; }
+.mmc-reel-face.selected { box-shadow: 0 0 0 2px var(--mmc-accent); }
+.mmc-reel-face-add {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px dashed var(--mmc-line-3); background: none;
+  color: var(--mmc-dim); display: grid; place-items: center; cursor: pointer;
+}
+.mmc-reel-face-add:hover { color: var(--mmc-strong); border-color: var(--mmc-strong); }
+.mmc-reel-hint { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-faint); }
+
+/* The side: the player, then the inspector. */
+.mmc-reel-side { min-height: 0; display: flex; flex-direction: column; }
+.mmc-reel-player {
+  position: relative; flex: none; margin: 16px 20px 0; height: clamp(150px, 24vh, 290px); border-radius: 14px;
+  overflow: hidden; background: var(--mmc-media-bg);
+}
+.mmc-reel-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mmc-reel-blank {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; text-align: center;
+  color: var(--mmc-dim); background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 14px, var(--mmc-surface-2) 14px 28px);
+}
+.mmc-reel-plabel, .mmc-reel-tc {
+  position: absolute; top: 12px; padding: 4px 10px; border-radius: 8px; font-size: calc(13px * var(--mmc-type));
+  color: #fff; background: rgba(0, 0, 0, .58);
+}
+.mmc-reel-plabel { left: 12px; }
+.mmc-reel-tc { right: 12px; font-variant-numeric: tabular-nums; }
+.mmc-reel-tc:empty { display: none; }
+.mmc-reel-play {
+  position: absolute; left: 50%; top: 50%; width: 54px; height: 54px; margin: -27px; border-radius: 50%; border: 0;
+  background: rgba(0, 0, 0, .5); color: #fff; display: grid; place-items: center; cursor: pointer; transition: opacity .2s;
+}
+.mmc-reel-play.playing { opacity: 0; }
+.mmc-reel-player:hover .mmc-reel-play.playing { opacity: .8; }
+.mmc-reel-inspect { flex: 1; min-height: 0; overflow: auto; padding: 16px 20px 22px; }
+.mmc-reel-inspect-body { display: flex; flex-direction: column; gap: 8px; }
+.mmc-reel-ihead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.mmc-reel-ihead b { font-size: calc(19px * var(--mmc-type)); color: var(--mmc-strong); font-weight: 650; }
+.mmc-reel-ihead > span { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-ihead .mmc-reel-tag { align-self: baseline; }
+.mmc-reel-why { margin: 0 0 4px; color: var(--mmc-text); line-height: 1.5; font-size: calc(14px * var(--mmc-type)); max-width: 60ch; }
+.mmc-reel-irow { display: grid; grid-template-columns: 136px minmax(0, 1fr); align-items: center; gap: 12px; min-height: 34px; }
+.mmc-reel-ilabel { color: var(--mmc-dim); font-size: calc(13.5px * var(--mmc-type)); }
+.mmc-reel-icontrol { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
+.mmc-reel .mmc-seed-pill, .mmc-reel .mmc-seed-ghost { display: flex; }
+.mmc-reel-inline { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.mmc-reel-note { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.45; }
+.mmc-reel-mono { font-variant-numeric: tabular-nums; color: var(--mmc-text); }
+.mmc-reel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 6px; }
+.mmc-reel-actions.quiet { margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--mmc-line); }
+.mmc-reel-btn {
+  display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid var(--mmc-line-2); background: var(--mmc-surface); color: var(--mmc-text);
+  font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-btn:hover { background: var(--mmc-surface-2); }
+.mmc-reel-btn.primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; font-weight: 650; }
+.mmc-reel-btn.quiet { background: none; border-color: transparent; color: var(--mmc-dim); padding: 0 10px; }
+.mmc-reel-btn.quiet:hover { color: var(--mmc-strong); background: var(--mmc-wash); }
+.mmc-reel-btn.danger, .mmc-reel-btn.quiet.danger { color: var(--mmc-bad); }
+.mmc-reel-btn:disabled { opacity: .4; cursor: not-allowed; }
+.mmc-reel-link {
+  font: inherit; font-size: calc(13px * var(--mmc-type)); background: none; border: 0; padding: 2px 4px;
+  color: var(--mmc-accent); cursor: pointer; border-radius: 5px;
+}
+.mmc-reel-link:hover { background: var(--mmc-wash); }
+.mmc-reel-value {
+  display: inline-flex; align-items: baseline; gap: 8px; height: 32px; padding: 0 12px; border-radius: 9px;
+  border: 0; background: var(--mmc-surface-2); color: var(--mmc-strong); font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-value small { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); }
+.mmc-reel-value { align-items: center; }
+.mmc-reel-value svg { color: var(--mmc-dim); }
+.mmc-reel .mmc-refine-split { display: inline-flex; align-items: center; position: static; }
+.mmc-reel .mmc-refine-split .mmc-tool-icon { display: none; }
+.mmc-reel .mmc-refine-split .mmc-reel-btn { border-radius: 10px 0 0 10px; }
+.mmc-reel .mmc-refine-more {
+  position: static; height: 32px; width: 30px; border: 1px solid var(--mmc-line-2); border-left: 0;
+  border-radius: 0 10px 10px 0; background: var(--mmc-surface); color: var(--mmc-dim); cursor: pointer;
+  display: grid; place-items: center; padding: 0;
+}
+.mmc-reel-family .mmc-pill { height: 32px; border-radius: 9px; border: 0; background: var(--mmc-surface-2); }
+.mmc-reel-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: var(--mmc-surface-2); }
+.mmc-reel-seg button {
+  display: inline-flex; align-items: baseline; gap: 5px; border: 0; background: none; padding: 5px 11px; border-radius: 8px;
+  color: var(--mmc-dim); font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-seg button small { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); opacity: .75; }
+.mmc-reel-seg button[aria-pressed="true"] { background: var(--mmc-bg); color: var(--mmc-strong); box-shadow: 0 1px 2px var(--mmc-shadow-soft); }
+.mmc-reel-seg.motion button[aria-pressed="true"] { color: var(--mmc-role-motion); }
+.mmc-reel-seg.voice button[aria-pressed="true"] { color: var(--mmc-role-voice); }
+.mmc-reel-seg button:disabled { opacity: .38; cursor: not-allowed; }
+.mmc-reel-switch {
+  position: relative; width: 38px; height: 22px; border-radius: 11px; border: 0; padding: 0; cursor: pointer;
+  background: var(--mmc-surface-3); flex: none;
+}
+.mmc-reel-switch::after {
+  content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--mmc-dim); transition: transform .15s;
+}
+.mmc-reel-switch[aria-checked="true"] { background: var(--mmc-accent); }
+.mmc-reel-switch[aria-checked="true"]::after { transform: translateX(16px); background: var(--mmc-on-accent); }
+.mmc-reel-switch:disabled { opacity: .4; cursor: not-allowed; }
+.mmc-reel-stepper { display: inline-flex; align-items: center; border-radius: 9px; background: var(--mmc-surface-2); overflow: hidden; }
+.mmc-reel-stepper button { width: 28px; height: 30px; border: 0; background: none; color: var(--mmc-dim); cursor: pointer; font: inherit; }
+.mmc-reel-stepper button:hover { color: var(--mmc-strong); }
+.mmc-reel-stepper span { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type)); color: var(--mmc-strong); }
+.mmc-reel-seed {
+  width: 150px; height: 30px; padding: 0 10px; border-radius: 9px; border: 0; background: var(--mmc-surface-2);
+  color: var(--mmc-strong); font: inherit; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type));
+}
+.mmc-reel-seed::placeholder { color: var(--mmc-dim); }
+.mmc-reel-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
+.mmc-reel-thumbs img, .mmc-reel-thumb-blank, .mmc-reel-thumb-add { width: 62px; height: 40px; border-radius: 7px; object-fit: cover; }
+.mmc-reel-thumb-blank { display: grid; place-items: center; background: var(--mmc-surface-2); color: var(--mmc-dim); }
+.mmc-reel-thumb-add { display: grid; place-items: center; border: 1px dashed var(--mmc-line-3); background: none; color: var(--mmc-dim); cursor: pointer; }
+.mmc-reel-loras { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mmc-reel-lora {
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: 7px; border: 0;
+  background: color-mix(in srgb, var(--mmc-role-voice) 15%, transparent); color: var(--mmc-role-voice);
+  font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
+}
+.mmc-reel-lora small { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); opacity: .8; }
+.mmc-reel-lora.off { opacity: .45; }
+.mmc-reel-machine { margin-top: 10px; padding-top: 12px; border-top: 1px solid var(--mmc-line); font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim); line-height: 1.5; }
+.mmc-reel-compiled { white-space: pre-wrap; font-size: calc(13px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-text); margin: 0; padding: 4px 2px; }
+
+/* The reel: to scale, the one place lengths are compared. */
+.mmc-reel-foot { flex: none; border-top: 1px solid var(--mmc-line); background: color-mix(in oklab, var(--mmc-bg) 94%, var(--mmc-media-bg)); padding: 12px 22px 0; }
+.mmc-reel-lane { overflow: hidden; }
+.mmc-reel-track-area { position: relative; display: flex; flex-direction: column; gap: 3px; }
+.mmc-reel-passes { position: relative; height: 16px; }
+.mmc-reel-pass {
+  position: absolute; top: 0; height: 16px; border: 1px solid var(--mmc-line-3); border-bottom: 0;
+  border-radius: 6px 6px 0 0; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
+  padding: 0 8px; overflow: hidden; white-space: nowrap; box-sizing: border-box;
+}
+.mmc-reel-picture { position: relative; height: 84px; }
+.mmc-reel-card {
+  position: absolute; top: 0; height: 84px; padding: 0; border-radius: 8px; overflow: hidden; cursor: grab;
+  touch-action: none; user-select: none;
+  border: 1px solid var(--mmc-line-2); color: var(--mmc-text); font: inherit; text-align: left;
+  background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 9px, var(--mmc-surface-2) 9px 18px);
+}
+.mmc-reel-card.kept, .mmc-reel-card.reshoot, .mmc-reel-card.changed { background: var(--mmc-media-bg); }
+.mmc-reel-card.runs-in { border-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+.mmc-reel-card.runs-on { border-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+.mmc-reel-card.filmed { background: none; }
+.mmc-reel-card.selected { box-shadow: 0 0 0 2px var(--mmc-accent); z-index: 2; }
+.mmc-reel-film { position: absolute; top: 0; height: 84px; overflow: hidden; background: var(--mmc-media-bg); }
+.mmc-reel-thumb { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.mmc-reel-card-head {
+  position: absolute; left: calc(8px + var(--lead, 0px)); top: 6px; display: flex; gap: 6px; align-items: baseline;
+  font-size: calc(12.5px * var(--mmc-type)); color: #fff; text-shadow: 0 1px 3px rgba(0, 0, 0, .8);
+}
+.mmc-reel-card-head span { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); }
+.mmc-reel-card.new .mmc-reel-card-head { color: var(--mmc-strong); text-shadow: none; }
+.mmc-reel-card-text {
+  position: absolute; left: calc(8px + var(--lead, 0px)); right: calc(12px + var(--tail, 0px)); top: 26px; font-size: calc(12px * var(--mmc-type)); line-height: 1.3;
+  color: var(--mmc-dim); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+}
+.mmc-reel-card-tag {
+  position: absolute; left: calc(7px + var(--lead, 0px)); bottom: 6px; z-index: 5; font-size: calc(10.5px * var(--mmc-type)); font-weight: 650;
+  padding: 1px 7px; border-radius: 5px; background: var(--mmc-accent); color: var(--mmc-on-accent);
+}
+.mmc-reel-card-tag.gone { background: var(--mmc-bad); color: #fff; }
+.mmc-reel-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; display: grid; place-items: center; z-index: 3; }
+.mmc-reel-edge::after { content: ""; width: 2px; height: 24px; border-radius: 1px; background: rgba(255, 255, 255, .45); }
+.mmc-reel-card:hover .mmc-reel-edge::after { background: #fff; }
+/* The frames a blend carries over: ticks, like the sound thread's, under a
+   bracket like a pass's. Over pictures they stand back for the pictures' own
+   slits until the join is looked at. */
+.mmc-reel-blend { position: absolute; top: 1px; height: 82px; z-index: 4; pointer-events: none; }
+.mmc-reel-blend::after {
+  content: ""; position: absolute; inset: 0; opacity: .42; transition: opacity .15s;
+  background: repeating-linear-gradient(90deg, var(--mmc-role-motion) 0 2px, transparent 2px 5px);
+}
+.mmc-reel-blend.filmed::after { opacity: 0; }
+.mmc-reel-blend.none::after { content: none; }
+.mmc-reel-blend.none .mmc-reel-grip { right: -14px; }
+.mmc-reel-blend:hover::after, .mmc-reel-blend.hot::after { opacity: .6; }
+.mmc-reel-blend.selected::after { opacity: .8; }
+.mmc-reel-blend.filmed:hover::after, .mmc-reel-blend.filmed.hot::after { opacity: .35; }
+.mmc-reel-blend.filmed.selected::after { opacity: .5; }
+.mmc-reel-bracket {
+  position: absolute; left: 0; right: 0; width: 100%; top: -17px; height: 16px; padding: 0; box-sizing: border-box; cursor: pointer;
+  pointer-events: auto; font: inherit; font-size: calc(10.5px * var(--mmc-type)); line-height: 15px; text-align: center;
+  white-space: nowrap; color: var(--mmc-role-motion); border: 1px solid var(--mmc-role-motion);
+  border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--mmc-bg);
+}
+.mmc-reel-blend.selected .mmc-reel-bracket { background: color-mix(in oklab, var(--mmc-role-motion) 20%, var(--mmc-bg)); }
+.mmc-reel-grip { position: absolute; z-index: 1; right: -7px; top: 0; width: 14px; height: 100%; cursor: ew-resize; pointer-events: auto; }
+.mmc-reel-grip::after {
+  content: ""; position: absolute; left: 6px; top: 50%; width: 2px; height: 24px; margin-top: -12px; border-radius: 1px;
+  background: var(--mmc-role-motion); opacity: .6;
+}
+.mmc-reel-blend:hover .mmc-reel-grip::after, .mmc-reel-blend.selected .mmc-reel-grip::after { opacity: 1; }
+.mmc-reel-joins { position: relative; height: 28px; }
+.mmc-reel-join {
+  position: absolute; top: 1px; width: 26px; height: 26px; margin-left: -13px; border-radius: 50%; padding: 0;
+  display: grid; place-items: center; cursor: pointer; background: var(--mmc-bg); color: var(--mmc-dim);
+  border: 1.5px solid var(--mmc-line-3);
+}
+.mmc-reel-join.on { color: var(--mmc-role-motion); border-color: var(--mmc-role-motion); }
+.mmc-reel-join.merged { border-style: dashed; color: var(--mmc-faint); }
+.mmc-reel-join.selected { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
+.mmc-reel-sound { position: relative; height: 26px; }
+.mmc-reel-wave {
+  position: absolute; top: 5px; height: 16px; border-radius: 3px;
+  background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--mmc-role-voice) 55%, transparent) 0 2px, transparent 2px 5px);
+}
+.mmc-reel-sdot {
+  position: absolute; top: 6px; width: 14px; height: 14px; margin-left: -7px; border-radius: 50%; padding: 0; z-index: 2;
+  background: var(--mmc-bg); border: 1.5px solid var(--mmc-line-3); cursor: pointer;
+}
+.mmc-reel-sdot.on { border-color: var(--mmc-role-voice); background: var(--mmc-role-voice); }
+.mmc-reel-track {
+  position: absolute; top: 1px; height: 24px; border-radius: 6px; padding: 0 8px; z-index: 3; cursor: pointer;
+  border: 1px solid var(--mmc-role-voice); background: color-mix(in oklab, var(--mmc-role-voice) 26%, var(--mmc-bg));
+  color: var(--mmc-strong); font: inherit; font-size: calc(11.5px * var(--mmc-type)); text-align: left;
+  overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
+}
+.mmc-reel-track.selected { box-shadow: 0 0 0 2px var(--mmc-accent); }
+.mmc-reel-status { display: flex; align-items: center; gap: 16px; padding: 8px 0 10px; }
+.mmc-reel-status .mmc-reel-link { color: var(--mmc-text); }
+.mmc-reel-status .mmc-reel-hint { margin-left: auto; }
+
+@media (max-width: 900px) {
+  .mmc-reel-main { grid-template-columns: minmax(0, 1fr); }
+  .mmc-reel-script { border-right: 0; }
+}
+/* ---- Continuity: web/creator/styles/blockout.js (the stage HUD and number slots), verbatim ---- */
+/* --- the viewport HUD -------------------------------------------------------- */
+/* Floating over the canvas: the two questions you are always answering while
+   working — which camera am I, and am I looking at the stage or the file. */
+.mmc-bo-hud {
+  position: absolute; left: 10px; right: 10px; z-index: 2;
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  pointer-events: none;
+}
+.mmc-bo-hud.top { top: 10px; }
+.mmc-bo-hud.bottom { bottom: 10px; }
+.mmc-bo-hud .mmc-bo-switch { pointer-events: auto; }
+.mmc-bo-switch {
+  display: flex; gap: 2px; padding: 2px; border-radius: 9px;
+  background: rgba(14, 15, 17, .74); border: 1px solid rgba(255, 255, 255, .1);
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+}
+.mmc-bo-seg {
+  height: calc(24px * var(--mmc-type)); padding: 0 10px; border: 0; border-radius: 7px;
+  background: none; cursor: pointer; white-space: nowrap;
+  font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
+  color: rgba(233, 231, 226, .58);
+}
+.mmc-bo-seg:hover { color: rgba(233, 231, 226, .92); }
+.mmc-bo-seg.on { background: rgba(233, 231, 226, .15); color: #f0ede7; }
+.mmc-bo-seg:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -1px; }
+
+/* --- the properties panel's numbers ------------------------------------------ */
+.mmc-bo-vec { display: flex; gap: 5px; }
+.mmc-bo-vecslot {
+  flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
+  height: calc(26px * var(--mmc-type)); padding: 0 7px; border-radius: 7px;
+  background: var(--mmc-wash); border: 1px solid var(--mmc-line-2);
+}
+.mmc-bo-vecslot:focus-within { border-color: var(--mmc-line-3); }
+.mmc-bo-axis {
+  flex: none; font-size: calc(9.5px * var(--mmc-type));
+  font-weight: 600; letter-spacing: .06em;
+}
+.mmc-bo-axis.is-x, .mmc-bo-axis.is-w { color: #e05a52; }
+.mmc-bo-axis.is-y, .mmc-bo-axis.is-h { color: #79c85a; }
+.mmc-bo-axis.is-z, .mmc-bo-axis.is-d { color: #4f8fe2; }
+.mmc-bo-num {
+  width: 100%; min-width: 0; padding: 0; border: 0; background: none;
+  color: var(--mmc-text); font-family: inherit;
+  font-size: calc(11.5px * var(--mmc-type)); font-variant-numeric: tabular-nums;
+  -moz-appearance: textfield; appearance: textfield;
+}
+.mmc-bo-num:focus { outline: none; }
+.mmc-bo-num::-webkit-outer-spin-button,
+.mmc-bo-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+
+/* ---- what the prototype adds to the reel: the stage ------------------------------
+   Everything above this line is Continuity's own CSS, copied from the branch.
+   Below are the few rules the 3D stage needs that the reel does not have yet. */
+html, body { height: 100%; margin: 0; }
+body { background: #0c0c0d; color: var(--mmc-text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif; font-size: 14px; }
+* { box-sizing: border-box; }
+button:focus-visible, [contenteditable]:focus-visible, input:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
+.mmc-reel-plain .mmc-prompt:focus-visible, .mmc-reel-line-text:focus-visible { outline: none; }
+.mmc-overlay { padding: clamp(8px, 2.2vw, 40px); background: var(--mmc-scrim-2); }
+.mmc-prompt { white-space: pre-wrap; overflow-wrap: anywhere; min-height: 1.5em; cursor: text; }
+.mmc-prompt .at { font-weight: 550; color: var(--tag, var(--mmc-accent)); }
+.mmc-reel-line-text { display: block; }
+
+/* the stage, wherever it sits: in the player, or on the glass in Direct */
+.mmc-st { position: absolute; inset: 0; }
+.mmc-st canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; touch-action: none; display: block; }
+.mmc-st .mmc-reel-blank { flex-direction: column; gap: 12px; display: flex; align-items: center; justify-content: center; font-size: calc(13.5px * var(--mmc-type)); line-height: 1.5; }
+.mmc-st .mmc-reel-blank[hidden] { display: none; }
+.mmc-st .mmc-reel-blank p { margin: 0; max-width: 44ch; }
+.mmc-bo-hud > * { pointer-events: auto; }
+.mmc-bo-hud .mmc-bn-gap { flex: 1; pointer-events: none; }
+.mmc-st-said { height: calc(24px * var(--mmc-type)); padding: 0 10px; display: inline-flex; align-items: center; white-space: nowrap;
+  font-size: calc(11.5px * var(--mmc-type)); color: #f0ede7; font-variant-numeric: tabular-nums; }
+.mmc-bo-seg { display: inline-flex; align-items: center; gap: 5px; }
+.mmc-bo-seg:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Direct: the stage takes the script's place, the shot's own line stays under it */
+.mmc-st-col { min-height: 0; display: none; flex-direction: column; gap: 10px; padding: 16px 20px 12px 18px; border-right: 1px solid var(--mmc-line); }
+.mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: 14px; overflow: hidden; background: var(--mmc-media-bg); }
+.mmc-reel-main.direct .mmc-reel-script { display: none; }
+.mmc-reel-main.direct .mmc-st-col { display: flex; }
+.mmc-reel-main.direct .mmc-reel-player { display: none; }
+.mmc-st-line { flex: none; }
+
+/* the reel's playhead, and a join whose staging does not line up */
+.mmc-st-head { position: absolute; top: -3px; height: 90px; width: 2px; margin-left: -1px; background: var(--mmc-accent); z-index: 6; pointer-events: none; }
+.mmc-st-head::before { content: ""; position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--mmc-accent); }
+.mmc-reel-join.jump { border-color: var(--mmc-accent); color: var(--mmc-accent); }
+.mmc-reel-pass { cursor: pointer; background: none; font: inherit; font-size: calc(10.5px * var(--mmc-type)); text-align: left; line-height: 15px; }
+.mmc-reel-pass.selected { color: var(--mmc-accent); border-color: var(--mmc-accent); }
+.mmc-reel-card canvas.mmc-reel-thumb { object-fit: fill; }
+.mmc-reel-card.guide canvas.mmc-reel-thumb { opacity: .5; }
+.mmc-reel-card-tag.quiet { background: rgba(0, 0, 0, .58); color: #fff; font-weight: 500; }
+.mmc-reel-face-blank { font-size: calc(12px * var(--mmc-type)); font-weight: 650; }
+.mmc-reel-face canvas { width: 38px; height: 26px; border-radius: 6px; display: block; }
+.mmc-st-cuthint { padding: 6px 0 2px 64px; }
+.mmc-st-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--tag, var(--mmc-surface-3)); flex: none; }
+.mmc-st-name { width: 100%; max-width: 240px; }
+.mmc-reel-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type)); line-height: 1.45; }
+.mmc-reel-seed.wide { width: 100%; max-width: 260px; }
+
+@media (max-width: 900px) {
+  .mmc-overlay { position: static; display: block; }
+  .mmc-tl-modal { height: auto; }
+  .mmc-reel-head { height: auto; flex-wrap: wrap; padding: 10px 14px; row-gap: 8px; }
+  .mmc-reel-main { display: flex; flex-direction: column; }
+  .mmc-reel-side { order: -1; }
+  .mmc-st-col { border-right: 0; }
+  .mmc-st-glass { min-height: 0; aspect-ratio: 16 / 9; flex: none; }
+  .mmc-reel-irow { grid-template-columns: 96px minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .mmc-reel-switch::after { transition: none; } }
+
+</style>
+</head>
+<body>
+<div class="mmc-overlay"><div class="mmc-modal mmc-tl-modal mmc-reel">
+<div class="mmc-reel-head" id="headbar"></div>
+<div class="mmc-reel-main" id="main">
+<div class="mmc-reel-script" id="script"></div>
+<div class="mmc-st-col"><div class="mmc-st-glass" id="glass"></div><div class="mmc-st-line" id="stageline"></div></div>
+<div class="mmc-reel-side"><div class="mmc-reel-player" id="player"></div><div class="mmc-reel-inspect" id="inspect"></div></div>
+</div>
+<div class="mmc-reel-foot"><div class="mmc-reel-lane" id="lane"><div class="mmc-reel-track-area">
+<div class="mmc-reel-passes" id="passes"></div><div class="mmc-reel-picture" id="picture"></div><div class="mmc-reel-joins" id="joins"></div><div class="mmc-reel-sound" id="sound"></div>
+</div></div><div class="mmc-reel-status" id="status"></div></div>
+</div></div>
+<script>
+"use strict";
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const DEG = 180 / Math.PI;
+const KINDS = {
+  person: { label: "Person", w: 0.5, h: 1.75, d: 0.35 },
+  block: { label: "Block", w: 1, h: 1, d: 1 },
+  wall: { label: "Wall", w: 4, h: 3, d: 0.2 },
+  post: { label: "Post", w: 0.3, h: 3, d: 0.3 },
+};
+const angDiff = (a, b) => { let d = a - b; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+function lerpCam(a, b, u) {
+  return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), z: lerp(a.z, b.z, u),
+    yaw: a.yaw + angDiff(b.yaw, a.yaw) * u, pitch: lerp(a.pitch, b.pitch, u), mm: lerp(a.mm, b.mm, u) };
+}
+function aimAt(cam, p) {
+  const dx = p.x - cam.x, dz = p.z - cam.z, dy = p.y - cam.y;
+  cam.yaw = Math.atan2(dx, dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
+  return cam;
+}
+const S = { pieces: [] };
+function viewOf(cam) {
+  const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  return (x, y, z) => {
+    const px = x - cam.x, py = y - cam.y, pz = z - cam.z;
+    const x1 = cy * px - sy * pz, z1 = sy * px + cy * pz;
+    return [x1, cp * py - sp * z1, sp * py + cp * z1];
+  };
+}
+const focal = (cam, W, H) => cam.mm / 36 * Math.max(W, H);
+function project(cam, p, W, H) {
+  const v = viewOf(cam)(p.x, p.y, p.z);
+  if (v[2] < 0.05) return null;
+  const f = focal(cam, W, H);
+  return { x: W / 2 + f * v[0] / v[2], y: H / 2 - f * v[1] / v[2], z: v[2] };
+}
+function rayFloor(cam, sx, sy, W, H, planeY = 0) {
+  const f = focal(cam, W, H);
+  const dx = (sx - W / 2) / f, dy = -(sy - H / 2) / f, dz = 1;
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch), cy = Math.cos(cam.yaw), syw = Math.sin(cam.yaw);
+  const y1 = cp * dy + sp * dz, z1 = -sp * dy + cp * dz;
+  const wx = cy * dx + syw * z1, wz = -syw * dx + cy * z1;
+  if (y1 > -1e-4) return null;
+  const k = (planeY - cam.y) / y1;
+  if (k < 0 || k > 80) return null;
+  return { x: cam.x + wx * k, z: cam.z + wz * k };
+}
+function boxesOf(p) {
+  if (p.kind === "person") {
+    const s = p.w / 0.5, f = [Math.sin(p.r), Math.cos(p.r)];
+    return [
+      { x: p.x, z: p.z, y0: 0, w: 0.46 * s, h: p.h * 0.8, d: 0.28, r: p.r },
+      { x: p.x, z: p.z, y0: p.h * 0.82, w: 0.22, h: p.h * 0.17, d: 0.24, r: p.r },
+      { x: p.x + f[0] * 0.13, z: p.z + f[1] * 0.13, y0: p.h * 0.88, w: 0.07, h: 0.05, d: 0.08, r: p.r },
+    ];
+  }
+  return [{ x: p.x, z: p.z, y0: p.y || 0, w: p.w, h: p.h, d: p.d, r: p.r }];
+}
+function cornersOf(b) {
+  const out = [], c = Math.cos(b.r), s = Math.sin(b.r);
+  for (let i = 0; i < 8; i++) {
+    const lx = (i & 1 ? 0.5 : -0.5) * b.w, ly = b.y0 + (i & 2 ? b.h : 0), lz = (i & 4 ? 0.5 : -0.5) * b.d;
+    out.push({ x: b.x + c * lx + s * lz, y: ly, z: b.z - s * lx + c * lz });
+  }
+  return out;
+}
+const FACES = [[[0, 4, 6, 2], [-1, 0, 0]], [[1, 3, 7, 5], [1, 0, 0]], [[0, 1, 5, 4], [0, -1, 0]],
+  [[2, 6, 7, 3], [0, 1, 0]], [[0, 2, 3, 1], [0, 0, -1]], [[4, 5, 7, 6], [0, 0, 1]]];
+const LIGHT = (() => { const v = [0.45, 0.8, -0.35], n = Math.hypot(...v); return v.map((x) => x / n); })();
+const BLOCK_COLORS = [[224, 96, 86], [92, 184, 240], [99, 201, 142], [157, 149, 245], [240, 125, 160], [240, 166, 60], [96, 210, 200], [200, 196, 96]];
+const DNEAR = 1.0, DFAR = 24, NEAR = 0.06;
+const hexRGB = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const bufs = new Map();
+function getBuf(W, H) {
+  const k = W + "x" + H; let b = bufs.get(k);
+  if (!b) { b = { W, H, img: new ImageData(W, H), z: new Float32Array(W * H), id: new Uint8Array(W * H) }; bufs.set(k, b);
+    if (bufs.size > 30) bufs.delete(bufs.keys().next().value); }
+  return b;
+}
+function clipNear(poly) {
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], ain = a.z >= NEAR, bin = b.z >= NEAR;
+    if (ain) out.push(a);
+    if (ain !== bin) {
+      const t = (NEAR - a.z) / (b.z - a.z);
+      out.push({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), z: NEAR, wx: lerp(a.wx, b.wx, t), wz: lerp(a.wz, b.wz, t) });
+    }
+  }
+  return out;
+}
+function renderScene(cam, W, H, mode, pieces = S.pieces) {
+  const b = getBuf(W, H), px = b.img.data, zb = b.z, ib = b.id;
+  zb.fill(0); ib.fill(255);
+  const colour = mode === "stage" || mode === "staged";
+  const SKY0 = mode === "stage" ? [29, 30, 33] : [52, 52, 55], SKY1 = mode === "stage" ? [44, 45, 49] : [80, 79, 77];
+  if (colour) for (let y = 0; y < H; y++) {
+    const t = y / H, r = lerp(SKY0[0], SKY1[0], t), g = lerp(SKY0[1], SKY1[1], t), bl = lerp(SKY0[2], SKY1[2], t);
+    for (let x = 0, i = y * W * 4; x < W; x++, i += 4) { px[i] = r; px[i + 1] = g; px[i + 2] = bl; px[i + 3] = 255; }
+  }
+  const V = viewOf(cam), f = focal(cam, W, H), fog = SKY1;
+  const drawPoly = (world, id, col, floor) => {
+    let poly = world.map((p) => { const v = V(p.x, p.y, p.z); return { x: v[0], y: v[1], z: v[2], wx: p.x, wz: p.z }; });
+    poly = clipNear(poly);
+    if (poly.length < 3) return;
+    const sp = poly.map((v) => { const iz = 1 / v.z; return { sx: W / 2 + f * v.x * iz, sy: H / 2 - f * v.y * iz, iz, ax: v.wx * iz, az: v.wz * iz }; });
+    for (let i = 1; i < sp.length - 1; i++) tri(sp[0], sp[i], sp[i + 1], id, col, floor);
+  };
+  const tri = (a, c, d, id, col, floor) => {
+    const minX = Math.max(0, Math.floor(Math.min(a.sx, c.sx, d.sx))), maxX = Math.min(W - 1, Math.ceil(Math.max(a.sx, c.sx, d.sx)));
+    const minY = Math.max(0, Math.floor(Math.min(a.sy, c.sy, d.sy))), maxY = Math.min(H - 1, Math.ceil(Math.max(a.sy, c.sy, d.sy)));
+    if (minX > maxX || minY > maxY) return;
+    const area = (c.sx - a.sx) * (d.sy - a.sy) - (c.sy - a.sy) * (d.sx - a.sx);
+    if (Math.abs(area) < 1e-9) return;
+    const inv = 1 / area;
+    const coef = (p, q) => [-(q.sy - p.sy) * inv, (q.sx - p.sx) * inv, (-(q.sx - p.sx) * p.sy + (q.sy - p.sy) * p.sx) * inv];
+    const [A0, B0, C0] = coef(c, d), [A1, B1, C1] = coef(d, a), [A2, B2, C2] = coef(a, c);
+    for (let y = minY; y <= maxY; y++) {
+      const py = y + 0.5;
+      for (let x = minX; x <= maxX; x++) {
+        const pxx = x + 0.5;
+        const w0 = A0 * pxx + B0 * py + C0; if (w0 < -1e-7) continue;
+        const w1 = A1 * pxx + B1 * py + C1; if (w1 < -1e-7) continue;
+        const w2 = A2 * pxx + B2 * py + C2; if (w2 < -1e-7) continue;
+        const iz = w0 * a.iz + w1 * c.iz + w2 * d.iz, idx = y * W + x;
+        if (iz <= zb[idx]) continue;
+        zb[idx] = iz; ib[idx] = id;
+        if (!colour) continue;
+        const dist = 1 / iz; let r, g, bl;
+        if (floor) {
+          const wx = (w0 * a.ax + w1 * c.ax + w2 * d.ax) * dist, wz = (w0 * a.az + w1 * c.az + w2 * d.az) * dist;
+          if (mode === "stage") {
+            r = 50; g = 52; bl = 56;
+            const lw = Math.min(0.14, 0.006 + 0.0032 * dist);
+            const rx = Math.round(wx), rz = Math.round(wz), fx = Math.abs(wx - rx), fz = Math.abs(wz - rz);
+            if (fx < lw || fz < lw) {
+              const major = (fx < lw && rx % 5 === 0) || (fz < lw && rz % 5 === 0);
+              r = g = bl = major ? 84 : 66; bl += 4;
+            }
+            if (Math.abs(wz) < lw * 1.4) { r = 150; g = 72; bl = 66; }
+            if (Math.abs(wx) < lw * 1.4) { r = 72; g = 112; bl = 172; }
+          } else { r = 82; g = 80; bl = 76; }
+          const k = clamp((dist - 6) / 28, 0, 0.88);
+          r = lerp(r, fog[0], k); g = lerp(g, fog[1], k); bl = lerp(bl, fog[2], k);
+        } else {
+          const k = clamp((dist - 14) / 30, 0, 0.7);
+          r = lerp(col[0], fog[0], k); g = lerp(col[1], fog[1], k); bl = lerp(col[2], fog[2], k);
+        }
+        const o = idx * 4; px[o] = r; px[o + 1] = g; px[o + 2] = bl; px[o + 3] = 255;
+      }
+    }
+  };
+  const FL = 40;
+  drawPoly([{ x: -FL, y: 0, z: -FL }, { x: FL, y: 0, z: -FL }, { x: FL, y: 0, z: FL }, { x: -FL, y: 0, z: FL }], 254, null, true);
+  for (const p of pieces) {
+    const tint = p.plays ? hexRGB(CAST[p.plays] || "#999999") : null;
+    const base = p.kind === "wall" ? [150, 146, 138] : [166, 161, 151];
+    const clay = tint ? base.map((v, i) => lerp(v, tint[i], mode === "stage" ? 0.55 : 0)) : base;
+    for (const bx of boxesOf(p)) {
+      const cs = cornersOf(bx), c = Math.cos(bx.r), s = Math.sin(bx.r);
+      for (const [idx, n] of FACES) {
+        const nw = normalOf(bx, n);
+        const ctr = idx.reduce((acc, i) => ({ x: acc.x + cs[i].x / 4, y: acc.y + cs[i].y / 4, z: acc.z + cs[i].z / 4 }), { x: 0, y: 0, z: 0 });
+        if ((ctr.x - cam.x) * nw[0] + (ctr.y - cam.y) * nw[1] + (ctr.z - cam.z) * nw[2] >= 0) continue;
+        const k = 0.56 + 0.44 * Math.max(0, nw[0] * LIGHT[0] + nw[1] * LIGHT[1] + nw[2] * LIGHT[2]);
+        drawPoly(idx.map((i) => cs[i]), p.id, clay.map((v) => v * k), false);
+      }
+    }
+  }
+  if (mode === "depth") {
+    for (let i = 0, o = 0; i < zb.length; i++, o += 4) {
+      const iz = zb[i]; let v = 0;
+      if (iz > 0) v = Math.pow(clamp((DFAR - 1 / iz) / (DFAR - DNEAR), 0, 1), 1.5) * 255;
+      px[o] = px[o + 1] = px[o + 2] = v; px[o + 3] = 255;
+    }
+  } else if (mode === "blocks") {
+    for (let i = 0, o = 0; i < ib.length; i++, o += 4) {
+      const id = ib[i], c = id === 255 ? [0, 0, 0] : id === 254 ? [44, 44, 44] : BLOCK_COLORS[(id - 1) % BLOCK_COLORS.length];
+      px[o] = c[0]; px[o + 1] = c[1]; px[o + 2] = c[2]; px[o + 3] = 255;
+    }
+  } else if (mode === "lines") {
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x, o = i * 4; let e = false;
+      for (const j of [x + 1 < W ? i + 1 : -1, y + 1 < H ? i + W : -1]) {
+        if (j < 0) continue;
+        if (ib[j] !== ib[i] && !(ib[i] >= 254 && ib[j] >= 254)) e = true;
+        else if (zb[i] > 0 && zb[j] > 0 && Math.abs(zb[i] - zb[j]) / zb[i] > 0.06 && ib[i] !== 254) e = true;
+      }
+      const v = e ? 235 : 0; px[o] = px[o + 1] = px[o + 2] = v; px[o + 3] = 255;
+    }
+  }
+  return b;
+}
+
+// ============================================================================
+// The reel with a stage. Everything above this line is the blockout bench's
+// own software renderer, lifted from the three-ways prototype.
+// ============================================================================
+const CAST = { anna: "#f07da0", ben: "#5cb8f0" };
+const CAST_TAG = { anna: 3, ben: 0 };
+const ASPECT = 16 / 9;
+// Every piece can be turned on three axes and lifted, as the blockout bench's Turn and Move do.
+// Whatever way up it is, its lowest point rests at its height off the floor.
+function rotOf(p) {
+  const cy = Math.cos(p.r || 0), sy = Math.sin(p.r || 0), ct = Math.cos(p.tilt || 0), st = Math.sin(p.tilt || 0), ca = Math.cos(p.roll || 0), sa = Math.sin(p.roll || 0);
+  return (x, y, z) => {
+    const x1 = x * ca + y * sa, y1 = -x * sa + y * ca;
+    const y2 = y1 * ct - z * st, z2 = y1 * st + z * ct;
+    return [cy * x1 + sy * z2, y2, -sy * x1 + cy * z2];
+  };
+}
+function boxesOf(p) {
+  const rot = rotOf(p), s = p.w / 0.5;
+  const parts = p.kind === "person" ? [[0, 0, 0, 0.46 * s, p.h * 0.8, 0.28], [0, p.h * 0.82, 0, 0.22, p.h * 0.17, 0.24], [0, p.h * 0.88, 0.13, 0.07, 0.05, 0.08]] : [[0, 0, 0, p.w, p.h, p.d]];
+  const boxes = parts.map(([lx, ly, lz, w, hh, d]) => ({ lx, ly, lz, w, h: hh, d, rot, ox: p.x, oy: 0, oz: p.z }));
+  let low = Infinity;
+  for (const b of boxes) for (let i = 0; i < 8; i++) low = Math.min(low, rot(b.lx + (i & 1 ? 0.5 : -0.5) * b.w, b.ly + (i & 2 ? b.h : 0), b.lz + (i & 4 ? 0.5 : -0.5) * b.d)[1]);
+  for (const b of boxes) b.oy = (p.y || 0) - low;
+  return boxes;
+}
+function cornersOf(b) {
+  const out = [];
+  for (let i = 0; i < 8; i++) { const v = b.rot(b.lx + (i & 1 ? 0.5 : -0.5) * b.w, b.ly + (i & 2 ? b.h : 0), b.lz + (i & 4 ? 0.5 : -0.5) * b.d); out.push({ x: b.ox + v[0], y: b.oy + v[1], z: b.oz + v[2] }); }
+  return out;
+}
+const normalOf = (b, n) => b.rot(n[0], n[1], n[2]);
+function boundsOf(p) {
+  let n = 0, cx = 0, cz = 0, top = -Infinity, bottom = Infinity;
+  for (const b of boxesOf(p)) for (const c of cornersOf(b)) { n++; cx += c.x; cz += c.z; top = Math.max(top, c.y); bottom = Math.min(bottom, c.y); }
+  return { cx: cx / n, cz: cz / n, top, bottom };
+}
+const poseOf = (e, t) => ({ t, x: e.x, z: e.z, r: e.r || 0, y: e.y || 0, tilt: e.tilt || 0, roll: e.roll || 0 });
+function stanceOf(o, person) {
+  const up = Math.cos(o.tilt || 0) * Math.cos(o.roll || 0), y = o.y || 0, air = y > 0.3;
+  const s = up < -0.5 ? "upside down" : up < 0.4 ? (person ? (air ? "stretched out flat" : "lying on the floor") : "lying on its side") : up < 0.9 ? "leaning" : "";
+  return [s, air ? y.toFixed(1) + " m off the ground" : ""].filter(Boolean).join(" ");
+}
+const FPS = 24;
+const $ = (s, r = document) => r.querySelector(s);
+const esc = (s) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+function h(tag, attrs = {}, kids = []) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") e.className = v;
+    else if (k === "text") e.textContent = v;
+    else if (k === "html") e.innerHTML = v;
+    else if (k === "style") e.style.cssText = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of [].concat(kids)) if (c != null && c !== false) e.append(c);
+  return e;
+}
+const svg = (d, s = 16, fill = false) => { const t = document.createElement("template");
+  t.innerHTML = '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="' + (fill ? "currentColor" : "none") + '" stroke="currentColor" stroke-width="' + (fill ? 0 : 2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + "</svg>";
+  return t.content.firstChild; };
+const ICON = {
+  undo: () => svg('<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>'),
+  play: (s = 12) => svg('<path d="M7 4.5v15l13-7.5z"/>', s, true),
+  pause: (s = 12) => svg('<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>', s, true),
+  on: () => svg('<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>', 13),
+  cut: () => svg('<path d="M12 4v16"/>', 13),
+};
+
+// ---------------------------------------------------------------------------
+// The piece
+// ---------------------------------------------------------------------------
+const P = {
+  model: "h3", guide: "depth",
+  scene: "A small kitchen early in the morning. Grey light through the window, steam, nobody quite awake.",
+  sound: "A kettle ticking as it cools, rain on the glass.",
+  score: "",
+  nextId: 4,
+  scenes: [
+    { id: 1, name: "Kitchen", free: { yaw: -0.62, pitch: -0.46, dist: 10.5, tx: -0.2, ty: 0.9, tz: 1.5 }, pieces: [
+      { id: 1, kind: "wall", x: 0, z: 4.1, y: 0, w: 7.2, h: 3, d: 0.2, r: 0, plays: null, word: "" },
+      { id: 2, kind: "wall", x: -3.6, z: 1.4, y: 0, w: 5.4, h: 3, d: 0.2, r: Math.PI / 2, plays: null, word: "" },
+      { id: 3, kind: "wall", x: 2.3, z: 3.92, y: 0, w: 1.1, h: 2.2, d: 0.16, r: 0, plays: null, word: "doorway" },
+      { id: 4, kind: "block", x: -1.7, z: 3.5, y: 0, w: 2.8, h: 0.95, d: 0.7, r: 0, plays: null, word: "counter" },
+      { id: 5, kind: "block", x: 1.2, z: 0.7, y: 0, w: 1.4, h: 0.75, d: 0.8, r: 0, plays: null, word: "table" },
+      { id: 6, kind: "block", x: 2.25, z: 0.7, y: 0, w: 0.5, h: 0.9, d: 0.5, r: 0, plays: null, word: "chair" },
+      { id: 7, kind: "person", x: -1.5, z: 2.75, y: 0, w: 0.5, h: 1.7, d: 0.35, r: 0, plays: "anna", word: "" },
+      { id: 8, kind: "person", x: 2.3, z: 3.4, y: 0, w: 0.5, h: 1.8, d: 0.35, r: Math.PI, plays: "ben", word: "" },
+    ] },
+    { id: 2, name: "Street", free: { yaw: -0.5, pitch: -0.4, dist: 14, tx: -0.4, ty: 1, tz: 3.6 }, pieces: [
+      { id: 1, kind: "wall", x: 0, z: 7.2, y: 0, w: 15, h: 6, d: 0.3, r: 0, plays: null, word: "house front" },
+      { id: 2, kind: "block", x: 1.4, z: 3.1, y: 0, w: 4.2, h: 1.4, d: 1.8, r: 0, plays: null, word: "car" },
+      { id: 3, kind: "post", x: -3.1, z: 4.7, y: 0, w: 0.25, h: 3.6, d: 0.25, r: 0, plays: null, word: "street lamp" },
+      { id: 4, kind: "block", x: 0, z: 4.45, y: 0, w: 15, h: 0.15, d: 0.3, r: 0, plays: null, word: "" },
+      { id: 5, kind: "person", x: -2.2, z: 6.7, y: 0, w: 0.5, h: 1.7, d: 0.35, r: Math.PI, plays: "anna", word: "" },
+    ] },
+  ],
+  shots: [
+    { id: 1, scene: 1, secs: 5, state: "kept", take: null, cont: false, blend: 12, guide: null, hold: "firm", seed: 418207,
+      text: "@anna stands at the counter with her back to us, pouring coffee. @ben comes in through the doorway behind her.",
+      cam: [{ t: 0, x: -0.3, y: 1.5, z: -3.9, yaw: 0.04, pitch: -0.04, mm: 28 }, { t: 5, x: -0.8, y: 1.5, z: -1.9, yaw: -0.1, pitch: -0.04, mm: 28 }],
+      block: { 8: [{ t: 0, x: 2.3, z: 3.4, r: Math.PI }, { t: 5, x: 1.7, z: 1.9, r: 3.5 }] } },
+    { id: 2, scene: 1, secs: 4, state: "kept", take: null, cont: true, blend: 12, guide: null, hold: "firm", seed: 418208,
+      text: "@ben sits down at the table. @anna turns round to him, cup in hand.",
+      cam: [{ t: 0, x: -0.8, y: 1.5, z: -1.9, yaw: -0.1, pitch: -0.04, mm: 28 }, { t: 4, x: -0.7, y: 1.4, z: -1.7, yaw: 0.42, pitch: -0.07, mm: 28 }],
+      block: { 8: [{ t: 0, x: 1.7, z: 1.9, r: 3.5 }, { t: 4, x: 2.2, z: 0.95, r: 3.9 }], 7: [{ t: 0, x: -1.5, z: 2.75, r: 0 }, { t: 4, x: -1.4, z: 2.6, r: 2.1 }] } },
+    { id: 3, scene: 2, secs: 5, state: "new", take: null, cont: false, blend: 12, guide: null, hold: "firm", seed: 418209,
+      text: "Outside, a car waits at the kerb in the rain. @anna steps out of the house and walks towards it.",
+      cam: [{ t: 0, x: -3.4, y: 1.2, z: -2.6, yaw: 0.52, pitch: 0.03, mm: 35 }, { t: 5, x: -1.2, y: 1.2, z: -3.0, yaw: 0.3, pitch: 0.03, mm: 35 }],
+      block: { 5: [{ t: 0, x: -2.2, z: 6.7, r: Math.PI }, { t: 5, x: -0.9, z: 4.9, r: 2.5 }] } },
+  ],
+};
+const U = { tool: "move", sel: { type: "shot", id: 2 }, cur: 1, t: 0, view: "stage", lens: false, mode: "write", playing: false, shooting: null, still: null, said: "" };
+
+const sceneById = (id) => P.scenes.find((s) => s.id === id);
+const sceneOf = (shot) => sceneById(shot.scene);
+const shotsOf = (scId) => P.shots.map((s, i) => (s.scene === scId ? i : -1)).filter((i) => i >= 0);
+const curShot = () => P.shots[U.cur];
+const total = () => P.shots.reduce((a, s) => a + s.secs, 0);
+const startOf = (i) => P.shots.slice(0, i).reduce((a, s) => a + s.secs, 0);
+const secs = (s) => s.toFixed(1) + " s";
+const snapT = (shot, t) => (t < 0.14 ? 0 : shot.secs - t < 0.14 ? shot.secs : Math.round(t * 20) / 20);
+function rangeText(idxs) {
+  if (!idxs.length) return "no shot yet";
+  const n = idxs.map((i) => i + 1);
+  const run = n.every((v, k) => k === 0 || v === n[k - 1] + 1);
+  return n.length === 1 ? "shot " + n[0] : run ? "shots " + n[0] + "–" + n[n.length - 1] : "shots " + n.join(", ");
+}
+
+function camAt(marks, t) {
+  if (!marks.length) return { x: 0, y: 1.5, z: -3, yaw: 0, pitch: 0, mm: 35 };
+  if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
+  const last = marks[marks.length - 1];
+  if (t >= last.t) return { ...last };
+  let i = 0; while (marks[i + 1].t < t) i++;
+  const a = marks[i], b = marks[i + 1];
+  let u = (t - a.t) / Math.max(1e-6, b.t - a.t); u = u * u * (3 - 2 * u);
+  return lerpCam(a, b, u);
+}
+function posAt(marks, t) {
+  if (!marks || !marks.length) return null;
+  if (marks.length === 1 || t <= marks[0].t) return marks[0];
+  const last = marks[marks.length - 1];
+  if (t >= last.t) return last;
+  let i = 0; while (marks[i + 1].t < t) i++;
+  const a = marks[i], b = marks[i + 1], u = (t - a.t) / Math.max(1e-6, b.t - a.t);
+  return { x: lerp(a.x, b.x, u), z: lerp(a.z, b.z, u), r: a.r + angDiff(b.r, a.r) * Math.min(1, u * 2.5),
+    y: lerp(a.y || 0, b.y || 0, u), tilt: lerp(a.tilt || 0, b.tilt || 0, u), roll: lerp(a.roll || 0, b.roll || 0, u) };
+}
+const piecesAt = (pieces, block, t) => pieces.map((p) => { const m = posAt(block[p.id], t); return m ? { ...p, x: m.x, z: m.z, r: m.r, y: m.y || 0, tilt: m.tilt || 0, roll: m.roll || 0 } : p; });
+const stagingNow = () => { const s = curShot(); return piecesAt(sceneOf(s).pieces, s.block, U.t); };
+function freeCam() {
+  const f = sceneOf(curShot()).free, cp = Math.cos(f.pitch);
+  const dx = Math.sin(f.yaw) * cp, dy = Math.sin(f.pitch), dz = Math.cos(f.yaw) * cp;
+  return { x: f.tx - dx * f.dist, y: f.ty - dy * f.dist, z: f.tz - dz * f.dist, yaw: f.yaw, pitch: f.pitch, mm: 26 };
+}
+function camRay(cam, sx, sy, W, H) {
+  const f = focal(cam, W, H), dx = (sx - W / 2) / f, dy = -(sy - H / 2) / f;
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch), cy = Math.cos(cam.yaw), sw = Math.sin(cam.yaw);
+  const y1 = cp * dy + sp, z1 = -sp * dy + cp;
+  return { x: cy * dx + sw * z1, y: y1, z: -sw * dx + cy * z1 };
+}
+const snapshot = (shot) => JSON.parse(JSON.stringify({ cam: shot.cam, block: shot.block, pieces: sceneOf(shot).pieces, secs: shot.secs, scene: shot.scene }));
+
+// ---------------------------------------------------------------------------
+// Takes: what changing the staging does to them (the reel's own rules)
+// ---------------------------------------------------------------------------
+function touch(i) {
+  const s = P.shots[i];
+  if (s.state === "kept" || s.state === "follows") s.state = "changed";
+  for (let j = i + 1; j < P.shots.length && P.shots[j].cont; j++) if (P.shots[j].state === "kept") P.shots[j].state = "follows";
+}
+const touchScene = (id) => shotsOf(id).forEach(touch);
+const tagOf = (s) => (s.state === "changed" ? ["changed", "Changed · reshoots"] : s.state === "follows" ? ["reshoot", "Reshoots"] : ["", ""]);
+const guideOf = (s) => s.guide || P.guide;
+
+// what jumps at a continuing join
+function jumpAt(i) {
+  const s = P.shots[i], p = P.shots[i - 1];
+  if (!p || !s.cont || s.scene !== p.scene) return null;
+  const a = camAt(p.cam, p.secs), b = camAt(s.cam, 0);
+  const camD = Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z), yawD = Math.abs(angDiff(a.yaw, b.yaw));
+  let who = null, whoD = 0;
+  for (const pc of sceneOf(s).pieces) {
+    if (pc.kind !== "person") continue;
+    const e = posAt(p.block[pc.id], p.secs) || pc, st = posAt(s.block[pc.id], 0) || pc, d = Math.hypot(e.x - st.x, e.z - st.z, (e.y || 0) - (st.y || 0)) + (Math.abs((e.tilt || 0) - (st.tilt || 0)) + Math.abs((e.roll || 0) - (st.roll || 0)) > 0.3 ? 0.5 : 0);
+    if (d > whoD) { whoD = d; who = pc; }
+  }
+  if (camD < 0.2 && yawD < 0.08 && whoD < 0.2) return null;
+  return { camD, yawD, who, whoD };
+}
+function lineUp(i) {
+  const s = P.shots[i], p = P.shots[i - 1], end = camAt(p.cam, p.secs);
+  s.cam = s.cam.filter((m) => m.t > 0.14); s.cam.unshift({ ...end, t: 0 });
+  for (const pc of sceneOf(s).pieces) {
+    if (pc.kind !== "person") continue;
+    const e = posAt(p.block[pc.id], p.secs);
+    if (!e && !s.block[pc.id]) continue;
+    const st = e || pc, rest = (s.block[pc.id] || []).filter((m) => m.t > 0.14);
+    s.block[pc.id] = [poseOf(st, 0), ...rest];
+  }
+  touch(i);
+}
+
+// ---------------------------------------------------------------------------
+// The sentences the model is given
+// ---------------------------------------------------------------------------
+const articled = (w) => (/^(a|an|the)\s/i.test(w) ? w : (/^[aeiou]/i.test(w) ? "an " : "a ") + w);
+const nameOf = (p) => (p.plays ? "@" + p.plays : p.word ? articled(p.word) : null);
+const labelOf = (p) => (p.plays ? "@" + p.plays : p.word ? p.word[0].toUpperCase() + p.word.slice(1) : KINDS[p.kind].label);
+function placeOf(p, cam) {
+  const W = 1000, H = 1000 / ASPECT, bb = boundsOf(p), pr = project(cam, { x: bb.cx, y: bb.bottom + (bb.top - bb.bottom) * 0.6, z: bb.cz }, W, H);
+  if (!pr || pr.x < -0.04 * W || pr.x > 1.04 * W || pr.y < -0.1 * H || pr.y > 1.1 * H) return null;
+  const xn = pr.x / W;
+  return (xn < 0.36 ? "at frame left" : xn > 0.64 ? "at frame right" : "at centre") + (pr.z < 2.8 ? " in the foreground" : pr.z < 6.5 ? " in the midground" : " in the background");
+}
+function stagingSentence(shot) {
+  const cam = camAt(shot.cam, 0), now = piecesAt(sceneOf(shot).pieces, shot.block, 0), parts = [];
+  for (const p of now) { const n = nameOf(p), w = n && placeOf(p, cam), st = stanceOf(p, p.kind === "person"); if (w) parts.push(n + (st ? " " + st : "") + " " + w); }
+  const walks = [];
+  for (const p of sceneOf(shot).pieces) {
+    const m = shot.block[p.id]; if (!m || m.length < 2 || !nameOf(p)) continue;
+    const a = m[0], b = m[m.length - 1], d = Math.hypot(a.x - b.x, a.z - b.z);
+    const person = p.kind === "person", sa = stanceOf(a, person), sb = stanceOf(b, person), off = (a.y || 0) > 0.3 || (b.y || 0) > 0.3;
+    if (d > 0.5) walks.push(nameOf(p) + (off ? " travels " : " walks ") + d.toFixed(1) + " m"); else if (sa === sb && Math.abs(angDiff(a.r, b.r)) > 0.6) walks.push(nameOf(p) + " turns round");
+    if (sa !== sb) walks.push(nameOf(p) + " ends " + (sb || (/lying|leaning|flat|upside/.test(sa) ? (person ? "standing" : "upright") : "on the ground")));
+  }
+  if (!parts.length) return "Nothing named is in frame.";
+  const s = parts.join(", ") + ".";
+  return s[0].toUpperCase() + s.slice(1) + (walks.length ? " " + walks.join(", ").replace(/^./, (c) => c.toUpperCase()) + "." : "");
+}
+function moveSentence(shot) {
+  const a = shot.cam[0], b = shot.cam[shot.cam.length - 1], verbs = [];
+  if (a && b && shot.cam.length > 1) {
+    const dx = b.x - a.x, dz = b.z - a.z, fwd = dx * Math.sin(a.yaw) + dz * Math.cos(a.yaw), lat = dx * Math.cos(a.yaw) - dz * Math.sin(a.yaw);
+    const dyaw = angDiff(b.yaw, a.yaw), dy = b.y - a.y;
+    if (Math.abs(fwd) > 0.4) verbs.push(fwd > 0 ? "pushes in" : "pulls back");
+    if (Math.abs(lat) > 0.4) verbs.push(lat > 0 ? "trucks right" : "trucks left");
+    if (Math.abs(dyaw) > 0.1) verbs.push(dyaw > 0 ? "pans right" : "pans left");
+    if (Math.abs(dy) > 0.3) verbs.push(dy > 0 ? "rises" : "sinks");
+    if (Math.abs(b.mm - a.mm) > 4) verbs.push(b.mm > a.mm ? "zooms in" : "zooms out");
+  }
+  const mm = Math.round((a || { mm: 35 }).mm), y = (a || { y: 1.5 }).y;
+  const height = y < 0.9 ? "from low down" : y > 2 ? "from above" : "at eye height";
+  const how = verbs.length ? (shot.secs >= 4 ? "slowly " : "") + verbs.join(" and ") : "holds still";
+  return "The camera " + how + ", on a " + mm + " mm lens " + height + ".";
+}
+const guideFile = (i) => "input/continuity/blockout/shot-" + (i + 1) + "-" + guideOf(P.shots[i]) + ".mp4";
+const MODEL = {
+  h3: { label: "MiniMax H3", note: "MiniMax H3 follows the guide through its ControlNet-Union branch, which is loaded only for shots that carry one." },
+  ltx: { label: "LTX 2.5", note: "LTX 2.5 follows the guide through the Union Control IC-LoRA, which reads it at half the canvas." },
+};
+
+// ---------------------------------------------------------------------------
+// History
+// ---------------------------------------------------------------------------
+const hist = { past: [], future: [], last: "" };
+function commit() {
+  const now = JSON.stringify(P);
+  if (now === hist.last) return;
+  hist.past.push(hist.last); if (hist.past.length > 80) hist.past.shift();
+  hist.future = []; hist.last = now;
+  renderHead();
+}
+function restore(json) {
+  const d = JSON.parse(json);
+  for (const k of Object.keys(P)) delete P[k];
+  Object.assign(P, d);
+  U.cur = clamp(U.cur, 0, P.shots.length - 1); U.t = Math.min(U.t, curShot().secs);
+  if (U.sel.type === "shot" || U.sel.type === "join") { if (!P.shots.some((s) => s.id === U.sel.id)) U.sel = { type: "piece" }; }
+  else if (U.sel.type === "obj") { const sc = sceneById(U.sel.scene); if (!sc || !sc.pieces.some((p) => p.id === U.sel.id)) U.sel = { type: "piece" }; }
+  else if (U.sel.type === "set" && !sceneById(U.sel.id)) U.sel = { type: "piece" };
+  renderAll();
+}
+function undo() { if (!hist.past.length || U.shooting) return; hist.future.push(hist.last); hist.last = hist.past.pop(); restore(hist.last); say("Undone"); }
+function redo() { if (!hist.future.length || U.shooting) return; hist.past.push(hist.last); hist.last = hist.future.pop(); restore(hist.last); say("Redone"); }
+let sayTimer = 0;
+function say(text) { U.said = text; renderStatus(); clearTimeout(sayTimer); sayTimer = setTimeout(() => { U.said = ""; renderStatus(); }, 2600); }
+
+// ---------------------------------------------------------------------------
+// Selection
+// ---------------------------------------------------------------------------
+function select(sel, keepScript) {
+  U.sel = sel;
+  if (sel.type === "shot" || sel.type === "join") {
+    const i = P.shots.findIndex((s) => s.id === sel.id);
+    if (i >= 0 && i !== U.cur && !(sel.type === "join" && i - 1 === U.cur)) { U.cur = i; U.t = 0; }
+  } else if (sel.type === "set" && curShot().scene !== sel.id) {
+    const first = shotsOf(sel.id)[0]; if (first != null) { U.cur = first; U.t = 0; }
+  }
+  if (!keepScript) refreshScript();
+  renderInspector(); renderFoot(); renderStageLine(); syncHud(); requestDraw();
+}
+
+// ---------------------------------------------------------------------------
+// The stage: one canvas, moved between the player and the glass
+// ---------------------------------------------------------------------------
+const cv = h("canvas", { width: 512, height: 288, "aria-label": "The stage" });
+const ctx = cv.getContext("2d");
+const blank = h("div", { class: "mmc-reel-blank", hidden: true });
+const hudTop = h("div", { class: "mmc-bo-hud top" });
+const hudBottom = h("div", { class: "mmc-bo-hud bottom" });
+const stage = h("div", { class: "mmc-st" }, [cv, blank, hudTop, hudBottom]);
+let drawQueued = false;
+function requestDraw() { if (drawQueued) return; drawQueued = true; requestAnimationFrame(draw); }
+const stagingKey = () => { const s = curShot(); return JSON.stringify([s.id, Math.round(U.t * 10), s.cam, s.block, sceneOf(s).pieces]); };
+
+function grade(b, sceneId) {
+  const d = b.img.data, W = b.W, H = b.H, warm = sceneId === 1;
+  for (let y = 0, i = 0; y < H; y++) {
+    const vy = y / H - 0.5;
+    for (let x = 0; x < W; x++, i += 4) {
+      let r = d[i] / 255, g = d[i + 1] / 255, bl = d[i + 2] / 255;
+      const l = (r + g + bl) / 3, k = 1.5;
+      r = (r - 0.42) * k + 0.47; g = (g - 0.42) * k + 0.47; bl = (bl - 0.42) * k + 0.47;
+      if (warm) { r = r * 1.1 + 0.03 * (1 - l); bl = bl * 0.8 + 0.07 * (1 - l); }
+      else { r *= 0.74; g *= 0.93; bl = bl * 1.12 + 0.05; }
+      const vx = x / W - 0.5, v = 1 - 1.5 * (vx * vx + vy * vy);
+      const n = (Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1 * 0.035;
+      d[i] = clamp((r * v + n) * 255, 0, 255); d[i + 1] = clamp((g * v + n) * 255, 0, 255); d[i + 2] = clamp((bl * v + n) * 255, 0, 255);
+    }
+  }
+}
+function showBlank(text, action, onAct) {
+  blank.replaceChildren(...[h("p", { text }), action ? h("button", { class: "mmc-reel-btn", text: action, onclick: onAct }) : null].filter(Boolean));
+  blank.hidden = false;
+}
+function draw() {
+  drawQueued = false;
+  const shot = curShot(), W = U.mode === "direct" ? 800 : 512, H = Math.round(W / ASPECT);
+  if (cv.width !== W) { cv.width = W; cv.height = H; }
+  const live = U.shooting && U.shooting.queue[U.shooting.at] === U.cur;
+  const view = live ? "guide" : U.view;
+  blank.hidden = true;
+  const lensCam = camAt(shot.cam, U.t), pieces = stagingNow();
+  if (view === "take") {
+    if (!shot.take) { ctx.clearRect(0, 0, W, H); showBlank("Shot " + (U.cur + 1) + " has no take yet. Shoot renders it from this staging.", "Shoot", shoot); }
+    else {
+      const tk = shot.take, t = Math.min(U.t, tk.secs), b = renderScene(camAt(tk.cam, t), W, H, "staged", piecesAt(tk.pieces, tk.block, t));
+      grade(b, tk.scene); ctx.putImageData(b.img, 0, 0);
+    }
+  } else if (view === "guide") {
+    const g = guideOf(shot);
+    if (g === "none") { ctx.clearRect(0, 0, W, H); showBlank("This shot carries no guide. The model gets the words alone.", null); }
+    else ctx.putImageData(renderScene(lensCam, W, H, g, pieces).img, 0, 0);
+  } else if (view === "still") {
+    if (U.still && U.still.busy) { ctx.putImageData(renderScene(lensCam, W, H, "depth", pieces).img, 0, 0); showBlank("Rendering this frame…", null); blank.style.opacity = ".82"; }
+    else if (U.still && U.still.key === stagingKey()) { const b = renderScene(lensCam, W, H, "staged", pieces); grade(b, shot.scene); ctx.putImageData(b.img, 0, 0); }
+    else { ctx.clearRect(0, 0, W, H); showBlank("One frame of this shot, rendered by the image model from the depth pass. A few seconds, to check the look before you shoot.", "Render this frame", renderStill); }
+  } else {
+    const cam = U.lens && U.mode === "direct" ? lensCam : freeCam();
+    ctx.putImageData(renderScene(cam, W, H, "stage", pieces).img, 0, 0);
+    overlay(cam, W, H, shot, pieces, lensCam);
+  }
+  if (!(U.still && U.still.busy)) blank.style.opacity = "";
+  syncTime();
+}
+function renderStill() {
+  U.still = { busy: true }; requestDraw();
+  setTimeout(() => { U.still = { key: stagingKey() }; requestDraw(); }, 1100);
+}
+
+function overlay(cam, W, H, shot, pieces, lensCam) {
+  const line = (a, b) => { const p = project(cam, a, W, H), q = project(cam, b, W, H); if (!p || !q) return; ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); };
+  const sc = sceneOf(shot);
+  ctx.lineJoin = "round"; ctx.lineCap = "round";
+  // where people walk in this shot
+  for (const p of sc.pieces) {
+    const m = shot.block[p.id]; if (!m || m.length < 2) continue;
+    ctx.strokeStyle = CAST[p.plays] || "#bdb8ae"; ctx.lineWidth = 2; ctx.setLineDash([5, 5]); ctx.beginPath();
+    for (let k = 0; k < m.length - 1; k++) line({ x: m[k].x, y: (m[k].y || 0) + 0.02, z: m[k].z }, { x: m[k + 1].x, y: (m[k + 1].y || 0) + 0.02, z: m[k + 1].z });
+    ctx.stroke(); ctx.setLineDash([]);
+    ctx.globalAlpha = 0.4; ctx.lineWidth = 1; ctx.beginPath();
+    for (const mk of m) if ((mk.y || 0) > 0.05) line({ x: mk.x, y: mk.y, z: mk.z }, { x: mk.x, y: 0, z: mk.z });
+    ctx.stroke(); ctx.globalAlpha = 1;
+    for (const mk of m) { const q = project(cam, { x: mk.x, y: (mk.y || 0) + 0.02, z: mk.z }, W, H); if (!q) continue; ctx.fillStyle = ctx.strokeStyle; ctx.beginPath(); ctx.arc(q.x, q.y, 3.5, 0, 7); ctx.fill(); }
+  }
+  if (!(U.lens && U.mode === "direct")) {
+    // the shot camera: its path, its marks, and where it stands now
+    ctx.strokeStyle = "#6ebeff"; ctx.lineWidth = 1.6; ctx.beginPath();
+    let prev = camAt(shot.cam, 0);
+    for (let k = 1; k <= 24; k++) { const c = camAt(shot.cam, shot.secs * k / 24); line(prev, c); prev = c; }
+    ctx.stroke();
+    ctx.globalAlpha = 0.35; ctx.beginPath();
+    prev = camAt(shot.cam, 0);
+    for (let k = 1; k <= 24; k++) { const c = camAt(shot.cam, shot.secs * k / 24); line({ x: prev.x, y: 0.02, z: prev.z }, { x: c.x, y: 0.02, z: c.z }); prev = c; }
+    ctx.stroke(); ctx.globalAlpha = 1;
+    for (const mk of shot.cam) { const q = project(cam, mk, W, H); if (!q) continue; ctx.save(); ctx.translate(q.x, q.y); ctx.rotate(Math.PI / 4); ctx.fillStyle = "#6ebeff"; ctx.fillRect(-4.5, -4.5, 9, 9); ctx.restore(); }
+    const o = lensCam, far = 1.3, cs = [[0, 0], [1600, 0], [1600, 900], [0, 900]].map(([sx, sy]) => { const d = camRay(o, sx, sy, 1600, 900); return { x: o.x + d.x * far, y: o.y + d.y * far, z: o.z + d.z * far }; });
+    ctx.strokeStyle = "#6ebeff"; ctx.lineWidth = 2; ctx.beginPath();
+    for (let k = 0; k < 4; k++) { line(o, cs[k]); line(cs[k], cs[(k + 1) % 4]); }
+    ctx.stroke();
+    ctx.globalAlpha = 0.25; ctx.beginPath(); line(o, { x: o.x, y: 0, z: o.z }); ctx.stroke(); ctx.globalAlpha = 1;
+  }
+  // the selected piece
+  if (U.sel.type === "obj") {
+    const p = pieces.find((q) => q.id === U.sel.id);
+    if (p) {
+      ctx.strokeStyle = "#f0a63c"; ctx.lineWidth = 1.8; ctx.beginPath();
+      for (const bx of boxesOf(p)) { const c = cornersOf(bx); for (let i = 0; i < 8; i++) for (let j = i + 1; j < 8; j++) { const x = i ^ j; if (x === 1 || x === 2 || x === 4) line(c[i], c[j]); } }
+      ctx.stroke();
+    }
+  }
+  // names
+  ctx.font = "600 " + (W > 600 ? 12.5 : 11) + "px -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif"; ctx.textAlign = "center";
+  for (const p of pieces) {
+    if (!p.plays && !p.word) continue;
+    const bb = boundsOf(p), q = project(cam, { x: bb.cx, y: bb.top + 0.16, z: bb.cz }, W, H); if (!q) continue;
+    const text = labelOf(p), w = ctx.measureText(text).width + 12;
+    ctx.fillStyle = "rgba(14,15,17,.74)"; ctx.beginPath(); ctx.roundRect(q.x - w / 2, q.y - 17, w, 18, 6); ctx.fill();
+    ctx.fillStyle = p.plays ? CAST[p.plays] : "#e9e7e2"; ctx.fillText(text, q.x, q.y - 4);
+  }
+}
+
+// pointer work on the glass
+function toCanvas(e) {
+  const r = cv.getBoundingClientRect(), s = Math.min(r.width / cv.width, r.height / cv.height);
+  return { x: (e.clientX - r.left - (r.width - cv.width * s) / 2) / s, y: (e.clientY - r.top - (r.height - cv.height * s) / 2) / s };
+}
+function camMark(shot, t) {
+  t = snapT(shot, t);
+  let m = shot.cam.find((k) => Math.abs(k.t - t) < 0.14);
+  if (!m) { m = { ...camAt(shot.cam, t), t }; shot.cam.push(m); shot.cam.sort((a, b) => a.t - b.t); }
+  return m;
+}
+function blockMark(shot, p, t) {
+  t = snapT(shot, t);
+  let marks = shot.block[p.id];
+  if (!marks) marks = shot.block[p.id] = [poseOf(p, 0)];
+  let m = marks.find((k) => Math.abs(k.t - t) < 0.14);
+  if (!m) { const at = posAt(marks, t); m = poseOf(at, t); marks.push(m); marks.sort((a, b) => a.t - b.t); }
+  return m;
+}
+let drag = null;
+cv.addEventListener("pointerdown", (e) => {
+  if (U.view !== "stage" || U.shooting) return;
+  const pt = toCanvas(e), shot = curShot(), W = cv.width, H = cv.height;
+  cv.setPointerCapture(e.pointerId); stopPlay();
+  const lensOn = U.lens && U.mode === "direct";
+  const cam = lensOn ? camAt(shot.cam, U.t) : freeCam();
+  const b = renderScene(cam, W, H, "stage", stagingNow());
+  const px = clamp(Math.round(pt.x), 0, W - 1), py = clamp(Math.round(pt.y), 0, H - 1), id = b.id[py * W + px];
+  if (id < 254) {
+    const p = stagingNow().find((q) => q.id === id), bb = boundsOf(p), planeY = (bb.top + bb.bottom) / 2, hit = rayFloor(cam, pt.x, pt.y, W, H, planeY) || { x: p.x, z: p.z };
+    drag = { kind: "obj", id, ox: p.x - hit.x, oz: p.z - hit.z, planeY, tool: U.tool, r0: p.r || 0, tilt0: p.tilt || 0, roll0: p.roll || 0, y0: p.y || 0, moved: false, sx: e.clientX, sy: e.clientY };
+    if (!(U.sel.type === "obj" && U.sel.id === id)) select({ type: "obj", scene: shot.scene, id });
+    if (!lensOn) return;
+  }
+  drag = { kind: lensOn ? "lens" : "orbit", shift: e.shiftKey, sx: e.clientX, sy: e.clientY, lx: e.clientX, ly: e.clientY, moved: false, wasObj: id < 254 };
+});
+cv.addEventListener("pointermove", (e) => {
+  if (!drag) return;
+  const shot = curShot(), W = cv.width, H = cv.height;
+  if (Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 3) drag.moved = true;
+  if (!drag.moved) return;
+  if (drag.kind === "obj") {
+    const sc = sceneOf(shot), p = sc.pieces.find((q) => q.id === drag.id), person = p.kind === "person";
+    const tgt = person ? blockMark(shot, p, U.t) : p, dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+    const q15 = (v) => Math.round(v / (Math.PI / 12)) * (Math.PI / 12);
+    if (drag.tool === "turn") {
+      if (e.shiftKey) tgt.roll = q15(drag.roll0 + dx * 0.012); else { tgt.r = q15(drag.r0 + dx * 0.012); tgt.tilt = q15(drag.tilt0 + dy * 0.012); }
+    } else if (drag.tool === "lift") tgt.y = clamp(Math.round((drag.y0 - dy * 0.012) * 20) / 20, 0, 8);
+    else {
+      const pt = toCanvas(e), hit = rayFloor(freeCam(), pt.x, pt.y, W, H, drag.planeY); if (!hit) return;
+      const nx = Math.round((hit.x + drag.ox) * 20) / 20, nz = Math.round((hit.z + drag.oz) * 20) / 20;
+      if (person) { const marks = shot.block[p.id], k = marks.indexOf(tgt); if (k > 0) { const a = marks[k - 1]; if (Math.hypot(nx - a.x, nz - a.z) > 0.3) tgt.r = Math.atan2(nx - a.x, nz - a.z); } }
+      tgt.x = nx; tgt.z = nz;
+    }
+    if (person) touch(U.cur); else touchScene(sc.id);
+  } else if (drag.kind === "orbit") {
+    const f = sceneOf(shot).free, dx = e.clientX - drag.lx, dy = e.clientY - drag.ly;
+    if (e.shiftKey) { const k = f.dist * 0.0016; f.tx -= Math.cos(f.yaw) * dx * k; f.tz += Math.sin(f.yaw) * dx * k; f.ty = clamp(f.ty + dy * k, 0, 4); }
+    else { f.yaw += dx * 0.006; f.pitch = clamp(f.pitch - dy * 0.005, -1.45, -0.04); }
+  } else {
+    const m = camMark(shot, U.t), dx = e.clientX - drag.lx, dy = e.clientY - drag.ly, k = 0.0022 * 35 / m.mm;
+    if (e.shiftKey) { m.x -= Math.cos(m.yaw) * dx * 0.008; m.z += Math.sin(m.yaw) * dx * 0.008; m.y = clamp(m.y + dy * 0.008, 0.2, 5); }
+    else { m.yaw -= dx * k; m.pitch = clamp(m.pitch + dy * k, -1.2, 1.2); }
+    touch(U.cur);
+  }
+  drag.lx = e.clientX; drag.ly = e.clientY;
+  requestDraw();
+});
+const endDrag = () => {
+  if (!drag) return;
+  const d = drag; drag = null;
+  if (!d.moved && d.kind !== "obj" && !d.wasObj) { if (U.sel.type === "obj") select({ type: "shot", id: curShot().id }); return; }
+  if (d.moved && d.kind !== "orbit") { commit(); afterEdit(); }
+};
+cv.addEventListener("pointerup", endDrag); cv.addEventListener("pointercancel", endDrag);
+cv.addEventListener("wheel", (e) => {
+  if (U.view !== "stage" || U.shooting) return;
+  e.preventDefault();
+  if (U.lens && U.mode === "direct") { const shot = curShot(), m = camMark(shot, U.t), k = -e.deltaY * 0.0022; m.x += Math.sin(m.yaw) * k; m.z += Math.cos(m.yaw) * k; touch(U.cur); wheelDone(); }
+  else { const f = sceneOf(curShot()).free; f.dist = clamp(f.dist * Math.exp(e.deltaY * 0.0012), 2.5, 40); }
+  requestDraw();
+}, { passive: false });
+let wheelTimer = 0;
+function wheelDone() { clearTimeout(wheelTimer); wheelTimer = setTimeout(() => { commit(); afterEdit(); }, 350); }
+function afterEdit() { refreshScript(); renderHead(); renderInspector(); renderFoot(); requestDraw(); }
+
+function addPiece(kind) {
+  const shot = curShot(), sc = sceneOf(shot), k = KINDS[kind], f = sc.free;
+  const id = Math.max(0, ...sc.pieces.map((p) => p.id)) + 1;
+  sc.pieces.push({ id, kind, x: Math.round(f.tx * 4) / 4, z: Math.round(f.tz * 4) / 4, y: 0, w: k.w, h: k.h, d: k.d, r: 0, plays: null, word: "" });
+  touchScene(sc.id); commit(); U.sel = { type: "obj", scene: sc.id, id }; afterEdit();
+  say("Added to the " + sc.name.toLowerCase() + " set: " + rangeText(shotsOf(sc.id)) + " will reshoot");
+}
+function removeObj() {
+  if (U.sel.type !== "obj") return;
+  const sc = sceneById(U.sel.scene); sc.pieces = sc.pieces.filter((p) => p.id !== U.sel.id);
+  for (const i of shotsOf(sc.id)) delete P.shots[i].block[U.sel.id];
+  touchScene(sc.id); commit(); U.sel = { type: "set", id: sc.id }; afterEdit();
+}
+function cameraHere() {
+  const shot = curShot(), f = freeCam(), m = camMark(shot, U.t);
+  Object.assign(m, { x: f.x, y: clamp(f.y, 0.2, 6), z: f.z, yaw: f.yaw, pitch: f.pitch });
+  touch(U.cur); commit(); U.lens = true; afterEdit(); syncHud();
+  say("The shot camera is where you stood, at " + secs(m.t));
+}
+
+function hudSeg(text, on, onclick, extra = {}) { return h("button", { class: "mmc-bo-seg" + (on ? " on" : ""), type: "button", "aria-pressed": on ? "true" : "false", onclick, ...extra }, [].concat(text)); }
+const timeSaid = h("span", { class: "mmc-st-said" });
+const playBtn = h("button", { class: "mmc-bo-seg", type: "button", "aria-label": "Play", onclick: () => (U.playing ? stopPlay() : startPlay()) });
+function syncHud() {
+  const stageView = U.view === "stage" && !U.shooting, direct = U.mode === "direct";
+  const views = [["stage", "Stage"], ["guide", "Guide"], ["still", "Still"], ["take", "Take"]];
+  hudTop.replaceChildren(...[
+    h("div", { class: "mmc-bo-switch", role: "group", "aria-label": "What the player shows" }, views.map(([v, l]) => hudSeg(l, U.view === v, () => { U.view = v; syncHud(); requestDraw(); renderStatus(); }))),
+    stageView && direct && !U.lens ? h("div", { class: "mmc-bo-switch", role: "group", "aria-label": "What a drag on a piece does" }, [["move", "Move", "1"], ["turn", "Turn", "2"], ["lift", "Lift", "3"]].map(([v, l, k]) => hudSeg(l, U.tool === v, () => setTool(v), { title: l + " (" + k + ")" }))) : null,
+    h("span", { class: "mmc-bn-gap" }),
+    stageView && direct ? h("div", { class: "mmc-bo-switch", role: "group", "aria-label": "Which camera" }, [
+      hudSeg("Free look", !U.lens, () => { U.lens = false; syncHud(); requestDraw(); renderStatus(); }),
+      hudSeg("Through the lens", U.lens, () => { U.lens = true; syncHud(); requestDraw(); renderStatus(); })]) : null].filter(Boolean));
+  playBtn.replaceChildren(U.playing ? ICON.pause() : ICON.play());
+  hudBottom.replaceChildren(...[
+    h("div", { class: "mmc-bo-switch" }, [playBtn, timeSaid]),
+    h("span", { class: "mmc-bn-gap" }),
+    stageView && direct ? h("div", { class: "mmc-bo-switch", role: "group", "aria-label": "Add to the set" }, ["person", "block", "wall", "post"].map((k) => hudSeg("+ " + KINDS[k].label, false, () => addPiece(k)))) : null,
+    stageView && direct && !U.lens ? h("div", { class: "mmc-bo-switch" }, [hudSeg("Put the camera here", false, cameraHere)]) : null,
+    !direct ? h("div", { class: "mmc-bo-switch" }, [hudSeg("Direct this shot", false, () => setMode("direct"))]) : null].filter(Boolean));
+  syncTime();
+}
+function setTool(v) { U.tool = v; syncHud(); renderStatus(); }
+function syncTime() {
+  const s = curShot(), live = U.shooting && U.shooting.queue[U.shooting.at] === U.cur;
+  timeSaid.textContent = (live ? "Shooting shot " : "Shot ") + (U.cur + 1) + " · " + U.t.toFixed(1) + " / " + secs(s.secs);
+  const head = $("#head"); if (head && footPps) head.style.left = (startOf(U.cur) + U.t) * footPps + "px";
+}
+
+// play the piece end to end
+let lastTick = 0;
+function startPlay() { if (U.t >= curShot().secs - 0.05) { if (U.cur === P.shots.length - 1) U.cur = 0; U.t = 0; } U.playing = true; lastTick = performance.now(); syncHud(); requestAnimationFrame(tick); }
+function stopPlay() { if (!U.playing) return; U.playing = false; syncHud(); }
+function tick(now) {
+  if (!U.playing) return;
+  U.t += Math.min(0.1, (now - lastTick) / 1000); lastTick = now;
+  if (U.t >= curShot().secs) {
+    if (U.cur < P.shots.length - 1) { U.cur++; U.t = 0; if (U.sel.type === "shot" || U.sel.type === "obj") U.sel = { type: "shot", id: curShot().id }; refreshScript(); renderInspector(); renderFoot(); renderStageLine(); }
+    else { U.t = curShot().secs; U.playing = false; syncHud(); }
+  }
+  draw();
+  if (U.playing) requestAnimationFrame(tick);
+}
+
+// ---------------------------------------------------------------------------
+// Shooting (stood in for: the prototype has no model behind it)
+// ---------------------------------------------------------------------------
+function shoot() {
+  if (U.shooting) return;
+  const queue = P.shots.map((s, i) => (s.state === "kept" ? -1 : i)).filter((i) => i >= 0);
+  if (!queue.length) { say("Nothing to shoot. The piece is put together from the " + P.shots.length + " kept takes."); return; }
+  stopPlay(); U.shooting = { queue, at: 0, p: 0, last: performance.now() };
+  U.cur = queue[0]; U.t = 0; U.sel = { type: "shot", id: curShot().id };
+  renderAll(); requestAnimationFrame(shootTick);
+}
+function shootTick(now) {
+  const S2 = U.shooting; if (!S2) return;
+  const i = S2.queue[S2.at], shot = P.shots[i];
+  S2.p += (now - S2.last) / (shot.secs * 520); S2.last = now;
+  U.t = Math.min(shot.secs, S2.p * shot.secs);
+  if (S2.p >= 1) {
+    shot.take = snapshot(shot); shot.state = "kept"; S2.at++; S2.p = 0;
+    if (S2.at >= S2.queue.length) {
+      U.shooting = null; U.view = "take"; U.t = 0; hist.last = JSON.stringify(P);
+      renderAll(); say(S2.queue.length === 1 ? "Shot " + (i + 1) + " landed. It is kept until you change it." : S2.queue.length + " takes landed. They are kept until you change them."); return;
+    }
+    U.cur = S2.queue[S2.at]; U.t = 0; U.sel = { type: "shot", id: curShot().id }; renderAll();
+  }
+  const bar = $("#progress"); if (bar) bar.style.setProperty("--done", S2.p.toFixed(3));
+  const pl = $("#plan"); if (pl) pl.firstChild.textContent = "Shooting shot " + (S2.queue[S2.at] + 1) + " · " + Math.round(S2.p * 100) + " %";
+  draw(); requestAnimationFrame(shootTick);
+}
+function cancelShoot() { if (!U.shooting) return; U.shooting = null; U.t = 0; renderAll(); say("Cancelled. Takes that had landed are kept."); }
+
+// ---------------------------------------------------------------------------
+// The header
+// ---------------------------------------------------------------------------
+function setMode(m) { U.mode = m; if (m === "write") U.tool = "move"; if (m === "direct" && U.view === "take" && !curShot().take) U.view = "stage"; renderAll(); }
+function renderHead() {
+  const todo = P.shots.filter((s) => s.state !== "kept").length, kept = P.shots.length - todo;
+  let plan;
+  if (U.shooting) plan = h("span", { class: "mmc-reel-plan", id: "plan" }, [document.createTextNode("Shooting…")]);
+  else plan = h("span", { class: "mmc-reel-plan", id: "plan", html: todo ? "Shoots <b>" + todo + (todo === 1 ? " shot" : " shots") + "</b>" + (kept ? " · plays <i>" + kept + " kept " + (kept === 1 ? "take" : "takes") + "</i>" : "") : "Plays <i>" + kept + " kept takes</i>" });
+  const seg = h("div", { class: "mmc-reel-seg", role: "group", "aria-label": "Write or direct" }, [
+    h("button", { type: "button", "aria-pressed": U.mode === "write" ? "true" : "false", text: "Write", onclick: () => setMode("write") }),
+    h("button", { type: "button", "aria-pressed": U.mode === "direct" ? "true" : "false", text: "Direct", onclick: () => setMode("direct") })]);
+  $("#headbar").replaceChildren(
+    h("span", { class: "mmc-reel-title", text: "Timeline" }),
+    h("span", { class: "mmc-reel-meta", text: P.shots.length + (P.shots.length === 1 ? " shot · " : " shots · ") + secs(total()) }),
+    seg,
+    h("button", { class: "mmc-reel-step", type: "button", "aria-label": "Undo", title: "Undo (Ctrl+Z)", disabled: !hist.past.length || !!U.shooting, onclick: undo }, [ICON.undo()]),
+    h("button", { class: "mmc-reel-step redo", type: "button", "aria-label": "Redo", title: "Redo (Ctrl+Shift+Z)", disabled: !hist.future.length || !!U.shooting, onclick: redo }, [ICON.undo()]),
+    plan,
+    U.shooting ? h("button", { class: "mmc-reel-shoot quiet", type: "button", text: "Cancel", onclick: cancelShoot })
+      : h("button", { class: "mmc-reel-shoot", type: "button", text: todo ? "Shoot" : "Put together", onclick: shoot }));
+}
+
+// ---------------------------------------------------------------------------
+// The script
+// ---------------------------------------------------------------------------
+const promptHTML = (text) => esc(text).replace(/@(\w+)/g, (m, n) => (CAST[n] ? '<span class="at" style="--tag:' + CAST[n] + '">' + m + "</span>" : m));
+let typeTimer = 0;
+function typed(i) { touch(i); refreshTags(); renderHead(); renderFoot(); clearTimeout(typeTimer); typeTimer = setTimeout(() => { commit(); if (U.sel.type === "shot") renderInspector(); }, 500); }
+function shotRow(i, single) {
+  const s = P.shots[i], [cls, tag] = tagOf(s);
+  const box = h("div", { class: "mmc-prompt", contenteditable: "true", role: "textbox", "aria-label": "Shot " + (i + 1), spellcheck: "false", html: promptHTML(s.text),
+    oninput: (e) => { s.text = e.target.textContent; typed(i); },
+    onfocus: () => { if (!(U.sel.type === "shot" && U.sel.id === s.id)) select({ type: "shot", id: s.id }, true), refreshTags(); },
+    onblur: (e) => { if (rendering || !e.target.isConnected) return; e.target.innerHTML = promptHTML(s.text); if (!single) renderStageLine(); else refreshScript(); },
+    onkeydown: (e) => {
+      if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); addShot(i); }
+      else if (e.key === "Backspace" && !s.text && P.shots.length > 1) { e.preventDefault(); removeShot(i); }
+    } });
+  return h("div", { class: "mmc-reel-row mmc-reel-shot" + (U.sel.type === "shot" && U.sel.id === s.id ? " selected" : ""), "data-shot": s.id }, [
+    h("div", { class: "mmc-reel-gutter" }, [
+      h("button", { class: "mmc-reel-num", type: "button", text: String(i + 1), title: "Select shot " + (i + 1), onclick: () => select({ type: "shot", id: s.id }) }),
+      h("span", { class: "mmc-reel-secs", text: secs(s.secs) })]),
+    h("div", { class: "mmc-reel-words" }, [h("div", { class: "mmc-reel-plain" }, [box])]),
+    h("span", { class: "mmc-reel-tag " + cls, text: tag })]);
+}
+function setThumb(sc) {
+  const c = h("canvas", { width: 76, height: 52 });
+  const cam = aimAt({ x: sc.free.tx - 5, y: 5.5, z: sc.free.tz - 9, yaw: 0, pitch: 0, mm: 24 }, { x: sc.free.tx, y: 0.8, z: sc.free.tz });
+  c.getContext("2d").putImageData(renderScene(cam, 76, 52, "staged", sc.pieces).img, 0, 0);
+  return c;
+}
+let rendering = false;
+function renderScript() {
+  const host = $("#script");
+  rendering = true;
+  const cast = Object.keys(CAST).map((n) => h("button", { class: "mmc-reel-face", type: "button", style: "color:" + CAST[n], title: "@" + n + " is in " + rangeText(P.shots.map((s, i) => (s.text.includes("@" + n) ? i : -1)).filter((i) => i >= 0)),
+    onclick: () => { const sc = sceneOf(curShot()), p = sc.pieces.find((q) => q.plays === n); if (p) select({ type: "obj", scene: sc.id, id: p.id }); else say("@" + n + " does not stand on the " + sc.name.toLowerCase() + " set"); } },
+    [h("span", { class: "mmc-reel-face-blank", style: "background:color-mix(in srgb," + CAST[n] + " 26%, var(--mmc-surface-3));color:" + CAST[n], text: n[0].toUpperCase() }), "@" + n]));
+  const sets = P.scenes.map((sc) => h("button", { class: "mmc-reel-face frame" + (U.sel.type === "set" && U.sel.id === sc.id ? " selected" : ""), type: "button", title: "The " + sc.name.toLowerCase() + " set, " + rangeText(shotsOf(sc.id)), onclick: () => select({ type: "set", id: sc.id }) }, [setThumb(sc), sc.name]));
+  const area = (key, label, placeholder) => h("div", { class: "mmc-reel-row mmc-reel-quiet" }, [
+    h("div", { class: "mmc-reel-gutter" }, [h("span", { class: "mmc-reel-label", text: label })]),
+    h("textarea", { class: "mmc-reel-line-text", id: "field-" + key, rows: "1", placeholder, "aria-label": label, oninput: (e) => { P[key] = e.target.value; clearTimeout(typeTimer); typeTimer = setTimeout(commit, 500); }, onfocus: () => select({ type: "piece" }, true) }, [P[key]])]);
+  const rows = [];
+  P.shots.forEach((s, i) => {
+    if (i > 0 && !s.cont) rows.push(h("div", { class: "mmc-reel-hint mmc-st-cuthint", text: "Hard cut" + (s.scene !== P.shots[i - 1].scene ? " · the " + sceneOf(s).name.toLowerCase() + " set" : " · same set, a new keystone") }));
+    rows.push(shotRow(i));
+  });
+  host.replaceChildren(
+    h("div", { class: "mmc-reel-castrow" }, [...cast, ...sets]),
+    h("div", { class: "mmc-reel-row mmc-reel-scene" }, [
+      h("div", { class: "mmc-reel-gutter" }, [h("span", { class: "mmc-reel-label", text: "Scene" })]),
+      h("div", { class: "mmc-reel-plain" }, [h("div", { class: "mmc-prompt", contenteditable: "true", role: "textbox", "aria-label": "The scene", spellcheck: "false", text: P.scene,
+        oninput: (e) => { P.scene = e.target.textContent; P.shots.forEach((_, i) => touch(i)); refreshTags(); renderHead(); renderFoot(); clearTimeout(typeTimer); typeTimer = setTimeout(commit, 500); },
+        onfocus: () => select({ type: "piece" }, true) })])]),
+    area("sound", "Sound", "What is heard throughout"),
+    area("score", "Score", "Music, if there is any"),
+    h("div", { class: "mmc-reel-rule" }),
+    h("div", { class: "mmc-reel-shots" }, rows),
+    h("div", { class: "mmc-reel-row" }, [
+      h("div", { class: "mmc-reel-gutter" }, [h("span", { class: "mmc-reel-num ghost", text: String(P.shots.length + 1) })]),
+      h("div", { class: "mmc-reel-next-body" }, [h("button", { class: "mmc-reel-ghost", type: "button", text: "Write the next shot", onclick: () => addShot(P.shots.length - 1) })])]));
+  rendering = false;
+}
+function refreshTags() {
+  for (const row of document.querySelectorAll("[data-shot]")) {
+    const s = P.shots.find((q) => String(q.id) === row.dataset.shot); if (!s) continue;
+    const [cls, tag] = tagOf(s), t = row.querySelector(".mmc-reel-tag");
+    t.className = "mmc-reel-tag " + cls; t.textContent = tag;
+    row.classList.toggle("selected", U.sel.type === "shot" && U.sel.id === s.id);
+    row.querySelector(".mmc-reel-secs").textContent = secs(s.secs);
+  }
+}
+function refreshScript() {
+  const a = document.activeElement;
+  if (a && a.isContentEditable && $("#script").contains(a)) { refreshTags(); return; }
+  renderScript();
+}
+function renderStageLine() {
+  const host = $("#stageline"); if (!host) return;
+  const a = document.activeElement; if (a && a.isContentEditable && host.contains(a)) { refreshTags(); return; }
+  rendering = true; host.replaceChildren(shotRow(U.cur, true)); rendering = false;
+}
+function addShot(after) {
+  const p = P.shots[after], end = camAt(p.cam, p.secs), block = {};
+  for (const pc of sceneOf(p).pieces) { const e = posAt(p.block[pc.id], p.secs); if (e) block[pc.id] = [poseOf(e, 0)]; }
+  const s = { id: P.nextId++, scene: p.scene, secs: 4, state: "new", take: null, cont: true, blend: 12, guide: null, hold: "firm", seed: p.seed + 1, text: "", cam: [{ ...end, t: 0 }], block };
+  P.shots.splice(after + 1, 0, s);
+  if (P.shots[after + 2] && P.shots[after + 2].cont) touch(after + 2);
+  commit(); U.cur = after + 1; U.t = 0; U.sel = { type: "shot", id: s.id }; renderAll();
+  const box = [...document.querySelectorAll('[data-shot="' + s.id + '"] .mmc-prompt')].find((b) => b.offsetParent); if (box) box.focus();
+  say("Shot " + (after + 2) + " starts where shot " + (after + 1) + " ends: same set, same marks, the camera where it stopped");
+}
+function removeShot(i) {
+  if (P.shots.length < 2) return;
+  P.shots.splice(i, 1); if (P.shots[0]) P.shots[0].cont = false;
+  if (P.shots[i] && P.shots[i].cont) touch(i);
+  commit(); U.cur = clamp(i - 1, 0, P.shots.length - 1); U.t = 0; U.sel = { type: "shot", id: curShot().id }; renderAll();
+}
+
+// ---------------------------------------------------------------------------
+// The inspector
+// ---------------------------------------------------------------------------
+const irow = (label, ...control) => h("div", { class: "mmc-reel-irow" }, [h("span", { class: "mmc-reel-ilabel", text: label }), h("div", { class: "mmc-reel-icontrol" }, control)]);
+const note = (text) => h("span", { class: "mmc-reel-note", text });
+function seg(options, cur, pick, cls = "") {
+  return h("div", { class: "mmc-reel-seg " + cls, role: "group" }, options.map(([v, label, small, off]) => h("button", { type: "button", "aria-pressed": v === cur ? "true" : "false", disabled: !!off, title: off || null, onclick: () => pick(v) }, [label, small ? h("small", { text: small }) : null])));
+}
+const btn = (text, cls, onclick, extra = {}) => h("button", { class: "mmc-reel-btn " + (cls || ""), type: "button", text, onclick, ...extra });
+function stepper(text, minus, plus) { return h("div", { class: "mmc-reel-stepper" }, [h("button", { type: "button", text: "−", "aria-label": "Less", onclick: minus }), h("span", { text }), h("button", { type: "button", text: "+", "aria-label": "More", onclick: plus })]); }
+const edited = (fn) => () => { fn(); commit(); afterEdit(); };
+const back = () => h("button", { class: "mmc-reel-link mmc-reel-back", type: "button", text: "‹ The piece", onclick: () => select({ type: "piece" }) });
+const GUIDES = [["depth", "Depth"], ["blocks", "Blocks"], ["lines", "Lines"], ["none", "None"]];
+function vec(slots) {
+  return h("div", { class: "mmc-bo-vec" }, slots.map(([axis, value, set, step]) => h("label", { class: "mmc-bo-vecslot" }, [
+    h("span", { class: "mmc-bo-axis is-" + axis.toLowerCase(), text: axis }),
+    h("input", { class: "mmc-bo-num", type: "number", step: step || "0.05", value: String(Math.round(value * 100) / 100), "aria-label": axis, id: "num-" + axis + "-" + Math.random().toString(36).slice(2, 7),
+      onchange: (e) => { const v = parseFloat(e.target.value); if (!isFinite(v)) return; set(v); commit(); afterEdit(); } })])));
+}
+
+function renderInspector() {
+  const host = $("#inspect"), kids = [], sel = U.sel;
+  if (sel.type === "shot") {
+    const i = P.shots.findIndex((s) => s.id === sel.id), s = P.shots[i], [cls, tag] = tagOf(s), sc = sceneOf(s);
+    const why = s.state === "kept" ? "Kept. The next render plays this take as it is."
+      : s.state === "new" ? "Not shot yet. The next render shoots it from this staging."
+      : s.state === "follows" ? "Its take continues from film that is about to be replaced, so it is shot again."
+      : "Changed since its take. The next render shoots it again, and the take stays until the new one lands.";
+    kids.push(back(), h("div", { class: "mmc-reel-ihead" }, [h("b", { text: "Shot " + (i + 1) }), h("span", { text: secs(s.secs) + " · the " + sc.name.toLowerCase() + " set" }), tag ? h("span", { class: "mmc-reel-tag " + cls, text: tag }) : null]),
+      h("p", { class: "mmc-reel-why", text: why }),
+      h("div", { class: "mmc-reel-actions" }, [
+        U.mode === "write" ? btn("Direct this shot", "primary", () => setMode("direct")) : btn("Back to the script", "", () => setMode("write")),
+        s.state === "kept" ? btn("Reshoot", "", edited(() => { s.state = "changed"; for (let j = i + 1; j < P.shots.length && P.shots[j].cont; j++) if (P.shots[j].state === "kept") P.shots[j].state = "follows"; })) : null]),
+      irow("Length", stepper(secs(s.secs), edited(() => setLength(i, s.secs - 0.5)), edited(() => setLength(i, s.secs + 0.5)))),
+      irow("Camera", note(moveSentence(s))),
+      irow("Marks", h("div", { class: "mmc-reel-inline" }, [
+        ...s.cam.map((m) => h("button", { class: "mmc-reel-value", type: "button", title: "Go to this mark", onclick: () => { U.t = m.t; requestDraw(); renderInspector(); } }, [h("span", { text: secs(m.t) }), Math.abs(m.t - U.t) < 0.07 ? h("small", { text: "here" }) : null])),
+        s.cam.length > 1 && s.cam.some((m) => Math.abs(m.t - U.t) < 0.07) ? h("button", { class: "mmc-reel-link", type: "button", text: "Take this mark out", onclick: edited(() => { s.cam = s.cam.filter((m) => Math.abs(m.t - U.t) >= 0.07); touch(i); }) }) : null])),
+      irow("Lens", seg([24, 28, 35, 50, 85].map((mm) => [mm, String(mm), "mm"]), Math.round(s.cam[0].mm), (mm) => edited(() => { s.cam.forEach((m) => (m.mm = mm)); touch(i); })())),
+      irow("Staging", note(stagingSentence(s))),
+      irow("Guide", seg(GUIDES, guideOf(s), (g) => edited(() => { s.guide = g === P.guide ? null : g; touch(i); })()), s.guide ? note("Differs from the piece, which sends " + P.guide + ".") : null),
+      guideOf(s) !== "none" ? irow("Guide holds", seg([["loose", "Loosely", "0.6"], ["firm", "Firmly", "1.0"]], s.hold, (v) => edited(() => { s.hold = v; touch(i); })()), note(s.hold === "firm" ? "The blocks are where things are." : "The blocks are a suggestion. More life, less exact marks.")) : null,
+      irow("Seed", h("input", { class: "mmc-reel-seed", id: "seed-" + s.id, type: "text", inputmode: "numeric", value: String(s.seed), "aria-label": "Seed", onchange: (e) => edited(() => { const v = parseInt(e.target.value, 10); if (isFinite(v)) { s.seed = v; touch(i); } })() })),
+      h("div", { class: "mmc-reel-machine" }, [
+        h("div", { text: "What the model is given for this shot" }),
+        h("pre", { class: "mmc-reel-compiled", text: stagingSentence(s) + " " + moveSentence(s) + (guideOf(s) !== "none" ? "\n" + guideFile(i) + " · " + Math.round(s.secs * FPS) + " frames" : "") })]));
+  } else if (sel.type === "join") {
+    const i = P.shots.findIndex((s) => s.id === sel.id), s = P.shots[i], p = P.shots[i - 1], jump = jumpAt(i);
+    kids.push(back(), h("div", { class: "mmc-reel-ihead" }, [h("b", { text: "Join " + i + " → " + (i + 1) }), h("span", { text: s.cont ? "continues" : "hard cut" })]),
+      h("p", { class: "mmc-reel-why", text: s.cont ? "Shot " + (i + 1) + " continues from the last frames of shot " + i + ", on the same set." : "A hard cut. Shot " + (i + 1) + " starts a new scene, with a set and a keystone of its own." }),
+      irow("Continues", h("button", { class: "mmc-reel-switch", type: "button", role: "switch", "aria-checked": s.cont ? "true" : "false", "aria-label": "Continue from shot " + i,
+        onclick: edited(() => { s.cont = !s.cont; if (s.cont && s.scene !== p.scene) { s.scene = p.scene; s.block = {}; lineUp(i); } touch(i); }) })));
+    if (s.cont) {
+      kids.push(irow("Blend", stepper(s.blend + " frames", edited(() => { s.blend = Math.max(0, s.blend - 4); touch(i); }), edited(() => { s.blend = Math.min(48, s.blend + 4); touch(i); })), note("The frames shot " + i + " hands over.")));
+      if (jump) {
+        const parts = [];
+        if (jump.camD >= 0.2) parts.push("the camera starts " + jump.camD.toFixed(1) + " m from where shot " + i + " leaves it");
+        else if (jump.yawD >= 0.08) parts.push("the camera starts turned " + Math.round(jump.yawD * 180 / Math.PI) + "° from how shot " + i + " leaves it");
+        if (jump.whoD >= 0.2) parts.push(labelOf(jump.who) + " stands " + jump.whoD.toFixed(1) + " m from where they stopped");
+        kids.push(irow("Staging", h("span", { class: "mmc-reel-warn", text: "Does not line up: " + parts.join(", and ") + ". The model will be handed frames that contradict the guide." }),
+          btn("Start shot " + (i + 1) + " where shot " + i + " ends", "", edited(() => lineUp(i)))));
+      } else kids.push(irow("Staging", note("Lines up. The camera and everyone on set start where shot " + i + " leaves them.")));
+    } else {
+      kids.push(irow("Set", seg(P.scenes.map((sc) => [sc.id, sc.name]), s.scene, (id) => edited(() => { if (id === s.scene) return; s.scene = id; s.block = {}; for (let j = i + 1; j < P.shots.length && P.shots[j].cont; j++) { P.shots[j].scene = id; P.shots[j].block = {}; } touch(i); })()),
+        note("Every shot that continues from shot " + (i + 1) + " moves with it.")));
+    }
+  } else if (sel.type === "set") {
+    const sc = sceneById(sel.id), used = shotsOf(sc.id);
+    kids.push(back(), h("div", { class: "mmc-reel-ihead" }, [h("b", { text: sc.name }), h("span", { text: "set · " + rangeText(used) })]),
+      h("p", { class: "mmc-reel-why", text: "The set is shared by every shot of its scene. Moving a wall or the table reshoots all of them. Moving a person only changes the shot you are on." }),
+      irow("Name", h("input", { class: "mmc-reel-seed mmc-st-name", id: "setname", type: "text", value: sc.name, "aria-label": "Name of the set", onchange: (e) => edited(() => { sc.name = e.target.value.trim() || sc.name; })() })),
+      irow("On it", h("div", { class: "mmc-reel-inline" }, sc.pieces.filter((p) => p.plays || p.word || p.kind === "person").map((p) => h("button", { class: "mmc-reel-value", type: "button", onclick: () => select({ type: "obj", scene: sc.id, id: p.id }) }, [h("span", { class: "mmc-st-dot", style: p.plays ? "--tag:" + CAST[p.plays] : "" }), h("span", { text: labelOf(p) })]))),
+        note(sc.pieces.filter((p) => !p.plays && !p.word && p.kind !== "person").length + " unnamed walls and blocks besides.")),
+      irow("Add", h("div", { class: "mmc-reel-inline" }, ["person", "block", "wall", "post"].map((k) => btn(KINDS[k].label, "", () => { if (curShot().scene !== sc.id) { U.cur = used[0] || 0; U.t = 0; } addPiece(k); })))),
+      h("div", { class: "mmc-reel-machine", text: "A piece that is named or plays someone is put into the staging sentence. Unnamed pieces only shape the depth pass." }));
+  } else if (sel.type === "obj") {
+    const sc = sceneById(sel.scene), p = sc.pieces.find((q) => q.id === sel.id), shot = curShot(), i = U.cur;
+    const person = p.kind === "person", now = person ? (posAt(shot.block[p.id], U.t) || p) : p, marks = shot.block[p.id];
+    const walk = marks && marks.length > 1 ? Math.hypot(marks[0].x - marks[marks.length - 1].x, marks[0].z - marks[marks.length - 1].z, (marks[0].y || 0) - (marks[marks.length - 1].y || 0)) : 0;
+    kids.push(h("button", { class: "mmc-reel-link mmc-reel-back", type: "button", text: "‹ Shot " + (i + 1), onclick: () => select({ type: "shot", id: shot.id }) }),
+      h("div", { class: "mmc-reel-ihead" }, [h("b", { text: labelOf(p) }), h("span", { text: person ? "in shot " + (i + 1) + " at " + secs(U.t) : "the " + sc.name.toLowerCase() + " set · " + rangeText(shotsOf(sc.id)) })]),
+      h("p", { class: "mmc-reel-why", text: person ? "Drag them to block this shot: Move slides them, Turn tips them over, Lift takes them off the floor. Move the playhead first to give them a second mark, and they go from one to the other." : "Part of the set. Moving it reshoots " + rangeText(shotsOf(sc.id)) + "." }),
+      person ? irow("Plays", seg([[null, "Nobody"], ...Object.keys(CAST).map((n) => [n, "@" + n, null, sc.pieces.some((q) => q.plays === n && q.id !== p.id) ? "@" + n + " already stands on this set" : null])], p.plays, (n) => edited(() => { p.plays = n; touchScene(sc.id); })()))
+        : irow("Called", h("input", { class: "mmc-reel-seed", id: "word-" + p.id, type: "text", value: p.word, placeholder: "table, doorway, car…", "aria-label": "What this piece is called", onchange: (e) => edited(() => { p.word = e.target.value.trim().toLowerCase(); touchScene(sc.id); })() }), note(p.word ? "Named in the staging sentence." : "Unnamed: it only shapes the depth pass.")),
+      irow("Place", vec([
+        ["X", now.x, (v) => setPose(p, "x", v)],
+        ["Y", now.y || 0, (v) => setPose(p, "y", clamp(v, 0, 8))],
+        ["Z", now.z, (v) => setPose(p, "z", v)]]), (now.y || 0) > 0.02 ? note("Y is how far its lowest point is off the floor.") : null),
+      irow("Turned", stepper(deg(now.r, true) + "°", edited(() => nudge(p, "r", -Math.PI / 12)), edited(() => nudge(p, "r", Math.PI / 12)))),
+      irow("Tipped", h("div", { class: "mmc-reel-inline" }, [
+        stepper(lean(now.tilt, "forward", "back"), edited(() => nudge(p, "tilt", -Math.PI / 12)), edited(() => nudge(p, "tilt", Math.PI / 12))),
+        stepper(lean(now.roll, "right", "left"), edited(() => nudge(p, "roll", -Math.PI / 12)), edited(() => nudge(p, "roll", Math.PI / 12)))]),
+        note(stanceOf(now, person) ? stanceOf(now, person).replace(/^./, (c) => c.toUpperCase()) + ". The staging sentence says so." : person ? "Standing." : "Upright."),
+        stanceOf(now, person) ? btn(person ? "Stand them up" : "Stand it up", "", edited(() => { setPose(p, "tilt", 0); setPose(p, "roll", 0); setPose(p, "y", 0); })) : null),
+      person ? irow("In this shot", note(walk > 0.3 ? "Travels " + walk.toFixed(1) + " m between " + marks.length + " marks." : marks && marks.length > 1 ? "Changes where they stand, on the spot." : "Holds one mark."), marks && marks.length > 1 ? btn("Hold the first mark", "", edited(() => { shot.block[p.id] = [marks[0]]; touch(i); })) : null)
+        : irow("Size", vec([["W", p.w, (v) => { p.w = Math.max(0.1, v); touchScene(sc.id); }], ["H", p.h, (v) => { p.h = Math.max(0.1, v); touchScene(sc.id); }], ["D", p.d, (v) => { p.d = Math.max(0.1, v); touchScene(sc.id); }]])),
+      h("div", { class: "mmc-reel-actions quiet" }, [btn("Take off the set", "quiet danger", removeObj)]));
+  } else {
+    kids.push(h("div", { class: "mmc-reel-ihead" }, [h("b", { text: "The piece" }), h("span", { text: P.shots.length + " shots · " + secs(total()) })]),
+      irow("Model", seg(Object.entries(MODEL).map(([k, m]) => [k, m.label]), P.model, (k) => edited(() => { P.model = k; P.shots.forEach((_, i) => touch(i)); })())),
+      irow("Frame", h("span", { class: "mmc-reel-mono", text: "16:9 · 1344 × 768" })),
+      irow("Guide", seg(GUIDES, P.guide, (g) => edited(() => { P.guide = g; P.shots.forEach((s, i) => { if (!s.guide) touch(i); }); })()), note(P.guide === "none" ? "No shot carries a guide unless it says so itself. The stage still writes the staging and the camera into the words." : MODEL[P.model].note)),
+      irow("Sets", h("div", { class: "mmc-reel-inline" }, P.scenes.map((sc) => h("button", { class: "mmc-reel-value", type: "button", onclick: () => select({ type: "set", id: sc.id }) }, [h("span", { text: sc.name }), h("small", { text: rangeText(shotsOf(sc.id)) })]))), note("A hard cut starts a new scene, and a scene has one set.")),
+      h("div", { class: "mmc-reel-machine", text: "Every shot is staged on its scene's set. The stage writes two things for the render: a guide clip along the shot camera's path, and the staging and the move in the model's own words." }));
+  }
+  host.replaceChildren(h("div", { class: "mmc-reel-inspect-body" }, kids));
+}
+function setLength(i, v) {
+  const s = P.shots[i], n = clamp(Math.round(v * 2) / 2, 1, 10), k = n / s.secs;
+  if (n === s.secs) return;
+  s.cam.forEach((m) => (m.t = Math.round(m.t * k * 20) / 20));
+  for (const marks of Object.values(s.block)) marks.forEach((m) => (m.t = Math.round(m.t * k * 20) / 20));
+  s.secs = n; if (i === U.cur) U.t = Math.min(U.t, n); touch(i);
+}
+function setPose(p, key, v) {
+  const shot = curShot();
+  if (p.kind === "person") { blockMark(shot, p, U.t)[key] = v; touch(U.cur); } else { p[key] = v; touchScene(shot.scene); }
+}
+function nudge(p, key, d) {
+  const shot = curShot(), cur = p.kind === "person" ? blockMark(shot, p, U.t)[key] || 0 : p[key] || 0;
+  let v = Math.round((cur + d) / (Math.PI / 12)) * (Math.PI / 12);
+  if (key !== "r") v = clamp(v, -Math.PI, Math.PI);
+  setPose(p, key, v);
+}
+const deg = (r, wrap) => { const d = Math.round((r || 0) * 180 / Math.PI); return wrap ? ((d % 360) + 360) % 360 : d; };
+const lean = (r, pos, neg) => { const d = deg(r); return d === 0 ? "0°" : Math.abs(d) + "° " + (d > 0 ? pos : neg); };
+
+// ---------------------------------------------------------------------------
+// The reel underneath
+// ---------------------------------------------------------------------------
+let footPps = 0, thumbTimer = 0;
+function renderFoot() {
+  const lane = $("#lane"), Wd = Math.max(320, lane.clientWidth), pps = Wd / total(); footPps = pps;
+  const passes = [], cards = [], joins = [], dots = [];
+  let run = null;
+  P.shots.forEach((s, i) => {
+    if (!run || run.scene !== s.scene) { run = { scene: s.scene, from: i, to: i }; passes.push(run); } else run.to = i;
+  });
+  const passEls = passes.map((r) => { const sc = sceneById(r.scene), x = startOf(r.from) * pps, w = (startOf(r.to) + P.shots[r.to].secs) * pps - x - 2;
+    return h("button", { class: "mmc-reel-pass" + (U.sel.type === "set" && U.sel.id === sc.id ? " selected" : ""), type: "button", style: "left:" + x + "px;width:" + w + "px", text: sc.name + " set", title: "The " + sc.name.toLowerCase() + " set", onclick: () => select({ type: "set", id: sc.id }) }); });
+  P.shots.forEach((s, i) => {
+    const x = startOf(i) * pps, w = s.secs * pps - 2, [cls, tag] = tagOf(s), has = !!s.take;
+    const card = h("div", { class: "mmc-reel-card " + (has ? (s.state === "kept" ? "kept" : s.state === "follows" ? "reshoot" : "changed") : "guide") + (U.sel.type === "shot" && U.sel.id === s.id ? " selected" : ""), role: "button", tabindex: "0", "aria-label": "Shot " + (i + 1),
+      style: "left:" + x + "px;width:" + w + "px", "data-card": String(i) }, [
+      h("canvas", { class: "mmc-reel-thumb", width: Math.max(2, Math.round(w)), height: 84 }),
+      h("span", { class: "mmc-reel-card-head" }, [String(i + 1), h("span", { text: secs(s.secs) })]),
+      tag ? h("span", { class: "mmc-reel-card-tag " + cls, text: s.state === "follows" ? "Reshoots" : "Changed" }) : !has ? h("span", { class: "mmc-reel-card-tag quiet", text: guideOf(s) === "none" ? "Not shot yet" : "Not shot yet · its guide" }) : null,
+      h("span", { class: "mmc-reel-edge", title: "Drag to change the length" })]);
+    card.addEventListener("pointerdown", (e) => cardDown(e, i, card, pps));
+    card.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select({ type: "shot", id: s.id }); } });
+    cards.push(card);
+    if (i > 0) {
+      const jump = jumpAt(i), selj = U.sel.type === "join" && U.sel.id === s.id;
+      joins.push(h("button", { class: "mmc-reel-join" + (s.cont ? " on" : "") + (jump ? " jump" : "") + (selj ? " selected" : ""), type: "button", style: "left:" + x + "px",
+        title: s.cont ? (jump ? "Continues, but the staging does not line up" : "Continues from shot " + i) : "Hard cut", "aria-label": "Join " + i + " to " + (i + 1), onclick: () => select({ type: "join", id: s.id }) }, [s.cont ? ICON.on() : ICON.cut()]));
+      dots.push(h("button", { class: "mmc-reel-sdot" + (s.cont ? " on" : ""), type: "button", style: "left:" + x + "px", "aria-label": s.cont ? "Sound carries across" : "Sound starts again", onclick: () => select({ type: "join", id: s.id }) }));
+      if (s.cont && s.blend) cards.push(h("div", { class: "mmc-reel-blend" + (selj ? " selected" : ""), style: "left:" + x + "px;width:" + Math.max(18, s.blend / FPS * pps) + "px" }, [
+        h("button", { class: "mmc-reel-bracket", type: "button", text: s.blend + " f", onclick: () => select({ type: "join", id: s.id }) })]));
+    }
+  });
+  cards.push(h("div", { class: "mmc-st-head", id: "head" }));
+  if (U.shooting) { const i = U.shooting.queue[U.shooting.at]; cards.push(h("div", { class: "mmc-reel-progress", id: "progress", style: "left:" + startOf(i) * pps + "px;width:" + (P.shots[i].secs * pps - 2) + "px;--done:" + U.shooting.p })); }
+  $("#passes").replaceChildren(...passEls); $("#picture").replaceChildren(...cards); $("#joins").replaceChildren(...joins);
+  $("#sound").replaceChildren(h("div", { class: "mmc-reel-wave", style: "left:0;width:" + (Wd - 2) + "px" }), ...dots);
+  syncTime(); renderStatus();
+  clearTimeout(thumbTimer); thumbTimer = setTimeout(drawThumbs, 60);
+}
+const tmp = h("canvas", { width: 150, height: 84 }), tctx = tmp.getContext("2d");
+function drawThumbs() {
+  for (const card of document.querySelectorAll("[data-card]")) {
+    const i = +card.dataset.card, s = P.shots[i]; if (!s) continue;
+    const c = card.querySelector("canvas"), g = c.getContext("2d"), n = Math.max(1, Math.round(c.width / 150)), fw = c.width / n;
+    for (let k = 0; k < n; k++) {
+      const u = (k + 0.5) / n; let b;
+      if (s.take) { const tk = s.take, t = u * tk.secs; b = renderScene(camAt(tk.cam, t), 150, 84, "staged", piecesAt(tk.pieces, tk.block, t)); grade(b, tk.scene); }
+      else { const t = u * s.secs, gd = guideOf(s); b = renderScene(camAt(s.cam, t), 150, 84, gd === "none" ? "staged" : gd, piecesAt(sceneOf(s).pieces, s.block, t)); }
+      tctx.putImageData(b.img, 0, 0);
+      if (fw < 150) g.drawImage(tmp, (150 - fw) / 2, 0, fw, 84, k * fw, 0, fw, 84); else g.drawImage(tmp, 0, 0, 150, 84, k * fw, 0, fw, 84);
+    }
+  }
+}
+function cardDown(e, i, card, pps) {
+  if (U.shooting) return;
+  const s = P.shots[i], edge = e.target.classList.contains("mmc-reel-edge"), x0 = e.clientX, len0 = s.secs;
+  card.setPointerCapture(e.pointerId); stopPlay();
+  const seek = (ev) => { const r = card.getBoundingClientRect(); U.t = clamp((ev.clientX - r.left) / r.width, 0, 1) * s.secs; U.t = Math.round(U.t * 20) / 20; requestDraw(); };
+  if (!edge) { const same = U.cur === i && U.sel.type === "shot" && U.sel.id === s.id; U.cur = i; seek(e); if (!same) { U.sel = { type: "shot", id: s.id }; refreshScript(); renderInspector(); renderStageLine(); syncHud();
+    for (const c of document.querySelectorAll("[data-card]")) c.classList.toggle("selected", +c.dataset.card === i); } }
+  let changed = false;
+  const move = (ev) => {
+    if (edge) { const n = clamp(Math.round((len0 + (ev.clientX - x0) / pps) * 2) / 2, 1, 10); if (n !== s.secs) { setLength(i, n); changed = true; card.style.width = n * pps - 2 + "px"; card.querySelector(".mmc-reel-card-head span").textContent = secs(n); } }
+    else seek(ev);
+  };
+  const up = () => { card.removeEventListener("pointermove", move); card.removeEventListener("pointerup", up); card.removeEventListener("pointercancel", up);
+    if (changed) { commit(); afterEdit(); } else if (!edge && U.sel.type === "shot") renderInspector(); };
+  card.addEventListener("pointermove", move); card.addEventListener("pointerup", up); card.addEventListener("pointercancel", up);
+}
+function renderStatus() {
+  const host = $("#status"); if (!host) return;
+  let hint = "Drag across a shot to scrub it, or its edge to change its length. Click a join to change it.";
+  if (U.view === "stage" && U.mode === "direct") hint = U.lens ? "Through the lens: drag pans and tilts, shift-drag trucks and pedestals, the wheel pushes in. Each writes a camera mark at the playhead."
+    : U.tool === "turn" ? "Turn: drag a piece sideways to turn it, up or down to tip it over, shift-drag to roll it. It snaps to 15° and rests on the floor whichever way up it is."
+    : U.tool === "lift" ? "Lift: drag a piece up to take it off the floor, down to put it back. Move the playhead first and it rises or falls between the two marks."
+    : "Move: drag a person to block them, drag a wall or the table to change the set. Drag the floor to orbit, shift-drag to slide, wheel to zoom.";
+  host.replaceChildren(
+    h("button", { class: "mmc-reel-link", type: "button", text: "The piece", onclick: () => select({ type: "piece" }) }),
+    h("span", { class: "mmc-reel-hint", text: U.said || hint }));
+}
+
+// ---------------------------------------------------------------------------
+// Putting it together
+// ---------------------------------------------------------------------------
+function renderAll() {
+  $("#main").classList.toggle("direct", U.mode === "direct");
+  (U.mode === "direct" ? $("#glass") : $("#player")).append(stage);
+  renderHead(); renderScript(); renderStageLine(); renderInspector(); renderFoot(); syncHud(); requestDraw();
+}
+document.addEventListener("keydown", (e) => {
+  const a = document.activeElement, typing = a && (a.isContentEditable || /^(INPUT|TEXTAREA)$/.test(a.tagName));
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z" && !typing) { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
+  if (typing) return;
+  if (e.key === " " && a.tagName !== "BUTTON") { e.preventDefault(); U.playing ? stopPlay() : startPlay(); }
+  else if ((e.key === "Delete" || e.key === "Backspace") && U.sel.type === "obj") { e.preventDefault(); removeObj(); }
+  else if (e.key === "Escape") select({ type: "piece" });
+  else if (U.mode === "direct" && "123".includes(e.key)) setTool(["move", "turn", "lift"][+e.key - 1]);
+});
+let resizeTimer = 0;
+window.addEventListener("resize", () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(renderFoot, 120); });
+
+P.shots[0].take = snapshot(P.shots[0]); P.shots[1].take = snapshot(P.shots[1]);
+hist.last = JSON.stringify(P);
+renderAll();
+
+</script>
+</body>
+</html>
