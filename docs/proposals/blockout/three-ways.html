@@ -1,0 +1,1451 @@
+<title>Blockout, Three Ways</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the pack's own dark bench room. A top bar like the reel's (title, length, undo, one primary button),
+   three tabs for three benches over one shared scene, and the reasoning underneath. Single dark look, on purpose:
+   it is the ComfyUI overlay these benches live in. */
+:root {
+  color-scheme: dark;
+  --bg: #232323;
+  --panel: #2c2c2c;
+  --raise: #363636;
+  --sunk: #1d1d1d;
+  --line: #3f3f3f;
+  --line-soft: #333333;
+  --ink: #ece9e4;
+  --muted: #a5a19a;
+  --faint: #78746e;
+  --accent: #f0a63c;
+  --cta: #f6c78f;
+  --on-cta: #2b1d0b;
+  --mark: #5b9ee8;
+  --mark-soft: rgba(91, 158, 232, 0.16);
+  --good: #7cc48e;
+  --font: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 10px;
+}
+html, body { background: var(--bg); color: var(--ink); }
+body { font-family: var(--font); font-size: 14px; line-height: 1.45; -webkit-font-smoothing: antialiased; }
+* { box-sizing: border-box; }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.page { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 16px 48px; max-width: 1560px; margin: 0 auto; }
+
+/* ---------- the window ---------- */
+.win { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+  display: flex; flex-direction: column; height: clamp(640px, calc(100vh - 32px), 940px); box-shadow: 0 24px 60px rgba(0,0,0,.35); }
+.bar { display: flex; align-items: center; gap: 14px; padding: 10px 14px 10px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.bar .title { font-weight: 700; font-size: 17px; letter-spacing: -0.01em; }
+.bar .len { color: var(--muted); font-variant-numeric: tabular-nums; }
+.iconbtn { width: 30px; height: 30px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); display: inline-grid; place-items: center; }
+.iconbtn:hover:not(:disabled) { background: var(--raise); color: var(--ink); }
+.iconbtn:disabled { opacity: .35; cursor: default; }
+.tabs { display: flex; gap: 2px; background: var(--sunk); border-radius: 9px; padding: 3px; overflow-x: auto; max-width: 100%; }
+.tab { border: 0; background: transparent; color: var(--muted); padding: 6px 12px; border-radius: 7px; white-space: nowrap; display: flex; gap: 8px; align-items: baseline; }
+.tab b { font-weight: 600; color: var(--faint); font-family: var(--mono); font-size: 12px; }
+.tab[aria-selected="true"] { background: var(--raise); color: var(--ink); }
+.tab[aria-selected="true"] b { color: var(--accent); }
+.gap { flex: 1; }
+.plan-line { color: var(--muted); font-size: 13px; white-space: nowrap; }
+.plan-line b { color: var(--ink); font-weight: 600; }
+.cta { border: 0; background: var(--cta); color: var(--on-cta); font-weight: 650; padding: 8px 16px; border-radius: 9px; white-space: nowrap; }
+.cta:hover { filter: brightness(1.05); }
+.idea { padding: 9px 18px; border-bottom: 1px solid var(--line-soft); color: var(--muted); font-size: 13px; background: var(--sunk); }
+.idea b { color: var(--ink); font-weight: 600; }
+
+.proto { flex: 1; min-height: 0; display: none; }
+.proto.on { display: grid; }
+
+/* ---------- shared bits ---------- */
+.seg { display: inline-flex; background: var(--sunk); border-radius: 8px; padding: 2px; gap: 2px; flex-wrap: wrap; }
+.seg button { border: 0; background: transparent; color: var(--muted); padding: 4px 10px; border-radius: 6px; font-size: 12.5px; }
+.seg button.on { background: var(--raise); color: var(--ink); }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px 3px 6px; background: var(--raise); border: 1px solid transparent; font-size: 13px; }
+.chip i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.chip.on { border-color: var(--accent); }
+.ghost { border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 8px; padding: 6px 12px; font-size: 13px; }
+.ghost:hover { background: var(--raise); }
+.small { font-size: 12px; color: var(--faint); }
+.lensbox { position: relative; min-height: 0; min-width: 0; display: grid; place-items: center; }
+.lensbox canvas { display: block; border-radius: 6px; touch-action: none; background: #111; }
+.float { position: absolute; display: flex; gap: 6px; align-items: center; z-index: 2; }
+.float .seg { background: rgba(20,20,20,.78); backdrop-filter: blur(6px); }
+.addrow button { border: 0; background: rgba(20,20,20,.78); backdrop-filter: blur(6px); color: var(--ink); padding: 5px 10px; border-radius: 7px; font-size: 12.5px; }
+.addrow button:hover { background: rgba(50,50,50,.9); }
+.caption { display: flex; gap: 12px; align-items: flex-start; padding: 10px 2px 0; min-width: 0; }
+.caption q { flex: 1; min-width: 0; font-size: 14.5px; color: var(--ink); quotes: none; line-height: 1.5; }
+.caption q .who { color: var(--accent); }
+.copy { border: 1px solid var(--line); background: transparent; border-radius: 7px; padding: 4px 10px; font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.copy:hover { color: var(--ink); border-color: var(--muted); }
+
+/* inspector, as the reel draws it */
+.insp { border-left: 1px solid var(--line); overflow-y: auto; padding: 16px 18px 24px; min-width: 0; }
+.ihead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px; }
+.ihead b { font-size: 18px; font-weight: 700; letter-spacing: -.01em; }
+.ihead .gap + button { margin-left: auto; }
+.isub { color: var(--faint); font-size: 12.5px; margin-bottom: 14px; }
+.row { display: grid; grid-template-columns: 82px 1fr; gap: 10px; align-items: center; padding: 7px 0; }
+.row > label, .row > span.l { color: var(--muted); font-size: 13px; }
+.rng { display: grid; grid-template-columns: 1fr 58px; gap: 10px; align-items: center; }
+.rng output { font-variant-numeric: tabular-nums; text-align: right; font-size: 13px; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+input[type=text] { width: 100%; background: var(--sunk); border: 1px solid var(--line); border-radius: 7px; padding: 5px 8px; }
+.passes { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.pass { border: 1px solid var(--line); background: var(--sunk); border-radius: 8px; padding: 5px; text-align: left; display: grid; gap: 4px; }
+.pass canvas { width: 100%; height: auto; border-radius: 4px; display: block; background: #000; }
+.pass span { font-size: 12.5px; padding: 0 2px; }
+.pass.on { border-color: var(--accent); }
+.danger { color: #e88a7d; border: 0; background: transparent; font-size: 12.5px; }
+.danger:hover { text-decoration: underline; }
+.divider { border-top: 1px solid var(--line-soft); margin: 12px 0; }
+
+/* the move at its real length, the reel's way */
+.tl { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: end; padding: 10px 16px 12px; border-top: 1px solid var(--line); min-width: 0; }
+.tl-play { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--raise); display: grid; place-items: center; margin-bottom: 2px; }
+.tl-body { position: relative; min-width: 0; }
+.tl-thumbs { position: relative; height: 70px; margin-bottom: 6px; }
+.tl-thumb { position: absolute; bottom: 0; transform: translateX(-50%); border: 2px solid transparent; border-radius: 6px; padding: 0; background: #000; line-height: 0; }
+.tl-thumb canvas { border-radius: 4px; display: block; }
+.tl-thumb.on { border-color: var(--mark); }
+.tl-thumb small { position: absolute; left: 4px; top: 3px; line-height: 1; font-size: 10.5px; color: #fff; background: rgba(0,0,0,.55); padding: 2px 4px; border-radius: 3px; font-family: var(--mono); }
+.tl-track { position: relative; height: 30px; border-radius: 7px; background: var(--sunk); touch-action: none; cursor: pointer; }
+.tl-shot { position: absolute; left: 0; top: 0; bottom: 0; background: repeating-linear-gradient(135deg, rgba(255,255,255,.035) 0 6px, transparent 6px 12px), var(--raise); border-radius: 7px; border: 1px solid var(--line); }
+.tl-tick { position: absolute; bottom: 0; width: 1px; height: 7px; background: var(--faint); opacity: .6; }
+.tl-ticklab { position: absolute; top: 34px; transform: translateX(-50%); font-size: 10.5px; color: var(--faint); font-family: var(--mono); }
+.tl-mark { position: absolute; top: 50%; width: 14px; height: 14px; background: var(--mark); transform: translate(-50%,-50%) rotate(45deg); border-radius: 2px; border: 2px solid var(--panel); cursor: ew-resize; touch-action: none; }
+.tl-mark.on { box-shadow: 0 0 0 2px var(--ink); }
+.tl-end { position: absolute; top: -3px; bottom: -3px; width: 10px; transform: translateX(-50%); cursor: ew-resize; touch-action: none; display: grid; place-items: center; }
+.tl-end::after { content: ""; width: 3px; height: 18px; border-radius: 2px; background: var(--muted); }
+.tl-head { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--accent); transform: translateX(-1px); pointer-events: none; }
+.tl-head::before { content: ""; position: absolute; top: -5px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); }
+.tl-side { display: grid; gap: 6px; justify-items: end; margin-bottom: 2px; }
+.tl-add { border: 1px solid var(--mark); color: #a9cbf5; background: var(--mark-soft); border-radius: 8px; padding: 6px 12px; font-size: 13px; white-space: nowrap; }
+.tl-hint { font-size: 12px; color: var(--faint); margin-top: 22px; }
+
+/* ---------- A: viewfinder ---------- */
+#viewfinder { grid-template-columns: minmax(0,1fr) 320px; grid-template-rows: minmax(0,1fr) auto; }
+#viewfinder .stagecol { display: grid; grid-template-rows: minmax(0,1fr) auto; padding: 14px 16px 6px; min-width: 0; min-height: 0; }
+#viewfinder .insp { grid-row: 1 / span 2; grid-column: 2; }
+#viewfinder .tl { grid-column: 1; }
+.inset { position: absolute; left: 10px; bottom: 10px; width: 230px; height: 172px; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 8px 24px rgba(0,0,0,.45); z-index: 3; transition: width .18s, height .18s; }
+.inset.big { width: min(440px, 60%); height: min(330px, 70%); }
+.inset canvas { width: 100%; height: 100%; display: block; touch-action: none; }
+.inset .grow { position: absolute; right: 5px; top: 5px; border: 0; background: rgba(0,0,0,.55); border-radius: 6px; font-size: 11px; padding: 3px 7px; color: var(--ink); }
+.inset .tag { position: absolute; left: 7px; top: 6px; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+
+/* ---------- B: floor plan ---------- */
+#plan { grid-template-columns: minmax(0,1fr) 380px; grid-template-rows: minmax(0,1fr) auto; }
+#plan .floor { position: relative; min-width: 0; min-height: 0; }
+#plan .floor canvas { width: 100%; height: 100%; display: block; touch-action: none; }
+#plan .side { grid-row: 1 / span 2; grid-column: 2; border-left: 1px solid var(--line); display: grid; grid-template-rows: auto minmax(0,1fr); min-height: 0; min-width: 0; }
+#plan .monitor { padding: 12px 14px 10px; border-bottom: 1px solid var(--line-soft); }
+#plan .monitor .lensbox { height: 196px; }
+#plan .side .insp { border-left: 0; }
+#plan .tl { grid-column: 1; }
+.planbar { position: absolute; left: 12px; top: 12px; display: flex; gap: 6px; flex-wrap: wrap; z-index: 2; }
+.planbar .tool { border: 1px solid var(--line); background: rgba(35,35,35,.92); border-radius: 8px; padding: 6px 10px; font-size: 13px; display: inline-flex; gap: 7px; align-items: center; }
+.planbar .tool:hover { border-color: var(--muted); }
+.planbar .tool svg { opacity: .8; }
+.planhint { position: absolute; left: 12px; bottom: 10px; font-size: 12px; color: var(--faint); pointer-events: none; }
+.planfit { position: absolute; right: 12px; top: 12px; z-index: 2; }
+.monhead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.monhead b { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+/* ---------- C: words first ---------- */
+#words { grid-template-columns: minmax(0,1fr) minmax(0, 440px); }
+.wcol { overflow-y: auto; padding: 22px 28px 28px; min-width: 0; }
+.wside { border-left: 1px solid var(--line); overflow-y: auto; padding: 14px 18px 20px; display: grid; gap: 14px; align-content: start; min-width: 0; }
+.wside .lensbox { height: 232px; }
+.wlabel { color: var(--faint); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; margin: 22px 0 10px; }
+.wlabel:first-child { margin-top: 0; }
+.prose { font-size: 21px; line-height: 1.9; letter-spacing: -.005em; max-width: 760px; }
+.prose select { appearance: none; -webkit-appearance: none; border: 0; border-bottom: 1.5px dashed var(--faint); background: transparent; color: var(--ink); font-size: inherit; padding: 0 2px; border-radius: 0; cursor: pointer; }
+.prose select:hover { border-bottom-color: var(--accent); color: #fff; }
+.prose select option { background: var(--panel); color: var(--ink); font-size: 14px; }
+.prose .who { color: var(--accent); font-weight: 500; }
+.wrow { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.wrow .x { border: 0; background: transparent; color: var(--faint); font-size: 14px; opacity: 0; }
+.wrow:hover .x, .wrow .x:focus-visible { opacity: 1; }
+.wadd { font-size: 15px !important; color: var(--muted) !important; border-bottom-style: dotted !important; margin-top: 6px; }
+.written { border-left: 3px solid var(--accent); padding: 8px 0 8px 14px; color: var(--ink); font-size: 15px; line-height: 1.55; display: flex; gap: 12px; align-items: flex-start; max-width: 760px; }
+.written q { quotes: none; flex: 1; min-width: 0; }
+.banner { background: rgba(240,166,60,.1); border: 1px solid rgba(240,166,60,.35); color: var(--ink); border-radius: 8px; padding: 8px 12px; font-size: 13px; margin-bottom: 14px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; max-width: 760px; }
+.fg { display: grid; gap: 6px; }
+.fg-cols { display: grid; grid-template-columns: 82px repeat(3, minmax(0,1fr)); gap: 6px; font-size: 11.5px; color: var(--faint); text-align: center; }
+.fg-row { display: grid; grid-template-columns: 82px 1fr; gap: 6px; align-items: stretch; }
+.fg-row > span { font-size: 11.5px; color: var(--faint); align-self: center; }
+.fg-cells { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 6px; justify-self: center; }
+.fg-cell { min-height: 46px; border: 1px dashed var(--line); border-radius: 7px; display: flex; flex-wrap: wrap; gap: 4px; align-content: center; justify-content: center; padding: 4px; background: var(--sunk); }
+.fg-cell.hot { border-color: var(--accent); background: rgba(240,166,60,.08); }
+.fg-chip { touch-action: none; cursor: grab; user-select: none; font-size: 12px; padding: 2px 8px 2px 5px; }
+.dragghost { position: fixed; z-index: 50; pointer-events: none; opacity: .9; }
+.wlinks { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* ---------- toast ---------- */
+.toast { position: fixed; left: 50%; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); background: #111; border: 1px solid var(--line); color: var(--ink); padding: 9px 14px; border-radius: 9px; font-size: 13px; opacity: 0; transition: .2s; z-index: 60; pointer-events: none; max-width: calc(100% - 32px); }
+.toast.on { opacity: 1; transform: translateX(-50%); }
+
+/* ---------- notes ---------- */
+.notes { max-width: 1060px; margin: 44px auto 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 34px; }
+.notes h2 { font-size: 22px; letter-spacing: -.015em; margin: 0 0 10px; text-wrap: balance; }
+.notes p, .notes li { color: #cfcbc4; max-width: 68ch; }
+.notes ol { padding-left: 20px; display: grid; gap: 8px; margin: 0; }
+.notes li b { color: var(--ink); }
+.shared { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.shared div { background: var(--panel); border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; font-size: 13.5px; color: #cfcbc4; }
+.shared b { display: block; color: var(--ink); margin-bottom: 4px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 13.5px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line-soft); }
+th { color: var(--muted); font-weight: 600; background: var(--panel); }
+td:first-child { color: var(--muted); width: 140px; }
+tr:last-child td { border-bottom: 0; }
+.rec { border: 1px solid rgba(240,166,60,.4); background: rgba(240,166,60,.06); border-radius: var(--r); padding: 16px 18px; }
+.rec h2 { margin-bottom: 6px; }
+
+@media (max-width: 1000px) {
+  .win { height: auto; }
+  .proto.on { display: flex; flex-direction: column; }
+  #viewfinder .stagecol { height: 62vw; min-height: 300px; }
+  .insp, #plan .side, .wside { border-left: 0; border-top: 1px solid var(--line); }
+  #plan .floor { height: 70vw; min-height: 320px; }
+  .inset { width: 150px; height: 112px; }
+  .plan-line { display: none; }
+  .prose { font-size: 18px; }
+  .wcol { padding: 18px 16px; }
+}
+@media (prefers-reduced-motion: reduce) { .inset, .toast { transition: none; } }
+</style>
+
+<div class="page">
+  <div class="win" id="win">
+    <div class="bar">
+      <span class="title">Blockout</span>
+      <span class="len" id="len">4.0 s, 2 marks</span>
+      <button class="iconbtn" id="undo" title="Undo (Ctrl+Z)" aria-label="Undo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></button>
+      <button class="iconbtn" id="redo" title="Redo (Ctrl+Shift+Z)" aria-label="Redo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m15 14 5-5-5-5"/><path d="M20 9H9a5 5 0 0 0 0 10h3"/></svg></button>
+      <div class="tabs" role="tablist" aria-label="Three benches">
+        <button class="tab" role="tab" data-tab="viewfinder"><b>A</b>Viewfinder</button>
+        <button class="tab" role="tab" data-tab="plan"><b>B</b>Floor plan</button>
+        <button class="tab" role="tab" data-tab="words"><b>C</b>Words first</button>
+      </div>
+      <span class="gap"></span>
+      <span class="plan-line" id="planline"></span>
+      <button class="cta" id="render">Render the guide</button>
+    </div>
+    <div class="idea" id="idea"></div>
+
+    <!-- A ---------------------------------------------------------------- -->
+    <section class="proto" id="viewfinder" role="tabpanel">
+      <div class="stagecol">
+        <div class="lensbox" id="a-lens">
+          <div class="float addrow" style="left:10px;top:10px" id="a-add"></div>
+          <div class="float" style="right:10px;top:10px"><div class="seg look"></div></div>
+          <div class="inset" id="a-inset"><span class="tag">From above</span><button class="grow" id="a-grow">Bigger</button></div>
+        </div>
+        <div class="caption"><q id="a-say"></q><button class="copy" data-copy>Copy</button></div>
+      </div>
+      <div class="tl" id="a-tl"></div>
+      <aside class="insp" id="a-insp"></aside>
+    </section>
+
+    <!-- B ---------------------------------------------------------------- -->
+    <section class="proto" id="plan" role="tabpanel">
+      <div class="floor" id="b-floor">
+        <div class="planbar" id="b-tools"></div>
+        <button class="ghost planfit" id="b-fit">Fit</button>
+        <div class="planhint">Drag a piece to place it, its dot to turn it. Drag a camera's blue dot to aim it. Scroll to zoom, drag the floor to pan.</div>
+      </div>
+      <div class="tl" id="b-tl"></div>
+      <div class="side">
+        <div class="monitor">
+          <div class="monhead"><b>Through the lens</b><div class="seg look"></div></div>
+          <div class="lensbox" id="b-lens"></div>
+          <div class="caption"><q id="b-say" style="font-size:13px"></q><button class="copy" data-copy>Copy</button></div>
+        </div>
+        <aside class="insp" id="b-insp"></aside>
+      </div>
+    </section>
+
+    <!-- C ---------------------------------------------------------------- -->
+    <section class="proto" id="words" role="tabpanel">
+      <div class="wcol" id="c-col"></div>
+      <div class="wside">
+        <div>
+          <div class="monhead"><b>The shot, playing</b><div class="seg look"></div></div>
+          <div class="lensbox" id="c-lens"></div>
+        </div>
+        <div>
+          <div class="monhead"><b>Where in frame</b><span class="small">drag a name</span></div>
+          <div class="fg" id="c-grid"></div>
+        </div>
+        <div class="wlinks">
+          <button class="ghost" data-go="viewfinder">Fine-tune in the viewfinder</button>
+          <button class="ghost" data-go="plan">Open the floor plan</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="notes">
+    <section>
+      <h2>Why the bench needs a redo</h2>
+      <ol>
+        <li><b>Everything lives in one scrolling rail.</b> Set, presets, snap, camera, lens, frame, path, output and the file path are nine stops in one column, and most hints are cut off mid-sentence.</li>
+        <li><b>There are two cameras to manage.</b> Free look, Through the lens, Put the camera here, Go to the camera: you work a camera to look at the camera.</li>
+        <li><b>Blocking is done with 3D handles.</b> Moving a box on the floor through a perspective view is the fiddliest way to do the one thing a director sketches flat on paper.</li>
+        <li><b>The move is invisible.</b> Marks are text rows (Mark 1, 0:00.0) and the scrub bar is empty. You cannot see the frames you marked.</li>
+        <li><b>The output is chosen twice.</b> The pass list sits at the bottom of the rail and a Stage/Depth switch sits on the glass.</li>
+        <li><b>The best output is the smallest thing on screen.</b> The staging sentence, the part you paste into the prompt, is a grey italic line at the foot.</li>
+      </ol>
+    </section>
+    <section>
+      <h2>What all three take from the reel</h2>
+      <div class="shared">
+        <div><b>One surface</b>No rail of stops. The work is in the middle and one inspector shows whatever is selected, or the shot when nothing is.</div>
+        <div><b>The move at its real length</b>The marks sit on a ruler to scale, the shot's end is dragged to change its length, and A shows each mark's frame.</div>
+        <div><b>Undo and one button</b>Ctrl+Z takes back any change. The header says what the render will write, and one button writes it.</div>
+        <div><b>The words up front</b>The staging sentence is the caption under the lens in A and B, and the whole editor in C.</div>
+      </div>
+    </section>
+    <section>
+      <h2>The three side by side</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th></th><th>A · Viewfinder</th><th>B · Floor plan</th><th>C · Words first</th></tr></thead>
+          <tbody>
+            <tr><td>You work in</td><td>The lens itself, with a small plan from above in the corner</td><td>A top-down plan, with the lens as a monitor</td><td>A sentence of choices, with the lens playing the result</td></tr>
+            <tr><td>Moving things</td><td>Drag a piece in the lens; it slides on the floor</td><td>Drag on the plan; a dot turns it, a corner sizes it</td><td>Drag a name into a 3×3 grid of frame thirds and depths</td></tr>
+            <tr><td>The camera move</td><td>Scrub, reframe, and a mark is made there. The marks show as frames</td><td>Cameras drawn on the plan with their path; drag a dot to aim</td><td>Pick a verb: pushes in, arcs left around, cranes up</td></tr>
+            <tr><td>Cameras</td><td>One. The plan replaces free look</td><td>One. The plan replaces free look</td><td>One, and you never handle it</td></tr>
+            <tr><td>Best for</td><td>Framing by eye; people who think in shots</td><td>Blocking actors and the room; precise layouts</td><td>Getting a usable guide in 20 seconds</td></tr>
+            <tr><td>Costs</td><td>Room layout is harder at the lens; the inset is small</td><td>Height and tilt are numbers, not gestures</td><td>Only what the vocabulary can say; hand edits fall back to A or B</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+    <section class="rec">
+      <h2>Recommendation</h2>
+      <p>Build B as the bench, with C's sentence across its top as the way in, and A's frame thumbnails on its ruler. Most people start by saying the shot in C, get a working set and move, then drag things on the plan where the words run out. The lens stays one camera, shown as a monitor. These three tabs already share one scene, so that path is how this page behaves today.</p>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+// ============================================================================
+// The shared scene. All three benches edit this one object.
+// ============================================================================
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const DEG = 180 / Math.PI;
+const CAST = { anna: "#f07da0", ben: "#5cb8f0", mara: "#63c98e" };
+const ASPECTS = { "16:9": [1344, 768], "9:16": [768, 1344], "1:1": [1024, 1024], "4:3": [1152, 864], "21:9": [1536, 640] };
+const PASSES = [
+  { id: "staged", label: "As staged" }, { id: "depth", label: "Depth" },
+  { id: "blocks", label: "Blocks" }, { id: "lines", label: "Lines" },
+];
+const KINDS = {
+  person: { label: "Person", w: 0.5, h: 1.75, d: 0.35 },
+  block: { label: "Block", w: 1, h: 1, d: 1 },
+  wall: { label: "Wall", w: 4, h: 3, d: 0.2 },
+  post: { label: "Post", w: 0.3, h: 3, d: 0.3 },
+};
+const PROPS = {
+  table: { kind: "block", w: 1.4, h: 0.75, d: 0.8 }, chair: { kind: "block", w: 0.5, h: 0.9, d: 0.5 },
+  doorway: { kind: "wall", w: 1.1, h: 2.2, d: 0.15 }, car: { kind: "block", w: 1.8, h: 1.4, d: 4.2 },
+  pillar: { kind: "post", w: 0.5, h: 3.2, d: 0.5 },
+};
+const DEFAULT_CAM = { x: 0, y: 1.55, z: -1.5, yaw: 0, pitch: -0.05, mm: 35 };
+
+const S = {
+  pieces: [], marks: [], duration: 4, aspect: "16:9", pass: "depth", look: "stage",
+  sel: null, t: 0, playing: false, tab: "viewfinder", snap: 0.25, handEdited: false,
+  words: {
+    place: "room",
+    who: [
+      { ref: "anna", col: 0, row: 1, facing: "each" },
+      { ref: "table", col: 1, row: 1 },
+      { ref: "ben", col: 2, row: 1, facing: "each" },
+    ],
+    move: "push", target: "anna", speed: "slow", lens: 35, height: "eye",
+  },
+};
+let nextId = 1;
+function makePiece(kind, over = {}) {
+  const k = KINDS[kind];
+  return { id: nextId++, kind, x: 0, z: 0, y: 0, w: k.w, h: k.h, d: k.d, r: 0, plays: null, word: "", ...over };
+}
+const pieceById = (id) => S.pieces.find((p) => p.id === id);
+const sortMarks = () => S.marks.sort((a, b) => a.t - b.t);
+const angDiff = (a, b) => { let d = a - b; while (d > Math.PI) d -= 2 * Math.PI; while (d < -Math.PI) d += 2 * Math.PI; return d; };
+const fmt = (s) => s.toFixed(1) + " s";
+const frameRatio = () => { const [w, h] = ASPECTS[S.aspect]; return w / h; };
+
+function lerpCam(a, b, u) {
+  return { x: lerp(a.x, b.x, u), y: lerp(a.y, b.y, u), z: lerp(a.z, b.z, u),
+    yaw: a.yaw + angDiff(b.yaw, a.yaw) * u, pitch: lerp(a.pitch, b.pitch, u), mm: lerp(a.mm, b.mm, u) };
+}
+function camAt(t) {
+  const m = S.marks;
+  if (!m.length) return { ...DEFAULT_CAM };
+  if (m.length === 1 || t <= m[0].t) return { ...m[0] };
+  if (t >= m[m.length - 1].t) return { ...m[m.length - 1] };
+  let i = 0; while (m[i + 1].t < t) i++;
+  const a = m[i], b = m[i + 1];
+  let u = (t - a.t) / Math.max(1e-6, b.t - a.t); u = u * u * (3 - 2 * u);
+  return lerpCam(a, b, u);
+}
+function aimAt(cam, p) {
+  const dx = p.x - cam.x, dz = p.z - cam.z, dy = p.y - cam.y;
+  cam.yaw = Math.atan2(dx, dz); cam.pitch = Math.atan2(dy, Math.hypot(dx, dz));
+  return cam;
+}
+function markNear(t) { return S.marks.findIndex((m) => Math.abs(m.t - t) < 0.06); }
+
+// ============================================================================
+// Projection and the software renderer (the bench's own approach: arithmetic,
+// no WebGL). Depth, Blocks and Lines are read off the same z and id buffers.
+// ============================================================================
+function viewOf(cam) {
+  const cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw), cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  return (x, y, z) => {
+    const px = x - cam.x, py = y - cam.y, pz = z - cam.z;
+    const x1 = cy * px - sy * pz, z1 = sy * px + cy * pz;
+    return [x1, cp * py - sp * z1, sp * py + cp * z1];
+  };
+}
+const focal = (cam, W, H) => cam.mm / 36 * Math.max(W, H);
+function project(cam, p, W, H) {
+  const v = viewOf(cam)(p.x, p.y, p.z);
+  if (v[2] < 0.05) return null;
+  const f = focal(cam, W, H);
+  return { x: W / 2 + f * v[0] / v[2], y: H / 2 - f * v[1] / v[2], z: v[2] };
+}
+function rayFloor(cam, sx, sy, W, H, planeY = 0) {
+  const f = focal(cam, W, H);
+  const dx = (sx - W / 2) / f, dy = -(sy - H / 2) / f, dz = 1;
+  const cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch), cy = Math.cos(cam.yaw), syw = Math.sin(cam.yaw);
+  const y1 = cp * dy + sp * dz, z1 = -sp * dy + cp * dz;
+  const wx = cy * dx + syw * z1, wz = -syw * dx + cy * z1;
+  if (y1 > -1e-4) return null;
+  const k = (planeY - cam.y) / y1;
+  if (k < 0 || k > 80) return null;
+  return { x: cam.x + wx * k, z: cam.z + wz * k };
+}
+function boxesOf(p) {
+  if (p.kind === "person") {
+    const s = p.w / 0.5, f = [Math.sin(p.r), Math.cos(p.r)];
+    return [
+      { x: p.x, z: p.z, y0: 0, w: 0.46 * s, h: p.h * 0.8, d: 0.28, r: p.r },
+      { x: p.x, z: p.z, y0: p.h * 0.82, w: 0.22, h: p.h * 0.17, d: 0.24, r: p.r },
+      { x: p.x + f[0] * 0.13, z: p.z + f[1] * 0.13, y0: p.h * 0.88, w: 0.07, h: 0.05, d: 0.08, r: p.r },
+    ];
+  }
+  return [{ x: p.x, z: p.z, y0: p.y || 0, w: p.w, h: p.h, d: p.d, r: p.r }];
+}
+function cornersOf(b) {
+  const out = [], c = Math.cos(b.r), s = Math.sin(b.r);
+  for (let i = 0; i < 8; i++) {
+    const lx = (i & 1 ? 0.5 : -0.5) * b.w, ly = b.y0 + (i & 2 ? b.h : 0), lz = (i & 4 ? 0.5 : -0.5) * b.d;
+    out.push({ x: b.x + c * lx + s * lz, y: ly, z: b.z - s * lx + c * lz });
+  }
+  return out;
+}
+const FACES = [[[0, 4, 6, 2], [-1, 0, 0]], [[1, 3, 7, 5], [1, 0, 0]], [[0, 1, 5, 4], [0, -1, 0]],
+  [[2, 6, 7, 3], [0, 1, 0]], [[0, 2, 3, 1], [0, 0, -1]], [[4, 5, 7, 6], [0, 0, 1]]];
+const LIGHT = (() => { const v = [0.45, 0.8, -0.35], n = Math.hypot(...v); return v.map((x) => x / n); })();
+const BLOCK_COLORS = [[224, 96, 86], [92, 184, 240], [99, 201, 142], [157, 149, 245], [240, 125, 160], [240, 166, 60], [96, 210, 200], [200, 196, 96]];
+const DNEAR = 1.0, DFAR = 24, NEAR = 0.06;
+const hexRGB = (h) => [parseInt(h.slice(1, 3), 16), parseInt(h.slice(3, 5), 16), parseInt(h.slice(5, 7), 16)];
+const bufs = new Map();
+function getBuf(W, H) {
+  const k = W + "x" + H; let b = bufs.get(k);
+  if (!b) { b = { W, H, img: new ImageData(W, H), z: new Float32Array(W * H), id: new Uint8Array(W * H) }; bufs.set(k, b);
+    if (bufs.size > 30) bufs.delete(bufs.keys().next().value); }
+  return b;
+}
+function clipNear(poly) {
+  const out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], ain = a.z >= NEAR, bin = b.z >= NEAR;
+    if (ain) out.push(a);
+    if (ain !== bin) {
+      const t = (NEAR - a.z) / (b.z - a.z);
+      out.push({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), z: NEAR, wx: lerp(a.wx, b.wx, t), wz: lerp(a.wz, b.wz, t) });
+    }
+  }
+  return out;
+}
+function renderScene(cam, W, H, mode, pieces = S.pieces) {
+  const b = getBuf(W, H), px = b.img.data, zb = b.z, ib = b.id;
+  zb.fill(0); ib.fill(255);
+  const colour = mode === "stage" || mode === "staged";
+  const SKY0 = mode === "stage" ? [29, 30, 33] : [52, 52, 55], SKY1 = mode === "stage" ? [44, 45, 49] : [80, 79, 77];
+  if (colour) for (let y = 0; y < H; y++) {
+    const t = y / H, r = lerp(SKY0[0], SKY1[0], t), g = lerp(SKY0[1], SKY1[1], t), bl = lerp(SKY0[2], SKY1[2], t);
+    for (let x = 0, i = y * W * 4; x < W; x++, i += 4) { px[i] = r; px[i + 1] = g; px[i + 2] = bl; px[i + 3] = 255; }
+  }
+  const V = viewOf(cam), f = focal(cam, W, H), fog = SKY1;
+  const drawPoly = (world, id, col, floor) => {
+    let poly = world.map((p) => { const v = V(p.x, p.y, p.z); return { x: v[0], y: v[1], z: v[2], wx: p.x, wz: p.z }; });
+    poly = clipNear(poly);
+    if (poly.length < 3) return;
+    const sp = poly.map((v) => { const iz = 1 / v.z; return { sx: W / 2 + f * v.x * iz, sy: H / 2 - f * v.y * iz, iz, ax: v.wx * iz, az: v.wz * iz }; });
+    for (let i = 1; i < sp.length - 1; i++) tri(sp[0], sp[i], sp[i + 1], id, col, floor);
+  };
+  const tri = (a, c, d, id, col, floor) => {
+    const minX = Math.max(0, Math.floor(Math.min(a.sx, c.sx, d.sx))), maxX = Math.min(W - 1, Math.ceil(Math.max(a.sx, c.sx, d.sx)));
+    const minY = Math.max(0, Math.floor(Math.min(a.sy, c.sy, d.sy))), maxY = Math.min(H - 1, Math.ceil(Math.max(a.sy, c.sy, d.sy)));
+    if (minX > maxX || minY > maxY) return;
+    const area = (c.sx - a.sx) * (d.sy - a.sy) - (c.sy - a.sy) * (d.sx - a.sx);
+    if (Math.abs(area) < 1e-9) return;
+    const inv = 1 / area;
+    const coef = (p, q) => [-(q.sy - p.sy) * inv, (q.sx - p.sx) * inv, (-(q.sx - p.sx) * p.sy + (q.sy - p.sy) * p.sx) * inv];
+    const [A0, B0, C0] = coef(c, d), [A1, B1, C1] = coef(d, a), [A2, B2, C2] = coef(a, c);
+    for (let y = minY; y <= maxY; y++) {
+      const py = y + 0.5;
+      for (let x = minX; x <= maxX; x++) {
+        const pxx = x + 0.5;
+        const w0 = A0 * pxx + B0 * py + C0; if (w0 < -1e-7) continue;
+        const w1 = A1 * pxx + B1 * py + C1; if (w1 < -1e-7) continue;
+        const w2 = A2 * pxx + B2 * py + C2; if (w2 < -1e-7) continue;
+        const iz = w0 * a.iz + w1 * c.iz + w2 * d.iz, idx = y * W + x;
+        if (iz <= zb[idx]) continue;
+        zb[idx] = iz; ib[idx] = id;
+        if (!colour) continue;
+        const dist = 1 / iz; let r, g, bl;
+        if (floor) {
+          const wx = (w0 * a.ax + w1 * c.ax + w2 * d.ax) * dist, wz = (w0 * a.az + w1 * c.az + w2 * d.az) * dist;
+          if (mode === "stage") {
+            r = 50; g = 52; bl = 56;
+            const lw = Math.min(0.14, 0.006 + 0.0032 * dist);
+            const rx = Math.round(wx), rz = Math.round(wz), fx = Math.abs(wx - rx), fz = Math.abs(wz - rz);
+            if (fx < lw || fz < lw) {
+              const major = (fx < lw && rx % 5 === 0) || (fz < lw && rz % 5 === 0);
+              r = g = bl = major ? 84 : 66; bl += 4;
+            }
+            if (Math.abs(wz) < lw * 1.4) { r = 150; g = 72; bl = 66; }
+            if (Math.abs(wx) < lw * 1.4) { r = 72; g = 112; bl = 172; }
+          } else { r = 82; g = 80; bl = 76; }
+          const k = clamp((dist - 6) / 28, 0, 0.88);
+          r = lerp(r, fog[0], k); g = lerp(g, fog[1], k); bl = lerp(bl, fog[2], k);
+        } else {
+          const k = clamp((dist - 14) / 30, 0, 0.7);
+          r = lerp(col[0], fog[0], k); g = lerp(col[1], fog[1], k); bl = lerp(col[2], fog[2], k);
+        }
+        const o = idx * 4; px[o] = r; px[o + 1] = g; px[o + 2] = bl; px[o + 3] = 255;
+      }
+    }
+  };
+  const FL = 40;
+  drawPoly([{ x: -FL, y: 0, z: -FL }, { x: FL, y: 0, z: -FL }, { x: FL, y: 0, z: FL }, { x: -FL, y: 0, z: FL }], 254, null, true);
+  for (const p of pieces) {
+    const tint = p.plays ? hexRGB(CAST[p.plays] || "#999999") : null;
+    const base = p.kind === "wall" ? [150, 146, 138] : [166, 161, 151];
+    const clay = tint ? base.map((v, i) => lerp(v, tint[i], mode === "stage" ? 0.55 : 0)) : base;
+    for (const bx of boxesOf(p)) {
+      const cs = cornersOf(bx), c = Math.cos(bx.r), s = Math.sin(bx.r);
+      for (const [idx, n] of FACES) {
+        const nw = [c * n[0] + s * n[2], n[1], -s * n[0] + c * n[2]];
+        const ctr = idx.reduce((acc, i) => ({ x: acc.x + cs[i].x / 4, y: acc.y + cs[i].y / 4, z: acc.z + cs[i].z / 4 }), { x: 0, y: 0, z: 0 });
+        if ((ctr.x - cam.x) * nw[0] + (ctr.y - cam.y) * nw[1] + (ctr.z - cam.z) * nw[2] >= 0) continue;
+        const k = 0.56 + 0.44 * Math.max(0, nw[0] * LIGHT[0] + nw[1] * LIGHT[1] + nw[2] * LIGHT[2]);
+        drawPoly(idx.map((i) => cs[i]), p.id, clay.map((v) => v * k), false);
+      }
+    }
+  }
+  if (mode === "depth") {
+    for (let i = 0, o = 0; i < zb.length; i++, o += 4) {
+      const iz = zb[i]; let v = 0;
+      if (iz > 0) v = Math.pow(clamp((DFAR - 1 / iz) / (DFAR - DNEAR), 0, 1), 1.5) * 255;
+      px[o] = px[o + 1] = px[o + 2] = v; px[o + 3] = 255;
+    }
+  } else if (mode === "blocks") {
+    for (let i = 0, o = 0; i < ib.length; i++, o += 4) {
+      const id = ib[i], c = id === 255 ? [0, 0, 0] : id === 254 ? [44, 44, 44] : BLOCK_COLORS[(id - 1) % BLOCK_COLORS.length];
+      px[o] = c[0]; px[o + 1] = c[1]; px[o + 2] = c[2]; px[o + 3] = 255;
+    }
+  } else if (mode === "lines") {
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const i = y * W + x, o = i * 4; let e = false;
+      for (const j of [x + 1 < W ? i + 1 : -1, y + 1 < H ? i + W : -1]) {
+        if (j < 0) continue;
+        if (ib[j] !== ib[i] && !(ib[i] >= 254 && ib[j] >= 254)) e = true;
+        else if (zb[i] > 0 && zb[j] > 0 && Math.abs(zb[i] - zb[j]) / zb[i] > 0.06 && ib[i] !== 254) e = true;
+      }
+      const v = e ? 235 : 0; px[o] = px[o + 1] = px[o + 2] = v; px[o + 3] = 255;
+    }
+  }
+  return b;
+}
+
+// ============================================================================
+// The sentence. Who stands where, from the projection; the move, from the marks.
+// ============================================================================
+const articled = (w) => /^(a|an|the)\s/i.test(w) ? w : (/^[aeiou]/i.test(w) ? "an " : "a ") + w;
+const nameOf = (p) => p.plays ? "@" + p.plays : p.word ? articled(p.word) : null;
+function placeOf(p, cam) {
+  const W = 1000, H = 1000 / frameRatio();
+  const pr = project(cam, { x: p.x, y: p.h * 0.6, z: p.z }, W, H);
+  if (!pr || pr.x < -0.04 * W || pr.x > 1.04 * W || pr.y < -0.1 * H || pr.y > 1.1 * H) return null;
+  const xn = pr.x / W;
+  return { col: xn < 0.36 ? "at frame left" : xn > 0.64 ? "at frame right" : "at centre",
+    band: pr.z < 2.8 ? "in the foreground" : pr.z < 6.5 ? "in the midground" : "in the background", xn, z: pr.z };
+}
+function targetOf(cam) {
+  let best = null, score = Infinity;
+  for (const p of S.pieces) {
+    if (!nameOf(p)) continue;
+    const pl = placeOf(p, cam); if (!pl) continue;
+    const s = Math.abs(pl.xn - 0.5) + pl.z * 0.04 - (p.plays ? 0.3 : 0);
+    if (s < score) { score = s; best = p; }
+  }
+  return best;
+}
+function moveSentence() {
+  const m = S.marks;
+  if (m.length < 2) return "A still frame.";
+  const a = m[0], b = m[m.length - 1];
+  const fx = Math.sin(a.yaw), fz = Math.cos(a.yaw), dx = b.x - a.x, dz = b.z - a.z;
+  const fwd = dx * fx + dz * fz, lat = dx * fz - dz * fx, up = b.y - a.y;
+  const yaw = angDiff(b.yaw, a.yaw), pit = b.pitch - a.pitch, zoom = b.mm - a.mm;
+  let c = [[Math.abs(fwd) / 0.6, fwd > 0 ? "pushes in" : "pulls back", "f"], [Math.abs(lat) / 0.6, lat > 0 ? "trucks right" : "trucks left", "l"],
+    [Math.abs(up) / 0.5, up > 0 ? "cranes up" : "cranes down", "u"], [Math.abs(yaw) / 0.2, yaw > 0 ? "pans right" : "pans left", "y"],
+    [Math.abs(pit) / 0.15, pit > 0 ? "tilts up" : "tilts down", "p"], [Math.abs(zoom) / 8, zoom > 0 ? "zooms in" : "zooms out", "z"]];
+  const tgt = targetOf(b), tname = tgt ? nameOf(tgt) : null;
+  if (Math.abs(lat) > 0.6 && Math.abs(yaw) > 0.2 && Math.sign(lat) !== Math.sign(yaw)) {
+    c = c.filter((x) => x[2] !== "l" && x[2] !== "y");
+    c.push([Math.abs(lat) / 0.6 + Math.abs(yaw) / 0.2, (lat > 0 ? "arcs right" : "arcs left") + (tname ? " around " + tname : ""), "a"]);
+  }
+  c.sort((p, q) => q[0] - p[0]);
+  if (!c.length || c[0][0] < 1) return "The camera holds.";
+  const verbs = [c[0]];
+  if (c[1] && c[1][0] >= Math.max(1, 0.6 * c[0][0])) verbs.push(c[1]);
+  const rate = c[0][0] / S.duration;
+  const speed = rate < 0.6 ? "slow" : rate < 1.4 ? "medium" : "fast";
+  const toward = verbs[0][2] === "f" && fwd > 0 && tname ? " toward " + tname : "";
+  return `The camera ${verbs.map((v) => v[1]).join(" and ")}${toward} at ${speed} speed.`;
+}
+function stagingSentence() {
+  const cam = S.marks[0] || DEFAULT_CAM, parts = [];
+  for (const p of S.pieces) {
+    const name = nameOf(p); if (!name) continue;
+    const pl = placeOf(p, cam); if (!pl) continue;
+    parts.push(p.plays ? `${name} stands ${pl.col} ${pl.band}` : `${name} ${pl.col} ${pl.band}`);
+  }
+  let s = parts.join("; ");
+  if (s) s = s[0].toUpperCase() + s.slice(1) + ". ";
+  return s + moveSentence();
+}
+function sayHTML() {
+  const esc = (t) => t.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+  return esc(stagingSentence()).replace(/@\w+/g, (m) => `<span class="who">${m}</span>`);
+}
+
+// ============================================================================
+// C's vocabulary: words in, set and marks out.
+// ============================================================================
+const PLACES = { bare: "on a bare floor", room: "in an empty room", corridor: "in a corridor", street: "on a street corner", diner: "in a diner" };
+const MOVES = { hold: "holds still", push: "pushes in", pull: "pulls back", panl: "pans left", panr: "pans right",
+  truckl: "trucks left", truckr: "trucks right", arcl: "arcs left", arcr: "arcs right", craneup: "cranes up", cranedown: "cranes down", zoom: "zooms in" };
+const PREP = { hold: "on", push: "toward", pull: "from", panl: "to", panr: "to", truckl: "past", truckr: "past", arcl: "around", arcr: "around", craneup: "over", cranedown: "down to", zoom: "on" };
+const SPEEDS = { slow: "slowly", medium: "steadily", fast: "quickly" };
+const HEIGHTS = { eye: "at eye height", low: "low, looking up", high: "high, looking down" };
+const COLS = ["at frame left", "at centre", "at frame right"], ROWS = ["in the foreground", "in the midground", "in the background"];
+const FACING = { camera: "facing the camera", each: "facing each other", away: "facing away", left: "facing frame left", right: "facing frame right" };
+const isCast = (ref) => ref in CAST;
+
+function sceneFromWords() {
+  const W = S.words; nextId = 1;
+  const pieces = [];
+  const camY = W.height === "low" ? 0.6 : W.height === "high" ? 2.9 : 1.55;
+  const base = { x: 0, y: camY, z: -1.5, yaw: 0, pitch: 0, mm: W.lens };
+  const dists = [2.4, 4.6, 8.2], half = (d) => d * 18 * (frameRatio() >= 1 ? 1 : frameRatio()) / W.lens;
+  const cells = {};
+  W.who.forEach((w) => { const k = w.col + "," + w.row; (cells[k] = cells[k] || []).push(w); });
+  for (const w of W.who) {
+    const list = cells[w.col + "," + w.row], i = list.indexOf(w), n = list.length;
+    const d = dists[w.row], xn = [-0.6, 0, 0.6][w.col];
+    const x = xn * half(d) + (i - (n - 1) / 2) * 0.75, z = base.z + d;
+    if (isCast(w.ref)) pieces.push(makePiece("person", { x, z, plays: w.ref, r: Math.PI, _facing: w.facing }));
+    else { const pr = PROPS[w.ref]; pieces.push(makePiece(pr.kind, { x, z, w: pr.w, h: pr.h, d: pr.d, word: w.ref })); }
+  }
+  const people = pieces.filter((p) => p.kind === "person");
+  for (const p of people) {
+    const others = people.filter((o) => o !== p);
+    const f = p._facing;
+    if (f === "each" && others.length) { const cx = others.reduce((s, o) => s + o.x, 0) / others.length, cz = others.reduce((s, o) => s + o.z, 0) / others.length; p.r = Math.atan2(cx - p.x, cz - p.z); }
+    else if (f === "away") p.r = 0; else if (f === "left") p.r = -Math.PI / 2; else if (f === "right") p.r = Math.PI / 2; else p.r = Math.PI;
+    delete p._facing;
+  }
+  const add = (kind, o) => pieces.push(makePiece(kind, o));
+  if (W.place === "room") { add("wall", { x: 0, z: 9.5, w: 14, h: 3.4 }); add("wall", { x: -5.6, z: 4, w: 11.2, h: 3.4, r: Math.PI / 2 }); add("wall", { x: 5.6, z: 4, w: 11.2, h: 3.4, r: Math.PI / 2 }); }
+  if (W.place === "corridor") { add("wall", { x: -2.4, z: 7, w: 18, h: 3, r: Math.PI / 2 }); add("wall", { x: 2.4, z: 7, w: 18, h: 3, r: Math.PI / 2 }); add("wall", { x: 0, z: 15.5, w: 5, h: 3 }); [3, 7, 11].forEach((z, i) => add("post", { x: i % 2 ? 2.1 : -2.1, z, h: 3 })); }
+  if (W.place === "street") { add("block", { x: -6.5, z: 9, w: 7, h: 7.5, d: 6 }); add("block", { x: 5.5, z: 12, w: 6, h: 9, d: 7 }); add("post", { x: 2.6, z: 4.5, w: 0.15, h: 4.2, d: 0.15, word: "lamp post" }); }
+  if (W.place === "diner") { add("wall", { x: 0, z: 8.6, w: 13, h: 3.2 }); add("block", { x: 0, z: 7.4, w: 6, h: 1.05, d: 0.7, word: "counter" }); add("wall", { x: -5.6, z: 3.5, w: 10.2, h: 3.2, r: Math.PI / 2 }); }
+
+  const tgtP = pieces.find((p) => (p.plays || p.word) === W.target) || people[0] || pieces[0];
+  const look = tgtP ? { x: tgtP.x, y: tgtP.kind === "person" ? tgtP.h * 0.82 : tgtP.h * 0.7, z: tgtP.z } : { x: 0, y: 1.2, z: 3 };
+  const centre = { x: 0, y: 1.25, z: base.z + 4.6 };
+  aimAt(base, W.move === "hold" || W.move === "push" || W.move === "zoom" || W.move.startsWith("arc") || W.move.startsWith("crane") ? lerpPt(centre, look, 0.35) : centre);
+  const k = { slow: 0.5, medium: 1, fast: 1.7 }[W.speed];
+  const b = { ...base };
+  const toT = Math.hypot(look.x - base.x, look.z - base.z);
+  switch (W.move) {
+    case "push": { const step = Math.min(toT - 1.1, 2.1 * k); const ux = (look.x - base.x) / toT, uz = (look.z - base.z) / toT; b.x += ux * step; b.z += uz * step; aimAt(b, look); break; }
+    case "pull": b.x -= Math.sin(b.yaw) * 2 * k; b.z -= Math.cos(b.yaw) * 2 * k; break;
+    case "panl": b.yaw -= 0.42 * k; break;
+    case "panr": b.yaw += 0.42 * k; break;
+    case "truckl": b.x -= Math.cos(b.yaw) * 1.7 * k; b.z += Math.sin(b.yaw) * 1.7 * k; break;
+    case "truckr": b.x += Math.cos(b.yaw) * 1.7 * k; b.z -= Math.sin(b.yaw) * 1.7 * k; break;
+    case "arcl": case "arcr": { const ang = (W.move === "arcl" ? 1 : -1) * 0.65 * k; const rx = base.x - look.x, rz = base.z - look.z; b.x = look.x + rx * Math.cos(ang) - rz * Math.sin(ang); b.z = look.z + rx * Math.sin(ang) + rz * Math.cos(ang); aimAt(b, look); break; }
+    case "craneup": b.y += 1.7 * k; aimAt(b, look); break;
+    case "cranedown": b.y = Math.max(0.45, b.y - 1.3 * k); aimAt(b, look); break;
+    case "zoom": b.mm = clamp(b.mm * (1 + 0.8 * k), 18, 85); break;
+  }
+  base.t = 0; b.t = S.duration;
+  S.pieces = pieces;
+  S.marks = W.move === "hold" ? [base] : [base, b];
+  S.sel = null; S.handEdited = false;
+}
+const lerpPt = (a, b, t) => ({ x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t), z: lerp(a.z, b.z, t) });
+
+// ============================================================================
+// Undo, redraw, and the little helpers every bench shares.
+// ============================================================================
+const hist = { past: [], future: [] };
+const snapState = () => JSON.stringify({ pieces: S.pieces, marks: S.marks, duration: S.duration, aspect: S.aspect, pass: S.pass, words: S.words, handEdited: S.handEdited, nextId });
+let lastSnap = null;
+function commit(handEdit = true) {
+  if (handEdit) S.handEdited = true;
+  const now = snapState(); if (now === lastSnap) return refreshAll();
+  if (lastSnap) hist.past.push(lastSnap);
+  if (hist.past.length > 200) hist.past.shift();
+  hist.future = []; lastSnap = now; refreshAll();
+}
+function restore(json) {
+  const o = JSON.parse(json);
+  Object.assign(S, { pieces: o.pieces, marks: o.marks, duration: o.duration, aspect: o.aspect, pass: o.pass, words: o.words, handEdited: o.handEdited });
+  nextId = o.nextId;
+  if (S.sel?.type === "piece" && !pieceById(S.sel.id)) S.sel = null;
+  if (S.sel?.type === "mark" && !S.marks[S.sel.i]) S.sel = null;
+  S.t = clamp(S.t, 0, S.duration);
+  refreshAll();
+}
+function undo() { if (!hist.past.length) return; hist.future.push(lastSnap); lastSnap = hist.past.pop(); restore(lastSnap); toast("Undone"); }
+function redo() { if (!hist.future.length) return; hist.past.push(lastSnap); lastSnap = hist.future.pop(); restore(lastSnap); toast("Redone"); }
+
+function h(tag, attrs = {}, kids = []) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "text") e.textContent = v; else if (k === "html") e.innerHTML = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v); else if (k === "class") e.className = v;
+    else e.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of [].concat(kids)) if (c != null && c !== false) e.append(c);
+  return e;
+}
+let toastTimer;
+function toast(msg) { const t = document.getElementById("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("on"), 2200); }
+const snapV = (v, step = S.snap) => step ? Math.round(v / step) * step : v;
+
+let drawQueued = false, dragging = false;
+function requestDraw() { if (drawQueued) return; drawQueued = true; requestAnimationFrame(frame); }
+let lastT = 0;
+function frame(now) {
+  drawQueued = false;
+  if (S.playing) {
+    const dt = Math.min(0.1, (now - (lastT || now)) / 1000); lastT = now;
+    S.t += dt; if (S.t > S.duration) S.t = 0;
+    requestDraw();
+  } else lastT = 0;
+  for (const v of views) if (v.visible()) v.draw();
+  for (const t of timelines) if (t.visible()) t.update();
+}
+
+// ============================================================================
+// The lens: through the one camera, at the playhead. Used by all three.
+// ============================================================================
+class Lens {
+  constructor(host, opts = {}) {
+    this.host = host; this.opts = opts;
+    this.canvas = h("canvas"); host.prepend(this.canvas);
+    this.ctx = this.canvas.getContext("2d"); this.off = document.createElement("canvas"); this.octx = this.off.getContext("2d");
+    new ResizeObserver(() => { this.fit(); requestDraw(); }).observe(host);
+    this.bind();
+  }
+  visible() { return this.host.offsetParent !== null; }
+  fit() {
+    const r = this.host.getBoundingClientRect(), ar = frameRatio();
+    if (!r.width || !r.height) return;
+    let w = r.width, hh = w / ar; if (hh > r.height) { hh = r.height; w = hh * ar; }
+    this.cssW = Math.max(40, Math.floor(w)); this.cssH = Math.max(30, Math.floor(hh)); this.ar = ar;
+    this.dpr = Math.min(2, devicePixelRatio || 1);
+    Object.assign(this.canvas.style, { width: this.cssW + "px", height: this.cssH + "px" });
+    this.canvas.width = Math.round(this.cssW * this.dpr); this.canvas.height = Math.round(this.cssH * this.dpr);
+  }
+  draw() {
+    if (!this.cssW || Math.abs(this.ar - frameRatio()) > 1e-3) this.fit();
+    if (!this.cssW) return;
+    const cam = camAt(S.t), sc = Math.min(1, (this.opts.maxRes || 720) / this.cssW) * (dragging || S.playing ? 0.7 : 1);
+    const W = Math.max(32, Math.round(this.cssW * sc)), H = Math.max(18, Math.round(this.cssH * sc));
+    const mode = S.look === "stage" ? "stage" : S.pass;
+    this.buf = renderScene(cam, W, H, mode);
+    if (this.off.width !== W || this.off.height !== H) { this.off.width = W; this.off.height = H; }
+    this.octx.putImageData(this.buf.img, 0, 0);
+    const c = this.ctx; c.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+    c.imageSmoothingEnabled = true; c.imageSmoothingQuality = "high";
+    c.drawImage(this.off, 0, 0, this.cssW, this.cssH);
+    if (S.look === "stage") this.overlay(c, cam);
+  }
+  overlay(c, cam) {
+    const W = this.cssW, H = this.cssH;
+    c.strokeStyle = "rgba(255,255,255,.07)"; c.lineWidth = 1; c.beginPath();
+    for (const k of [1, 2]) { c.moveTo(W * k / 3, 0); c.lineTo(W * k / 3, H); c.moveTo(0, H * k / 3); c.lineTo(W, H * k / 3); }
+    c.stroke();
+    const sel = S.sel?.type === "piece" ? pieceById(S.sel.id) : null;
+    if (sel) {
+      const bx = boxesOf(sel)[0], cs = cornersOf(bx), pr = cs.map((p) => project(cam, p, W, H));
+      c.strokeStyle = "#f0a63c"; c.lineWidth = 1.6; c.beginPath();
+      for (const [a, b] of [[0, 1], [1, 3], [3, 2], [2, 0], [4, 5], [5, 7], [7, 6], [6, 4], [0, 4], [1, 5], [2, 6], [3, 7]]) {
+        if (!pr[a] || !pr[b]) continue; c.moveTo(pr[a].x, pr[a].y); c.lineTo(pr[b].x, pr[b].y);
+      }
+      c.stroke();
+    }
+    c.font = "600 12px Inter, system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+    for (const p of S.pieces) {
+      const name = nameOf(p); if (!name) continue;
+      const at = project(cam, { x: p.x, y: p.h + 0.28, z: p.z }, W, H); if (!at || at.z > 30) continue;
+      const tw = c.measureText(name).width + 14;
+      c.fillStyle = "rgba(15,15,15,.72)"; roundRect(c, at.x - tw / 2, at.y - 10, tw, 20, 10); c.fill();
+      c.fillStyle = p.plays ? CAST[p.plays] : "#e6e2dc"; c.fillText(name, at.x, at.y + 0.5);
+    }
+    const ni = markNear(S.t);
+    c.textAlign = "left"; c.font = "500 11px 'JetBrains Mono', monospace";
+    const lab = ni >= 0 ? `Mark ${ni + 1} · ${fmt(S.marks[ni].t)}` : `${fmt(S.t)} · between marks`;
+    c.fillStyle = "rgba(15,15,15,.6)"; const lw = c.measureText(lab).width + 12; roundRect(c, W - lw - 8, H - 26, lw, 18, 5); c.fill();
+    c.fillStyle = ni >= 0 ? "#a9cbf5" : "#bdb8b0"; c.fillText(lab, W - lw - 2, H - 16.5);
+  }
+  local(e) { const r = this.canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; }
+  pick(p) {
+    if (!this.buf) return null;
+    const bx = Math.floor(p.x / this.cssW * this.buf.W), by = Math.floor(p.y / this.cssH * this.buf.H);
+    if (bx < 0 || by < 0 || bx >= this.buf.W || by >= this.buf.H) return null;
+    const id = this.buf.id[by * this.buf.W + bx]; return id >= 254 ? null : id;
+  }
+  bind() {
+    const cv = this.canvas;
+    cv.addEventListener("pointerdown", (e) => {
+      if (this.opts.editable === false) return;
+      cv.setPointerCapture(e.pointerId); S.playing = false;
+      const p = this.local(e), id = S.look === "stage" ? this.pick(p) : null, cam = camAt(S.t);
+      if (id) {
+        S.sel = { type: "piece", id }; renderInspectors();
+        const pc = pieceById(id), hit = rayFloor(cam, p.x, p.y, this.cssW, this.cssH);
+        this.drag = { kind: "piece", pc, hit, x0: pc.x, z0: pc.z, cam };
+      } else {
+        this.drag = { kind: "cam", x: p.x, y: p.y, made: false, shift: e.shiftKey };
+        if (S.sel?.type === "piece") { S.sel = null; renderInspectors(); }
+      }
+      dragging = true; requestDraw();
+    });
+    cv.addEventListener("pointermove", (e) => {
+      const d = this.drag; if (!d) return;
+      const p = this.local(e);
+      if (d.kind === "piece") {
+        const now = rayFloor(d.cam, p.x, p.y, this.cssW, this.cssH); if (!now || !d.hit) return;
+        d.pc.x = snapV(d.x0 + now.x - d.hit.x); d.pc.z = snapV(d.z0 + now.z - d.hit.z);
+      } else {
+        const dx = p.x - d.x, dy = p.y - d.y;
+        if (!d.made && Math.hypot(dx, dy) < 3) return;
+        const m = this.editMark(d); d.x = p.x; d.y = p.y;
+        if (d.shift || e.shiftKey) {
+          const k = 0.01; m.x -= Math.cos(m.yaw) * dx * k; m.z += Math.sin(m.yaw) * dx * k; m.y = clamp(m.y + dy * k, 0.1, 12);
+        } else { const k = 0.0035 * (35 / m.mm) + 0.0012; m.yaw += dx * k; m.pitch = clamp(m.pitch + dy * k, -1.45, 1.45); }
+      }
+      syncInspectors(); requestDraw();
+    });
+    const up = () => { if (!this.drag) return; this.drag = null; dragging = false; commit(); };
+    cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+    cv.addEventListener("wheel", (e) => {
+      if (this.opts.editable === false) return;
+      e.preventDefault(); S.playing = false;
+      const m = this.editMark({});
+      if (e.altKey || e.ctrlKey) m.mm = clamp(m.mm - e.deltaY * 0.03, 18, 85);
+      else { const k = -e.deltaY * 0.004; m.x += Math.sin(m.yaw) * k; m.z += Math.cos(m.yaw) * k; }
+      syncInspectors(); requestDraw(); clearTimeout(this.wheelT); this.wheelT = setTimeout(() => commit(), 250);
+    }, { passive: false });
+    cv.addEventListener("dblclick", () => { if (S.sel?.type === "piece") return; });
+  }
+  editMark(d) {
+    let i = markNear(S.t);
+    if (i < 0) {
+      const m = { ...camAt(S.t), t: S.t }; S.marks.push(m); sortMarks(); i = S.marks.indexOf(m);
+      toast(S.marks.length === 1 ? "First mark made" : `New mark at ${fmt(S.t)}`);
+      renderTimelines();
+    }
+    d.made = true;
+    if (S.sel?.type !== "mark" || S.sel.i !== i) { S.sel = { type: "mark", i }; renderInspectors(); renderTimelines(); }
+    return S.marks[i];
+  }
+}
+function roundRect(c, x, y, w, hh, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + hh, r); c.arcTo(x + w, y + hh, x, y + hh, r); c.arcTo(x, y + hh, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+
+// ============================================================================
+// The floor plan: the set from above, the camera and its path drawn on it.
+// ============================================================================
+class Plan {
+  constructor(host, opts = {}) {
+    this.host = host; this.opts = opts; this.canvas = h("canvas"); host.prepend(this.canvas);
+    this.ctx = this.canvas.getContext("2d"); this.sc = 30; this.cx = 0; this.cz = 3; this.fitted = false;
+    new ResizeObserver(() => requestDraw()).observe(host);
+    this.bind();
+  }
+  visible() { return this.host.offsetParent !== null; }
+  toS(x, z) { return [this.W / 2 + (x - this.cx) * this.sc, this.H / 2 - (z - this.cz) * this.sc]; }
+  toW(sx, sy) { return [this.cx + (sx - this.W / 2) / this.sc, this.cz - (sy - this.H / 2) / this.sc]; }
+  fit() {
+    let x0 = Infinity, x1 = -Infinity, z0 = Infinity, z1 = -Infinity;
+    const take = (x, z) => { x0 = Math.min(x0, x); x1 = Math.max(x1, x); z0 = Math.min(z0, z); z1 = Math.max(z1, z); };
+    const focus = S.pieces.filter((p) => p.w < 6 && p.d < 6);
+    for (const p of focus) for (const c of cornersOf(boxesOf(p)[0])) take(c.x, c.z);
+    for (const m of S.marks) take(m.x, m.z);
+    if (!isFinite(x0)) { x0 = -4; x1 = 4; z0 = -2; z1 = 8; }
+    const pad = this.opts.compact ? 1.2 : 1.8;
+    this.sc = clamp(Math.min(this.W / (x1 - x0 + pad * 2), this.H / (z1 - z0 + pad * 2)), 6, 140);
+    this.cx = (x0 + x1) / 2; this.cz = (z0 + z1) / 2;
+  }
+  draw() {
+    const r = this.host.getBoundingClientRect(); if (!r.width || !r.height) return;
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    if (this.canvas.width !== Math.round(r.width * dpr) || this.canvas.height !== Math.round(r.height * dpr)) {
+      this.canvas.width = Math.round(r.width * dpr); this.canvas.height = Math.round(r.height * dpr);
+    }
+    this.W = r.width; this.H = r.height;
+    if (!this.fitted) { this.fit(); this.fitted = true; }
+    const c = this.ctx; c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.fillStyle = "#262729"; c.fillRect(0, 0, this.W, this.H);
+    const [wx0, wz1] = this.toW(0, 0), [wx1, wz0] = this.toW(this.W, this.H);
+    const step = this.sc < 10 ? 5 : 1;
+    c.lineWidth = 1;
+    for (let x = Math.ceil(wx0 / step) * step; x <= wx1; x += step) {
+      const [sx] = this.toS(x, 0); c.strokeStyle = x === 0 ? "rgba(80,125,200,.6)" : x % 5 === 0 ? "#3a3c40" : "#2f3033";
+      c.beginPath(); c.moveTo(Math.round(sx) + 0.5, 0); c.lineTo(Math.round(sx) + 0.5, this.H); c.stroke();
+    }
+    for (let z = Math.ceil(wz0 / step) * step; z <= wz1; z += step) {
+      const [, sy] = this.toS(0, z); c.strokeStyle = z === 0 ? "rgba(190,90,80,.6)" : z % 5 === 0 ? "#3a3c40" : "#2f3033";
+      c.beginPath(); c.moveTo(0, Math.round(sy) + 0.5); c.lineTo(this.W, Math.round(sy) + 0.5); c.stroke();
+    }
+    // the path, then the set, then the cameras on top
+    if (S.marks.length > 1) {
+      c.strokeStyle = "rgba(91,158,232,.75)"; c.lineWidth = 2; c.setLineDash([5, 4]); c.beginPath();
+      for (let i = 0; i <= 48; i++) { const cm = camAt(S.duration * i / 48), [sx, sy] = this.toS(cm.x, cm.z); i ? c.lineTo(sx, sy) : c.moveTo(sx, sy); }
+      c.stroke(); c.setLineDash([]);
+    }
+    const order = [...S.pieces].sort((a, b) => a.h - b.h);
+    c.font = "600 11.5px Inter, system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "top";
+    for (const p of order) this.drawPiece(c, p, S.sel?.type === "piece" && S.sel.id === p.id);
+    const ni = markNear(S.t);
+    S.marks.forEach((m, i) => this.drawCam(c, m, { n: i + 1, on: S.sel?.type === "mark" && S.sel.i === i, here: ni === i }));
+    if (ni < 0) this.drawCam(c, camAt(S.t), { ghost: true });
+  }
+  drawPiece(c, p, on) {
+    const [sx, sy] = this.toS(p.x, p.z);
+    if (p.kind === "person") {
+      const rad = Math.max(5, 0.27 * this.sc);
+      c.fillStyle = p.plays ? CAST[p.plays] : "#a29d94"; c.beginPath(); c.arc(sx, sy, rad, 0, 7); c.fill();
+      c.strokeStyle = on ? "#f0a63c" : "rgba(0,0,0,.45)"; c.lineWidth = on ? 2.5 : 1; c.stroke();
+      const fx = Math.sin(p.r), fz = Math.cos(p.r);
+      c.fillStyle = "rgba(20,20,20,.85)"; c.beginPath();
+      c.moveTo(sx + fx * rad * 1.45, sy - fz * rad * 1.45); c.lineTo(sx + fz * rad * 0.55 + fx * rad * 0.6, sy + fx * rad * 0.55 - fz * rad * 0.6); c.lineTo(sx - fz * rad * 0.55 + fx * rad * 0.6, sy - fx * rad * 0.55 - fz * rad * 0.6); c.closePath(); c.fill();
+    } else {
+      const cs = cornersOf(boxesOf(p)[0]).map((q) => this.toS(q.x, q.z));
+      const poly = [cs[0], cs[1], cs[5], cs[4]];
+      const tone = p.kind === "wall" ? "#8f8a82" : p.kind === "post" ? "#a39e95" : `rgb(${110 + Math.min(60, p.h * 30)},${106 + Math.min(60, p.h * 30)},${100 + Math.min(60, p.h * 30)})`;
+      c.fillStyle = tone; c.beginPath(); poly.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.closePath(); c.fill();
+      if (Math.min(p.w, p.d) * this.sc < 4) { c.strokeStyle = on ? "#f0a63c" : tone; c.lineWidth = on ? 4 : 3; c.stroke(); }
+      else if (on) { c.strokeStyle = "#f0a63c"; c.lineWidth = 2.5; c.stroke(); }
+    }
+    const name = nameOf(p);
+    if (name && !this.opts.compact) {
+      const rad = p.kind === "person" ? Math.max(5, 0.27 * this.sc) : 0;
+      c.fillStyle = p.plays ? CAST[p.plays] : "#d8d4cd"; c.fillText(name, sx, sy + rad + 5);
+    }
+    if (on && !this.opts.compact) {
+      const k = this.knobs(p);
+      c.strokeStyle = "#f0a63c"; c.lineWidth = 1.5; c.beginPath(); c.moveTo(sx, sy); c.lineTo(k.rot[0], k.rot[1]); c.stroke();
+      c.fillStyle = "#f0a63c"; c.beginPath(); c.arc(k.rot[0], k.rot[1], 6, 0, 7); c.fill();
+      if (k.size) { c.fillStyle = "#fff"; c.strokeStyle = "#f0a63c"; c.lineWidth = 2; c.fillRect(k.size[0] - 5, k.size[1] - 5, 10, 10); c.strokeRect(k.size[0] - 5, k.size[1] - 5, 10, 10); }
+    }
+  }
+  knobs(p) {
+    const fx = Math.sin(p.r), fz = Math.cos(p.r), reach = Math.max(p.w, p.d) / 2 + Math.max(0.5, 22 / this.sc);
+    const rot = this.toS(p.x + fx * reach, p.z + fz * reach);
+    let size = null;
+    if (p.kind !== "person") { const c = Math.cos(p.r), s = Math.sin(p.r), lx = p.w / 2, lz = p.d / 2; size = this.toS(p.x + c * lx + s * lz, p.z - s * lx + c * lz); }
+    return { rot, size };
+  }
+  hfov(cam) { const ar = frameRatio(); return Math.atan(18 * (ar >= 1 ? 1 : ar) / cam.mm); }
+  camGeo(cam) {
+    const [sx, sy] = this.toS(cam.x, cam.z), len = Math.max(34, 2.2 * this.sc), hf = this.hfov(cam);
+    const dirS = (a) => [Math.sin(a), -Math.cos(a)];
+    const l = dirS(cam.yaw - hf), r = dirS(cam.yaw + hf), f = dirS(cam.yaw);
+    return { sx, sy, len, l, r, f, aim: [sx + f[0] * len, sy + f[1] * len] };
+  }
+  drawCam(c, cam, { n, on, here, ghost }) {
+    const g = this.camGeo(cam), { sx, sy, len } = g;
+    c.beginPath(); c.moveTo(sx, sy); c.lineTo(sx + g.l[0] * len, sy + g.l[1] * len); c.lineTo(sx + g.r[0] * len, sy + g.r[1] * len); c.closePath();
+    c.fillStyle = ghost ? "rgba(240,166,60,.12)" : on || here ? "rgba(91,158,232,.22)" : "rgba(91,158,232,.08)"; c.fill();
+    c.strokeStyle = ghost ? "rgba(240,166,60,.8)" : "rgba(91,158,232,.9)"; c.lineWidth = on ? 2 : 1.2; if (ghost) c.setLineDash([4, 3]); c.stroke(); c.setLineDash([]);
+    c.save(); c.translate(sx, sy); c.rotate(cam.yaw);
+    c.fillStyle = ghost ? "#f0a63c" : "#5b9ee8"; roundRect(c, -8, 0, 16, 11, 2.5); c.fill();
+    if (on) { c.strokeStyle = "#fff"; c.lineWidth = 1.5; c.stroke(); }
+    c.restore();
+    if (!ghost && !this.opts.compact) {
+      c.fillStyle = "#5b9ee8"; c.strokeStyle = "#fff"; c.lineWidth = 1.5; c.beginPath(); c.arc(g.aim[0], g.aim[1], 5.5, 0, 7); c.fill(); c.stroke();
+      c.fillStyle = "#cfe0f7"; c.font = "600 11px 'JetBrains Mono', monospace"; c.textAlign = "center"; c.textBaseline = "middle";
+      c.fillText(String(n), sx - g.f[0] * 20, sy - g.f[1] * 20);
+    }
+  }
+  hit(sx, sy) {
+    if (!this.opts.compact) {
+      for (let i = S.marks.length - 1; i >= 0; i--) { const g = this.camGeo(S.marks[i]); if (Math.hypot(sx - g.aim[0], sy - g.aim[1]) < 10) return { type: "aim", i }; }
+      const sp = S.sel?.type === "piece" ? pieceById(S.sel.id) : null;
+      if (sp) { const k = this.knobs(sp); if (Math.hypot(sx - k.rot[0], sy - k.rot[1]) < 10) return { type: "rot", p: sp }; if (k.size && Math.hypot(sx - k.size[0], sy - k.size[1]) < 10) return { type: "size", p: sp }; }
+    }
+    for (let i = S.marks.length - 1; i >= 0; i--) { const [mx, my] = this.toS(S.marks[i].x, S.marks[i].z); if (Math.hypot(sx - mx, sy - my) < 13) return { type: "mark", i }; }
+    const [wx, wz] = this.toW(sx, sy), pad = 5 / this.sc;
+    const order = [...S.pieces].sort((a, b) => b.h - a.h);
+    for (const p of order) {
+      if (p.kind === "person") { if (Math.hypot(wx - p.x, wz - p.z) < Math.max(0.3, 7 / this.sc)) return { type: "piece", p }; continue; }
+      const dx = wx - p.x, dz = wz - p.z, c = Math.cos(p.r), s = Math.sin(p.r);
+      const lx = c * dx - s * dz, lz = s * dx + c * dz;
+      if (Math.abs(lx) <= p.w / 2 + pad && Math.abs(lz) <= p.d / 2 + pad) return { type: "piece", p };
+    }
+    return null;
+  }
+  bind() {
+    const cv = this.canvas;
+    const loc = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    cv.addEventListener("pointerdown", (e) => {
+      cv.setPointerCapture(e.pointerId); S.playing = false;
+      const [sx, sy] = loc(e), hit = this.hit(sx, sy), [wx, wz] = this.toW(sx, sy);
+      if (!hit) { this.drag = { type: "pan", sx, sy, cx: this.cx, cz: this.cz }; if (S.sel && !this.opts.compact) { S.sel = null; renderInspectors(); renderTimelines(); } }
+      else if (hit.type === "piece") { S.sel = { type: "piece", id: hit.p.id }; this.drag = { type: "piece", p: hit.p, ox: hit.p.x - wx, oz: hit.p.z - wz }; renderInspectors(); }
+      else if (hit.type === "mark") { S.sel = { type: "mark", i: hit.i }; S.t = S.marks[hit.i].t; const m = S.marks[hit.i]; this.drag = { type: "mark", m, ox: m.x - wx, oz: m.z - wz }; renderInspectors(); renderTimelines(); }
+      else if (hit.type === "aim") { S.sel = { type: "mark", i: hit.i }; S.t = S.marks[hit.i].t; this.drag = { type: "aim", m: S.marks[hit.i] }; renderInspectors(); renderTimelines(); }
+      else this.drag = { type: hit.type, p: hit.p };
+      dragging = true; requestDraw();
+    });
+    cv.addEventListener("pointermove", (e) => {
+      const d = this.drag; if (!d) return;
+      const [sx, sy] = loc(e), [wx, wz] = this.toW(sx, sy);
+      if (d.type === "pan") { this.cx = d.cx - (sx - d.sx) / this.sc; this.cz = d.cz + (sy - d.sy) / this.sc; }
+      else if (d.type === "piece") { d.p.x = snapV(wx + d.ox); d.p.z = snapV(wz + d.oz); }
+      else if (d.type === "mark") { d.m.x = snapV(wx + d.ox); d.m.z = snapV(wz + d.oz); }
+      else if (d.type === "aim") d.m.yaw = Math.atan2(wx - d.m.x, wz - d.m.z);
+      else if (d.type === "rot") { let r = Math.atan2(wx - d.p.x, wz - d.p.z); if (S.snap) r = Math.round(r / (Math.PI / 12)) * (Math.PI / 12); d.p.r = r; }
+      else if (d.type === "size") {
+        const dx = wx - d.p.x, dz = wz - d.p.z, c = Math.cos(d.p.r), s = Math.sin(d.p.r);
+        d.p.w = clamp(snapV(2 * Math.abs(c * dx - s * dz)), 0.1, 30); d.p.d = clamp(snapV(2 * Math.abs(s * dx + c * dz)), 0.1, 30);
+      }
+      if (d.type !== "pan") syncInspectors();
+      requestDraw();
+    });
+    const up = () => { if (!this.drag) return; const t = this.drag.type; this.drag = null; dragging = false; if (t !== "pan") commit(); else requestDraw(); };
+    cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+    cv.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const r = cv.getBoundingClientRect(), sx = e.clientX - r.left, sy = e.clientY - r.top, [wx, wz] = this.toW(sx, sy);
+      this.sc = clamp(this.sc * Math.exp(-e.deltaY * 0.0015), 6, 160);
+      const [nx, nz] = this.toW(sx, sy); this.cx += wx - nx; this.cz += wz - nz; requestDraw();
+    }, { passive: false });
+  }
+}
+
+// ============================================================================
+// The ruler: the shot at its real length, the marks on it, the playhead.
+// ============================================================================
+const MAXLEN = 10;
+class Timeline {
+  constructor(host, opts = {}) { this.host = host; this.opts = opts; this.thumbs = []; }
+  visible() { return this.host.offsetParent !== null; }
+  render() {
+    const pct = (t) => (t / MAXLEN * 100) + "%";
+    this.play = h("button", { class: "tl-play", "aria-label": "Play", onclick: () => { S.playing = !S.playing; if (S.playing && S.t >= S.duration - 0.01) S.t = 0; requestDraw(); this.update(); } });
+    this.track = h("div", { class: "tl-track" });
+    this.shot = h("div", { class: "tl-shot", style: `width:${pct(S.duration)}` });
+    this.track.append(this.shot);
+    for (let s = 0; s <= MAXLEN; s++) {
+      this.track.append(h("div", { class: "tl-tick", style: `left:${pct(s)}` }));
+      if (s % 2 === 0 || s === MAXLEN) this.track.append(h("div", { class: "tl-ticklab", style: `left:${pct(s)}`, text: s + "s" }));
+    }
+    this.thumbs = [];
+    const thumbRow = this.opts.thumbs ? h("div", { class: "tl-thumbs" }) : null;
+    S.marks.forEach((m, i) => {
+      const on = S.sel?.type === "mark" && S.sel.i === i;
+      const dot = h("div", { class: "tl-mark" + (on ? " on" : ""), style: `left:${pct(m.t)}`, title: `Mark ${i + 1} at ${fmt(m.t)}` });
+      this.bindMark(dot, i); this.track.append(dot);
+      if (thumbRow) {
+        const ar = frameRatio(), th = 58, tw = Math.round(th * ar);
+        const cv = h("canvas", { width: Math.min(tw, 120), height: Math.round(Math.min(tw, 120) / ar) });
+        const b = h("button", { class: "tl-thumb" + (on ? " on" : ""), style: `left:${pct(m.t)}`, title: `Mark ${i + 1}` }, [cv, h("small", { text: `${i + 1} · ${m.t.toFixed(1)}` })]);
+        this.bindMark(b, i); thumbRow.append(b); this.thumbs.push({ cv, m });
+      }
+    });
+    this.end = h("div", { class: "tl-end", style: `left:${pct(S.duration)}`, title: "Drag to change the length" });
+    this.bindEnd(this.end); this.track.append(this.end);
+    this.head = h("div", { class: "tl-head" }); this.track.append(this.head);
+    this.bindTrack();
+    this.add = h("button", { class: "tl-add", onclick: () => addMarkHere() });
+    this.lenLab = h("div", { class: "small" });
+    this.host.replaceChildren(this.play, h("div", { class: "tl-body" }, [thumbRow, this.track, h("div", { class: "tl-hint", text: this.opts.hint || "" })]), h("div", { class: "tl-side" }, [this.lenLab, this.add]));
+    this.update(); scheduleThumbs();
+  }
+  update() {
+    if (!this.head) return;
+    this.head.style.left = (S.t / MAXLEN * 100) + "%";
+    this.play.innerHTML = S.playing ? '<svg width="12" height="12" viewBox="0 0 12 12"><rect x="2" y="1" width="3" height="10" fill="currentColor"/><rect x="7" y="1" width="3" height="10" fill="currentColor"/></svg>' : '<svg width="12" height="12" viewBox="0 0 12 12"><path d="M3 1.5v9l7.5-4.5z" fill="currentColor"/></svg>';
+    const near = markNear(S.t);
+    this.add.textContent = near >= 0 ? `On mark ${near + 1}` : `+ Mark at ${fmt(S.t)}`;
+    this.add.disabled = near >= 0; this.add.style.opacity = near >= 0 ? 0.5 : 1;
+    this.lenLab.textContent = `Shot runs ${fmt(S.duration)}`;
+  }
+  tAt(e) { const r = this.track.getBoundingClientRect(); return clamp((e.clientX - r.left) / r.width * MAXLEN, 0, MAXLEN); }
+  bindTrack() {
+    this.track.addEventListener("pointerdown", (e) => {
+      if (e.target !== this.track && e.target !== this.shot && !e.target.classList.contains("tl-tick")) return;
+      this.track.setPointerCapture(e.pointerId); S.playing = false;
+      const go = (ev) => { S.t = clamp(this.tAt(ev), 0, S.duration); const n = markNear(S.t); if (n >= 0) S.t = S.marks[n].t; requestDraw(); };
+      go(e);
+      const mv = (ev) => go(ev), upf = () => { this.track.removeEventListener("pointermove", mv); this.track.removeEventListener("pointerup", upf); };
+      this.track.addEventListener("pointermove", mv); this.track.addEventListener("pointerup", upf);
+    });
+  }
+  bindMark(el, i) {
+    el.addEventListener("pointerdown", (e) => {
+      e.stopPropagation(); el.setPointerCapture(e.pointerId); S.playing = false;
+      S.sel = { type: "mark", i }; S.t = S.marks[i].t; renderInspectors();
+      const m = S.marks[i], x0 = e.clientX; let moved = false;
+      const mv = (ev) => {
+        if (!moved && Math.abs(ev.clientX - x0) < 4) return; moved = true;
+        const lo = i > 0 ? S.marks[i - 1].t + 0.2 : 0, hi = i < S.marks.length - 1 ? S.marks[i + 1].t - 0.2 : S.duration;
+        m.t = Math.round(clamp(this.tAt(ev), lo, hi) * 10) / 10; S.t = m.t;
+        el.style.left = (m.t / MAXLEN * 100) + "%"; requestDraw();
+      };
+      const upf = () => { el.removeEventListener("pointermove", mv); el.removeEventListener("pointerup", upf); if (moved) commit(); else { renderTimelines(); requestDraw(); } };
+      el.addEventListener("pointermove", mv); el.addEventListener("pointerup", upf);
+    });
+  }
+  bindEnd(el) {
+    el.addEventListener("pointerdown", (e) => {
+      e.stopPropagation(); el.setPointerCapture(e.pointerId);
+      const was = S.duration, times = S.marks.map((m) => m.t);
+      const mv = (ev) => {
+        const d = Math.round(clamp(this.tAt(ev), 1, MAXLEN) * 10) / 10;
+        S.duration = d; S.marks.forEach((m, k) => m.t = Math.round(times[k] * d / was * 100) / 100);
+        S.t = Math.min(S.t, d);
+        el.style.left = this.shot.style.width = (d / MAXLEN * 100) + "%"; this.lenLab.textContent = `Shot runs ${fmt(d)}`; updateHeader();
+      };
+      const upf = () => { el.removeEventListener("pointermove", mv); el.removeEventListener("pointerup", upf); commit(); };
+      el.addEventListener("pointermove", mv); el.addEventListener("pointerup", upf);
+    });
+  }
+}
+function addMarkHere() {
+  if (markNear(S.t) >= 0) return;
+  const m = { ...camAt(S.t), t: Math.round(S.t * 100) / 100 }; S.marks.push(m); sortMarks();
+  S.sel = { type: "mark", i: S.marks.indexOf(m) }; commit(); toast(`Mark at ${fmt(m.t)}. Reframe and it holds.`);
+}
+
+let thumbTimer;
+function scheduleThumbs() {
+  clearTimeout(thumbTimer);
+  thumbTimer = setTimeout(() => {
+    for (const tl of timelines) for (const { cv, m } of tl.thumbs) {
+      const b = renderScene(m, cv.width, cv.height, "stage"); cv.getContext("2d").putImageData(b.img, 0, 0);
+    }
+    const cam = camAt(S.t);
+    for (const { cv, id } of passThumbs) { const b = renderScene(cam, cv.width, cv.height, id); cv.getContext("2d").putImageData(b.img, 0, 0); }
+  }, 90);
+}
+
+// ============================================================================
+// The inspector: the shot when nothing is selected, else the selection.
+// ============================================================================
+let syncers = [], passThumbs = [];
+const inspHosts = [];
+function syncInspectors() { for (const s of syncers) s(); }
+function slider(label, { min, max, step, get, set, show }) {
+  const out = h("output"), inp = h("input", { type: "range", min, max, step, "aria-label": label });
+  const sync = () => { if (document.activeElement !== inp) inp.value = get(); out.textContent = show(get()); };
+  inp.addEventListener("input", () => { set(+inp.value); out.textContent = show(get()); requestDraw(); });
+  inp.addEventListener("change", () => commit());
+  syncers.push(sync); sync();
+  return h("div", { class: "row" }, [h("label", { text: label }), h("div", { class: "rng" }, [inp, out])]);
+}
+function seg(options, current, pick) {
+  return h("div", { class: "seg" }, options.map(([v, l]) => h("button", { class: v === current ? "on" : "", "aria-pressed": v === current, text: l, onclick: () => pick(v) })));
+}
+function renderInspectors() {
+  syncers = []; passThumbs = [];
+  for (const host of inspHosts) host.replaceChildren(...inspectorBody());
+  scheduleThumbs(); updateHeader();
+}
+function inspectorBody() {
+  const sel = S.sel;
+  if (sel?.type === "piece") {
+    const p = pieceById(sel.id); if (!p) { S.sel = null; return inspectorBody(); }
+    const kids = [
+      h("div", { class: "ihead" }, [h("b", { text: nameOf(p) ? nameOf(p) : KINDS[p.kind].label }), h("span", { class: "small", text: nameOf(p) ? KINDS[p.kind].label : "" }), h("span", { class: "gap", style: "flex:1" }),
+        h("button", { class: "danger", text: "Remove", onclick: () => removeSel() })]),
+      h("div", { class: "isub", text: "Drag it on the floor to move it. Named pieces are written into the sentence." }),
+      h("div", { class: "row" }, [h("span", { class: "l", text: "Plays" }), h("div", { style: "display:flex;gap:6px;flex-wrap:wrap" }, [
+        ...Object.keys(CAST).map((k) => h("button", { class: "chip" + (p.plays === k ? " on" : ""), onclick: () => { p.plays = p.plays === k ? null : k; if (p.plays) p.word = ""; commit(); } }, [h("i", { style: `background:${CAST[k]}` }), "@" + k])),
+      ])]),
+      h("div", { class: "row" }, [h("label", { text: "Called", for: "called-" + p.id }), h("input", { type: "text", id: "called-" + p.id, value: p.word, placeholder: p.plays ? "plays @" + p.plays : "table, doorway, car…",
+        onchange: (e) => { p.word = e.target.value.trim(); if (p.word) p.plays = null; commit(); } })]),
+      h("div", { class: "divider" }),
+    ];
+    if (p.kind !== "person") {
+      kids.push(slider("Width", { min: 0.1, max: 16, step: 0.05, get: () => p.w, set: (v) => p.w = v, show: (v) => v.toFixed(2) + " m" }));
+      kids.push(slider("Depth", { min: 0.1, max: 16, step: 0.05, get: () => p.d, set: (v) => p.d = v, show: (v) => v.toFixed(2) + " m" }));
+    }
+    kids.push(slider("Height", { min: 0.1, max: 10, step: 0.05, get: () => p.h, set: (v) => p.h = v, show: (v) => v.toFixed(2) + " m" }));
+    kids.push(slider("Turn", { min: -180, max: 180, step: 1, get: () => Math.round(angDiff(p.r, 0) * DEG), set: (v) => p.r = v / DEG, show: (v) => v + "°" }));
+    kids.push(h("div", { class: "divider" }), h("button", { class: "ghost", text: "Duplicate", onclick: () => { const c = makePiece(p.kind, { ...p, id: undefined, x: p.x + 0.8, plays: null }); c.id = nextId++; S.pieces.push(c); S.sel = { type: "piece", id: c.id }; commit(); } }));
+    return kids;
+  }
+  if (sel?.type === "mark") {
+    const m = S.marks[sel.i]; if (!m) { S.sel = null; return inspectorBody(); }
+    return [
+      h("div", { class: "ihead" }, [h("b", { text: `Mark ${sel.i + 1}` }), h("span", { class: "small", text: "at " + fmt(m.t) }), h("span", { class: "gap", style: "flex:1" }),
+        h("button", { class: "danger", text: "Remove", onclick: () => removeSel() })]),
+      h("div", { class: "isub", text: "One frame the camera passes through. Drag in the lens to reframe it." }),
+      slider("Lens", { min: 18, max: 85, step: 1, get: () => Math.round(m.mm), set: (v) => m.mm = v, show: (v) => v + " mm" }),
+      slider("Height", { min: 0.1, max: 8, step: 0.05, get: () => m.y, set: (v) => m.y = v, show: (v) => v.toFixed(2) + " m" }),
+      slider("Tilt", { min: -80, max: 80, step: 1, get: () => Math.round(m.pitch * DEG), set: (v) => m.pitch = v / DEG, show: (v) => v + "°" }),
+      slider("Pan", { min: -180, max: 180, step: 1, get: () => Math.round(angDiff(m.yaw, 0) * DEG), set: (v) => m.yaw = v / DEG, show: (v) => v + "°" }),
+    ];
+  }
+  const [pw, ph] = ASPECTS[S.aspect];
+  return [
+    h("div", { class: "ihead" }, [h("b", { text: "Shot" })]),
+    h("div", { class: "isub", text: "Select a piece or a mark to see theirs." }),
+    h("div", { class: "row" }, [h("span", { class: "l", text: "Frame" }), h("div", {}, [seg(Object.keys(ASPECTS).map((a) => [a, a]), S.aspect, (a) => { S.aspect = a; commit(false); }), h("div", { class: "small", style: "margin-top:4px", text: `${pw} × ${ph}, the family's native canvas` })])]),
+    slider("Length", { min: 1, max: 10, step: 0.1, get: () => S.duration, set: (v) => { const was = S.duration; S.duration = v; S.marks.forEach((m) => m.t = m.t * v / was); S.t = Math.min(S.t, v); }, show: (v) => fmt(v) }),
+    h("div", { class: "row" }, [h("span", { class: "l", text: "Snap" }), seg([[0, "Off"], [0.25, "0.25 m"], [1, "1 m"]], S.snap, (v) => { S.snap = v; renderInspectors(); })]),
+    h("div", { class: "divider" }),
+    h("div", { class: "row", style: "align-items:start" }, [h("span", { class: "l", text: "Writes" }), h("div", { class: "passes" }, PASSES.map((ps) => {
+      const cv = h("canvas", { width: 128, height: Math.round(128 / frameRatio()) }); passThumbs.push({ cv, id: ps.id });
+      return h("button", { class: "pass" + (S.pass === ps.id ? " on" : ""), onclick: () => { S.pass = ps.id; S.look = "output"; commit(false); } }, [cv, h("span", { text: ps.label })]);
+    }))]),
+    h("div", { class: "small", style: "margin-top:10px", text: "Writes into input/continuity/blockout/ with the scene beside it." }),
+  ];
+}
+function removeSel() {
+  if (S.sel?.type === "piece") S.pieces = S.pieces.filter((p) => p.id !== S.sel.id);
+  else if (S.sel?.type === "mark") S.marks.splice(S.sel.i, 1);
+  S.sel = null; commit();
+}
+function addPiece(kind, where) {
+  let x, z;
+  if (where === "plan") { x = planB.cx; z = planB.cz; }
+  else { const cam = camAt(S.t), d = 3.5; x = cam.x + Math.sin(cam.yaw) * d; z = cam.z + Math.cos(cam.yaw) * d; }
+  const used = new Set(S.pieces.map((p) => p.plays));
+  const plays = kind === "person" ? Object.keys(CAST).find((k) => !used.has(k)) ?? null : null;
+  const p = makePiece(kind, { x: snapV(x), z: snapV(z), plays, r: kind === "person" ? Math.PI : 0 });
+  S.pieces.push(p); S.sel = { type: "piece", id: p.id }; commit();
+  toast(`${KINDS[kind].label} added${plays ? " as @" + plays : ""}`);
+}
+
+// ============================================================================
+// C: the words, as a sentence of choices, and the frame grid.
+// ============================================================================
+const measurer = document.createElement("canvas").getContext("2d");
+function fitSelect(s) {
+  const cs = getComputedStyle(s); measurer.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  const text = s.options[s.selectedIndex]?.text ?? "";
+  if (parseFloat(cs.fontSize)) s.style.width = Math.ceil(measurer.measureText(text).width + 6) + "px";
+}
+function sel(options, value, onPick, cls = "") {
+  const s = h("select", { class: cls, onchange: (e) => onPick(e.target.value) });
+  for (const [v, l] of options) s.append(h("option", { value: v, text: l, selected: String(v) === String(value) }));
+  return s;
+}
+function wordsChanged() { sceneFromWords(); commit(false); }
+function renderWords() {
+  const W = S.words, col = document.getElementById("c-col");
+  const label = (ref) => isCast(ref) ? "@" + ref : articled(ref);
+  const kids = [];
+  if (S.handEdited) kids.push(h("div", { class: "banner" }, [h("span", { text: "The set was arranged by hand in another view. The sentence below reads that set; changing a word here rebuilds it from these words." }), h("button", { class: "ghost", text: "Rebuild now", onclick: wordsChanged })]));
+  kids.push(h("div", { class: "wlabel", text: "Where" }));
+  kids.push(h("div", { class: "prose" }, ["The scene is set ", sel(Object.entries(PLACES), W.place, (v) => { W.place = v; wordsChanged(); }), "."]));
+  kids.push(h("div", { class: "wlabel", text: "Who and what" }));
+  const rows = h("div", { class: "prose" });
+  W.who.forEach((w, i) => {
+    const people = isCast(w.ref);
+    rows.append(h("div", { class: "wrow" }, [
+      h("span", { class: people ? "who" : "", text: people ? "@" + w.ref : articled(w.ref)[0].toUpperCase() + articled(w.ref).slice(1) }),
+      people ? " stands " : " ",
+      sel(COLS.map((c, k) => [k, c]), w.col, (v) => { w.col = +v; wordsChanged(); }), " ",
+      sel(ROWS.map((r, k) => [k, r]), w.row, (v) => { w.row = +v; wordsChanged(); }),
+      people ? ", " : "", people ? sel(Object.entries(FACING), w.facing || "camera", (v) => { w.facing = v; wordsChanged(); }) : "",
+      ".",
+      h("button", { class: "x", "aria-label": "Take out " + label(w.ref), text: "✕", onclick: () => { W.who.splice(i, 1); if (W.target === w.ref) W.target = W.who[0]?.ref; wordsChanged(); } }),
+    ]));
+  });
+  const present = new Set(W.who.map((w) => w.ref));
+  const add = h("select", { class: "wadd", "aria-label": "Add someone or something", onchange: (e) => { const ref = e.target.value; if (!ref) return; W.who.push({ ref, col: 1, row: isCast(ref) ? 1 : 0, facing: "camera" }); if (!W.target) W.target = ref; wordsChanged(); } });
+  add.append(h("option", { value: "", text: "+ Add someone or something" }));
+  const g1 = h("optgroup", { label: "Cast" }); Object.keys(CAST).filter((k) => !present.has(k)).forEach((k) => g1.append(h("option", { value: k, text: "@" + k })));
+  const g2 = h("optgroup", { label: "Things" }); Object.keys(PROPS).forEach((k) => g2.append(h("option", { value: k, text: articled(k) })));
+  add.append(g1, g2); rows.append(add);
+  kids.push(rows);
+  kids.push(h("div", { class: "wlabel", text: "The camera" }));
+  const targets = W.who.map((w) => [w.ref, `${PREP[W.move]} ${label(w.ref)}`]);
+  kids.push(h("div", { class: "prose" }, [
+    "The camera ", sel(Object.entries(MOVES), W.move, (v) => { W.move = v; wordsChanged(); }), " ",
+    targets.length ? sel(targets, W.target, (v) => { W.target = v; wordsChanged(); }) : "", " ",
+    W.move !== "hold" ? sel(Object.entries(SPEEDS), W.speed, (v) => { W.speed = v; wordsChanged(); }) : "",
+    W.move !== "hold" ? " over " : " for ", sel([2, 3, 4, 5, 6, 8, 10].map((d) => [d, d + " seconds"]), Math.round(S.duration), (v) => { S.duration = +v; wordsChanged(); }),
+    ", on a ", sel([18, 24, 35, 50, 85].map((l) => [l, l + " mm"]), W.lens, (v) => { W.lens = +v; wordsChanged(); }), " lens ",
+    sel(Object.entries(HEIGHTS), W.height, (v) => { W.height = v; wordsChanged(); }), ".",
+  ]));
+  kids.push(h("div", { class: "wlabel", text: "What the bench writes beside the guide" }));
+  kids.push(h("div", { class: "written" }, [h("q", { html: sayHTML() }), h("button", { class: "copy", "data-copy": "", text: "Copy" })]));
+  kids.push(h("div", { class: "wlabel", text: "Output" }));
+  kids.push(h("div", { style: "display:flex;gap:12px;align-items:center;flex-wrap:wrap" }, [seg(PASSES.map((p) => [p.id, p.label]), S.pass, (v) => { S.pass = v; S.look = "output"; commit(false); }),
+    seg(Object.keys(ASPECTS).map((a) => [a, a]), S.aspect, (a) => { S.aspect = a; sceneFromWords(); commit(false); })]));
+  col.replaceChildren(...kids);
+  for (const s of col.querySelectorAll(".prose select:not(.wadd)")) fitSelect(s);
+  renderGrid();
+}
+function renderGrid() {
+  const host = document.getElementById("c-grid"), W = S.words;
+  const label = (ref) => isCast(ref) ? "@" + ref : ref;
+  const rows = [h("div", { class: "fg-cols" }, [h("span"), ...["Left", "Centre", "Right"].map((t) => h("span", { text: t }))])];
+  for (const r of [2, 1, 0]) {
+    const width = [100, 88, 74][r];
+    const cells = h("div", { class: "fg-cells", style: `width:${width}%` });
+    for (let c = 0; c < 3; c++) {
+      const cell = h("div", { class: "fg-cell", "data-col": c, "data-row": r });
+      W.who.filter((w) => w.col === c && w.row === r).forEach((w) => {
+        const chip = h("span", { class: "chip fg-chip" }, [h("i", { style: `background:${isCast(w.ref) ? CAST[w.ref] : "#a29d94"}` }), label(w.ref)]);
+        bindChip(chip, w); cell.append(chip);
+      });
+      cells.append(cell);
+    }
+    rows.push(h("div", { class: "fg-row" }, [h("span", { text: ["Foreground", "Midground", "Background"][r] }), cells]));
+  }
+  host.replaceChildren(...rows);
+}
+function bindChip(chip, w) {
+  chip.addEventListener("pointerdown", (e) => {
+    e.preventDefault(); chip.setPointerCapture(e.pointerId);
+    const ghost = chip.cloneNode(true); ghost.classList.add("dragghost"); document.body.append(ghost);
+    let hot = null;
+    const place = (ev) => { ghost.style.left = ev.clientX - 20 + "px"; ghost.style.top = ev.clientY - 12 + "px"; };
+    place(e);
+    const mv = (ev) => {
+      place(ev);
+      const under = document.elementsFromPoint(ev.clientX, ev.clientY).find((n) => n.classList?.contains("fg-cell"));
+      if (hot !== under) { hot?.classList.remove("hot"); hot = under; hot?.classList.add("hot"); }
+    };
+    const upf = () => {
+      ghost.remove(); chip.removeEventListener("pointermove", mv); chip.removeEventListener("pointerup", upf);
+      if (hot) { w.col = +hot.dataset.col; w.row = +hot.dataset.row; hot.classList.remove("hot"); wordsChanged(); }
+    };
+    chip.addEventListener("pointermove", mv); chip.addEventListener("pointerup", upf);
+  });
+}
+
+// ============================================================================
+// Wiring.
+// ============================================================================
+const IDEAS = {
+  viewfinder: "<b>A · Viewfinder.</b> The glass is the lens, always: there is one camera and you are standing in it. Drag the frame to pan and tilt, shift-drag to truck, scroll to push in. Scrub the ruler and reframe: a mark is made there, and every mark shows its frame. The plan in the corner is how you see the room.",
+  plan: "<b>B · Floor plan.</b> Block it the way a director sketches it: from above. People are dots that face a way, the set is footprints, and the camera is drawn on the floor with its field of view and its path. The lens is a monitor on the side that you can still reframe in.",
+  words: "<b>C · Words first.</b> Say the shot and the bench builds it. Every dashed word is a choice; drag names around the frame grid to restage. The sentence underneath is read back off the built set, so it is exactly what gets written. Open A or B when the words run out.",
+};
+const views = [], timelines = [];
+let planB;
+function setTab(tab) {
+  S.tab = tab;
+  for (const b of document.querySelectorAll(".tab")) b.setAttribute("aria-selected", b.dataset.tab === tab);
+  for (const p of document.querySelectorAll(".proto")) p.classList.toggle("on", p.id === tab);
+  document.getElementById("idea").innerHTML = IDEAS[tab];
+  if (location.hash !== "#" + tab) history.replaceState(null, "", "#" + tab);
+  if (tab === "words") { renderWords(); S.playing = true; } else S.playing = false;
+  refreshAll();
+}
+function updateHeader() {
+  const n = S.marks.length, [pw, ph] = ASPECTS[S.aspect], pass = PASSES.find((p) => p.id === S.pass).label;
+  document.getElementById("len").textContent = `${fmt(S.duration)}, ${n} mark${n === 1 ? "" : "s"}`;
+  document.getElementById("planline").innerHTML = n > 1 ? `Writes a <b>${fmt(S.duration)} ${pass}</b> guide at ${pw}×${ph}` : `Writes a <b>${pass}</b> still at ${pw}×${ph}`;
+  document.getElementById("render").textContent = n > 1 ? "Render the guide" : "Render the still";
+  document.getElementById("undo").disabled = !hist.past.length; document.getElementById("redo").disabled = !hist.future.length;
+  for (const segEl of document.querySelectorAll(".seg.look")) {
+    const pass2 = PASSES.find((p) => p.id === S.pass).label;
+    segEl.replaceChildren(...[["stage", "Stage"], ["output", pass2]].map(([v, l]) => h("button", { class: S.look === v ? "on" : "", text: l, onclick: () => { S.look = v; updateHeader(); requestDraw(); } })));
+  }
+}
+function renderTimelines() { for (const t of timelines) t.render(); }
+function refreshAll() {
+  renderInspectors(); renderTimelines(); updateHeader();
+  if (S.tab === "words") renderWords();
+  for (const id of ["a-say", "b-say"]) document.getElementById(id).innerHTML = sayHTML();
+  requestDraw();
+}
+
+function boot() {
+  sceneFromWords();
+  inspHosts.push(document.getElementById("a-insp"), document.getElementById("b-insp"));
+  views.push(new Lens(document.getElementById("a-lens"), { maxRes: 760 }));
+  const inset = new Plan(document.getElementById("a-inset"), { compact: true }); views.push(inset);
+  planB = new Plan(document.getElementById("b-floor")); views.push(planB);
+  views.push(new Lens(document.getElementById("b-lens"), { maxRes: 420 }));
+  views.push(new Lens(document.getElementById("c-lens"), { maxRes: 480, editable: false }));
+  timelines.push(new Timeline(document.getElementById("a-tl"), { thumbs: true, hint: "Scrub, then reframe in the lens: a mark is made where the playhead is. Drag a frame to retime it, the bar's end to change the length." }));
+  timelines.push(new Timeline(document.getElementById("b-tl"), { hint: "Click a camera on the plan to go to its mark. Drag a diamond to retime it." }));
+  document.getElementById("a-add").append(...Object.keys(KINDS).map((k) => h("button", { text: "+ " + KINDS[k].label, onclick: () => addPiece(k, "lens") })));
+  document.getElementById("b-tools").append(...Object.keys(KINDS).map((k) => h("button", { class: "tool", onclick: () => addPiece(k, "plan") }, [
+    h("span", { html: k === "person" ? '<svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#f07da0"/></svg>' : `<svg width="12" height="12"><rect x="${k === "post" ? 4 : 1}" y="${k === "wall" ? 4 : 1}" width="${k === "post" ? 4 : 10}" height="${k === "wall" ? 4 : 10}" fill="#a39e95"/></svg>` }), KINDS[k].label])));
+  document.getElementById("b-fit").onclick = () => { planB.fit(); requestDraw(); };
+  document.getElementById("a-grow").onclick = (e) => { const el = document.getElementById("a-inset"); el.classList.toggle("big"); e.target.textContent = el.classList.contains("big") ? "Smaller" : "Bigger"; setTimeout(() => { inset.fit(); requestDraw(); }, 200); };
+  for (const b of document.querySelectorAll(".tab")) b.onclick = () => setTab(b.dataset.tab);
+  document.getElementById("undo").onclick = undo; document.getElementById("redo").onclick = redo;
+  document.getElementById("render").onclick = () => {
+    const [pw, ph] = ASPECTS[S.aspect], pass = PASSES.find((p) => p.id === S.pass).label;
+    toast(S.marks.length > 1 ? `Prototype: would write a ${pass} clip, ${Math.round(S.duration * 24) + 1} frames at ${pw}×${ph}` : `Prototype: would write a ${pass} still at ${pw}×${ph}`);
+  };
+  document.addEventListener("click", (e) => {
+    const go = e.target.closest("[data-go]"); if (go) { setTab(go.dataset.go); return; }
+    if (e.target.closest("[data-copy]")) {
+      const text = stagingSentence();
+      try { navigator.clipboard.writeText(text).then(() => toast("Copied. Paste it into the shot's words."), () => toast(text)); } catch { toast(text); }
+    }
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target.closest("input, select, textarea")) return;
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") { e.preventDefault(); e.shiftKey ? redo() : undo(); }
+    else if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") { e.preventDefault(); redo(); }
+    else if ((e.key === "Delete" || e.key === "Backspace") && S.sel) { e.preventDefault(); removeSel(); }
+    else if (e.key === "Escape" && S.sel) { S.sel = null; refreshAll(); }
+    else if (e.key === " " && S.tab !== "words") { e.preventDefault(); S.playing = !S.playing; requestDraw(); }
+  });
+  lastSnap = snapState();
+  const want = location.hash.slice(1);
+  setTab(IDEAS[want] ? want : "viewfinder");
+  addEventListener("hashchange", () => { const t = location.hash.slice(1); if (IDEAS[t] && t !== S.tab) setTab(t); });
+}
+boot();
+</script>
