@@ -6,6 +6,13 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout moves at a steady pace and says so.** Camera moves no longer
+start and end at half speed or lurch between unevenly timed marks, people walk
+curves and face the way they go, and the words say who walks or runs where. A
+camera that goes out and comes back is told as both moves. The bench describes
+the camera in everyday words; the model still gets its own. Kept takes stay;
+their clips are drawn again when they are reshot.
+
 **The reel shows the render.** The player has the live preview, with the shot,
 the step and the time; the shot is marked on the reel and in the script, and the
 header says what is happening with a Cancel beside it. Loading and waiting are

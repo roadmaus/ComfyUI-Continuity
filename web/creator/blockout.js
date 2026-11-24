@@ -41,7 +41,7 @@
 // **The path is marks, not curves.** No keyframe editor and no graph view: you
 // frame the shot, you press Mark, you frame the next one, the way a camera
 // department works a move out on a set. Each mark is the whole camera —
-// position, pan, tilt, lens — and the clip eases through them in order over a
+// position, pan, tilt, lens — and the clip goes through them in order over a
 // duration set in seconds.
 //
 // **The glass shows one thing at a time.** It opened with a seam down the
@@ -676,7 +676,7 @@ function placeOf(piece, cam, width, height) {
     : at.x > width * 0.64 ? t("at frame right") : t("at centre");
   const band = at.z < 3.2 ? t("in the foreground")
     : at.z < 9 ? t("in the midground") : t("in the distance");
-  return { words: `${third} ${band}`, depth: at.z };
+  return { words: `${third} ${band}`, to: `${third.replace(/^at (?=frame)/, "").replace(/^at /, "the ")} ${band}`, depth: at.z };
 }
 
 /**
@@ -719,6 +719,43 @@ function moveTarget(objects, marks, cam, width, height) {
   return best ? best.handle : null;
 }
 
+/** How far somebody goes over their marks and how fast, or null for somebody
+ *  who stays put. The pace is over the legs they move in: a wait is not part
+ *  of a walk. */
+function walkOf(marks) {
+  let metres = 0, seconds = 0;
+  for (let k = 1; k < (marks?.length ?? 0); k++) {
+    const far = Math.hypot(marks[k].x - marks[k - 1].x, (marks[k].y ?? 0) - (marks[k - 1].y ?? 0), marks[k].z - marks[k - 1].z);
+    if (far < 0.05) continue;
+    metres += far;
+    seconds += marks[k].t - marks[k - 1].t;
+  }
+  return metres < 0.5 ? null : { pace: metres / Math.max(0.1, seconds), last: marks[marks.length - 1] };
+}
+
+/** Somebody who moves in the shot: how, from where and to where in the frame.
+ *  "" for somebody never in it. */
+function walkClause(piece, end, walk, from, to, cam) {
+  if (!from && !to) return "";
+  const who = piece.plays ? `@${piece.plays}` : articled(piece.word);
+  const posture = postureOf(piece);
+  const how = posture || postureOf(end) ? t("moves")
+    : walk.pace > 3.2 ? t("runs") : walk.pace > 2 ? t("jogs") : walk.pace < 0.5 ? t("walks slowly") : t("walks");
+  if (!from) return t("{who} {how} into frame, to {to}", { who, how, to: to.to });
+  const start = posture ? t("{who} is {posture} {place} and", { who, posture, place: from.words })
+    : t("{who} starts {place} and", { who, place: from.words });
+  if (!to) return t("{start} {how} out of frame", { start, how });
+  if (from.words !== to.words) return t("{start} {how} to {to}", { start, how, to: to.to });
+  // The same corner of the frame at both ends: which way, rather than where.
+  const right = rightOf(cam), ahead = flatForwardOf(cam);
+  const dx = (end.x - piece.x) * right[0] + (end.z - piece.z) * right[2];
+  const dz = (end.x - piece.x) * ahead[0] + (end.z - piece.z) * ahead[2];
+  const way = Math.hypot(dx, dz) < 0.5 ? t("about")
+    : Math.abs(dz) > Math.abs(dx) ? (dz < 0 ? t("toward the camera") : t("away from the camera"))
+      : dx > 0 ? t("to the right") : t("to the left");
+  return t("{start} {how} {way}", { start, how, way });
+}
+
 /**
  * The staging and the move, as one piece of prose.
  *
@@ -728,14 +765,20 @@ function moveTarget(objects, marks, cam, width, height) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null } = {}) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
   const entering = [];
   const placed = [];
+  const walkers = [];
   for (const piece of objects) {
     if (!piece.plays && !piece.word) continue;
     const here = placeOf(piece, first, size.w, size.h);
+    const walk = piece.kind === "person" ? walkOf(people?.[piece.id]) : null;
+    if (walk) {
+      walkers.push({ piece, walk, here });
+      continue;
+    }
     if (here) placed.push({ piece, here });
     else if (piece.plays && marks.length > 1
              && placeOf(piece, marks[marks.length - 1], size.w, size.h)) {
@@ -753,6 +796,12 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
                  : t("@{who} stands {place}", { who: piece.plays, place: here.words }))
       : posture ? t("{what}, {posture}, {place}", { what: articled(piece.word), posture, place: here.words })
         : t("{what} {place}", { what: articled(piece.word), place: here.words }));
+  }
+  const lastCam = marks.length ? marks[marks.length - 1] : cam;
+  for (const { piece, walk, here } of walkers) {
+    const end = ends?.find((other) => other.id === piece.id) ?? { ...piece, ...walk.last };
+    const clause = walkClause(piece, end, walk, here, placeOf(end, lastCam, size.w, size.h), lastCam);
+    if (clause) clauses.push(clause);
   }
   // A change of posture within the shot, said once at the end: "@anna ends
   // standing". `ends` is the set as it stands at the shot's last frame.
@@ -784,14 +833,21 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
 // same words read fine on every other family; LTX's craft guide wants the same
 // moves as prose without labels, which this already is.
 
-export function moveSentence(marks, duration, target = null) {
-  if (!marks || marks.length < 2) return t("The camera holds a static shot.");
-  const a = marks[0], b = marks[marks.length - 1];
+// The bench says the same move to whoever is working it in everyday words
+// (`plain`): nobody should need to know what a truck is to read their own shot.
+
+/** How far one camera is from another, in the units a move's size is judged in. */
+const travelOf = (a, b) => Math.hypot((b.x - a.x) / 1.75, b.y - a.y, (b.z - a.z) / 1.75,
+  ((b.yaw - a.yaw) * DEG) / 25, ((b.pitch - a.pitch) * DEG) / 25, (b.mm - a.mm) / 30);
+
+/** What the camera does between two marks, strongest first: `{ mag, words }`. */
+function movesBetween(a, b, target, plain) {
   const right = rightOf(a), ahead = flatForwardOf(a);
   const dx = (b.x - a.x) * right[0] + (b.z - a.z) * right[2];
   const dz = (b.x - a.x) * ahead[0] + (b.z - a.z) * ahead[2];
   const dy = b.y - a.y;
   const dyaw = b.yaw - a.yaw, dpitch = b.pitch - a.pitch, dmm = b.mm - a.mm;
+  const say = (film, everyday) => (plain ? everyday : film);
   const moves = [];
   // An arc is sideways travel with the pan fighting it — the camera keeps
   // looking at what it is circling. Named as one move, not two.
@@ -800,31 +856,60 @@ export function moveSentence(marks, duration, target = null) {
     // last frame holds at its centre. "The subject" is the honest fallback.
     const around = target ? `@${target}` : t("the subject");
     moves.push({ mag: Math.abs(dx) / 1.5,
-                 words: dx > 0 ? t("arcs right around {who}", { who: around })
-                               : t("arcs left around {who}", { who: around }) });
+                 words: dx > 0 ? say(t("arcs right around {who}", { who: around }), t("circles to the right around {who}", { who: around }))
+                               : say(t("arcs left around {who}", { who: around }), t("circles to the left around {who}", { who: around })) });
   } else {
-    if (Math.abs(dx) > 0.25) moves.push({ mag: Math.abs(dx) / 1.5, words: dx > 0 ? t("trucks right") : t("trucks left") });
-    if (Math.abs(dyaw * DEG) > 5) moves.push({ mag: Math.abs(dyaw * DEG) / 25, words: dyaw > 0 ? t("pans right") : t("pans left") });
+    if (Math.abs(dx) > 0.25) moves.push({ mag: Math.abs(dx) / 1.5,
+      words: dx > 0 ? say(t("trucks right"), t("moves right")) : say(t("trucks left"), t("moves left")) });
+    if (Math.abs(dyaw * DEG) > 5) moves.push({ mag: Math.abs(dyaw * DEG) / 25,
+      words: dyaw > 0 ? say(t("pans right"), t("turns right")) : say(t("pans left"), t("turns left")) });
   }
   if (Math.abs(dz) > 0.3) {
     moves.push({ mag: Math.abs(dz) / 2,
                  words: dz > 0
-                   ? (target ? t("pushes in toward @{who}", { who: target }) : t("pushes in"))
-                   : t("pulls out") });
+                   ? (target ? say(t("pushes in toward @{who}", { who: target }), t("moves closer to @{who}", { who: target }))
+                             : say(t("pushes in"), t("moves forward")))
+                   : say(t("pulls out"), t("moves back")) });
   }
-  if (Math.abs(dy) > 0.25) moves.push({ mag: Math.abs(dy), words: dy > 0 ? t("pedestals up") : t("pedestals down") });
-  if (Math.abs(dpitch * DEG) > 5) moves.push({ mag: Math.abs(dpitch * DEG) / 25, words: dpitch > 0 ? t("tilts up") : t("tilts down") });
+  if (Math.abs(dy) > 0.25) moves.push({ mag: Math.abs(dy),
+    words: dy > 0 ? say(t("pedestals up"), t("rises")) : say(t("pedestals down"), t("sinks")) });
+  if (Math.abs(dpitch * DEG) > 5) moves.push({ mag: Math.abs(dpitch * DEG) / 25,
+    words: dpitch > 0 ? say(t("tilts up"), t("looks up")) : say(t("tilts down"), t("looks down")) });
   if (Math.abs(dmm) > 6) moves.push({ mag: Math.abs(dmm) / 30, words: dmm > 0 ? t("zooms in") : t("zooms out") });
-  if (!moves.length) return t("The camera holds a static shot.");
-  moves.sort((p, q) => q.mag - p.mag);
+  return moves.sort((p, q) => q.mag - p.mag);
+}
+
+export function moveSentence(marks, duration, target = null, { plain = false } = {}) {
+  const still = plain ? t("The camera stays still.") : t("The camera holds a static shot.");
+  if (!marks || marks.length < 2) return still;
+  const a = marks[0], b = marks[marks.length - 1];
+  // A camera that goes somewhere and comes back has no move from end to end.
+  // It is told in two, out to the mark farthest from the start and on from it.
+  let path = 0, seconds = 0, timed = true, turn = a;
+  for (let k = 1; k < marks.length; k++) {
+    const leg = travelOf(marks[k - 1], marks[k]);
+    path += leg;
+    if (marks[k].t === undefined) timed = false;
+    else if (leg > 0.02) seconds += marks[k].t - marks[k - 1].t;
+    if (travelOf(a, marks[k]) > travelOf(a, turn)) turn = marks[k];
+  }
+  const doubles = turn !== b && path > 1.5 * travelOf(a, b) + 0.3;
+  const parts = (doubles ? [movesBetween(a, turn, null, plain), movesBetween(turn, b, target, plain)]
+    : [movesBetween(a, b, target, plain)]).filter((moves) => moves.length);
+  if (!parts.length) return still;
   // The two strongest, because a prompt should name the move and not inventory
   // it: "pushes in and pedestals up" is a move, five clauses is a flight plan.
-  const top = moves.slice(0, 2).map((m) => m.words).join(` ${t("and")} `);
-  const mag = moves[0].mag;
+  const said = parts.map((moves) => moves.slice(0, 2).map((m) => m.words).join(` ${t("and")} `));
+  const mag = Math.max(...parts.map((moves) => moves[0].mag));
+  const far = parts.reduce((sum, moves) => sum + moves[0].mag, 0);
+  const rate = far / Math.max(0.1, timed && seconds ? seconds : Math.max(0.5, duration));
+  let sentence = t("The camera {moves}", { moves: said.join(t(", then ")) });
+  if (plain) {
+    if (rate > 0.55) sentence += " " + t("quickly"); else if (rate < 0.1) sentence += " " + t("slowly");
+    return sentence + ".";
+  }
   const amp = mag > 1.7 ? t("large") : mag < 0.42 ? t("small") : "";
-  const rate = mag / Math.max(0.5, duration);
-  const speed = rate > 0.55 ? t("fast") : rate < 0.18 ? t("slow") : "";
-  let sentence = t("The camera {moves}", { moves: top });
+  const speed = rate > 0.55 ? t("fast") : rate < 0.1 ? t("slow") : "";
   if (amp) sentence += " " + t("with {amp} amplitude", { amp });
   if (speed) sentence += " " + t("at {speed} speed", { speed });
   return sentence + ".";
@@ -878,29 +963,50 @@ export function nearPolyline(pts, px, py) {
 /** The default shot camera: eye height, looking down the room. */
 export const START_CAMERA = { x: 0, y: 1.6, z: -3.6, yaw: 0, pitch: -0.02, mm: 32 };
 
+/** The slope of one value at mark `k`: the two legs' slopes blended by how long
+ *  each takes, or none where it stops or turns back. A hold therefore holds,
+ *  and an evenly paced run keeps its pace through every mark. */
+function slopeAt(times, values, k) {
+  const leg = (at) => (values[at + 1] - values[at]) / Math.max(1e-6, times[at + 1] - times[at]);
+  const last = times.length - 1;
+  if (k === 0) return leg(0);
+  if (k === last) return leg(last - 1);
+  const before = leg(k - 1), after = leg(k);
+  if (before * after <= 0) return 0;
+  const h0 = times[k] - times[k - 1], h1 = times[k + 1] - times[k];
+  const w0 = 2 * h1 + h0, w1 = h1 + 2 * h0;
+  return (w0 + w1) / (w0 / before + w1 / after);
+}
+
+/** One value through its marks at `t`, within leg `i`: a cubic over real time,
+ *  so a mark sits at its moment and nothing overshoots one. */
+function through(times, values, i, t) {
+  const span = Math.max(1e-6, times[i + 1] - times[i]);
+  const u = clamp((t - times[i]) / span, 0, 1), u2 = u * u, u3 = u2 * u;
+  return (2 * u3 - 3 * u2 + 1) * values[i] + (u3 - 2 * u2 + u) * span * slopeAt(times, values, i)
+    + (-2 * u3 + 3 * u2) * values[i + 1] + (u3 - u2) * span * slopeAt(times, values, i + 1);
+}
+
+/** The leg `t` falls in. `t` is inside the marks. */
+function legAt(marks, t) {
+  let i = 0;
+  while (i < marks.length - 2 && marks[i + 1].t <= t) i++;
+  return i;
+}
+
 /**
- * The shot camera at `t` seconds. Catmull–Rom through the marks, the way the
- * old bench walked its path — over time rather than over the mark count, so a
- * mark sits at its moment. Marks evenly spread (every scene the old bench
- * saved) come out exactly on the old path.
+ * The shot camera at `t` seconds, through its marks at a steady pace: it is
+ * already moving on the first frame and still moving on the last.
  */
 export function cameraAt(marks, t) {
   if (!marks?.length) return { ...START_CAMERA };
   if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
-  const last = marks.length - 1;
-  if (t >= marks[last].t) return { ...marks[last] };
-  let i = 0;
-  while (i < last - 1 && marks[i + 1].t <= t) i++;
-  const span = Math.max(1e-6, marks[i + 1].t - marks[i].t);
-  const u = clamp((t - marks[i].t) / span, 0, 1), u2 = u * u, u3 = u2 * u;
-  const m = (k) => marks[clamp(k, 0, last)];
-  const p0 = m(i - 1), p1 = m(i), p2 = m(i + 1), p3 = m(i + 2);
+  const last = marks[marks.length - 1];
+  if (t >= last.t) return { ...last };
+  const i = legAt(marks, t);
+  const times = marks.map((mark) => mark.t);
   const out = { t };
-  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) {
-    out[key] = 0.5 * ((2 * p1[key]) + (-p0[key] + p2[key]) * u
-      + (2 * p0[key] - 5 * p1[key] + 4 * p2[key] - p3[key]) * u2
-      + (-p0[key] + 3 * p1[key] - 3 * p2[key] + p3[key]) * u3);
-  }
+  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) out[key] = through(times, marks.map((mark) => mark[key]), i, t);
   return out;
 }
 
@@ -911,20 +1017,30 @@ const shortest = (a, b) => {
   return d;
 };
 
-/** Where one person stands at `t`: straight from mark to mark, turning the
- *  short way round. Null where the shot gives them no marks. */
+/** How long somebody setting off takes to turn the way they walk, at most. */
+const TURN_SECONDS = 0.4;
+
+/** Where one person stands at `t`: along a curve through their marks, turning
+ *  the short way round. Somebody whose mark faces the way they walk turns as
+ *  they set off; any other turn is spread over the leg, as it was placed. Null
+ *  where the shot gives them no marks. */
 export function poseAt(marks, t) {
   if (!marks?.length) return null;
   if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
   const last = marks[marks.length - 1];
   if (t >= last.t) return { ...last };
-  let i = 0;
-  while (marks[i + 1].t < t) i++;
+  const i = legAt(marks, t);
   const a = marks[i], b = marks[i + 1];
-  const u = (t - a.t) / Math.max(1e-6, b.t - a.t);
+  const span = Math.max(1e-6, b.t - a.t);
+  const u = (t - a.t) / span;
+  const times = marks.map((mark) => mark.t);
   const out = { t };
-  for (const key of ["x", "y", "z"]) out[key] = a[key] + (b[key] - a[key]) * u;
-  for (const key of ["rx", "ry", "rz"]) out[key] = a[key] + shortest(a[key], b[key]) * u;
+  for (const key of ["x", "y", "z"]) out[key] = through(times, marks.map((mark) => mark[key] ?? 0), i, t);
+  const dx = b.x - a.x, dz = b.z - a.z;
+  const facing = Math.hypot(dx, dz) > 0.3 && Math.abs(shortest(Math.atan2(dx, dz), b.ry ?? 0)) < 0.35;
+  const turned = facing ? Math.min(1, (t - a.t) / Math.min(TURN_SECONDS, span / 2)) : u;
+  for (const key of ["rx", "rz"]) out[key] = (a[key] ?? 0) + shortest(a[key] ?? 0, b[key] ?? 0) * u;
+  out.ry = (a.ry ?? 0) + shortest(a.ry ?? 0, b.ry ?? 0) * turned;
   return out;
 }
 
@@ -967,7 +1083,7 @@ export function stagingWords(timeline, index) {
   const { w, h } = guideSize(timeline);
   const seconds = Number(segment.duration_s) || 0;
   const words = stagingSentence(stagedAt(set, segment.staging, 0), marks, seconds, cameraAt(marks, 0), { w, h },
-                                { ends: stagedAt(set, segment.staging, seconds) });
+                                { ends: stagedAt(set, segment.staging, seconds), people: segment.staging.people });
   const clip = S.stagedClip(segment);
   if (clip?.role !== "reference") return words;
   return `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot. ${words}`.trim();

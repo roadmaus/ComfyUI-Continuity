@@ -23,7 +23,7 @@ import { viewUrl, blockoutSweep } from "./api.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
 import {
-  Raster, project, cameraAt, stagedAt, guideSize, stagingSentence, moveSentence,
+  Raster, project, cameraAt, poseAt, stagedAt, guideSize, stagingSentence, moveSentence,
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
@@ -696,8 +696,8 @@ class Blockout extends Reel {
     context.stroke();
   }
 
-  /** Where each person walks in this shot: a dashed line on the floor from mark
-   *  to mark, in their own hue, with a dot at every mark. */
+  /** Where each person walks in this shot: a dashed line on the floor through
+   *  their marks, in their own hue, with a dot at every mark. */
   inkWalks(context, cam, scale) {
     const set = this.set();
     const staging = this.staging();
@@ -710,7 +710,9 @@ class Blockout extends Reel {
       context.fillStyle = context.strokeStyle;
       context.lineWidth = 2 * scale;
       context.setLineDash([5 * scale, 5 * scale]);
-      this.polyline(context, cam, marks.map((mark) => [mark.x, mark.y + 0.02, mark.z]));
+      const from = marks[0].t, over = marks[marks.length - 1].t - from;
+      const along = Array.from({ length: 49 }, (_, k) => poseAt(marks, from + (over * k) / 48));
+      this.polyline(context, cam, along.map((at) => [at.x, at.y + 0.02, at.z]));
       context.setLineDash([]);
       for (const mark of marks) {
         const at = project(cam, [mark.x, mark.y + 0.02, mark.z], w, h);
@@ -1729,8 +1731,10 @@ class Blockout extends Reel {
     const set = S.setOf(this.timeline, segment);
     if (!set) return "";
     const { w, h } = guideSize(this.timeline);
-    return stagingSentence(stagedAt(set, segment.staging, 0), segment.staging.camera,
-                           Number(segment.duration_s) || 0, cameraAt(segment.staging.camera, 0), { w, h });
+    const seconds = Number(segment.duration_s) || 0;
+    return stagingSentence(stagedAt(set, segment.staging, 0), segment.staging.camera, seconds,
+                           cameraAt(segment.staging.camera, 0), { w, h },
+                           { ends: stagedAt(set, segment.staging, seconds), people: segment.staging.people });
   }
 
   /** A staged shot's own rows: the move, the marks, the lens, who stands where,
@@ -1751,7 +1755,7 @@ class Blockout extends Reel {
     const loose = staging.hold === "loose";
     const posture = this.postureChanges(index);
     return [
-      this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(marks, this.seconds(index)) })),
+      this.irow(t("Camera"), el("span", { class: "mmc-reel-note", text: moveSentence(marks, this.seconds(index), null, { plain: true }) })),
       this.irow(t("Marks"), el("div", { class: "mmc-reel-inline" }, [
         ...marks.map((mark) => el("button", { class: "mmc-reel-value", title: t("Go to this mark"),
           onclick: () => { this.goTo(index, mark.t); this.renderSide(); } }, [
@@ -1764,7 +1768,7 @@ class Blockout extends Reel {
         (mm) => { for (const mark of staging.camera) mark.mm = mm; this.commit(); })),
       this.irow(t("Staging"), el("span", { class: "mmc-reel-note",
         text: stagingSentence(stagedAt(set, staging, 0), marks, this.seconds(index), cameraAt(marks, 0), { w, h },
-          { withMove: false, ends: stagedAt(set, staging, this.seconds(index)) })
+          { withMove: false, ends: stagedAt(set, staging, this.seconds(index)), people: staging.people })
           || t("Nothing named is in frame.") })),
       this.irow(t("Guide"), this.segmented(this.passOptions(), pass, (value) => {
         if (value === S.pieceStagingPass(this.timeline)) delete staging.pass; else staging.pass = value;

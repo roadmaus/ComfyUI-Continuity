@@ -2664,6 +2664,9 @@ export const STAGING_HOLDS = { firm: 1.0, loose: 0.6 };
 /** Where the derived guides live, and what marks one as derived. */
 export const STAGED_GUIDE_DIR = "continuity/blockout";
 export const STAGED_GUIDE_PREFIX = "staged-";
+/** How marks are walked between. Moves when that changes, so a guide drawn the
+ *  old way is drawn again. */
+const STAGING_MOTION = 2;
 /** Whatever a piece of a set can be, with the size a new one starts at. */
 export const SET_KINDS = {
   person: { w: 0.5, h: 1.75, d: 0.35 },
@@ -2887,6 +2890,7 @@ export function stagingStamp(timeline, index) {
   if (pass === "none") return null;
   const { words, ...staging } = serializeStaging(segment.staging);
   return hash(JSON.stringify([
+    STAGING_MOTION,
     staging, serializeSets([setStamped(setOf(timeline, segment))])[0]?.objects ?? [],
     pass, timeline.aspect, timeline.short_edge, pieceFamily(timeline),
     segment.duration_s,

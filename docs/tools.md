@@ -68,8 +68,9 @@ is written.
 A hard cut starts a scene, and a scene has a **set**: walls, blocks, posts and
 people. A hard cut may also keep the set it had (same room, new angle); the
 join says which. Each shot has its own **staging** on its set: the shot
-camera's marks, and marks for each person. Between two marks a person goes from
-one to the other, and the camera eases through its marks.
+camera's marks, and marks for each person. The camera
+and the people go through their marks at a steady pace, already moving on the
+first frame, and a person turns the way they walk as they set off.
 
 The set is shared, the blocking is not. Moving a wall or the table changes the
 set, so every shot of its scene is shot again; moving a person changes only the
