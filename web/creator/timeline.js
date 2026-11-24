@@ -45,6 +45,10 @@ export function openTimeline(options) {
  *  player. Everything both windows share is on `Reel`; what is here is this
  *  window's own. */
 export class Timeline extends Reel {
+  constructor(options, resolve) {
+    super(options, resolve);
+    this.openBlockoutWindow = options.openBlockout ?? null;
+  }
 
   mount() {
     this.buildParts();
@@ -57,6 +61,10 @@ export class Timeline extends Reel {
         this.redoButton,
         this.planEl,
         this.cancelButton,
+        ...(this.openBlockoutWindow ? [el("button", {
+          class: "mmc-reel-btn quiet", text: t("Open the blockout"), title: t("The stage, on the same piece"),
+          onclick: () => { const go = this.openBlockoutWindow; this.close(); go(); },
+        })] : []),
         ...(this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
@@ -759,8 +767,10 @@ export class TimelineBody {
 
   /** The strip, over the node. `edit` opens a card's window with it — what the
    *  face does on the way from one shot to two, so the new card is where the
-   *  writing already is. */
-  open({ edit = null } = {}) {
+   *  writing already is. `bench` is what the blockout bench was opened with,
+   *  handed back to it on the way across. */
+  open({ edit = null, bench = {} } = {}) {
+    let held = null;
     openTimeline({
       timeline: this.timeline,
       onCommit: () => this.commit(),
@@ -771,8 +781,9 @@ export class TimelineBody {
       ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
       stage: this.stage,
       run: () => this.currentRun(),
-      opened: (reel) => { this.reel = reel; this.stage.onChange = () => reel.staged(); },
-    }).then(() => { this.reel = null; this.stage.onChange = null; });
+      openBlockout: () => this.openBlockout(bench),
+      opened: (reel) => { held = reel; this.reel = reel; this.stage.onChange = () => reel.staged(); },
+    }).then(() => { if (this.reel === held) { this.reel = null; this.stage.onChange = null; } });
   }
 
   /** The blockout bench, over the node: the same piece as the strip, staged
@@ -788,7 +799,7 @@ export class TimelineBody {
       ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
       stage: this.stage,
       run: () => this.currentRun(),
-      openTimeline: () => this.open(),
+      openTimeline: () => this.open({ bench: { targets, back } }),
       opened: (bench) => { held = bench; this.reel = bench; this.stage.onChange = () => bench.staged(); },
     }).then(() => { if (this.reel === held) { this.reel = null; this.stage.onChange = null; } });
   }
