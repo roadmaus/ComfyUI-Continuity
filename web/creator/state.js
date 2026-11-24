@@ -2750,6 +2750,14 @@ export function parseSets(raw) {
   return out;
 }
 
+/** How fast a mark is arrived at and left, as multiples of the stretch's average.
+ *  Absent where it was never set. */
+function paceOfMark(raw) {
+  const out = {};
+  for (const key of ["in", "out"]) if (Number.isFinite(raw?.[key])) out[key] = finiteIn(raw[key], 1, 0, 3);
+  return out;
+}
+
 function cameraMark(raw) {
   return {
     t: finiteIn(raw?.t, 0, 0, 3600),
@@ -2759,6 +2767,7 @@ function cameraMark(raw) {
     yaw: finiteIn(raw?.yaw, 0, -100, 100),
     pitch: finiteIn(raw?.pitch, 0, -1.5, 1.5),
     mm: finiteIn(raw?.mm, 32, 8, 300),
+    ...paceOfMark(raw),
   };
 }
 
@@ -2771,6 +2780,7 @@ function personMark(raw) {
     rx: turn(raw?.rx),
     ry: turn(raw?.ry),
     rz: turn(raw?.rz),
+    ...paceOfMark(raw),
   };
 }
 

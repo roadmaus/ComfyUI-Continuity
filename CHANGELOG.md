@@ -6,6 +6,10 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout has a speed curve.** Under the glass, for the camera or the person
+selected: drag how fast a stop is reached and left, or pick a way to take the
+stretch. Stops keep their times.
+
 **The blockout moves at a steady pace and says so.** Camera moves no longer
 start and end at half speed or lurch between unevenly timed marks, people walk
 curves and face the way they go, and the words say who walks or runs where. A

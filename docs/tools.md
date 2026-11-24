@@ -109,6 +109,14 @@ lowest point sits at its height off the floor, so a figure laid flat lies on
 it. **+ Person**, **+ Block**, **+ Wall** and **+ Post** add to the set, and
 Delete takes the selection off it.
 
+Under the glass is the **speed** of whoever is selected, or of the camera. Each
+stop keeps its time; the curve says how fast the stretch between two is taken,
+and dragging a point up there slows it elsewhere, so it still arrives when it
+did. The buttons take the stretch the playhead is in: **Natural**, **Steady**,
+**Start gently**, **Stop gently**, **Rush in**, **Rush off**. **Wait until here**
+stays at the last stop until the playhead. Clicking off a point moves the
+playhead.
+
 ### What a shot sends
 
 | | |

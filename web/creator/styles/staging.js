@@ -44,6 +44,15 @@ export const css = `
 .mmc-st .mmc-bo-seg { display: inline-flex; align-items: center; gap: 5px; }
 .mmc-st .mmc-bo-seg:disabled { opacity: .4; cursor: not-allowed; }
 
+/* --- the speed lane under the glass ----------------------------------------------- */
+.mmc-st-pace { position: relative; flex: none; display: flex; flex-direction: column; gap: 6px; }
+.mmc-st-pace[hidden], .mmc-st-pace [hidden] { display: none; }
+.mmc-st-pacehead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px; }
+.mmc-st-pacename { font-weight: 600; font-size: calc(12.5px * var(--mmc-type, 1)); }
+.mmc-st-pacenow { position: absolute; right: 14px; bottom: 64px; pointer-events: none; font-size: calc(12px * var(--mmc-type, 1)); font-variant-numeric: tabular-nums; color: var(--mmc-dim); }
+.mmc-st-pace canvas { width: 100%; height: 84px; display: block; border-radius: 10px; cursor: pointer; touch-action: none;
+  color: var(--mmc-text); background: var(--mmc-surface-2); }
+
 /* --- the strip: the sets over the film, a shot's guide on its card, the playhead -- */
 .mmc-st-bench .mmc-reel-pass { cursor: pointer; background: none; font: inherit; font-size: calc(10.5px * var(--mmc-type, 1)); text-align: left; line-height: 15px; }
 .mmc-st-bench .mmc-reel-pass.selected { color: var(--mmc-accent); border-color: var(--mmc-accent); }

@@ -89,6 +89,29 @@ const facing = [pm(0, 0, 0, 0), pm(4, 4, 0, Math.PI / 2)];
 out.turns = [0, 0.4, 2].map((t) => r(poseAt(facing, t).ry));
 out.backwards = r(poseAt([pm(0, 0, 0, 0), pm(4, 0, -4, 0)], 2).ry);
 
+// A stretch given a pace: its ends go at the pace, its stops stay, it never
+// runs backwards, and a bent path has no say in the speed.
+const S = await import("./web/creator/state.js");
+const bent = [{ ...at(0, 0), out: 0 }, { ...at(2, 2, 3), in: 2 }, at(4, 4, 0)];
+const fast = (marks, t) => { const a = cameraAt(marks, t - 5e-3), b = cameraAt(marks, t + 5e-3);
+  return Math.hypot(b.x - a.x, b.z - a.z) / 1e-2; };
+const flat = [{ ...at(0, 0), out: 1 }, { ...at(2, 2, 3), in: 1 }, at(4, 4, 0)];
+const run = Array.from({ length: 9 }, (_, k) => fast(flat, 0.2 + k * 0.2));
+out.flat = Math.max(...run) / Math.min(...run) < 1.04;
+out.gentle = fast(bent, 0.02) < 0.1;
+out.stops = [0, 2, 4].map((t) => [r(cameraAt(bent, t).x), r(cameraAt(bent, t).z)]);
+const hard = [{ ...at(0, 0), out: 3 }, { ...at(2, 4), in: 3 }];
+let least = 1;
+for (let t = 0.01; t < 2; t += 0.01) least = Math.min(least, cameraAt(hard, t + 0.01).z - cameraAt(hard, t).z);
+out.forward = least > -1e-6;
+const sudden = [{ ...at(0, 0), out: 1 }, { ...at(2, 2), in: 1 }, at(4, 2)];
+out.sudden = [1, 1.95, 3].map((t) => Math.round(speed(sudden, t) * 10) / 10);
+out.panned = r(cameraAt([{ ...at(0, 0), out: 0 }, { ...at(2, 0), yaw: 1, in: 0 }], 0.5).yaw);
+out.person = r(poseAt([{ ...pm(0, 0, 0), out: 0 }, { ...pm(2, 0, 2), in: 0 }], 0.5).z);
+const kept = S.serializeStaging({ camera: bent, people: { 1: [{ ...pm(0, 0, 0), out: 0 }, { ...pm(1, 1, 1), in: 9 }] } });
+out.kept = [kept.camera.map((m) => [m.in ?? null, m.out ?? null]), kept.people[1].map((m) => [m.in ?? null, m.out ?? null])];
+out.reads = Object.keys(cameraAt(bent, 0)).includes("out");
+
 console.log(JSON.stringify(out));
 """
 
@@ -126,5 +149,16 @@ check("toward the camera", said["nears"], "@anna starts at centre in the midgrou
 check("a shuffle is standing", said["stays"], "@anna stands at centre in the midground.")
 check("a walker turns as they set off", said["turns"], [0, 1.57, 1.57])
 check("and can be placed walking backwards", said["backwards"], 0)
+
+check("a steady pace is steady round a bend", said["flat"], True)
+check("a gentle start is from standing still", said["gentle"], True)
+check("the stops stay where and when they were", said["stops"], [[0, 0], [3, 2], [0, 4]])
+check("no pace runs backwards", said["forward"], True)
+check("a steady stretch before a wait stops suddenly", said["sudden"], [1, 1, 0])
+check("a camera that only turns has a pace too", said["panned"], 0.16)
+check("so does a person", said["person"], 0.31)
+check("the pace is kept on the mark, and clamped", said["kept"],
+      [[[None, 0], [2, None], [None, None]], [[None, 0], [3, None]]])
+check("a moment read off the path carries no pace", said["reads"], False)
 
 passed("the blockout says who is where, and the move in the model's own words")

@@ -20,6 +20,7 @@
 import { el, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { viewUrl, blockoutSweep } from "./api.js";
+import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
 import {
@@ -203,6 +204,7 @@ class Blockout extends Reel {
     this.hudBottom = el("div", { class: "mmc-bo-hud bottom" });
     this.timeSaid = el("span", { class: "mmc-st-said" });
     this.stageEl = el("div", { class: "mmc-st" }, [this.canvas, this.video, this.blank, this.hudTop, this.hudBottom]);
+    this.paceLane = new PaceLane(this);
     this.glass = el("div", { class: "mmc-st-glass" }, [this.stageEl]);
     this.openButton = el("button", {
       class: "mmc-reel-btn quiet", text: t("Open the timeline"), title: t("The reel, on the same piece"),
@@ -227,7 +229,7 @@ class Blockout extends Reel {
       ]),
       el("div", { class: "mmc-reel-main" }, [
         this.scriptColumn(),
-        el("div", { class: "mmc-st-col" }, [this.glass]),
+        el("div", { class: "mmc-st-col" }, [this.glass, this.paceLane.node]),
         el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost]),
       ]),
       el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
@@ -595,6 +597,7 @@ class Blockout extends Reel {
     if (this.headEl && this.lay) {
       this.headEl.style.left = `${this.reelAt(this.startOf(this.index()) + this.at.t)}px`;
     }
+    this.paceLane.paint();
   }
 
   /** The HUD over the glass. */

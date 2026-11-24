@@ -987,6 +987,77 @@ function through(times, values, i, t) {
     + (-2 * u3 + 3 * u2) * values[i + 1] + (u3 - u2) * span * slopeAt(times, values, i + 1);
 }
 
+/** The fastest a stretch may be left or arrived at, as a multiple of its
+ *  average. Past three the progress below could run backwards. */
+export const MOST_PACE = 3;
+
+/** How far apart two readings are: in metres, or in degrees turned. */
+const apart = (a, b, unit) => (unit === "m"
+  ? Math.hypot(b.x - a.x, (b.y ?? 0) - (a.y ?? 0), b.z - a.z)
+  : Math.hypot((b.yaw ?? 0) - (a.yaw ?? 0), (b.pitch ?? 0) - (a.pitch ?? 0)) * DEG);
+export const legSpeed = (a, b, seconds, unit) => apart(a, b, unit) / seconds;
+
+const LEG_STEPS = 64;
+
+/** The length of leg `i` so far, at even steps of its own parameter. */
+function legLengths(marks, i, unit) {
+  const times = marks.map((mark) => mark.t);
+  const keys = unit === "m" ? ["x", "y", "z"] : ["yaw", "pitch"];
+  const values = keys.map((key) => marks.map((mark) => mark[key] ?? 0));
+  const span = times[i + 1] - times[i];
+  const lengths = [0];
+  let last = null;
+  for (let k = 0; k <= LEG_STEPS; k++) {
+    const at = {};
+    keys.forEach((key, n) => { at[key] = through(times, values[n], i, times[i] + (span * k) / LEG_STEPS); });
+    if (last) lengths.push(lengths[k - 1] + apart(last, at, unit));
+    last = at;
+  }
+  return lengths;
+}
+
+/** What a leg's length is measured in: metres, unless it only turns. */
+const unitOfLeg = (marks, i) => (apart(marks[i], marks[i + 1], "m") > 0.02 ? "m" : "deg");
+
+/** How far leg `i` goes. */
+export const strideOf = (marks, i, unit) => legLengths(marks, i, unit)[LEG_STEPS];
+
+/** The speeds leg `i` is left and arrived at with, as multiples of its average:
+ *  the ones its marks were given, or the ones it has by itself. */
+export function legEnds(marks, i, lengths = legLengths(marks, i, unitOfLeg(marks, i))) {
+  const total = lengths[LEG_STEPS];
+  if (total < 1e-6) return [marks[i].out ?? 1, marks[i + 1].in ?? 1];
+  // The end slope of a cubic, from its first two steps.
+  const slope = (one, two) => clamp((LEG_STEPS * (4 * one - two)) / (2 * total), 0, MOST_PACE);
+  return [
+    marks[i].out ?? slope(lengths[1], lengths[2]),
+    marks[i + 1].in ?? slope(total - lengths[LEG_STEPS - 1], total - lengths[LEG_STEPS - 2]),
+  ];
+}
+
+/** The moment leg `i`'s curve is read at for `t`: `t` itself, unless the leg was
+ *  given a pace. Then distance along the curve follows a cubic whose end slopes
+ *  are the pace, so the shape of the path has no say in the speed. */
+function pacedTime(marks, i, t) {
+  if (marks[i].out === undefined && marks[i + 1].in === undefined) return t;
+  const span = marks[i + 1].t - marks[i].t;
+  if (span < 1e-6) return t;
+  const lengths = legLengths(marks, i, unitOfLeg(marks, i));
+  const [out, into] = legEnds(marks, i, lengths);
+  const u = clamp((t - marks[i].t) / span, 0, 1), u2 = u * u, u3 = u2 * u;
+  const done = clamp((u3 - 2 * u2 + u) * out + (3 * u2 - 2 * u3) + (u3 - u2) * into, 0, 1);
+  const total = lengths[LEG_STEPS];
+  if (total < 1e-6) return marks[i].t + span * done;
+  let k = 0;
+  while (k < LEG_STEPS - 1 && lengths[k + 1] < done * total) k++;
+  const step = lengths[k + 1] - lengths[k];
+  const along = (k + (step > 1e-9 ? clamp((done * total - lengths[k]) / step, 0, 1) : 0)) / LEG_STEPS;
+  return marks[i].t + span * along;
+}
+
+/** A mark as a moment: where it is, without how it is arrived at and left. */
+const momentOf = ({ in: _in, out: _out, ...mark }) => mark;
+
 /** The leg `t` falls in. `t` is inside the marks. */
 function legAt(marks, t) {
   let i = 0;
@@ -1000,13 +1071,14 @@ function legAt(marks, t) {
  */
 export function cameraAt(marks, t) {
   if (!marks?.length) return { ...START_CAMERA };
-  if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
+  if (marks.length === 1 || t <= marks[0].t) return momentOf(marks[0]);
   const last = marks[marks.length - 1];
-  if (t >= last.t) return { ...last };
+  if (t >= last.t) return momentOf(last);
   const i = legAt(marks, t);
   const times = marks.map((mark) => mark.t);
+  const when = pacedTime(marks, i, t);
   const out = { t };
-  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) out[key] = through(times, marks.map((mark) => mark[key]), i, t);
+  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) out[key] = through(times, marks.map((mark) => mark[key]), i, when);
   return out;
 }
 
@@ -1026,16 +1098,17 @@ const TURN_SECONDS = 0.4;
  *  where the shot gives them no marks. */
 export function poseAt(marks, t) {
   if (!marks?.length) return null;
-  if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
+  if (marks.length === 1 || t <= marks[0].t) return momentOf(marks[0]);
   const last = marks[marks.length - 1];
-  if (t >= last.t) return { ...last };
+  if (t >= last.t) return momentOf(last);
   const i = legAt(marks, t);
   const a = marks[i], b = marks[i + 1];
   const span = Math.max(1e-6, b.t - a.t);
-  const u = (t - a.t) / span;
+  const when = pacedTime(marks, i, t);
+  const u = (when - a.t) / span;
   const times = marks.map((mark) => mark.t);
   const out = { t };
-  for (const key of ["x", "y", "z"]) out[key] = through(times, marks.map((mark) => mark[key] ?? 0), i, t);
+  for (const key of ["x", "y", "z"]) out[key] = through(times, marks.map((mark) => mark[key] ?? 0), i, when);
   const dx = b.x - a.x, dz = b.z - a.z;
   const facing = Math.hypot(dx, dz) > 0.3 && Math.abs(shortest(Math.atan2(dx, dz), b.ry ?? 0)) < 0.35;
   const turned = facing ? Math.min(1, (t - a.t) / Math.min(TURN_SECONDS, span / 2)) : u;
@@ -1134,7 +1207,9 @@ export function lineUp(timeline, index) {
   const set = S.setOf(timeline, before);
   const end = Number(before.duration_s) || 0;
   const camera = cameraAt(before.staging.camera, end);
-  segment.staging.camera = [{ ...camera, t: 0 }, ...segment.staging.camera.filter((mark) => mark.t > 0.14)];
+  // Where it starts changes; how fast it sets off is this shot's own.
+  const leaving = (marks) => (marks?.[0]?.out === undefined ? {} : { out: marks[0].out });
+  segment.staging.camera = [{ ...camera, ...leaving(segment.staging.camera), t: 0 }, ...segment.staging.camera.filter((mark) => mark.t > 0.14)];
   const left = stagedAt(set, before.staging, end);
   for (const piece of set.objects) {
     if (piece.kind !== "person") continue;
@@ -1143,7 +1218,8 @@ export function lineUp(timeline, index) {
     const moved = before.staging.people?.[piece.id]?.length || segment.staging.people[piece.id]?.length;
     if (!moved) continue;
     segment.staging.people[piece.id] = [{ t: 0, x: was.x, y: was.y ?? 0, z: was.z,
-                                          rx: was.rx ?? 0, ry: was.ry ?? 0, rz: was.rz ?? 0 }, ...rest];
+                                          rx: was.rx ?? 0, ry: was.ry ?? 0, rz: was.rz ?? 0,
+                                          ...leaving(segment.staging.people[piece.id]) }, ...rest];
   }
   return true;
 }
