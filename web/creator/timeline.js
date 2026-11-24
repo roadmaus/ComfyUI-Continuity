@@ -12,16 +12,15 @@ import { viewUrl, primeSettings, stillUrl } from "./api.js";
 import { openRestyle } from "./restyle.js";
 import { castFamilies } from "./refmod.js";
 import { clearButton } from "./clear.js";
-import { dragsFiles, el, icon, mountOverlay } from "./dom.js";
+import { el, icon, mountOverlay } from "./dom.js";
 import { CreatorEditor } from "./editor.js";
 import { t } from "./i18n.js";
 import { settingsHome } from "./slate.js";
-import { openLoras, loraBase, watchPins } from "./loras.js";
+import { openLoras, loraBase } from "./loras.js";
 import { openPicker } from "./picker.js";
 import { openPresetLibrary } from "./presetlib.js";
 import * as P from "./presets.js";
 import { openSettings } from "./settings.js";
-import { SoundLane } from "./soundlane.js";
 import { facesPill, neuralPill, guideLoraPill } from "./pills.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage, stageSource } from "./stage.js";
@@ -31,6 +30,7 @@ import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
 import * as Guide from "./guide.js";
 import { describeRatio, rulesFor } from "./canvas.js";
+import { openStaging } from "./staging.js";
 import { Reel, probeAspectSizes, timelineGeometry, fitText, compiledFor } from "./reel.js";
 
 export function openTimeline(options) {
@@ -47,95 +47,7 @@ export function openTimeline(options) {
 export class Timeline extends Reel {
 
   mount() {
-    this.promptBox = this.globalPromptBox();
-    this.promptBox.setValue(this.timeline.prompt ?? "");
-    // The scene is the first paragraph of the script: the standing description
-    // every shot is written under. Display label only; the key stays `prompt`.
-    this.promptBox.root.setAttribute("aria-label", t("Scene"));
-    this.promptBox.root.setAttribute("data-placeholder", t("Where it happens, when, and who is in it."));
-    this.promptBox.frame.classList.add("mmc-reel-plain");
-
-    // The piece's two audio fields, as lines of the scene rather than boxes:
-    // what the room sounds like, and the score only the audience hears. Held
-    // rather than built inline: the refiner writes into both.
-    this.soundscapeBox = this.textBox("soundscape", {
-      className: "mmc-reel-line-text", rows: 1, placeholder: t("Add the sound of the place"),
-    });
-    this.musicBox = this.textBox("music", {
-      className: "mmc-reel-line-text", rows: 1, placeholder: t("Add a score"),
-    });
-    for (const box of [this.soundscapeBox, this.musicBox]) {
-      box.setAttribute("aria-label", box === this.musicBox ? t("Score") : t("Sound"));
-      box.addEventListener("input", () => fitText(box));
-    }
-
-    watchPins(this, "pinsMoved");
-    // The supplied-track machinery: never drawn, only asked to add a track.
-    // The reel draws the tracks on its own sound thread.
-    this.sound = new SoundLane({
-      read: () => this.timeline,
-      onCommit: () => this.commit(),
-      flash: (message) => this.flash?.(message),
-    });
-
-    this.rows = new Map();
-    // A shot's refine button and rewrite panel, by card: both outlive a redraw.
-    this.refiners = new Map();
-    this.refining = new Set();
-    this.sel = null;
-    // What every pass is made from, as of the last commit: how a reorder is
-    // told from an edit. See `state.arrangement`.
-    this.arranged = S.arrangement(this.timeline);
-    this.titleMeta = el("span", { class: "mmc-reel-meta" });
-    this.planEl = el("span", { class: "mmc-reel-plan" });
-    this.shootButton = el("button", { class: "mmc-reel-shoot", onclick: () => this.shoot() });
-    this.undoButton = el("button", { class: "mmc-reel-step", title: t("Undo (Ctrl+Z)"), disabled: true,
-      onclick: () => this.step(this.done, this.undone) }, [icon("rewind", 16)]);
-    this.redoButton = el("button", { class: "mmc-reel-step redo", title: t("Redo (Ctrl+Shift+Z)"), disabled: true,
-      onclick: () => this.step(this.undone, this.done) }, [icon("rewind", 16)]);
-    // Held, not rebuilt: they are repainted on every step, and a button that
-    // is replaced under a press loses it.
-    this.liveButton = el("button", { class: "mmc-reel-link mmc-reel-live-said", title: t("Watch the render"),
-      onclick: () => { this.watching = true; this.renderPlayer(); } });
-    this.cancelButton = el("button", { class: "mmc-reel-btn quiet", text: t("Cancel"), hidden: true,
-      onclick: () => this.cancel() });
-    this.progressBar = el("span", { class: "mmc-reel-progress" });
-    this.liveImage = el("img", { class: "mmc-reel-media", alt: "" });
-    this.liveMedia = el("div", { class: "mmc-reel-live-media" });
-    this.liveLabel = el("span", { class: "mmc-reel-plabel" });
-    this.liveRule = el("span", { class: "mmc-reel-live-rule" });
-    this.castRow = el("div", { class: "mmc-reel-castrow" });
-    this.scriptHost = el("div", { class: "mmc-reel-shots" });
-    this.dropMark = el("div", { class: "mmc-reel-drop" });
-    this.nextRow = el("div", { class: "mmc-reel-row mmc-reel-next" });
-    this.playerHost = el("div", { class: "mmc-reel-player" });
-    this.inspectHost = el("div", { class: "mmc-reel-inspect" });
-    this.reelHost = el("div", {
-      class: "mmc-reel-lane",
-      // A video file from outside the page lands as a clip where it is dropped.
-      ondragover: (event) => {
-        if (!dragsFiles(event)) return;
-        event.preventDefault();
-        this.markDrop(this.dropAt(event));
-      },
-      ondragleave: (event) => { if (!this.reelHost.contains(event.relatedTarget)) this.markDrop(null); },
-      ondrop: (event) => {
-        if (!dragsFiles(event)) return;
-        event.preventDefault();
-        event.stopPropagation();
-        const at = this.dropAt(event);
-        this.markDrop(null);
-        this.dropFiles([...event.dataTransfer.files], at?.slot ?? this.timeline.segments.length);
-      },
-    });
-    this.statusHost = el("div", { class: "mmc-reel-status" });
-    // Being in the scene's lines is being at the piece: its settings are beside
-    // them. A click as well as focus, for a line that kept it.
-    const toPiece = () => { if (this.sel) this.select(null); };
-    const line = (label, field) => el("div", { class: "mmc-reel-row mmc-reel-quiet", onclick: toPiece, onfocusin: toPiece }, [
-      el("span", { class: "mmc-reel-gutter" }, [el("span", { class: "mmc-reel-label", text: label })]),
-      field,
-    ]);
+    this.buildParts();
 
     this.modal = el("div", { class: "mmc-modal mmc-tl-modal mmc-reel" }, [
       el("div", { class: "mmc-reel-head" }, [
@@ -149,18 +61,7 @@ export class Timeline extends Reel {
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-reel-main" }, [
-        el("div", { class: "mmc-reel-script", onclick: (event) => { if (event.target === event.currentTarget) toPiece(); } }, [
-          this.castRow,
-          el("div", { class: "mmc-reel-row mmc-reel-scene", onclick: toPiece, onfocusin: toPiece }, [
-            el("span", { class: "mmc-reel-gutter" }, [el("span", { class: "mmc-reel-label", text: t("Scene") })]),
-            this.promptBox.frame,
-          ]),
-          line(t("Sound"), this.soundscapeBox),
-          line(t("Score"), this.musicBox),
-          el("div", { class: "mmc-reel-rule" }),
-          this.scriptHost,
-          this.nextRow,
-        ]),
+        this.scriptColumn(),
         el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost]),
       ]),
       el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
@@ -854,6 +755,23 @@ export class TimelineBody {
       run: () => this.currentRun(),
       opened: (reel) => { this.reel = reel; this.stage.onChange = () => reel.staged(); },
     }).then(() => { this.reel = null; this.stage.onChange = null; });
+  }
+
+  /** The blockout bench, over the node: the same piece as the strip, staged
+   *  in 3D. Lent what the strip is lent, and the way across to it. */
+  openBlockout() {
+    let held = null;
+    openStaging({
+      timeline: this.timeline,
+      onCommit: () => this.commit(),
+      io: () => this.widgetIO(),
+      widgets: this.widgets,
+      ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
+      stage: this.stage,
+      run: () => this.currentRun(),
+      openTimeline: () => this.open(),
+      opened: (bench) => { held = bench; this.reel = bench; this.stage.onChange = () => bench.staged(); },
+    }).then(() => { if (this.reel === held) { this.reel = null; this.stage.onChange = null; } });
   }
 
   value(name, fallback) {

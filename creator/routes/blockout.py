@@ -80,9 +80,26 @@ async def write_clip(request):
         loop = asyncio.get_running_loop()
         answer = await loop.run_in_executor(
             None, blockout.write,
-            body.get("token", ""), body.get("fps", 24), body.get("op", "guide"), scene)
+            body.get("token", ""), body.get("fps", 24), body.get("op", "guide"), scene,
+            body.get("name") or None)
     except blockout.BlockoutError as exc:
         return web.json_response({"error": str(exc)}, status=400)
     except Exception as exc:  # noqa: BLE001 — an encoder failure is worth the sentence
         return web.json_response({"error": str(exc)}, status=500)
     return web.json_response(answer)
+
+
+@PromptServer.instance.routes.post("/continuity/blockout/sweep")
+@same_origin
+async def sweep_guides(request):
+    """Remove the derived guides no shot in the open graph points at. -> `{gone}`."""
+    try:
+        body = await request.json()
+    except (json.JSONDecodeError, ValueError):
+        return web.json_response({"error": "expected a JSON body"}, status=400)
+    keep = body.get("keep")
+    if not isinstance(keep, list):
+        return web.json_response({"error": "keep has to be a list"}, status=400)
+    loop = asyncio.get_running_loop()
+    gone = await loop.run_in_executor(None, blockout.sweep, [str(item) for item in keep])
+    return web.json_response({"gone": gone})

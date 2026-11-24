@@ -2591,17 +2591,28 @@ function stampsOf(timeline) {
   // The sets and the piece's default pass are left out of the head: a set
   // belongs to the shots staged on it, and changing one must release those and
   // no others. Each staged card reads its own set and pass below instead.
-  const { segments, sets, staging_pass, ...piece } = blob;
+  //
+  // The guide switch is left out of the head too. It changes what a shot that
+  // carries a guide renders and nothing else (`emit` applies the branch only
+  // where a shot has a drawing), so it is stamped into those shots alone —
+  // otherwise the first shot the bench gives a guide would release every kept
+  // take on the piece by throwing the switch.
+  const { segments, sets, staging_pass, guide, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card, index) => {
     const { hold, take, card_id, ...rest } = card;
+    // A staging's words are derived from the staging and its set, which are
+    // both stamped; leaving them out means writing them is never an edit.
+    if (rest.staging?.words) rest.staging = { ...rest.staging, words: undefined };
     // Appended only where there is a staging, so every card that has none
     // stamps exactly as it always did and no old take is released by this.
     const staged = rest.staging && rest.set
       ? JSON.stringify([setStamped((sets ?? []).find((set) => set.id === rest.set)),
                         stagingPass(blob, rest)])
       : "";
-    return hash(head + JSON.stringify(rest) + staged);
+    const guided = (rest.assets ?? []).some((asset) => asset.role === "guide")
+      ? JSON.stringify(guide ?? null) : "";
+    return hash(head + JSON.stringify(rest) + staged + guided);
   });
 }
 
@@ -2656,7 +2667,9 @@ export function setPiece(raw, id = raw?.id) {
   const spec = SET_KINDS[raw?.kind];
   if (!spec) return null;
   return {
-    id: Math.max(1, Math.round(finiteIn(id, 1, 1, 9999))),
+    // At most 253: the renderer keeps a piece's id in a byte, and 254/255 are
+    // the ground's and the sky's.
+    id: Math.max(1, Math.round(finiteIn(id, 1, 1, 253))),
     kind: raw.kind,
     x: finiteIn(raw.x, 0, -SET_FAR, SET_FAR),
     y: finiteIn(raw.y, 0, 0, SET_BIG),

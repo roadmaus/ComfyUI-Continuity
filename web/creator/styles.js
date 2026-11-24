@@ -27,6 +27,7 @@ import { css as neural } from "./styles/neural.js";
 import { css as screens } from "./styles/screens.js";
 import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
+import { css as staging } from "./styles/staging.js";
 import { css as chat } from "./styles/chat.js";
 import { css as director } from "./styles/director.js";
 import { css as lift } from "./styles/lift.js";
@@ -66,6 +67,9 @@ const CSS = [
   screens,
   loupe,
   blockout,
+  // The blockout bench is the reel's window with a stage in it: after the
+  // reel and the old bench's HUD, both of which it qualifies.
+  staging,
   // After the bench sheet: the chat room is that room with its rail on the
   // other side, so the two rules it turns round have to win over the ones they
   // are turning round.

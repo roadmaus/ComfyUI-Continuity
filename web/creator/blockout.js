@@ -74,22 +74,23 @@
 // pasted into the prompt as prose, editable like any other prose.
 
 import { el, icon, mark, spinner, mountOverlay, keepScroll } from "./dom.js";
-import { upload, blockoutFrames, blockoutWrite } from "./api.js";
+import { upload, blockoutFrames, blockoutWrite, probe } from "./api.js";
 import { openChoicePopover, openAspectPopover, aspectGlyph, PILL_GLYPH } from "./pills.js";
-import { rulesFor, resolveCanvas } from "./canvas.js";
+import { rulesFor, resolveCanvas, framesForSeconds } from "./canvas.js";
+import * as S from "./state.js";
 import { tagIndex } from "./state.js";
 import { t } from "./i18n.js";
 
 /** Where a written blockout lands. The server owns it (`blockout.SUBFOLDER`);
  *  this is the display copy for the line at the foot of the rail. */
-const WRITES = "continuity/blockout/";
+export const WRITES = "continuity/blockout/";
 
 /** The clip's rate. Fixed rather than dialled: a guide is read frame-for-frame
  *  against the shot, and 24 is what the families sample at. */
-const FPS = 24;
+export const FPS = 24;
 
 /** How many frames ride in one upload batch on the run. */
-const BATCH = 24;
+export const BATCH = 24;
 
 // ---- what a blockout can be written as ---------------------------------------
 //
@@ -100,7 +101,7 @@ const BATCH = 24;
 // that follow a guide natively were post-trained on the *tracings*, and a
 // blockout depth map should be read as exactly what it is.
 
-const PASSES = [
+export const PASSES = [
   {
     id: "as_staged", opId: "as_shot", label: "As staged",
     note: "No tracing — the clay render itself, as footage. Most families read a "
@@ -125,7 +126,7 @@ const PASSES = [
         + "models want them.",
   },
 ];
-const PASS_BY_ID = Object.fromEntries(PASSES.map((pass) => [pass.id, pass]));
+export const PASS_BY_ID = Object.fromEntries(PASSES.map((pass) => [pass.id, pass]));
 
 // ---- what shape a guide is written at ----------------------------------------
 //
@@ -142,7 +143,7 @@ const PASS_BY_ID = Object.fromEntries(PASSES.map((pass) => [pass.id, pass]));
 /** The widest the preview raster is ever allowed to get. The rasterizer is a
  *  per-pixel JS loop run twice a frame, so the ceiling is a frame budget, not a
  *  memory one: past about a megapixel a drag stops keeping up on a laptop. */
-const MOST_PREVIEW = 1100;
+export const MOST_PREVIEW = 1100;
 
 // ---- the set -----------------------------------------------------------------
 //
@@ -165,15 +166,15 @@ const KINDS = {
   post: { label: "Post", w: 0.16, h: 2.4, d: 0.16 },
 };
 
-const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
+export const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 
 /** How far a piece may stand from the origin, and how big it may get. Both are
  *  generous against any set worth blocking out and tight against a stray drag
  *  putting a wall past the fog where it cannot be found again. */
-const FAR = 40;
-const BIG = 20;
+export const FAR = 40;
+export const BIG = 20;
 
-const DEG = 180 / Math.PI;
+export const DEG = 180 / Math.PI;
 
 /** A piece, filled in. Everything optional so a preset can say only what it
  *  cares about, and everything clamped so a restored sidecar cannot smuggle a
@@ -211,7 +212,7 @@ function makePiece(id, kind, over = {}) {
 // something to assemble. Every one of them is a starting point to be pushed
 // around — that is the whole of what a blockout is.
 
-const PRESETS = [
+export const PRESETS = [
   {
     id: "bare", label: "Bare floor",
     note: "Nothing but the grid. The camera at eye height, looking down the room.",
@@ -291,7 +292,7 @@ const PRESETS = [
 const TAG_FALLBACK = ["#5cb8f0", "#63c98e", "#9d95f5", "#f07da0",
                       "#45c4c0", "#f0906b", "#d57de8", "#a8c858"];
 const tagInk = [];
-function tagRGB(index) {
+export function tagRGB(index) {
   if (!tagInk[index]) {
     let hex = "";
     try {
@@ -310,17 +311,17 @@ function tagRGB(index) {
 // floor is what nine drags out of ten are, and the other two read as tilts of
 // an already-turned box, which is how a hand expects them to behave.
 
-const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1],
+export const dot3 = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+export const cross3 = (a, b) => [a[1] * b[2] - a[2] * b[1],
                           a[2] * b[0] - a[0] * b[2],
                           a[0] * b[1] - a[1] * b[0]];
-const norm3 = (v) => {
+export const norm3 = (v) => {
   const len = Math.hypot(v[0], v[1], v[2]) || 1;
   return [v[0] / len, v[1] / len, v[2] / len];
 };
 
 /** The piece's rotation as a row-major 3×3. */
-function basisOf(piece) {
+export function basisOf(piece) {
   const cx = Math.cos(piece.rx ?? 0), sx = Math.sin(piece.rx ?? 0);
   const ry = piece.ry ?? piece.rot ?? 0;
   const cy = Math.cos(ry), sy = Math.sin(ry);
@@ -332,7 +333,7 @@ function basisOf(piece) {
   ];
 }
 
-const applyM = (m, v) => [
+export const applyM = (m, v) => [
   m[0] * v[0] + m[1] * v[1] + m[2] * v[2],
   m[3] * v[0] + m[4] * v[1] + m[5] * v[2],
   m[6] * v[0] + m[7] * v[1] + m[8] * v[2],
@@ -341,10 +342,10 @@ const applyM = (m, v) => [
 /** The centre of a piece's box, in world. `y` is the bottom, so the centre is
  *  half a height above it — which is also what every placement word is measured
  *  from, and what the gizmo hangs off. */
-const centreOf = (piece) => [piece.x, (piece.y ?? 0) + piece.h / 2, piece.z];
+export const centreOf = (piece) => [piece.x, (piece.y ?? 0) + piece.h / 2, piece.z];
 
 /** The eight corners of a piece's box, in world. */
-function cornersOf(piece) {
+export function cornersOf(piece) {
   const m = basisOf(piece);
   const [ox, oy, oz] = centreOf(piece);
   const hx = piece.w / 2, hy = piece.h / 2, hz = piece.d / 2;
@@ -389,17 +390,17 @@ const GROUND_ID = 254;
 const SKY_ID = 255;
 
 /** 35mm-equivalent focal length -> vertical field of view (24mm sensor height). */
-const vfovOf = (mm) => 2 * Math.atan(12 / mm);
+export const vfovOf = (mm) => 2 * Math.atan(12 / mm);
 
-const forwardOf = (cam) => {
+export const forwardOf = (cam) => {
   const cp = Math.cos(cam.pitch);
   return [Math.sin(cam.yaw) * cp, Math.sin(cam.pitch), Math.cos(cam.yaw) * cp];
 };
-const flatForwardOf = (cam) => [Math.sin(cam.yaw), 0, Math.cos(cam.yaw)];
-const rightOf = (cam) => [Math.cos(cam.yaw), 0, -Math.sin(cam.yaw)];
-const upOf = (cam) => cross3(forwardOf(cam), rightOf(cam));
+export const flatForwardOf = (cam) => [Math.sin(cam.yaw), 0, Math.cos(cam.yaw)];
+export const rightOf = (cam) => [Math.cos(cam.yaw), 0, -Math.sin(cam.yaw)];
+export const upOf = (cam) => cross3(forwardOf(cam), rightOf(cam));
 
-class Raster {
+export class Raster {
   constructor(width, height) {
     this.w = width;
     this.h = height;
@@ -678,7 +679,7 @@ class Raster {
 /** One world point through a camera, at a buffer size -> screen x/y and view
  *  depth, or null behind the near plane. `Raster.raster`'s arithmetic, applied
  *  to a single point. */
-function project(cam, point, width, height) {
+export function project(cam, point, width, height) {
   const sy = Math.sin(cam.yaw), cy = Math.cos(cam.yaw);
   const sp = Math.sin(cam.pitch), cp = Math.cos(cam.pitch);
   const x = point[0] - cam.x, y = point[1] - cam.y, z = point[2] - cam.z;
@@ -735,7 +736,7 @@ function moveTarget(objects, marks, cam, width, height) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
   const entering = [];
@@ -761,10 +762,10 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const piece of entering) {
     clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
   }
-  const move = moveSentence(marks, duration, moveTarget(objects, marks, cam, size.w, size.h));
+  const move = withMove ? moveSentence(marks, duration, moveTarget(objects, marks, cam, size.w, size.h)) : "";
   if (!clauses.length) return move;
   const staging = clauses.join("; ") + ".";
-  return `${staging.charAt(0).toUpperCase()}${staging.slice(1)} ${move}`;
+  return `${staging.charAt(0).toUpperCase()}${staging.slice(1)}${move ? ` ${move}` : ""}`;
 }
 
 // ---- the move, in words --------------------------------------------------------
@@ -828,7 +829,7 @@ export function moveSentence(marks, duration, target = null) {
 
 /** Catmull–Rom through the marks' every field. Clamped ends: the first and
  *  last mark are where the clip actually starts and stops. */
-function pathCam(marks, at) {
+export function pathCam(marks, at) {
   if (!marks.length) return null;
   if (marks.length === 1) return { ...marks[0] };
   const last = marks.length - 1;
@@ -846,7 +847,7 @@ function pathCam(marks, at) {
   return out;
 }
 
-function formatSeconds(seconds) {
+export function formatSeconds(seconds) {
   const minutes = Math.floor(seconds / 60);
   const rest = seconds - minutes * 60;
   return `${minutes}:${rest < 10 ? "0" : ""}${rest.toFixed(1)}`;
@@ -860,19 +861,19 @@ function formatSeconds(seconds) {
 // 3D application already knows what they mean, and inventing a house colour for
 // "the X axis" would be a private joke at the user's expense.
 
-const AXIS_INK = { x: "#e05a52", y: "#79c85a", z: "#4f8fe2" };
-const AXES = ["x", "y", "z"];
-const UNIT = { x: [1, 0, 0], y: [0, 1, 0], z: [0, 0, 1] };
+export const AXIS_INK = { x: "#e05a52", y: "#79c85a", z: "#4f8fe2" };
+export const AXES = ["x", "y", "z"];
+export const UNIT = { x: [1, 0, 0], y: [0, 1, 0], z: [0, 0, 1] };
 
 /** Two unit vectors spanning the plane normal to `axis` — the ring's own frame. */
-function planeOf(axis) {
+export function planeOf(axis) {
   const away = Math.abs(axis[1]) > 0.9 ? [1, 0, 0] : [0, 1, 0];
   const u = norm3(cross3(axis, away));
   return [u, norm3(cross3(axis, u))];
 }
 
 /** Shortest distance from a point to a polyline, in the polyline's own units. */
-function nearPolyline(pts, px, py) {
+export function nearPolyline(pts, px, py) {
   let best = Infinity;
   for (let i = 1; i < pts.length; i++) {
     const a = pts[i - 1], b = pts[i];
@@ -884,6 +885,213 @@ function nearPolyline(pts, px, py) {
   }
   return best;
 }
+
+// ---- a staging, in time ----------------------------------------------------------
+//
+// The new bench stages a piece, not one shot: a set (`state.parseSets`) shared
+// by the shots of its scene, and per shot a staging (`state.parseStaging`) of
+// timed marks — the shot camera's, and each person's. What follows is that
+// staging read at a moment: where the camera is, where everyone stands. The
+// renderer above is untouched; it is handed the set as it stands at `t`.
+
+/** The default shot camera: eye height, looking down the room. */
+export const START_CAMERA = { x: 0, y: 1.6, z: -3.6, yaw: 0, pitch: -0.02, mm: 32 };
+
+/**
+ * The shot camera at `t` seconds. Catmull–Rom through the marks, the way the
+ * old bench walked its path — over time rather than over the mark count, so a
+ * mark sits at its moment. Marks evenly spread (every scene the old bench
+ * saved) come out exactly on the old path.
+ */
+export function cameraAt(marks, t) {
+  if (!marks?.length) return { ...START_CAMERA };
+  if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
+  const last = marks.length - 1;
+  if (t >= marks[last].t) return { ...marks[last] };
+  let i = 0;
+  while (i < last - 1 && marks[i + 1].t <= t) i++;
+  const span = Math.max(1e-6, marks[i + 1].t - marks[i].t);
+  const u = clamp((t - marks[i].t) / span, 0, 1), u2 = u * u, u3 = u2 * u;
+  const m = (k) => marks[clamp(k, 0, last)];
+  const p0 = m(i - 1), p1 = m(i), p2 = m(i + 1), p3 = m(i + 2);
+  const out = { t };
+  for (const key of ["x", "y", "z", "yaw", "pitch", "mm"]) {
+    out[key] = 0.5 * ((2 * p1[key]) + (-p0[key] + p2[key]) * u
+      + (2 * p0[key] - 5 * p1[key] + 4 * p2[key] - p3[key]) * u2
+      + (-p0[key] + 3 * p1[key] - 3 * p2[key] + p3[key]) * u3);
+  }
+  return out;
+}
+
+const shortest = (a, b) => {
+  let d = b - a;
+  while (d > Math.PI) d -= 2 * Math.PI;
+  while (d < -Math.PI) d += 2 * Math.PI;
+  return d;
+};
+
+/** Where one person stands at `t`: straight from mark to mark, turning the
+ *  short way round. Null where the shot gives them no marks. */
+export function poseAt(marks, t) {
+  if (!marks?.length) return null;
+  if (marks.length === 1 || t <= marks[0].t) return { ...marks[0] };
+  const last = marks[marks.length - 1];
+  if (t >= last.t) return { ...last };
+  let i = 0;
+  while (marks[i + 1].t < t) i++;
+  const a = marks[i], b = marks[i + 1];
+  const u = (t - a.t) / Math.max(1e-6, b.t - a.t);
+  const out = { t };
+  for (const key of ["x", "y", "z"]) out[key] = a[key] + (b[key] - a[key]) * u;
+  for (const key of ["rx", "ry", "rz"]) out[key] = a[key] + shortest(a[key], b[key]) * u;
+  return out;
+}
+
+/** The set as it stands at `t` in a shot: everyone on their marks. */
+export function stagedAt(set, staging, t) {
+  return (set?.objects ?? []).map((piece) => {
+    const at = piece.kind === "person" ? poseAt(staging?.people?.[piece.id], t) : null;
+    return at ? { ...piece, x: at.x, y: at.y, z: at.z, rx: at.rx, ry: at.ry, rz: at.rz } : piece;
+  });
+}
+
+/** The pixels a piece's guide is written at: the family's native canvas at the
+ *  piece's ratio, snapped to its own grid. */
+export function guideSize(timeline) {
+  const rules = rulesFor(S.pieceFamily(timeline));
+  const found = rules.aspects.find(([label]) => label === timeline.aspect);
+  const [w, h] = resolveCanvas(found ? found[1] : (rules.aspects[0]?.[1] ?? 16 / 9),
+                               rules.nativeShortEdge, rules);
+  return { w, h };
+}
+
+/**
+ * The words a staged shot sends: who stands where and how the camera moves,
+ * from the bench's own sentences, at the first frame of the shot.
+ */
+export function stagingWords(timeline, index) {
+  const segment = timeline.segments[index];
+  const set = S.setOf(timeline, segment);
+  if (!set || !segment.staging) return "";
+  const marks = segment.staging.camera;
+  const { w, h } = guideSize(timeline);
+  return stagingSentence(stagedAt(set, segment.staging, 0), marks,
+                         Number(segment.duration_s) || 0, cameraAt(marks, 0), { w, h });
+}
+
+/** Bring every staged shot's words in line with its staging. -> changed. */
+export function syncStagingWords(timeline) {
+  let changed = false;
+  timeline.segments.forEach((segment, index) => {
+    if (!S.isStaged(timeline, segment)) return;
+    const words = stagingWords(timeline, index);
+    if ((segment.staging.words ?? "") === words) return;
+    if (words) segment.staging.words = words; else delete segment.staging.words;
+    changed = true;
+  });
+  return changed;
+}
+
+/** The shots the next render samples whose derived guide is not the one their
+ *  staging calls for — what Shoot has to draw before it can queue. */
+export function guidesWanted(timeline) {
+  const { shoot } = S.shootPlan(timeline);
+  const runs = S.passes(timeline);
+  const out = [];
+  for (const k of shoot) {
+    for (let index = runs[k].start; index < runs[k].end; index++) {
+      const segment = timeline.segments[index];
+      if (!S.isStaged(timeline, segment)) continue;
+      const name = S.stagedGuideName(timeline, index);
+      const guide = S.guideAsset(segment);
+      const derived = S.isStagedGuide(guide);
+      if (!name) { if (derived) out.push({ index, name: null }); continue; }
+      const path = `${S.STAGED_GUIDE_DIR}/${name}.mp4`;
+      if (guide?.filename !== path || Math.abs((guide.strength ?? 1) - S.stagingStrength(segment)) > 1e-6) {
+        out.push({ index, name, path });
+      } else {
+        out.push({ index, name, path, check: true });
+      }
+    }
+  }
+  return out;
+}
+
+/** One frame of a staged shot, drawn at `size` in `pass`, as a PNG blob. */
+export function drawStaged(raster, canvas, context, set, staging, at, pass) {
+  raster.raster(stagedAt(set, staging, at), cameraAt(staging.camera, at));
+  raster.shade(context, pass);
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded")))), "image/png");
+  });
+}
+
+/**
+ * Draw and attach the guide every staged shot in the next render calls for.
+ *
+ * The guide is derived, never a file the user manages: it is written under
+ * the shot's staging stamp (`state.stagedGuideName`) and reused wherever the
+ * stamp has not moved and the file is still there. A shot whose pass is None
+ * loses a derived guide it had; one it was handed by hand is left alone only
+ * while the shot is not staged. -> whether anything on the piece changed.
+ *
+ * `step(sentence)` is told what is happening, for the button that waits.
+ */
+export async function deriveGuides(timeline, { step = () => {} } = {}) {
+  let changed = syncStagingWords(timeline);
+  const wanted = guidesWanted(timeline);
+  if (!wanted.length) return changed;
+  const rules = rulesFor(S.pieceFamily(timeline));
+  const { w, h } = guideSize(timeline);
+  let raster = null, canvas = null, context = null;
+  for (const { index, name, path, check } of wanted) {
+    const segment = timeline.segments[index];
+    if (!name) {
+      segment.assets = segment.assets.filter((asset) => !S.isStagedGuide(asset));
+      changed = true;
+      continue;
+    }
+    if (check) {
+      const answer = await probe(path).catch(() => ({}));
+      if (!answer?.missing) continue;
+    }
+    if (!raster) {
+      raster = new Raster(w, h);
+      canvas = el("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      context = canvas.getContext("2d");
+    }
+    const set = S.setOf(timeline, segment);
+    const pass = S.stagingPass(timeline, segment);
+    const seconds = Number(segment.duration_s) || 1;
+    const count = Math.max(2, framesForSeconds(seconds, rules));
+    const token = crypto.getRandomValues(new Uint32Array(4))
+      .reduce((hex, part) => hex + part.toString(16).padStart(8, "0"), "");
+    let batch = [];
+    for (let frame = 0; frame < count; frame++) {
+      step(t("Drawing the guide for shot {n}, frame {f} of {count}…", { n: index + 1, f: frame + 1, count }));
+      const at = (frame / (count - 1)) * seconds;
+      batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, segment.staging, at, pass) });
+      if (batch.length >= BATCH || frame === count - 1) {
+        await blockoutFrames(token, batch);
+        batch = [];
+      }
+    }
+    step(t("Writing the guide for shot {n}…", { n: index + 1 }));
+    const written = await blockoutWrite({ token, fps: rules.fps, op: pass, name });
+    S.attachGuide(segment, timeline, {
+      path: written.path, kind: "video", op: PASS_BY_ID[pass]?.opId ?? pass,
+      strength: S.stagingStrength(segment),
+    });
+    changed = true;
+  }
+  return changed;
+}
+
+/** Every derived guide a piece points at — what the sweep keeps. */
+export const stagedGuidesOf = (timeline) => (timeline?.segments ?? [])
+  .flatMap((segment) => segment.assets ?? []).filter(S.isStagedGuide).map((asset) => asset.filename);
 
 /** The bench, or null. One at a time: it is the room. */
 let open = null;

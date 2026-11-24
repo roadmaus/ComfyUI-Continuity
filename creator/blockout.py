@@ -126,10 +126,58 @@ def take_frames(token, frames):
     return held + len(frames)
 
 
-def write(token, fps, op, scene=None):
+# The name a derived guide is written under: the shot's staging stamp and its
+# pass (`state.stagedGuideName`). Its own alphabet for the reason the token has
+# one — it becomes a filename — and a prefix of its own, so the sweep below can
+# never touch a guide somebody wrote by hand.
+_STAGED = re.compile(r"^staged-[0-9a-z]{1,16}-[a-z_]{1,16}$")
+
+# How long an unreferenced derived guide is left alone: a tab that has just
+# written one may not have saved the piece that names it yet.
+SWEEP_AFTER = 600
+
+
+def staged_name(name):
+    if not _STAGED.match(str(name or "")):
+        raise BlockoutError("that is not a name the bench derives a guide under")
+    return str(name)
+
+
+def sweep(keep):
+    """Remove the derived guides no shot points at. -> how many went.
+
+    `keep` is every derived guide the open graph names, as `staged-…` stems or
+    paths. Only files the bench derived are ever considered, and only once they
+    are old enough not to belong to a write still on its way to a saved piece.
+    A guide swept by mistake costs nothing but time: a staged shot that needs it
+    derives it again before it renders.
+    """
+    kept = {os.path.splitext(os.path.basename(str(item)))[0] for item in keep or []}
+    out_dir = os.path.join(folder_paths.get_input_directory(), *SUBFOLDER.split("/"))
+    if not os.path.isdir(out_dir):
+        return 0
+    now = time.time()
+    gone = 0
+    for name in os.listdir(out_dir):
+        stem, ext = os.path.splitext(name)
+        if ext not in (".mp4", ".png") or not _STAGED.match(stem) or stem in kept:
+            continue
+        path = os.path.join(out_dir, name)
+        try:
+            if now - os.path.getmtime(path) < SWEEP_AFTER:
+                continue
+            os.remove(path)
+            gone += 1
+        except OSError:
+            continue
+    return gone
+
+
+def write(token, fps, op, scene=None, name=None):
     """The staged frames -> one mp4 in the input folder. -> `{path, kind}`.
 
-    The frames are encoded in index order at a constant rate — there is no
+    `name`, where given, is a derived guide's (`staged_name`), written in
+    place. The frames are encoded in index order at a constant rate — there is no
     source clip whose timestamps could disagree, the browser drew these at
     exactly the spacing it is naming. The scene, where one is handed over, goes
     beside the file under the same stem; see the module note.
@@ -150,7 +198,10 @@ def write(token, fps, op, scene=None):
     op = re.sub(r"[^a-z0-9_]", "", str(op or "guide")) or "guide"
 
     out_dir = os.path.join(folder_paths.get_input_directory(), *SUBFOLDER.split("/"))
-    name = bench.free_name(out_dir, f"blockout-{op}", ".mp4")
+    # A derived guide goes under its staging stamp and overwrites: the same
+    # stamp is the same frames. Anything else gets a fresh name, as ever.
+    name = (f"{staged_name(name)}.mp4" if name
+            else bench.free_name(out_dir, f"blockout-{op}", ".mp4"))
     target = os.path.join(out_dir, name)
 
     first = np.asarray(Image.open(os.path.join(root, names[0])).convert("RGB"))

@@ -125,6 +125,18 @@ out.setAdded = after((t) => { t.sets.push({ id: "yard", name: "Yard", objects: [
   const back = s.parseTimeline(s.serializeTimeline(t));
   out.guide = [back.segments[1].assets[0].strength, s.isStagedGuide(back.segments[1].assets[0])];
 }
+{
+  // Throwing the guide switch releases the shots that carry a guide, not the rest.
+  const t = shot();
+  t.segments[1].assets.push({ handle: "vid-1", kind: "video", role: "guide", track: "picture",
+                              filename: "continuity/blockout/staged-x-depth.mp4" });
+  const queued = s.queuedCards(t);
+  s.attachTakes(t, [{ segment: 2, filename: "s2b.mp4", subfolder: "takes", duration_s: 5 }], queued);
+  const before = kept(t);
+  t.guide = { ...t.guide, on: true };
+  s.releaseEdited(t);
+  out.switch = [before, kept(t)];
+}
 console.log(JSON.stringify(out));
 """
 
@@ -154,6 +166,8 @@ check("the guide's stamp ignores free look and the words, not the set",
       got["stamp"], {"looked": True, "worded": True, "moved": False, "unstaged": None, "name": True})
 check("an old saved scene reads in as a set and a first shot", got["scene"],
       {"kinds": ["block", "wall"], "ry": 0.5, "times": [0, 3, 6], "pass": "lines", "duration": 6})
+check("the guide switch releases only the shots that carry a guide",
+      got["switch"], [[True, True, True, True], [True, False, True, True]])
 check("a staged guide keeps its own strength", got["guide"], [0.6, True])
 
 # The backend: the words go after the shot's prose, the marks go nowhere.
