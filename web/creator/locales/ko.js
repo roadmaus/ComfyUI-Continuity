@@ -156,7 +156,7 @@ export const ko = {
  "Add LoRA": "LoRA 추가",
  "Attach a {kind} to the whole piece. Cite its @handle in a segment's prompt — or in the global one, for every segment — to use it there.": "{kind}을(를) 작품 전체에 첨부합니다. 세그먼트 프롬프트에서, 또는 모든 세그먼트에 쓰려면 글로벌 프롬프트에서 @핸들을 인용하면 그곳에 사용됩니다.",
  "Manage the LoRAs patched onto every segment of this timeline": "이 타임라인의 모든 세그먼트에 적용되는 LoRA 관리",
- "Browse, organize and attach finished renders and pre-stage stills": "완성된 렌더와 프리스테이지 스틸을 탐색·정리·첨부합니다",
+ "Browse and organize finished renders and pre-stage stills": "완성된 렌더와 프리스테이지 스틸을 탐색·정리합니다",
  "Gallery": "갤러리",
  "Preferences for this ComfyUI — output quality. Not saved into the workflow.": "이 ComfyUI의 환경 설정 — 출력 품질. 워크플로에는 저장되지 않습니다.",
  "Settings": "설정",

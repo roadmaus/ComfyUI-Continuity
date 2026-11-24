@@ -156,7 +156,7 @@ export const ja = {
  "Add LoRA": "LoRA を追加",
  "Attach a {kind} to the whole piece. Cite its @handle in a segment's prompt — or in the global one, for every segment — to use it there.": "{kind}を作品全体に添付します。セグメントのプロンプト（全セグメントに使うならグローバルプロンプト）で@ハンドルを引用すると、そこで使われます。",
  "Manage the LoRAs patched onto every segment of this timeline": "このタイムラインの全セグメントに適用されるLoRAを管理",
- "Browse, organize and attach finished renders and pre-stage stills": "完成したレンダリングとプリステージのスチルを閲覧・整理・添付",
+ "Browse and organize finished renders and pre-stage stills": "完成したレンダリングとプリステージのスチルを閲覧・整理",
  "Gallery": "ギャラリー",
  "Preferences for this ComfyUI — output quality. Not saved into the workflow.": "この ComfyUI の環境設定 — 出力品質。ワークフローには保存されません。",
  "Settings": "設定",

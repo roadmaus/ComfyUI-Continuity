@@ -157,7 +157,7 @@ export const zh = {
  "Add LoRA": "添加 LoRA",
  "Attach a {kind} to the whole piece. Cite its @handle in a segment's prompt — or in the global one, for every segment — to use it there.": "把{kind}附加到整个作品。在某个分段的提示词中引用它的 @handle 即可在该分段使用；写在全局提示词里则用于每个分段。",
  "Manage the LoRAs patched onto every segment of this timeline": "管理应用到此时间线每个分段的 LoRA",
- "Browse, organize and attach finished renders and pre-stage stills": "浏览、整理并附加已完成的渲染和预备台静帧",
+ "Browse and organize finished renders and pre-stage stills": "浏览并整理已完成的渲染和预备台静帧",
  "Gallery": "图库",
  "Preferences for this ComfyUI — output quality. Not saved into the workflow.": "此 ComfyUI 的偏好设置——输出质量。不会保存进工作流。",
  "Settings": "设置",

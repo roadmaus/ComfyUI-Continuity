@@ -936,7 +936,7 @@ export class TimelineBody {
              t("Save this setup so you can put it back, or apply one you saved before"),
              () => openPresetLibrary({ target: this.presetTarget() }).then(() => this.render())),
         tool("Gallery", "gallery",
-             t("Browse, organize and attach finished renders and pre-stage stills"),
+             t("Browse and organize finished renders and pre-stage stills"),
              () => openPicker({
                kinds: ["renders"], kind: "renders", viewOnly: true,
                home: this.settingsHome(),

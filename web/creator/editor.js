@@ -916,42 +916,18 @@ export class CreatorEditor {
     });
   }
 
-  /**
-   * The gallery: the same picker, opened on the renders tab. No capacity
-   * precheck, unlike addReferences — looking at finished renders is legal with
-   * every slot full; only an actual pick has to answer for room, and the
-   * picker's own counters already hold it to that.
-   */
-  async openGallery() {
-    // The sheet rides along here too: a finished render picked as a panel joins
-    // the card's sheet the same way an upload does.
-    const spec = this.plateSpec();
-    const sheet = this.seedSheet("image");
-    const chosen = await openPicker({
-      kinds: ["renders", "image", "video", "audio", "refmods"],
-      aspect: this.pickerAspect(),
-      kind: "renders",
-      capacity: (k) => S.capacity(this.state, k, this.piece, sheet),
-      cardSeconds: this.cardSeconds(),
+  /** The gallery, for looking, as the strip's is. A render is attached with Add
+   *  image or Add video, whose picker has a renders tab. */
+  openGallery() {
+    return openPicker({
+      kinds: ["renders"], kind: "renders", viewOnly: true,
       home: this.settingsHome(),
-      plate: spec ? { ...spec,
-        panels: sheet
-          ? (sheet.panels?.length
-              ? sheet.panels.map((panel) => ({ path: panel.filename, cut: Boolean(panel.cut),
-                  ...(panel.rect ? { rect: [...panel.rect] } : {}),
-                  ...(panel.points?.length ? { points: panel.points.map((p) => ({ ...p })) } : {}),
-                  ...(panel.crop ? { crop: { ...panel.crop } } : {}) }))
-              : [{ path: sheet.filename, cut: false }])
-          : [] } : null,
+      capacity: () => ({ used: 0, max: 0, filesLeft: 0 }),
     });
-    if (!chosen) return;
-    const blocked = S.blockedReason(this.state, "reference");
-    if (blocked) return this.flash(blocked);
-    await this.mergeSheet(sheet, chosen);
   }
 
-  /** Turn picked assets into reference entries. The shared tail of both the
-   *  slot buttons and the gallery. */
+  /** Turn picked assets into reference entries. The tail of the
+   *  slot buttons. */
   async attachAssets(chosen) {
     const undecided = [];
     for (const asset of chosen) {
@@ -2235,7 +2211,7 @@ export class CreatorEditor {
         // there is not something you should have to queue a render to reach.
         el("button", {
           class: "mmc-tool",
-          title: t("Browse, organize and attach finished renders and pre-stage stills"),
+          title: t("Browse and organize finished renders and pre-stage stills"),
           onclick: () => this.openGallery(),
         }, [el("span", { class: "mmc-tool-icon" }, [icon("gallery")]), el("span", { text: t("Gallery") })]),
         // The way into the shell, with the machine's cluster rather than the
