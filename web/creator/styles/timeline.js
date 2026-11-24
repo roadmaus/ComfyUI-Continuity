@@ -873,6 +873,7 @@ export const css = `
 .mmc-reel-step.redo svg { transform: scaleX(-1); }
 .mmc-reel-step:hover { background: var(--mmc-surface-2); }
 .mmc-reel-step:disabled { opacity: .35; cursor: default; background: none; }
+.mmc-reel-shoot[hidden] { display: none; }
 .mmc-reel-shoot:disabled { opacity: .45; cursor: default; }
 
 .mmc-reel-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 0.72fr); }
@@ -1050,6 +1051,12 @@ export const css = `
   border: 1px solid var(--mmc-line-2); background: var(--mmc-surface); color: var(--mmc-text);
   font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
+.mmc-place { width: min(620px, 100%); height: auto; padding-bottom: 16px; }
+.mmc-place-body { display: flex; flex-direction: column; gap: 14px; padding: 16px 24px; overflow: auto; }
+.mmc-place-row { display: flex; flex-direction: column; gap: 8px; }
+.mmc-place .mmc-reel-value[aria-pressed="true"] { background: var(--mmc-accent); color: var(--mmc-on-accent); }
+.mmc-place > .mmc-reel-why { padding: 0 24px; }
+.mmc-place-foot { display: flex; justify-content: flex-end; padding: 8px 24px 0; }
 .mmc-reel-btn:hover { background: var(--mmc-surface-2); }
 .mmc-reel-btn.primary { background: var(--mmc-accent); color: var(--mmc-on-accent); border-color: transparent; font-weight: 650; }
 .mmc-reel-btn.quiet { background: none; border-color: transparent; color: var(--mmc-dim); padding: 0 10px; }

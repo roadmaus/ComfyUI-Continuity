@@ -17,6 +17,7 @@ import { renderMeta } from "./api.js";
 import { el, icon, copyDoor } from "./dom.js";
 import { elapsed } from "./stage.js";
 import { t } from "./i18n.js";
+import { openPlace } from "./placerender.js";
 import * as P from "./presets.js";
 import * as S from "./state.js";
 
@@ -131,15 +132,28 @@ export function takeSlate({ source, name = "", media, tookMs = null, home = null
   (async () => {
     if (!source) throw new Error(t("This render was not saved, so nothing says what made it."));
     const captured = P.captureFromRender(await renderMeta(source.path), { ...source, name });
-    root.replaceChildren(...slateParts({ captured, media, tookMs, home }));
+    root.replaceChildren(...slateParts({ captured, media, tookMs, home, source, name }));
   })().catch((error) => {
     root.replaceChildren(el("div", { class: "mmc-ch-prompt" }, [
-      el("p", { text: error.message ?? String(error) })]));
+      el("p", { text: error.message ?? String(error) })]), ...placeDoors(source, name));
   });
   return root;
 }
 
-function slateParts({ captured, media, tookMs, home }) {
+/** The doors onto a timeline, for a saved video: its shots, or its footage. */
+function placeDoors(source, name) {
+  if (source?.kind !== "video") return [];
+  const said = el("span", { class: "mmc-fs-slate-note" });
+  const door = (label, title, clip) => el("button", { class: "mmc-fs-slate-door", text: label, title,
+    onclick: () => openPlace({ path: source.path, name, clip, done: (sentence) => { said.textContent = sentence; } })
+      .catch((error) => { said.textContent = error.message ?? String(error); }) });
+  return [el("div", { class: "mmc-fs-slate-doors" }, [
+    door(t("Place into timeline"), t("Put its shots on a timeline, with their settings and their takes kept."), false),
+    door(t("Place as clip"), t("Put the footage alone on a timeline. It is never generated again."), true),
+    said])];
+}
+
+function slateParts({ captured, media, tookMs, home, source, name }) {
   const data = captured.data;
   const still = captured.scope === "prestage";
   // The words. A still has one prompt; a piece has a standing one and one
@@ -256,5 +270,5 @@ function slateParts({ captured, media, tookMs, home }) {
         said,
       ]);
   if (target && !said.textContent) said.textContent = taken;
-  return [prompt, el("dl", { class: "mmc-ch-facts" }, facts), doors];
+  return [prompt, el("dl", { class: "mmc-ch-facts" }, facts), doors, ...placeDoors(source, name)];
 }
