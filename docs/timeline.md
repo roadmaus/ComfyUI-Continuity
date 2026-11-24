@@ -19,7 +19,8 @@ reshooting the piece.
 - **The header** says how long the piece is and what the next render will do
   (how many shots it shoots, how many kept takes it plays), and **Shoot**
   queues it. With nothing to shoot it reads **Put together**, which renders the
-  kept takes and clips as they are ordered and trimmed now. While a render
+  kept takes and clips as they are ordered and trimmed now, and it goes away
+  once the last film made is the piece as it stands. While a render
   runs it says which shot is being made and how far it is, with **Cancel**, and
   the player shows the preview; select a shot to watch its take instead, and
   click the header's line to go back. A failed render's reason is shown there too. The two arrows, or

@@ -369,6 +369,7 @@ export class TimelineBody {
       // is not held by it: what came back is a take, and whether to keep it is
       // the point of looking at it. See `takeTakes`.
       onTakes: (reported, context) => this.takeTakes(reported, context),
+      onFilm: (promptId) => this.filmMade(promptId),
       // View-only: a timeline's references live on its segments, so a pick from
       // here would have no card to land on. The Creator attaches; this browses.
       onGallery: () => openPicker({
@@ -428,6 +429,16 @@ export class TimelineBody {
     // Snapshots contain only ids/stamps. Old entries can be recovered from
     // history if a very large pending batch outlives this bounded notebook.
     while (this.queued.size > 128) this.queued.delete(this.queued.keys().next().value);
+  }
+
+  /** The whole piece came out as one film: it is put together, unless it was
+   *  changed while that film was being made. */
+  filmMade(promptId) {
+    const snapshot = this.queued.get(String(promptId));
+    if (!snapshot || this.destroyed || S.cutStamp(this.timeline, snapshot.shot) !== snapshot.cut) return;
+    this.timeline.cut = S.cutStamp(this.timeline);
+    this.commit();
+    this.reel?.landed();
   }
 
   async takeTakes(reported, { promptId, prompt = null } = {}) {

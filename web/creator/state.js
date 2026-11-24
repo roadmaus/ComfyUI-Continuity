@@ -2502,9 +2502,26 @@ export function shootPlan(timeline) {
  */
 export function queuedCards(timeline, { legacy = false } = {}) {
   ensureCardIds(timeline);
+  const shot = shootPlan(timeline).shoot
+    .flatMap((k) => passes(timeline)[k].segments.map((card) => card.card_id));
   return { ids: timeline.segments.map((card) => card.card_id),
-           stamps: stampsOf(timeline), legacy };
+           stamps: stampsOf(timeline), legacy, shot, cut: cutStamp(timeline, shot) };
 }
+
+/**
+ * What a finished film of the piece is made from, hashed: every card as it
+ * stands, in order, with the film it plays. The films of the cards in `shot`
+ * are left out, because a render queued to shoot them has not made them yet.
+ */
+export function cutStamp(timeline, shot = []) {
+  const { cut, sets, ...blob } = JSON.parse(serializeTimeline(parseTimeline(serializeTimeline(timeline))));
+  return hash(JSON.stringify([blob, (sets ?? []).map(setStamped), blob.segments.map((card) =>
+    (!card.take || shot.includes(card.card_id) ? null : [card.take.filename, card.take.trim, card.take.crop]))],
+  (key, value) => (["hold", "take", "words"].includes(key) ? undefined : value)));
+}
+
+/** Whether the last film made of the piece is the piece as it stands. */
+export const isPutTogether = (timeline) => Boolean(timeline.cut) && timeline.cut === cutStamp(timeline);
 
 /**
  * Where the card that was number `number` at queue time sits now, or -1.
@@ -2600,7 +2617,7 @@ function stampsOf(timeline) {
   // where a shot has a drawing), so it is stamped into those shots alone —
   // otherwise the first shot the bench gives a guide would release every kept
   // take on the piece by throwing the switch.
-  const { segments, sets, staging_pass, guide, ...piece } = blob;
+  const { segments, sets, staging_pass, staging_clip, guide, cut, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card, index) => {
     const { hold, take, card_id, ...rest } = card;
@@ -4185,6 +4202,9 @@ export function serializeTimeline(timeline) {
       }
       const out = serializeCommon(segment, pieceFamily(timeline));
       if (segment.card_id) out.card_id = segment.card_id;
+    ...(fullStagingClip(timeline) ? { staging_clip: "full" } : {}),
+    // What the last finished film was made from; see `cutStamp`.
+    ...(timeline.cut ? { cut: timeline.cut } : {}),
       // Which pass this segment belongs to, said as "the same one as the
       // segment before me" — so a pass survives inserting, moving and deleting
       // with no numbers to keep in step. Never on the first segment, which is

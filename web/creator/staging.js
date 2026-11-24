@@ -327,7 +327,7 @@ class Blockout extends Reel {
       this.writeButton.disabled = Boolean(this.writing) || !this.set();
       return;
     }
-    if (this.busy() || S.stripProblem(this.timeline) || this.refusal || this.stage?.failure || !count) return;
+    if (this.shootButton.hidden || this.busy() || S.stripProblem(this.timeline) || this.refusal || this.stage?.failure || !count) return;
     const { shoot, kept } = S.shootPlan(this.timeline);
     const runs = S.passes(this.timeline);
     const shots = shoot.reduce((n, k) => n + runs[k].segments.length, 0);

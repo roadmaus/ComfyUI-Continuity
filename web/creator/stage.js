@@ -154,7 +154,7 @@ export class Stage {
    *   ("Segment 2 of 5"); without it the announce's index shows bare.
    */
   constructor({ nodeId, onVisibility, onState, onGallery, resultChips, segmentLabel,
-                onTakes = null, onRestyle = null }) {
+                onTakes = null, onFilm = null, onRestyle = null }) {
     this.nodeId = nodeId;
     this.onVisibility = onVisibility;
     this.onState = onState;
@@ -170,6 +170,7 @@ export class Stage {
     // it — it shows one finished piece — but the executed message is where the
     // files are named and there is one of those, not one per node.
     this.onTakes = onTakes;
+    this.onFilm = onFilm;
     this.state = "idle";
     this.segment = null;     // 1-based index of the segment now rendering
     this.progress = null;    // {step, total}
@@ -704,6 +705,7 @@ export class Stage {
     const saved = output?.mmc_video?.[0] ?? output?.mmc_image?.[0];
     if (!saved) return;
     promptId = promptId == null ? null : String(promptId);
+    if (!recovered && output.mmc_video) this.onFilm?.(promptId);
     // Duplicate delivery is not another render window, nor a reason to restart
     // playback. History may still improve the total on this same result object.
     if (promptId && this.result?.promptId === promptId && this.result.url === outputUrl(saved)) {

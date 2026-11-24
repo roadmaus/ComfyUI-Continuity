@@ -668,6 +668,7 @@ export class Reel {
     const failure = this.stage?.failure;
     const busy = this.busy();
     this.cancelButton.hidden = !busy;
+    this.shootButton.hidden = false;
     this.shootButton.classList.toggle("quiet", busy);
     if (busy) {
       this.liveButton.textContent = this.refusal ? `${this.busyText()}. ${this.refusal}` : this.busyText();
@@ -678,6 +679,8 @@ export class Reel {
       return;
     }
     this.shootButton.title = "";
+    const together = !shoot.length && count > 0 && S.isPutTogether(this.timeline);
+    this.shootButton.hidden = together && !this.shootLabel;
     this.planEl.replaceChildren(...(failure && !problem
       ? [el("button", { class: "mmc-reel-link mmc-reel-problem", text: failureLead(failure),
            title: t("Show why"), onclick: () => { this.failureSeen = null; this.playerKey = null; this.renderPlayer(); } })]
@@ -689,6 +692,7 @@ export class Reel {
            ...(kept.length ? [el("span", { text: ", " + t("plays") + " " }),
                               el("i", { text: t("{n} kept", { n: kept.length }) })] : [])]
         : [el("span", { text: !count ? t("Nothing in the piece yet.")
+            : together ? t("The piece is put together.")
             : kept.length ? t("Every shot is kept. The next render puts the piece together.")
               : t("Nothing to shoot. The next render puts your clips together.") })]));
     // With nothing to shoot it still renders: what is kept and what was cut in,
