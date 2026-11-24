@@ -19,13 +19,14 @@
 
 import { el, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
-import { viewUrl } from "./api.js";
+import { viewUrl, blockoutSweep } from "./api.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
 import {
   Raster, project, cameraAt, stagedAt, guideSize, stagingSentence, moveSentence,
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
-  syncStagingWords, drawStaged, START_CAMERA, cornersOf,
+  syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
+  planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
 
@@ -218,6 +219,12 @@ class Blockout extends Reel {
 
   close() {
     if (open === this) open = null;
+    // The derived guides no shot in the open graph points at any more. Every
+    // piece in the graph is asked, not only this one: a guide is a file in the
+    // input folder, and another node's shot may be the one that names it.
+    const pieces = (globalThis.app?.graph?._nodes ?? []).map((node) => node.mmcBody?.timeline).filter(Boolean);
+    if (!pieces.includes(this.timeline)) pieces.push(this.timeline);
+    if (pieces.some((piece) => (piece.sets ?? []).length)) blockoutSweep(pieces.flatMap(stagedGuidesOf));
     this.stopPlay();
     this.endDrag?.(false);
     window.removeEventListener("keydown", this.onUndoKey, true);
@@ -241,6 +248,14 @@ class Blockout extends Reel {
   select(sel, options) {
     if (sel?.kind === "shot" || sel?.kind === "join") {
       if (sel.index !== this.at.index) this.goTo(sel.index, 0);
+    }
+    // A set selected from the script or the strip puts the glass on it.
+    if (sel?.kind === "set") this.onSet(sel.id);
+    // A face in the cast row is the person who plays them on this set, where
+    // there is one; otherwise it is the reel's page for them.
+    if (sel?.kind === "cast") {
+      const piece = this.set()?.objects.find((candidate) => candidate.kind === "person" && candidate.plays === sel.handle);
+      if (piece) sel = { kind: "thing", id: piece.id };
     }
     super.select(sel, options);
   }
@@ -861,6 +876,475 @@ class Blockout extends Reel {
     );
   }
 
+  // ---- staging on the glass ----------------------------------------------------
+  //
+  // The old bench's handles, kept: Move hangs three world-axis arrows and a free
+  // centre off the selected piece, Turn three rings in its own axes snapping to
+  // 15°, and Lift the arrow that takes it off the floor. A press on a piece's
+  // body slides it across the floor. What a handle changes depends on what is
+  // held: a person is blocked in this shot (a mark at the playhead), anything
+  // else is the set (every shot staged on it). Free look moves only the view;
+  // through the lens every gesture writes a camera mark at the playhead.
+
+  mountGlass() {
+    this.canvas.addEventListener("pointerdown", (event) => this.press(event));
+    this.canvas.addEventListener("wheel", (event) => this.wheel(event), { passive: false });
+    this.canvas.addEventListener("contextmenu", (event) => event.preventDefault());
+  }
+
+  /** The three tools, as the HUD offers them. */
+  toolSwitch(seg) {
+    return el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("What a drag on a piece does") },
+      [["move", t("Move"), "1"], ["turn", t("Turn"), "2"], ["lift", t("Lift"), "3"]].map(([tool, label, key]) =>
+        seg(label, this.tool === tool, () => this.setTool(tool), { title: `${label} (${key})` })));
+  }
+
+  /** The four adds, and the camera put where you stand. */
+  hudAdds(seg) {
+    return [
+      el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("Add to the set") },
+        ["person", "block", "wall", "post"].map((kind) => seg(`+ ${this.kindLabel(kind)}`, false, () => this.addThing(kind)))),
+      ...(!this.lens ? [el("div", { class: "mmc-bo-switch" }, [seg(t("Put the camera here"), false, () => this.cameraHere())])] : []),
+    ];
+  }
+
+  kindLabel(kind) {
+    return t({ person: "Person", block: "Block", wall: "Wall", post: "Post" }[kind] ?? "Block");
+  }
+
+  setTool(tool) {
+    this.tool = tool;
+    this.paintHud();
+    this.paint();
+    this.renderStatus();
+  }
+
+  /** A glass pixel, in the buffer: the canvas is fitted into the glass, so the
+   *  picture is letterboxed inside the element. */
+  glassPoint(event) {
+    const rect = this.canvas.getBoundingClientRect();
+    const scale = Math.min(rect.width / this.raster.w, rect.height / this.raster.h) || 1;
+    const left = rect.left + (rect.width - this.raster.w * scale) / 2;
+    const top = rect.top + (rect.height - this.raster.h * scale) / 2;
+    return {
+      px: clamp((event.clientX - left) / scale, 0, this.raster.w - 1),
+      py: clamp((event.clientY - top) / scale, 0, this.raster.h - 1),
+    };
+  }
+
+  /** The handles of the selected piece, in buffer pixels, or null. */
+  gizmo(cam) {
+    const piece = this.selectedThing();
+    if (!piece || this.view !== "stage" || this.lens) return null;
+    const { w, h } = this.raster;
+    const origin = centreOf(piece);
+    const at = project(cam, origin, w, h);
+    if (!at) return null;
+    const fl = (h / 2) / Math.tan(vfovOf(cam.mm) / 2);
+    const len = (at.z * h * 0.17) / fl;
+    const m = basisOf(piece);
+    const parts = [];
+    const keys = this.tool === "lift" ? ["y"] : AXES;
+    for (const key of keys) {
+      const axis = this.tool === "turn" ? norm3(applyM(m, UNIT[key])) : UNIT[key];
+      if (this.tool === "turn") {
+        const [u, v] = planeOf(axis);
+        const pts = [];
+        for (let step = 0; step <= 48; step++) {
+          const a = (step / 48) * Math.PI * 2;
+          const c = Math.cos(a), s = Math.sin(a);
+          const on = project(cam, [origin[0] + (u[0] * c + v[0] * s) * len, origin[1] + (u[1] * c + v[1] * s) * len,
+                                   origin[2] + (u[2] * c + v[2] * s) * len], w, h);
+          pts.push(on ? [on.x, on.y] : null);
+        }
+        parts.push({ key, axis, pts, ring: true });
+      } else {
+        const tip = project(cam, [origin[0] + axis[0] * len, origin[1] + axis[1] * len, origin[2] + axis[2] * len], w, h);
+        if (tip) parts.push({ key, axis, pts: [[at.x, at.y], [tip.x, tip.y]] });
+      }
+    }
+    return { piece, origin, at, parts };
+  }
+
+  inkGizmo(context, cam, scale) {
+    const gizmo = this.gizmo(cam);
+    if (!gizmo) return;
+    for (const part of gizmo.parts) {
+      context.strokeStyle = AXIS_INK[part.key];
+      context.lineWidth = (part.ring ? 1.8 : 2.4) * scale;
+      context.beginPath();
+      let started = false;
+      for (const point of part.pts) {
+        if (!point) { started = false; continue; }
+        started ? context.lineTo(point[0], point[1]) : context.moveTo(point[0], point[1]);
+        started = true;
+      }
+      context.stroke();
+      if (part.ring) continue;
+      const tip = part.pts[1];
+      context.fillStyle = AXIS_INK[part.key];
+      context.beginPath();
+      context.arc(tip[0], tip[1], 3.6 * scale, 0, Math.PI * 2);
+      context.fill();
+    }
+    if (this.tool === "move") {
+      context.fillStyle = "rgba(233,231,226,.9)";
+      context.strokeStyle = "rgba(20,20,20,.6)";
+      context.lineWidth = 1.4 * scale;
+      context.beginPath();
+      context.arc(gizmo.at.x, gizmo.at.y, 4.6 * scale, 0, Math.PI * 2);
+      context.fill();
+      context.stroke();
+    }
+  }
+
+  /** Which handle a press landed on, or null. */
+  grabbed(gizmo, px, py, scale) {
+    if (!gizmo) return null;
+    if (this.tool === "move" && Math.hypot(gizmo.at.x - px, gizmo.at.y - py) <= 8 * scale) return { key: "free" };
+    let best = null;
+    for (const part of gizmo.parts) {
+      const away = nearPolyline(part.pts, px, py);
+      if (away <= 11 * scale && (!best || away < best.away)) best = { key: part.key, axis: part.axis, away };
+    }
+    return best;
+  }
+
+  /**
+   * What an edit to a piece of the set writes to. A person is blocked in this
+   * shot: a mark at the playhead, made from where they stand now if there is
+   * none there yet (their first mark too, if they have none). Anything else is
+   * the set itself.
+   */
+  holdOf(id) {
+    const set = this.set();
+    const piece = set?.objects.find((candidate) => candidate.id === id);
+    if (!piece) return null;
+    if (piece.kind !== "person") return { piece, target: piece, person: false };
+    const staging = this.staging();
+    const t = snapTime(this.at.t, this.seconds());
+    const marks = staging.people[id] ?? (staging.people[id] = [restMark(piece, 0)]);
+    let mark = marks.find((candidate) => Math.abs(candidate.t - t) < 0.14);
+    if (!mark) {
+      const now = this.objectsNow().find((candidate) => candidate.id === id) ?? piece;
+      mark = restMark(now, t);
+      marks.push(mark);
+      marks.sort((a, b) => a.t - b.t);
+    }
+    return { piece, target: mark, person: true };
+  }
+
+  /** The shot camera's mark at the playhead, made from where it is if there is
+   *  none there yet. */
+  cameraMark() {
+    const staging = this.staging();
+    const t = snapTime(this.at.t, this.seconds());
+    let mark = staging.camera.find((candidate) => Math.abs(candidate.t - t) < 0.14);
+    if (!mark) {
+      mark = { ...cameraAt(staging.camera, t), t };
+      staging.camera.push(mark);
+      staging.camera.sort((a, b) => a.t - b.t);
+    }
+    return mark;
+  }
+
+  press(event) {
+    if (!this.raster || this.view !== "stage" || !this.set()) return;
+    event.preventDefault();
+    this.stopPlay();
+    // The draft buffer from the press on: everything below measures in it.
+    this.setDraft(true);
+    const cam = this.eye();
+    const { px, py } = this.glassPoint(event);
+    const scale = this.inkScale();
+    const slide = event.button === 1 || event.button === 2 || event.shiftKey;
+    let move = null;
+    let edits = false;
+    if (!this.lens && !slide) {
+      const grab = this.grabbed(this.gizmo(cam), px, py, scale);
+      if (grab) { move = this.dragHandle(grab, event, cam); edits = Boolean(move); }
+    }
+    let pressedThing = false;
+    if (!move && !this.lens && !slide) {
+      this.raster.raster(this.objectsNow(), cam);
+      const id = this.raster.id[Math.floor(py) * this.raster.w + Math.floor(px)];
+      const piece = this.objectsNow().find((candidate) => candidate.id === id);
+      if (piece) {
+        pressedThing = true;
+        if (!(this.sel?.kind === "thing" && this.sel.id === id)) this.select({ kind: "thing", id });
+        move = this.tool === "lift" ? this.dragLift(id, event) : this.dragFloor(id, px, py, cam);
+        edits = true;
+      }
+    }
+    if (!move) move = this.dragCamera(event, slide);
+    const x0 = event.clientX, y0 = event.clientY;
+    let moved = false;
+    const step = (e) => {
+      if (!moved && Math.hypot(e.clientX - x0, e.clientY - y0) < 3) return;
+      moved = true;
+      move(e);
+    };
+    try { this.canvas.setPointerCapture(event.pointerId); } catch { /* a pointer already gone */ }
+    const up = () => {
+      this.canvas.removeEventListener("pointermove", step);
+      this.canvas.removeEventListener("pointerup", up);
+      this.canvas.removeEventListener("pointercancel", up);
+      this.endDrag = null;
+      this.setDraft(false);
+      if (moved && (edits || this.lens)) { this.commit(); return; }
+      // A click on the floor, not a drag: back to the shot.
+      if (!moved && !pressedThing && !edits && this.sel?.kind === "thing") {
+        this.select({ kind: "shot", index: this.index() });
+        return;
+      }
+      this.paint();
+    };
+    this.endDrag = up;
+    this.canvas.addEventListener("pointermove", step);
+    this.canvas.addEventListener("pointerup", up);
+    this.canvas.addEventListener("pointercancel", up);
+  }
+
+  /** Half resolution while something moves: the rasterizer is a per-pixel loop. */
+  setDraft(draft) {
+    if (this.draft === draft) return;
+    this.draft = draft;
+    this.fit();
+    this.draw();
+  }
+
+  /** One handle, dragged. The axis is projected once, at the press, into a
+   *  screen direction; the pointer's travel along it is metres. */
+  dragHandle(grab, event, cam) {
+    const id = this.sel?.id;
+    const now = this.selectedThing();
+    if (!now) return null;
+    if (grab.key === "free") {
+      const { px, py } = this.glassPoint(event);
+      return this.dragFloor(id, px, py, cam);
+    }
+    const { w, h } = this.raster;
+    const origin = centreOf(now);
+    const from = project(cam, origin, w, h);
+    const along = project(cam, [origin[0] + grab.axis[0] * 0.5, origin[1] + grab.axis[1] * 0.5, origin[2] + grab.axis[2] * 0.5], w, h);
+    const at0 = this.glassPoint(event);
+    let hold = null;
+    const target = () => (hold ??= this.holdOf(id))?.target;
+    const start = { x: now.x, y: now.y ?? 0, z: now.z, rx: now.rx ?? 0, ry: now.ry ?? 0, rz: now.rz ?? 0 };
+    if (this.tool === "turn") {
+      if (!from) return null;
+      const key = `r${grab.key}`;
+      const toCam = [cam.x - origin[0], cam.y - origin[1], cam.z - origin[2]];
+      const spin = dot3(grab.axis, toCam) >= 0 ? 1 : -1;
+      const angle0 = Math.atan2(at0.py - from.y, at0.px - from.x);
+      return (moved) => {
+        const point = this.glassPoint(moved);
+        const angle = Math.atan2(point.py - from.y, point.px - from.x);
+        const turned = Math.round(((start[key] + spin * (angle - angle0)) * DEG) / 15) * 15 / DEG;
+        target()[key] = wrapTurn(turned);
+        this.paint();
+      };
+    }
+    if (!from || !along) return null;
+    const dirx = along.x - from.x, diry = along.y - from.y;
+    const len2 = dirx * dirx + diry * diry;
+    if (len2 < 1e-6) return null;
+    return (moved) => {
+      const point = this.glassPoint(moved);
+      const metres = (((point.px - at0.px) * dirx + (point.py - at0.py) * diry) / len2) * 0.5;
+      const low = grab.key === "y" ? 0 : -FAR;
+      const high = grab.key === "y" ? BIG : FAR;
+      target()[grab.key] = clamp(Math.round((start[grab.key] + metres) * 20) / 20, low, high);
+      this.paint();
+    };
+  }
+
+  /** A piece slid across the floor under the pointer, held where it was grabbed.
+   *  A person walking to a new mark turns to face the way they walk. */
+  dragFloor(id, px, py, cam) {
+    const now = this.objectsNow().find((candidate) => candidate.id === id);
+    if (!now) return null;
+    const grab = this.floorPoint(px, py, cam);
+    const held = grab ? { x: grab.x - now.x, z: grab.z - now.z } : null;
+    let hold = null;
+    return (moved) => {
+      if (!held) return;
+      const point = this.glassPoint(moved);
+      const floor = this.floorPoint(point.px, point.py, cam);
+      if (!floor) return;
+      hold ??= this.holdOf(id);
+      const target = hold.target;
+      const x = clamp(Math.round((floor.x - held.x) * 20) / 20, -FAR, FAR);
+      const z = clamp(Math.round((floor.z - held.z) * 20) / 20, -FAR, FAR);
+      if (hold.person) {
+        const marks = this.staging().people[id];
+        const before = marks[marks.indexOf(target) - 1];
+        if (before && Math.hypot(x - before.x, z - before.z) > 0.3) target.ry = Math.atan2(x - before.x, z - before.z);
+      }
+      target.x = x;
+      target.z = z;
+      this.paint();
+    };
+  }
+
+  /** Lift: drag up to take a piece off the floor, down to put it back. */
+  dragLift(id, event) {
+    const now = this.objectsNow().find((candidate) => candidate.id === id);
+    if (!now) return null;
+    const y0 = now.y ?? 0, start = event.clientY;
+    let hold = null;
+    return (moved) => {
+      hold ??= this.holdOf(id);
+      hold.target.y = clamp(Math.round((y0 - (moved.clientY - start) * 0.012) * 20) / 20, 0, 8);
+      this.paint();
+    };
+  }
+
+  /** Where a glass pixel's ray meets the floor, or null. */
+  floorPoint(px, py, cam) {
+    const ray = this.raster.ray(px, py, cam);
+    if (cam.y <= 0 || ray[1] >= -0.001) return null;
+    const along = -cam.y / ray[1];
+    return along > 400 ? null : { x: cam.x + ray[0] * along, z: cam.z + ray[2] * along };
+  }
+
+  /** The camera, operated. Free look orbits round the set's pivot and slides
+   *  across it; through the lens, the camera department's moves, each a mark. */
+  dragCamera(event, slide) {
+    let last = { x: event.clientX, y: event.clientY };
+    return (at) => {
+      const dx = at.clientX - last.x, dy = at.clientY - last.y;
+      last = { x: at.clientX, y: at.clientY };
+      const sliding = slide || at.shiftKey;
+      if (this.lens) {
+        const mark = this.cameraMark();
+        if (sliding) {
+          const right = rightOf(mark);
+          mark.x = clamp(mark.x - right[0] * dx * 0.008, -FAR, FAR);
+          mark.z = clamp(mark.z - right[2] * dx * 0.008, -FAR, FAR);
+          mark.y = clamp(mark.y + dy * 0.008, 0.2, 6);
+        } else {
+          const k = (0.0022 * 35) / mark.mm;
+          mark.yaw -= dx * k;
+          mark.pitch = clamp(mark.pitch + dy * k, -1.2, 1.2);
+        }
+      } else {
+        const set = this.set();
+        const view = set.view ?? (set.view = this.defaultView(set));
+        if (sliding) {
+          const right = rightOf(view), up = upOf(view);
+          const k = view.orbit * 0.0016;
+          view.x = clamp(view.x - right[0] * dx * k + up[0] * dy * k, -FAR, FAR);
+          view.y = clamp(view.y + up[1] * dy * k, -2, 8);
+          view.z = clamp(view.z - right[2] * dx * k + up[2] * dy * k, -FAR, FAR);
+        } else {
+          view.yaw += dx * 0.006;
+          view.pitch = clamp(view.pitch - dy * 0.005, -1.45, -0.04);
+        }
+      }
+      this.paint();
+    };
+  }
+
+  wheel(event) {
+    if (this.view !== "stage" || !this.set()) return;
+    event.preventDefault();
+    if (this.lens) {
+      const mark = this.cameraMark();
+      const ahead = forwardOf(mark);
+      const k = -event.deltaY * 0.0022;
+      mark.x = clamp(mark.x + ahead[0] * k, -FAR, FAR);
+      mark.z = clamp(mark.z + ahead[2] * k, -FAR, FAR);
+      clearTimeout(this.wheelTimer);
+      this.wheelTimer = setTimeout(() => this.commit(), 350);
+    } else {
+      const set = this.set();
+      const view = set.view ?? (set.view = this.defaultView(set));
+      view.orbit = clamp(view.orbit * Math.exp(event.deltaY * 0.0012), 2.5, 60);
+    }
+    this.paint();
+  }
+
+  /** A piece of the set, where free look is centred. Its name is the kind's
+   *  until it is given one; a person plays nobody until told. */
+  addThing(kind) {
+    const set = this.set();
+    if (!set) return;
+    const view = set.view ?? this.defaultView(set);
+    const id = Math.max(0, ...set.objects.map((piece) => piece.id)) + 1;
+    if (id > 253) { this.say(t("A set holds at most 253 pieces.")); return; }
+    set.objects.push(S.setPiece({ kind, x: Math.round(view.x * 4) / 4, z: Math.round(view.z * 4) / 4 }, id));
+    this.sel = { kind: "thing", id };
+    this.commit();
+    this.say(t("Added to the {name} set: {range} will reshoot.", { name: set.name.toLowerCase(),
+      range: rangeText(S.shotsOnSet(this.timeline, set.id).filter((i) => S.takeOn(this.timeline.segments[i]))) }));
+  }
+
+  /** Take the selected piece off the set, and out of every shot's blocking. */
+  removeThing() {
+    const set = this.set();
+    if (!set || this.sel?.kind !== "thing") return;
+    const id = this.sel.id;
+    set.objects = set.objects.filter((piece) => piece.id !== id);
+    for (const index of S.shotsOnSet(this.timeline, set.id)) {
+      const people = this.timeline.segments[index].staging?.people;
+      if (people) delete people[id];
+    }
+    this.sel = { kind: "set", id: set.id };
+    this.commit();
+  }
+
+  /** The shot camera, put where free look is standing, at the playhead. */
+  cameraHere() {
+    if (!this.set()) return;
+    const free = this.freeCam();
+    const mark = this.cameraMark();
+    Object.assign(mark, { x: free.x, y: clamp(free.y, 0.2, 6), z: free.z, yaw: free.yaw, pitch: free.pitch });
+    this.lens = true;
+    this.commit();
+    this.say(t("The shot camera is where you stood, at {s}.", { s: secondsText(mark.t) }));
+  }
+
+  /** The keys the glass answers to, when nothing is being typed. */
+  key(event) {
+    if (!this.overlay?.isConnected || !this.onTop()) return;
+    const at = event.target;
+    if (at && (at.tagName === "INPUT" || at.tagName === "TEXTAREA" || at.tagName === "SELECT" || at.isContentEditable)) return;
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    if (event.key === " " && at?.tagName !== "BUTTON") { this.playing ? this.stopPlay() : this.startPlay(); }
+    else if ((event.key === "Delete" || event.key === "Backspace") && this.sel?.kind === "thing") this.removeThing();
+    else if (event.key === "Escape" && this.sel) this.select(null);
+    else if (["1", "2", "3"].includes(event.key) && this.set()) this.setTool(["move", "turn", "lift"][Number(event.key) - 1]);
+    else return;
+    event.preventDefault();
+  }
+
+  // ---- the sets on the strip -------------------------------------------------
+
+  /** The lane over the film: one bracket per run of shots on one set. */
+  laneAbove(at, span) {
+    const lane = el("div", { class: "mmc-reel-passes" });
+    const segments = this.timeline.segments;
+    let run = null;
+    const runs = [];
+    segments.forEach((segment, index) => {
+      const set = S.isStaged(this.timeline, segment) ? S.setOf(this.timeline, segment) : null;
+      if (run && set && run.set === set) run.end = index;
+      else { run = set ? { set, start: index, end: index } : null; if (run) runs.push(run); }
+    });
+    for (const { set, start, end } of runs) {
+      const left = at(start), right = at(end) + span(end);
+      lane.append(el("button", {
+        class: `mmc-reel-pass${this.sel?.kind === "set" && this.sel.id === set.id ? " selected" : ""}`,
+        style: { left: `${left}px`, width: `${right - left - 2}px` },
+        title: t("The {name} set", { name: set.name.toLowerCase() }),
+        text: t("{name} set", { name: set.name }),
+        onclick: () => this.select({ kind: "set", id: set.id }),
+      }));
+    }
+    return lane;
+  }
+
   // ---- the inspector ---------------------------------------------------------
 
   renderSide() {
@@ -1019,7 +1503,201 @@ class Blockout extends Reel {
           : t("The blocks are where things are."))] : []),
     ];
   }
+
+  /** A set: its name, what is on it, and what can be added. Shared by every
+   *  shot of its scene, so the note says what moving it costs. */
+  inspectSet(id) {
+    const set = (this.timeline.sets ?? []).find((candidate) => candidate.id === id);
+    const used = S.shotsOnSet(this.timeline, id);
+    const named = set.objects.filter((piece) => piece.plays || piece.word || piece.kind === "person");
+    const rest = set.objects.length - named.length;
+    const name = el("input", { class: "mmc-reel-seed mmc-st-name", type: "text", value: set.name, "aria-label": t("Name of the set"),
+      onchange: (event) => { set.name = event.target.value.trim().slice(0, 48) || set.name; this.commit(); } });
+    return el("div", { class: "mmc-reel-inspect-body" }, [
+      this.ihead(set.name, `${t("set")} · ${rangeText(used)}`),
+      el("p", { class: "mmc-reel-why", text: t("The set is shared by every shot of its scene. Moving a wall or the table reshoots all of them. Moving a person only changes the shot you are on.") }),
+      this.irow(t("Name"), name),
+      this.irow(t("On it"), el("div", { class: "mmc-reel-inline" }, named.map((piece) => el("button", {
+        class: "mmc-reel-value", onclick: () => this.showThing(set.id, piece.id) }, [
+        el("span", { class: "mmc-st-hue", style: piece.plays ? { "--tag": `var(--mmc-tag-${S.tagIndex(piece.plays) % 8})` } : {} }),
+        el("span", { text: this.labelOf(piece) })]))),
+      rest ? t(rest === 1 ? "One unnamed wall or block besides." : "{n} unnamed walls and blocks besides.", { n: rest }) : null),
+      this.irow(t("Add"), el("div", { class: "mmc-reel-inline" }, ["person", "block", "wall", "post"].map((kind) =>
+        el("button", { class: "mmc-reel-btn", text: this.kindLabel(kind), onclick: () => { this.onSet(set.id); this.addThing(kind); } })))),
+      el("div", { class: "mmc-reel-machine", text: t("A piece that is named or plays someone is put into the staging sentence. Unnamed pieces only shape the depth pass.") }),
+    ]);
+  }
+
+  /** Put the glass on a shot staged on this set, if it is not on one already. */
+  onSet(id) {
+    if (this.set()?.id === id) return;
+    const first = S.shotsOnSet(this.timeline, id).find((index) => S.isStaged(this.timeline, this.timeline.segments[index]));
+    if (first != null) this.goTo(first, 0);
+  }
+
+  /** A piece of a set, selected from outside the glass. */
+  showThing(setId, id) {
+    this.onSet(setId);
+    if (this.set()?.id === setId) this.select({ kind: "thing", id });
+  }
+
+  /** A piece of the set, as it stands at the playhead. A person is blocked in
+   *  this shot; anything else is the set. */
+  inspectThing() {
+    const set = this.set();
+    const id = this.sel.id;
+    const base = set.objects.find((piece) => piece.id === id);
+    const now = this.selectedThing();
+    const person = base.kind === "person";
+    const index = this.index();
+    const marks = this.staging().people?.[id];
+    const used = S.shotsOnSet(this.timeline, set.id);
+    const edit = (write) => { write(); this.commit(); };
+    const pose = (key, value) => edit(() => { this.holdOf(id).target[key] = value; });
+    const nudge = (key, by) => {
+      const value = Math.round((((now[key] ?? 0) + by) * DEG) / 15) * 15 / DEG;
+      pose(key, key === "ry" ? wrapTurn(value) : clamp(value, -Math.PI, Math.PI));
+    };
+    const stepper = (text, minus, plus) => el("span", { class: "mmc-reel-stepper" }, [
+      el("button", { text: "−", "aria-label": t("Less"), onclick: minus }), el("span", { text }),
+      el("button", { text: "+", "aria-label": t("More"), onclick: plus })]);
+    const deg = (angle) => Math.round((angle ?? 0) * DEG);
+    const lean = (angle, positive, negative) => {
+      const d = deg(angle);
+      return d === 0 ? "0°" : `${Math.abs(d)}° ${d > 0 ? positive : negative}`;
+    };
+    const vec = (slots) => el("div", { class: "mmc-bo-vec" }, slots.map(([axis, value, write]) => el("label", { class: "mmc-bo-vecslot" }, [
+      el("span", { class: `mmc-bo-axis is-${axis.toLowerCase()}`, text: axis }),
+      el("input", { class: "mmc-bo-num", type: "number", step: "0.05", value: String(Math.round(value * 100) / 100), "aria-label": axis,
+        onchange: (event) => { const v = parseFloat(event.target.value); if (Number.isFinite(v)) edit(() => write(v)); } }),
+    ])));
+    const posture = this.postureOf?.(now) ?? "";
+    const walk = marks && marks.length > 1
+      ? Math.hypot(marks[0].x - marks[marks.length - 1].x, marks[0].z - marks[marks.length - 1].z, marks[0].y - marks[marks.length - 1].y) : 0;
+    const others = (handle) => set.objects.some((piece) => piece.plays === handle && piece.id !== id);
+    const rows = [
+      this.ihead(this.labelOf(base), person ? t("in shot {n} at {s}", { n: index + 1, s: secondsText(this.at.t) })
+        : `${t("the {name} set", { name: set.name.toLowerCase() })} · ${rangeText(used)}`),
+      el("p", { class: "mmc-reel-why", text: person
+        ? t("Drag them to block this shot: Move slides them, Turn tips them over, Lift takes them off the floor. Move the playhead first to give them a second mark, and they go from one to the other.")
+        : t("Part of the set. Moving it reshoots {range}.", { range: rangeText(used) }) }),
+      person
+        ? this.irow(t("Plays"), this.segmented([["", t("Nobody")], ...(this.timeline.subjects ?? []).map((subject) => [subject.handle, `@${subject.handle}`, null,
+            others(subject.handle) ? t("@{who} already stands on this set", { who: subject.handle }) : null])], base.plays,
+          (handle) => edit(() => { base.plays = handle; })))
+        : this.irow(t("Called"), el("input", { class: "mmc-reel-seed", type: "text", value: base.word, placeholder: t("table, doorway, car…"),
+            "aria-label": t("What this piece is called"),
+            onchange: (event) => edit(() => { base.word = event.target.value.trim().toLowerCase().slice(0, 48); }) }),
+          base.word ? t("Named in the staging sentence.") : t("Unnamed: it only shapes the depth pass.")),
+      this.irow(t("Place"), vec([
+        ["X", now.x, (v) => { this.holdOf(id).target.x = clamp(v, -FAR, FAR); }],
+        ["Y", now.y ?? 0, (v) => { this.holdOf(id).target.y = clamp(v, 0, BIG); }],
+        ["Z", now.z, (v) => { this.holdOf(id).target.z = clamp(v, -FAR, FAR); }]]),
+      (now.y ?? 0) > 0.02 ? t("Y is how far its lowest point is off the floor.") : null),
+      this.irow(t("Turned"), stepper(`${((deg(now.ry) % 360) + 360) % 360}°`, () => nudge("ry", -Math.PI / 12), () => nudge("ry", Math.PI / 12))),
+      this.irow(t("Tipped"), el("div", { class: "mmc-reel-inline" }, [
+        stepper(lean(now.rx, t("forward"), t("back")), () => nudge("rx", -Math.PI / 12), () => nudge("rx", Math.PI / 12)),
+        stepper(lean(now.rz, t("right"), t("left")), () => nudge("rz", -Math.PI / 12), () => nudge("rz", Math.PI / 12)),
+        ...(posture ? [el("button", { class: "mmc-reel-btn", text: person ? t("Stand them up") : t("Stand it up"),
+          onclick: () => edit(() => { Object.assign(this.holdOf(id).target, { rx: 0, rz: 0, y: 0 }); }) })] : []),
+      ]), posture ? `${posture.charAt(0).toUpperCase()}${posture.slice(1)}. ${t("The staging sentence says so.")}`
+        : person ? t("Standing.") : t("Upright.")),
+      person
+        ? this.irow(t("In this shot"), el("div", { class: "mmc-reel-inline" }, [
+            el("span", { class: "mmc-reel-note", text: walk > 0.3 ? t("Travels {m} m between {n} marks.", { m: walk.toFixed(1), n: marks.length })
+              : marks && marks.length > 1 ? t("Changes where they stand, on the spot.") : t("Holds one mark.") }),
+            ...(marks && marks.length > 1 ? [el("button", { class: "mmc-reel-btn", text: t("Hold the first mark"),
+              onclick: () => edit(() => { this.staging().people[id] = [marks[0]]; }) })] : []),
+          ]))
+        : this.irow(t("Size"), vec([
+            ["W", base.w, (v) => { base.w = clamp(v, 0.05, BIG); }],
+            ["H", base.h, (v) => { base.h = clamp(v, 0.05, BIG); }],
+            ["D", base.d, (v) => { base.d = clamp(v, 0.05, BIG); }]])),
+      el("div", { class: "mmc-reel-actions quiet" }, [el("button", { class: "mmc-reel-btn quiet danger", text: t("Take off the set"),
+        onclick: () => this.removeThing() })]),
+    ];
+    return el("div", { class: "mmc-reel-inspect-body" }, rows);
+  }
+
+  /** A join: whether the second shot continues from the first, and on a hard
+   *  cut which set it goes to. A clip on either side is the reel's join. */
+  inspectJoin(index) {
+    const segments = this.timeline.segments;
+    const segment = segments[index];
+    const before = segments[index - 1];
+    if (S.isClip(segment) || S.isClip(before) || S.merged(segment)) return super.inspectJoin(index);
+    const on = S.continues(segment);
+    const blocked = on ? null : S.blockedReason(segment, "continue");
+    const rows = [
+      this.ihead(t("Join {a} → {b}", { a: index, b: index + 1 }), on ? t("continues") : t("hard cut")),
+      el("p", { class: "mmc-reel-why", text: on
+        ? t("Shot {b} continues from the last frames of shot {a}, on the same set.", { a: index, b: index + 1 })
+        : t("A hard cut. Shot {b} starts a new scene, with a set and a keystone of its own.", { b: index + 1 }) }),
+      this.irow(t("Continues"), this.switchControl(on, (value) => this.setContinues(index, value), Boolean(blocked)), blocked),
+    ];
+    if (on) {
+      rows.push(this.blendRow(index));
+      if (this.lineUpRows) rows.push(...this.lineUpRows(index));
+    } else {
+      const sets = this.timeline.sets ?? [];
+      if (sets.length) {
+        rows.push(this.irow(t("Set"), this.segmented(sets.map((set) => [set.id, set.name]),
+          S.isStaged(this.timeline, segment) ? segment.set : null, (id) => this.moveToSet(index, id)),
+        t("Every shot that continues from shot {n} moves with it.", { n: index + 1 })));
+      }
+    }
+    return el("div", { class: "mmc-reel-inspect-body" }, rows);
+  }
+
+  /** Continue a join, or cut it. A shot continuing from another is on its set:
+   *  it carries on in the same room. */
+  setContinues(index, on) {
+    const segment = this.timeline.segments[index];
+    const before = this.timeline.segments[index - 1];
+    segment.continue = on;
+    segment.continue_audio = on;
+    if (on && S.isStaged(this.timeline, before) && segment.set !== before.set) {
+      segment.set = before.set;
+      segment.staging = { camera: segment.staging?.camera?.length ? segment.staging.camera : [], people: {} };
+      this.lineUp?.(index, { commit: false });
+      if (!segment.staging.camera.length) {
+        const end = cameraAt(before.staging.camera, this.seconds(index - 1));
+        delete end.t;
+        segment.staging.camera = [{ ...end, t: 0 }];
+      }
+    }
+    this.commit();
+  }
+
+  /** A hard cut's shot onto another set, with every shot continuing from it. */
+  moveToSet(index, id) {
+    const segments = this.timeline.segments;
+    for (let i = index; i < segments.length; i++) {
+      if (i > index && (!S.continues(segments[i]) || S.isClip(segments[i]))) break;
+      const segment = segments[i];
+      segment.set = id;
+      segment.staging = { camera: segment.staging?.camera?.length ? segment.staging.camera : [{ ...START_CAMERA, t: 0 }], people: {},
+        ...(segment.staging?.pass !== undefined ? { pass: segment.staging.pass } : {}),
+        ...(segment.staging?.hold ? { hold: segment.staging.hold } : {}) };
+    }
+    this.commit();
+  }
 }
+
+/** A playhead snapped to its shot: to its ends within a frame or so, else to
+ *  a twentieth of a second, so marks land where they can be found again. */
+function snapTime(t, seconds) {
+  if (t < 0.14) return 0;
+  if (seconds - t < 0.14) return seconds;
+  return Math.round(t * 20) / 20;
+}
+
+/** A person's pose as a mark at `t`. */
+const restMark = (piece, t) => ({ t, x: piece.x, y: piece.y ?? 0, z: piece.z,
+  rx: piece.rx ?? 0, ry: piece.ry ?? 0, rz: piece.rz ?? 0 });
+
+/** An angle folded into (-π, π]. */
+const wrapTurn = (angle) => (((angle + Math.PI) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
 
 /** The family's frame rate, for counting a guide's frames. */
 const rulesFps = (timeline) => rulesFor(S.pieceFamily(timeline)).fps;

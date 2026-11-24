@@ -52,6 +52,8 @@ export const css = `
 .mmc-st-bench .mmc-reel-face canvas { width: 38px; height: 26px; border-radius: 6px; display: block; }
 .mmc-st-hue { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--tag, var(--mmc-surface-3)); flex: none; }
 .mmc-st-name { width: 100%; max-width: 240px; }
+.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vec { width: 100%; max-width: 300px; }
+.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vecslot { min-width: 82px; }
 .mmc-st-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.45; }
 .mmc-st-words { white-space: pre-wrap; }
 

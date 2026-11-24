@@ -30,6 +30,7 @@ const appStub = `export const app = { graph: { _nodes: [] }, extensionManager: {
 
 let browser, requests = 0, media = 0, guideFrames = 0;
 const writes = [];
+const sweeps = [];
 const results = [];
 async function check(name, fn) { await fn(); results.push({ name, passed: true }); }
 
@@ -67,6 +68,10 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       const body = JSON.parse(route.request().postData() || '{}');
       writes.push(body);
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ path: `continuity/blockout/${body.name}.mp4`, kind: 'video' }) });
+    }
+    if (url.origin === ORIGIN && url.pathname === '/continuity/blockout/sweep') {
+      sweeps.push(JSON.parse(route.request().postData() || '{}').keep);
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ gone: 0 }) });
     }
     if (url.origin === ORIGIN && url.pathname === '/continuity/probe') {
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ missing: false }) });
@@ -249,11 +254,127 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     assert.deepEqual(await page.evaluate(() => [tl.segments[2].set ?? null, tl.sets.length]), [null, 2]);
   });
 
+  // Where a world point lands on the screen, through the glass's own camera.
+  const onGlass = (expr) => page.evaluate((expr) => {
+    const [px, py] = (0, eval)(expr);
+    const rect = bench.canvas.getBoundingClientRect();
+    const scale = Math.min(rect.width / bench.raster.w, rect.height / bench.raster.h);
+    return { x: rect.left + (rect.width - bench.raster.w * scale) / 2 + px * scale,
+             y: rect.top + (rect.height - bench.raster.h * scale) / 2 + py * scale };
+  }, expr);
+  const dragBy = async (from, dx, dy, mods = []) => {
+    for (const key of mods) await page.keyboard.down(key);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    await page.mouse.move(from.x + dx, from.y + dy, { steps: 6 });
+    await page.mouse.up();
+    for (const key of mods) await page.keyboard.up(key);
+    await page.waitForTimeout(60);
+  };
+
+  await check('The sets ride over the film as brackets, and select their set', async () => {
+    await open();
+    await page.waitForTimeout(150);
+    assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.mmc-reel-passes .mmc-reel-pass')].map((n) => n.textContent)),
+      ['Kitchen set', 'Street set']);
+    await page.locator('.mmc-reel-passes .mmc-reel-pass').first().click();
+    assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-reel-ihead b').textContent,
+      [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent),
+      [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-value')].map((n) => n.textContent)]),
+    ['Kitchen', ['Name', 'On it', 'Add'], ['Doorway', 'Counter', 'Table', 'Chair', '@anna', '@ben']]);
+  });
+
+  await check('A person moved in a shot is blocked in that shot alone, at the playhead', async () => {
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 1 }); bench.at.t = 2; bench.select({ kind: 'cast', handle: 'ben' }); });
+    await page.waitForTimeout(60);
+    assert.equal(await page.evaluate(() => [bench.sel.kind, bench.sel.id].join()), 'thing,8');
+    const centre = await onGlass('const g = bench.gizmo(bench.eye()); [g.at.x, g.at.y]');
+    await dragBy(centre, 60, 10);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[1].staging.people[8].map((m) => m.t),
+      tl.sets[0].objects.find((o) => o.id === 8).x, tl.segments.map((seg) => S.isKept(seg)),
+      document.querySelector('.mmc-reel-ihead span').textContent]),
+    [[0, 2, 4], 2.3, [true, false, false], 'in shot 2 at 2.0 s']);
+  });
+
+  await check('A wall moved is the set: every shot on it is released', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 0 }); bench.select({ kind: 'thing', id: 4 }); });
+    const x0 = await page.evaluate(() => tl.sets[0].objects.find((o) => o.id === 4).x);
+    const arrow = await onGlass('const g = bench.gizmo(bench.eye()); const p = g.parts.find((q) => q.key === "x").pts[1]; [p[0], p[1]]');
+    const tail = await onGlass('const g = bench.gizmo(bench.eye()); [g.at.x, g.at.y]');
+    await dragBy(arrow, (arrow.x - tail.x) * 2, (arrow.y - tail.y) * 2);
+    assert.deepEqual(await page.evaluate((x0) => [tl.sets[0].objects.find((o) => o.id === 4).x > x0,
+      tl.sets[0].objects.find((o) => o.id === 4).z, tl.segments.map((seg) => S.isKept(seg)), Object.keys(tl.segments[0].staging.people)], x0),
+    [true, 3.5, [false, false, false], ['8']]);
+  });
+
+  await check('Turn snaps to 15°, and Lift takes a piece off the floor', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 0 }); bench.select({ kind: 'thing', id: 5 }); });
+    await page.keyboard.press('2');
+    assert.equal(await page.evaluate(() => bench.tool), 'turn');
+    const ring = await onGlass('const g = bench.gizmo(bench.eye()); const pts = g.parts.find((q) => q.key === "y").pts.filter(Boolean); const p = pts[6]; [p[0], p[1]]');
+    await dragBy(ring, 25, 25);
+    const ry = await page.evaluate(() => tl.sets[0].objects.find((o) => o.id === 5).ry);
+    assert.ok(ry !== 0 && Math.abs(Math.round(ry * 180 / Math.PI) % 15) === 0, `turned to ${ry}`);
+    await page.keyboard.press('3');
+    const body = await onGlass('const g = bench.gizmo(bench.eye()); [g.at.x, g.at.y]');
+    await dragBy(body, 0, -60);
+    assert.ok(await page.evaluate(() => tl.sets[0].objects.find((o) => o.id === 5).y > 0.3));
+  });
+
+  await check('Through the lens every gesture writes a camera mark at the playhead; free look writes nothing', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 0 }); });
+    const glass = await page.locator('.mmc-st canvas').boundingBox();
+    const middle = { x: glass.x + glass.width / 2, y: glass.y + glass.height * 0.75 };
+    const noView = () => page.evaluate(() => JSON.stringify(JSON.parse(S.serializeTimeline(tl)), (k, v) => (k === 'view' ? undefined : v)));
+    const before = await noView();
+    await dragBy(middle, 80, 0);
+    assert.equal(await noView(), before);
+    assert.deepEqual(await page.evaluate(() => tl.segments.map((seg) => S.isKept(seg))), [true, true, false]);
+    await page.locator('.mmc-bo-hud.top').getByText('Through the lens').click();
+    await page.evaluate(() => { bench.at.t = 2.5; bench.paint(); });
+    await dragBy(middle, 40, 0);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[0].staging.camera.map((m) => m.t), S.isKept(tl.segments[0]), S.isKept(tl.segments[1])]),
+      [[0, 2.5, 5], false, false]);
+  });
+
+  await check('The adds put a piece on the set; Delete takes it off', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => bench.select({ kind: 'shot', index: 2 }));
+    await page.locator('.mmc-bo-hud.bottom').getByText('+ Block').click();
+    assert.deepEqual(await page.evaluate(() => [tl.sets[1].objects.length, bench.sel.kind,
+      document.querySelector('.mmc-reel-ihead b').textContent]), [5, 'thing', 'Block']);
+    await page.evaluate(() => document.activeElement?.blur());
+    await page.keyboard.press('Delete');
+    assert.equal(await page.evaluate(() => tl.sets[1].objects.length), 4);
+  });
+
+  await check('A join says whether it continues, and a hard cut which set it goes to', async () => {
+    await page.evaluate(() => bench.select({ kind: 'join', index: 2 }));
+    assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-reel-ihead span').textContent,
+      [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent)]),
+    ['hard cut', ['Continues', 'Set']]);
+    await page.locator('.mmc-reel-inspect .mmc-reel-seg').getByText('Kitchen').click();
+    assert.equal(await page.evaluate(() => tl.segments[2].set), 'kitchen');
+    await page.evaluate(() => bench.select({ kind: 'join', index: 1 }));
+    assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent).slice(0, 2)),
+      ['Continues', 'Blend']);
+  });
+
   await check('Open the timeline closes the bench and opens the reel on the same piece', async () => {
     await open();
     await page.waitForTimeout(100);
     await page.locator('.mmc-reel-head').getByText('Open the timeline').click();
     assert.deepEqual(await page.evaluate(() => [window.timelineOpened, document.querySelectorAll('.mmc-st-bench').length]), [1, 0]);
+    await page.waitForTimeout(100);
+    // Closing sweeps the derived guides nothing points at, keeping those the piece names.
+    assert.ok(sweeps.length >= 1 && Array.isArray(sweeps[sweeps.length - 1]));
   });
 
   if (process.env.SHOT) {
@@ -262,6 +383,9 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.evaluate(() => bench.select({ kind: 'shot', index: 1 }));
     await page.waitForTimeout(300);
     await page.screenshot({ path: process.env.SHOT });
+    await page.evaluate(() => { bench.at.t = 2; bench.select({ kind: 'thing', id: 8 }); });
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: process.env.SHOT.replace('.png', '2.png') });
   }
 
   assert.deepEqual(errors, []);
