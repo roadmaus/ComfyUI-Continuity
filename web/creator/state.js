@@ -2960,9 +2960,23 @@ export function stagingStamp(timeline, index) {
     staging, serializeSets([setStamped(setOf(timeline, segment))])[0]?.objects ?? [],
     pass, timeline.aspect, timeline.short_edge, pieceFamily(timeline),
     segment.duration_s,
+    // Where the frame is taken from a still or a clip, which one: the guide is
+    // drawn in its shape, so another source is another guide.
+    ...(frameSource(timeline) ? [frameSource(timeline)] : []),
     stagesByReference(timeline) ? (fullStagingClip(timeline) ? "full" : "half") : "",
     ...(run ? [run] : []),
   ]));
+}
+
+/** What the frame is read from when it is not the preset: the file and its
+ *  framing, or a clip's own size. "" for the preset. */
+export function frameSource(timeline) {
+  let read = "";
+  const size = timelineAspectSize(timeline, (asset) => {
+    read = `${asset.filename}|${JSON.stringify(asset.crop ?? null)}`;
+    return null;
+  });
+  return read || (size ? `${size.width}x${size.height}` : "");
 }
 
 /** The file a staged shot's derived guide is written to. */

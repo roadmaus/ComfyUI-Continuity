@@ -22,6 +22,7 @@ import { t } from "./i18n.js";
 import { viewUrl, blockoutSweep } from "./api.js";
 import { MODEL_GROUPS, MODELS } from "./setmodels.js";
 import { SCENE_GROUPS } from "./setscenes.js";
+import { probeAspectSizes } from "./framesize.js";
 import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
@@ -268,6 +269,8 @@ class Blockout extends Reel {
     fitText(this.musicBox);
     this.fit();
     this.paint();
+    // A frame taken from a still is the still's shape, known once it is looked at.
+    probeAspectSizes(this.timeline, () => this.paint());
   }
 
   close() {
@@ -437,7 +440,10 @@ class Blockout extends Reel {
    *  file will hold it, the still (not yet), or the take. */
   draw() {
     if (!this.overlay?.isConnected) return;
-    if (!this.raster) this.fit();
+    // The glass is the render's frame: a new ratio, from the pill or a still
+    // that has just been measured, reshapes it before anything is drawn.
+    const frame = guideSize(this.timeline);
+    if (!this.raster || Math.abs(this.raster.w / this.raster.h - frame.w / frame.h) > 0.005) this.fit();
     if (!this.raster) return;
     const segment = this.segment();
     const set = this.set();

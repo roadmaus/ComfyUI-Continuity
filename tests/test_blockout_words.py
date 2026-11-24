@@ -188,6 +188,20 @@ out.modelSeen = [still.detail, seen("block") > seen("shape"), seen("shape") > 50
 out.modelKept = S.serializeSets([{ id: "a", name: "A", objects: [still, { id: 2, kind: "person", model: "car" }] }])[0].objects.map((o) => [o.model ?? null, o.detail ?? null]);
 out.modelFront = r(B.facingOf(still, 0, -1, 0));
 
+// The frame: a still the piece takes its frame from is the shape the stage, the
+// guide and the guide's stamp follow, not the preset's.
+const F = await import("./web/creator/framesize.js");
+const framed = (crop = null) => Object.assign(piece(), {
+  assets: [{ handle: "still", filename: "tall.png", kind: "image", ...(crop ? { crop } : {}) }], aspect_source: { handle: "still" } });
+F.ASPECT_SIZES.set("tall.png", { width: 900, height: 1600 });
+const ratio = ({ w, h }) => r(w / h);
+out.frame = [ratio(B.guideSize(piece())), ratio(B.guideSize(framed())),
+  S.stagingStamp(piece(), 0) === S.stagingStamp(piece(), 0),
+  S.stagingStamp(framed(), 0) !== S.stagingStamp(piece(), 0),
+  S.stagingStamp(framed({ x: 0, y: 0, w: 0.5, h: 0.5 }), 0) !== S.stagingStamp(framed(), 0)];
+F.ASPECT_SIZES.delete("tall.png");
+out.frameUnknown = ratio(B.guideSize(framed()));
+
 console.log(JSON.stringify(out));
 """
 
@@ -264,5 +278,9 @@ check("every model fills its box, is closed, and is light", said["models"], {"ba
 check("a model shows, at each level", said["modelSeen"], ["shape", True, True, True])
 check("what it looks like is kept, and a person is never one", said["modelKept"], [["car", "shape"], [None, None]])
 check("a car drives front first", abs(said["modelFront"]), 3.14)
+
+check("the guide is drawn in the frame the render has, a still's where it is taken from one",
+      said["frame"], [1.75, 0.57, True, True, True])
+check("...and the preset's until the still has been measured", said["frameUnknown"], 1.75)
 
 passed("the blockout says who is where, and the move in the model's own words")

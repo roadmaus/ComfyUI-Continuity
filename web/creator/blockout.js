@@ -78,6 +78,7 @@ import { upload, blockoutFrames, blockoutWrite, probe } from "./api.js";
 import { rulesFor, resolveCanvas, framesForSeconds } from "./canvas.js";
 import * as S from "./state.js";
 import { modelTriangles } from "./setmodels.js";
+import { frameRatio, measureFrame } from "./framesize.js";
 import { t } from "./i18n.js";
 
 /** Where a written blockout lands. The server owns it (`blockout.SUBFOLDER`);
@@ -1373,9 +1374,9 @@ export function stagedSentence(set, staging, seconds, size, { withMove = true } 
  *  piece's ratio, snapped to its own grid. */
 export function guideSize(timeline) {
   const rules = rulesFor(S.pieceFamily(timeline));
-  const found = rules.aspects.find(([label]) => label === timeline.aspect);
-  const [w, h] = resolveCanvas(found ? found[1] : (rules.aspects[0]?.[1] ?? 16 / 9),
-                               rules.nativeShortEdge, rules);
+  // The render's own ratio, a still's or a clip's where the frame is taken from
+  // one, so what is framed on the stage is what renders.
+  const [w, h] = resolveCanvas(frameRatio(timeline, rules), rules.nativeShortEdge, rules);
   return { w, h };
 }
 
@@ -1552,6 +1553,8 @@ export function drawStaged(raster, canvas, context, set, staging, at, pass, run 
  * `step(sentence)` is told what is happening, for the button that waits.
  */
 export async function deriveGuides(timeline, { step = () => {} } = {}) {
+  // A frame taken from a still is that still's shape, which a look at it tells.
+  await measureFrame(timeline);
   let changed = syncStagingWords(timeline);
   const wanted = guidesWanted(timeline);
   if (!wanted.length) return changed;
