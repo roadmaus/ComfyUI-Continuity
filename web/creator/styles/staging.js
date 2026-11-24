@@ -27,6 +27,18 @@ export const css = `
 .mmc-st-back:hover { color: var(--mmc-accent); }
 
 /* --- the glass ------------------------------------------------------------------ */
+/* --- focus: the stage fills the window, the inspector a drawer over it ---------------- */
+.mmc-overlay.mmc-st-focusing { padding: 0; }
+.mmc-st-bench.mmc-st-focus { width: 100%; height: 100%; border-radius: 0; border: 0; }
+.mmc-st-focus .mmc-reel-main { position: relative; grid-template-columns: minmax(0, 1fr); }
+.mmc-st-focus .mmc-reel-script, .mmc-st-focus .mmc-reel-lane { display: none; }
+.mmc-st-focus .mmc-reel-foot { padding-top: 0; }
+.mmc-st-focus .mmc-reel-side { position: absolute; z-index: 6; top: 22px; right: 30px; bottom: 22px; width: min(360px, calc(100% - 60px)); overflow: auto;
+  border: 1px solid var(--mmc-line); border-radius: 14px; background: var(--mmc-float); box-shadow: 0 18px 48px var(--mmc-shadow);
+  transform: translateX(calc(100% + 40px)); visibility: hidden; transition: transform .18s ease, visibility 0s linear .18s; }
+.mmc-st-focus.mmc-st-drawer .mmc-reel-side { transform: none; visibility: visible; transition: transform .18s ease; }
+/* The tools over the stage stay clear of the drawer: its width, less the gap between them. */
+.mmc-st-focus.mmc-st-drawer .mmc-st .mmc-bo-hud { right: calc(min(360px, 100% - 60px) + 28px); transition: right .18s ease; }
 .mmc-st-col { min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; }
 .mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: 14px; overflow: hidden; background: var(--mmc-media-bg, #0e0f11); }
 .mmc-st { position: absolute; inset: 0; }

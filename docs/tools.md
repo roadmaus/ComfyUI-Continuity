@@ -121,6 +121,12 @@ home, places of work and public places, streets, and outdoors), each drawn from
 where its camera starts, with people in it and a camera move. Pressing one makes a
 new set from it; everything on it can then be moved, changed or taken away.
 
+**Focus** (or F) gives the stage the whole window: the script and the strip fold
+away, the tools float over the picture, and the camera's speed lane stays under it.
+The inspector becomes a drawer that slides in when a piece or a set is picked; **I**
+or **Inspector** shows it or puts it away. Shift+F hides the browser's own bars as
+well. Escape leaves focus first, and the window opens as it was last left.
+
 **+ Model** opens a shelf of simple things (furniture, parts of buildings, street,
 nature), all drawn in code. Each fills its piece's own box. **Detail** shows it as
 a block, a rough shape or in detail, piece by piece or, on the set's page, for

@@ -496,6 +496,41 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     assert.ok(sweeps.every((drop) => Array.isArray(drop) && drop.length && drop.every((path) => !named.includes(path))));
   });
 
+  await check('The stage is the render\'s frame: a new ratio reshapes it at once', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    const wide = await ink();
+    await page.evaluate(() => { tl.aspect = '9:16'; bench.commit(); });
+    await page.waitForTimeout(120);
+    const tall = await ink();
+    assert.ok(wide.w > wide.h && tall.h > tall.w && tall.lit > 50, JSON.stringify([wide, tall]));
+  });
+
+  await check('Focus folds the script and the strip away; the inspector is a drawer; Escape steps back out', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    const width = () => page.evaluate(() => document.querySelector('.mmc-st-glass').getBoundingClientRect().width);
+    const before = await width();
+    await page.keyboard.press('f');
+    await page.waitForTimeout(300);
+    const shown = (selector) => page.evaluate((selector) => {
+      const node = document.querySelector(selector);
+      return Boolean(node) && getComputedStyle(node).display !== 'none' && getComputedStyle(node).visibility !== 'hidden';
+    }, selector);
+    assert.deepEqual([await shown('.mmc-reel-script'), await shown('.mmc-reel-lane'), await shown('.mmc-reel-side')], [false, false, false]);
+    assert.ok(await width() > before * 1.4, `the stage did not grow: ${before} -> ${await width()}`);
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 4 }));
+    await page.waitForTimeout(250);
+    assert.equal(await shown('.mmc-reel-side'), true);
+    await page.keyboard.press('i');
+    await page.waitForTimeout(250);
+    assert.equal(await shown('.mmc-reel-side'), false);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(80);
+    assert.deepEqual(await page.evaluate(() => [Boolean(document.querySelector('.mmc-st-focus')), Boolean(document.querySelector('.mmc-st-bench'))]), [false, true]);
+    assert.equal(await shown('.mmc-reel-script'), true);
+  });
+
   await check('A set is removed, asking twice; its shots stay, unstaged', async () => {
     await open();
     await page.evaluate(() => bench.select({ kind: 'set', id: 'street' }));

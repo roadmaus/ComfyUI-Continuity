@@ -41,6 +41,11 @@ const VIEWS = ["stage", "guide", "still", "take"];
 /** The window, or null. One at a time, like every window on a piece. */
 let open = null;
 
+/** Whether the blockout opens in focus: as it was last left, on this browser. */
+const FOCUS_KEY = "mmc.blockout.focus";
+const remembered = (key) => { try { return globalThis.localStorage?.getItem(key) ?? null; } catch { return null; } };
+const remember = (key, value) => { try { globalThis.localStorage?.setItem(key, value); } catch { /* a private window: not kept */ } };
+
 /**
  * Open the bench on a piece.
  *
@@ -248,7 +253,8 @@ class Blockout extends Reel {
       class: "mmc-overlay",
       onpointerdown: (event) => { if (event.target === this.overlay) this.close(); },
     }, [this.modal]);
-    this.unmount = mountOverlay(this.overlay, () => this.close());
+    // In focus, Escape gives the window its columns back before it closes it.
+    this.unmount = mountOverlay(this.overlay, () => (this.focused ? this.setFocus(false) : this.close()));
     this.onUndoKey = (event) => this.undoKey(event);
     window.addEventListener("keydown", this.onUndoKey, true);
     this.onKeys = (event) => this.key(event);
@@ -271,6 +277,46 @@ class Blockout extends Reel {
     this.paint();
     // A frame taken from a still is the still's shape, known once it is looked at.
     probeAspectSizes(this.timeline, () => this.paint());
+    if (!this.single && remembered(FOCUS_KEY) === "1") this.setFocus(true);
+  }
+
+  // ---- focus: the stage fills the window -----------------------------------------
+
+  /** The script and the strip folded away, the inspector a drawer over the
+   *  stage, and with `screen` the browser's own bars hidden too. The page is
+   *  what goes full screen, not the window: a popover is portaled to <body>,
+   *  and would be left behind a full-screen element. */
+  setFocus(on, { screen = false } = {}) {
+    if (!this.modal) return;
+    this.focused = on;
+    remember(FOCUS_KEY, on ? "1" : "0");
+    this.modal.classList.toggle("mmc-st-focus", on);
+    this.overlay.classList.toggle("mmc-st-focusing", on);
+    if (on && screen && !document.fullscreenElement) {
+      document.documentElement.requestFullscreen?.()?.then(() => { this.ownScreen = true; }, () => {});
+    }
+    if (!on) this.leaveScreen();
+    this.paintHud();
+  }
+
+  /** Out of full screen, if this window is what put the page there. */
+  leaveScreen() {
+    if (this.ownScreen && document.fullscreenElement) document.exitFullscreen?.()?.catch(() => {});
+    this.ownScreen = false;
+  }
+
+  /** In focus the inspector is over the stage, so it slides in by itself only
+   *  for a piece or a set picked out to work on; a shot's page waits for I.
+   *  Either way it is the one selection's: picking another starts again. */
+  syncDrawer() {
+    const key = this.sel ? JSON.stringify(this.sel) : "";
+    if (key !== this.drawerFor) { this.drawerFor = key; this.drawer = this.sel?.kind === "thing" || this.sel?.kind === "set"; }
+    this.modal?.classList.toggle("mmc-st-drawer", Boolean(this.focused && this.drawer));
+  }
+
+  toggleDrawer() {
+    this.drawer = !this.drawer;
+    this.paintHud();
   }
 
   close() {
@@ -283,6 +329,7 @@ class Blockout extends Reel {
     if (drop.length) blockoutSweep(drop);
     this.stopPlay();
     this.endDrag?.(false);
+    this.leaveScreen();
     window.removeEventListener("keydown", this.onUndoKey, true);
     document.removeEventListener("keydown", this.onKeys);
     this.resize?.disconnect();
@@ -641,6 +688,7 @@ class Blockout extends Reel {
     }, [el("span", { text: label })]);
     const staged = Boolean(this.set());
     const stageView = this.view === "stage" && staged;
+    this.syncDrawer();
     this.hudTop.replaceChildren(...[
       el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("What the glass shows") }, [
         seg(t("Stage"), this.view === "stage", () => this.setView("stage"), { title: t("The set as you handle it: clay, grid, camera, names.") }),
@@ -651,6 +699,12 @@ class Blockout extends Reel {
       ]),
       ...(this.toolSwitch && stageView && !this.lens ? [this.toolSwitch(seg)] : []),
       el("span", { class: "mmc-bn-gap" }),
+      ...(this.single ? [] : [el("div", { class: "mmc-bo-switch" }, [
+        ...(this.focused ? [seg(t("Inspector"), this.drawer, () => this.toggleDrawer(),
+          { title: t("Show or put away the inspector (I)") })] : []),
+        seg(this.focused ? t("Leave focus") : t("Focus"), this.focused, () => this.setFocus(!this.focused),
+          { title: this.focused ? t("Give the window its columns back (F or Esc)") : t("The stage fills the window (F). Shift+F hides the browser's bars too.") }),
+      ])]),
       ...(stageView ? [el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("Which camera") }, [
         seg(t("Look around"), !this.lens, () => this.setLens(false), { title: t("Fly around the set. The shot camera stays where it is.") }),
         seg(t("What the camera sees"), this.lens, () => this.setLens(true), { title: t("Stand in the shot camera. Every gesture writes a camera mark at the playhead.") }),
@@ -1677,6 +1731,11 @@ class Blockout extends Reel {
     if (event.key === " " && at?.tagName !== "BUTTON") { this.playing ? this.stopPlay() : this.startPlay(); }
     else if ((event.key === "Delete" || event.key === "Backspace") && this.sel?.kind === "thing") this.removeThing();
     else if (event.key === "Escape" && this.sel) this.select(null);
+    else if ((event.key === "f" || event.key === "F") && !this.single) {
+      if (event.shiftKey && this.ownScreen) this.leaveScreen();
+      else this.setFocus(event.shiftKey || !this.focused, { screen: event.shiftKey });
+    }
+    else if ((event.key === "i" || event.key === "I") && this.focused) this.toggleDrawer();
     else if (["1", "2", "3"].includes(event.key) && this.set()) this.setTool(["move", "turn", "lift"][Number(event.key) - 1]);
     else return;
     event.preventDefault();
