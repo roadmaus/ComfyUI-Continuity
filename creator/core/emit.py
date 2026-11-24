@@ -56,6 +56,7 @@ renders through them: they are ComfyUI registry keys named in saved workflows,
 and frozen for it.
 """
 
+import dataclasses
 import json
 
 from comfy_api.latest import io
@@ -548,8 +549,12 @@ def emit(family, payloads, labels, weights, sampling, acceleration, unique_id,
         # because *which* socket it changes is the architecture's answer and not
         # the loop's.
         if guide is not None and one.guide is not None:
+            # A drawing that says how firmly it holds (a staged shot's, firm
+            # or loose) holds that firmly; the switch's window still applies.
+            held = guide if one.guide.strength is None else dataclasses.replace(
+                guide, strength=one.guide.strength)
             segment = family.emit_control(graph, links, segment, one, weights,
-                                          guide)
+                                          held)
         latent = family.emit_sampler(graph, links, segment, payloads[index], one,
                                      sampling, acceleration, weights,
                                      seed_for(index), run)

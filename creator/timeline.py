@@ -50,6 +50,7 @@ writes are ordinary nodes keyed on their filenames, so they cache the same way
 and are built once for the whole chain.
 """
 
+import hashlib
 import json
 import logging
 
@@ -144,9 +145,21 @@ def stamps(data):
     for block in data.get("sound", []) or []:
         if isinstance(block, dict):
             stamp(media.resolve, block, "filename")
+    # The sets a piece is staged on, by id, for the staged shots below.
+    sets = {item.get("id"): item for item in data.get("sets", []) or []
+            if isinstance(item, dict)}
     for segment in data.get("segments", []):
         if not isinstance(segment, dict):
             continue
+        # A staged shot's staging and its set: moving a person in this shot or
+        # a wall of its set is a different shot, and the backend says so as the
+        # frontend's stamp does. Hashed rather than listed: `out` is a tuple of
+        # facts, and this is one fact about the shot. Free look is not in it.
+        if isinstance(segment.get("staging"), dict) and segment.get("set"):
+            staged = sets.get(segment.get("set")) or {}
+            out.append(hashlib.sha1(json.dumps(
+                [segment["staging"], segment["set"], staged.get("name"),
+                 staged.get("objects")], sort_keys=True, default=str).encode()).hexdigest())
         # A supplied clip's own file. Without this, replacing the footage under
         # a card that has not otherwise changed would be a cache hit and the
         # render would keep playing the clip that is no longer there.

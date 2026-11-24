@@ -263,6 +263,10 @@ class Asset:
     # kind of drawing. Empty for a guide that did not come off the bench, which
     # is a thing nothing can be said about rather than a thing to guess at.
     op: str = ""
+    # guide only: how firmly this one drawing holds, where it says — a shot the
+    # blockout bench staged carries its own (firm or loose). None is the
+    # switch's strength, which is every guide that did not come off the bench.
+    strength: float | None = None
     # Whether the picker lifted this picture off its background before writing
     # it. Recorded rather than acted on: the file named above *is* the cut-out
     # one, so nothing downstream has anything left to do — this is what lets the
@@ -835,9 +839,43 @@ def _parse_assets(raw):
             # grows, and a guide naming one this build has never heard of is
             # still a drawing the branch can read.
             op=str(item.get("op") or "") if role == "guide" else "",
+            strength=_guide_strength(item) if role == "guide" else None,
             mods=mods,
         ))
     return assets
+
+
+def _guide_strength(item):
+    """A guide asset's own strength, clamped to the switch's range, or None."""
+    raw = item.get("strength")
+    if raw is None or isinstance(raw, bool):
+        return None
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if value != value:
+        return None
+    return min(1.0, max(0.0, value))
+
+
+def staging_words(segment):
+    """What the blockout bench wrote about a staged shot: who stands where and
+    how the camera moves, in the model's own words. Empty for a shot that was
+    never staged. Added after the shot's own prose — where the bench's Copy
+    used to have it pasted — so a rewrite of that prose cannot lose it."""
+    staging = segment.get("staging") if isinstance(segment, dict) else None
+    if not isinstance(staging, dict) or not segment.get("set"):
+        return ""
+    return str(staging.get("words") or "").strip()
+
+
+def _with_staging(segment, text):
+    words = staging_words(segment)
+    text = str(text or "").strip()
+    if not words:
+        return text
+    return f"{text}\n{words}" if text else words
 
 
 def _parse_panels(owner, role, kind, raw, seen):
@@ -3758,7 +3796,12 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     #   input. Assigning/recovering an identity must not re-encode a shot.
     for key in ("seed", "take", "hold", "card_no", "card_id"):
         request.pop(key, None)
-    request["prompt"] = _join_prompt(global_prompt, segment.get("prompt"))
+    # The staging reaches the model twice, and as neither of these keys: as the
+    # guide asset the bench derived from it, and as its words, joined onto the
+    # shot's own prose here. The marks themselves are nothing a model reads.
+    request.pop("set", None)
+    request.pop("staging", None)
+    request["prompt"] = _join_prompt(global_prompt, _with_staging(segment, segment.get("prompt")))
     # A shot-scoped rewrite gets the same join: it stands in for the
     # segment's own sentence, not for the piece, so the global prompt goes
     # in front of it here exactly as it goes in front of typed text — which
@@ -3768,7 +3811,7 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     if refined_scope(segment) == "shot":
         request["refined"] = {**segment["refined"],
                               "body": _join_prompt(global_prompt,
-                                                   segment["refined"].get("body"))}
+                                                   _with_staging(segment, segment["refined"].get("body")))}
     request["aspect"] = data.get("aspect", "16:9")
     request["short_edge"] = data.get("short_edge", rules_of(data).native_short_edge)
     # The two-pass choice travels with the canvas it is a property of.
@@ -3855,6 +3898,8 @@ def _asset_dict(asset):
         out["cut"] = True
     if asset.op:
         out["op"] = asset.op
+    if asset.strength is not None:
+        out["strength"] = asset.strength
     if asset.panels:
         out["panels"] = [_panel_dict(panel) for panel in asset.panels]
     # Pool injection and one-pass merging parse this again. Dropping the map
@@ -4164,7 +4209,7 @@ def group_payload(data, start=0, end=None):
         # could turn this shot's img-1 into img-2 and then that into img-3.
         text = HANDLE_RE.sub(
             lambda m: "@" + rename.get(m.group(1), m.group(1)),
-            written or str(segment.get("prompt") or ""),
+            _with_staging(segment, written or str(segment.get("prompt") or "")),
         ).strip()
         # Audio prose can cite these same references. Compare/join it only
         # after the shot's aliases have been mapped to the merged namespace.

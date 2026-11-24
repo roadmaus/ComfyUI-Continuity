@@ -1133,7 +1133,7 @@ export const guideAsset = (state) =>
  * @param {object} segment  the shot the drawing goes on
  * @param {?object} piece   the container holding the switch, where there is one
  */
-export function attachGuide(segment, piece, { path, kind = "video", op = "", trim = null, crop = null }) {
+export function attachGuide(segment, piece, { path, kind = "video", op = "", trim = null, crop = null, strength = null }) {
   if (!segment || !path) return null;
   const existing = guideAsset(segment);
   const at = existing ? segment.assets.indexOf(existing) : segment.assets.length;
@@ -1145,6 +1145,7 @@ export function attachGuide(segment, piece, { path, kind = "video", op = "", tri
     ...(op ? { op } : {}),
     ...(trim ? { trim } : {}),
     ...(crop ? { crop } : {}),
+    ...(Number.isFinite(strength) ? { strength } : {}),
     // Silent, always, and only a clip has a soundtrack to silence. A guide is a
     // drawing; whatever the footage it was traced from happened to carry is not
     // something the branch reads, and attaching it with sound would spend an
@@ -1982,6 +1983,9 @@ function serializeAssets(assets) {
     // picked back off the folder carries none, and an absent id says nothing
     // rather than something false.
     if (asset.role === "guide" && asset.op) out.op = asset.op;
+    // How firmly this one drawing holds, where it says: a staged shot's guide
+    // carries its own (`STAGING_HOLDS`), and absent is the switch's strength.
+    if (asset.role === "guide" && Number.isFinite(asset.strength)) out.strength = round2(asset.strength);
     // The framing (`picture.js`), read by `crop.py` wherever the file is; and
     // a plate's panels, which are what the prompt cites and the picker
     // re-opens on. Neither was written until 2026-09-13: a window set in the
@@ -2584,11 +2588,20 @@ export function editedSince(timeline) {
  *  twenty times to answer one question about it. */
 function stampsOf(timeline) {
   const blob = JSON.parse(serializeTimeline(timeline));
-  const { segments, ...piece } = blob;
+  // The sets and the piece's default pass are left out of the head: a set
+  // belongs to the shots staged on it, and changing one must release those and
+  // no others. Each staged card reads its own set and pass below instead.
+  const { segments, sets, staging_pass, ...piece } = blob;
   const head = JSON.stringify(piece);
-  return (segments ?? []).map((card) => {
+  return (segments ?? []).map((card, index) => {
     const { hold, take, card_id, ...rest } = card;
-    return hash(head + JSON.stringify(rest));
+    // Appended only where there is a staging, so every card that has none
+    // stamps exactly as it always did and no old take is released by this.
+    const staged = rest.staging && rest.set
+      ? JSON.stringify([setStamped((sets ?? []).find((set) => set.id === rest.set)),
+                        stagingPass(blob, rest)])
+      : "";
+    return hash(head + JSON.stringify(rest) + staged);
   });
 }
 
@@ -2601,6 +2614,268 @@ function hash(text) {
     value = Math.imul(value, 0x01000193) >>> 0;
   }
   return value.toString(36);
+}
+
+// ---- sets and staging ---------------------------------------------------------
+//
+// What the blockout bench stages a piece on. A set belongs to the piece and is
+// shared by every shot staged on it: walls, blocks, posts and people, each a box
+// on three turns. A shot names its set and carries its own staging — the shot
+// camera's marks, and marks for each person — so moving a wall changes every
+// shot of its scene and moving a person changes only the shot it is moved in.
+// A piece without either behaves exactly as it always did.
+
+/** The four passes a staged shot can send, plus none (the words alone). */
+export const STAGING_PASSES = ["as_staged", "depth", "blocks", "lines"];
+export const DEFAULT_STAGING_PASS = "depth";
+/** How firmly a staged shot's guide holds: the strength the asset carries. */
+export const STAGING_HOLDS = { firm: 1.0, loose: 0.6 };
+/** Where the derived guides live, and what marks one as derived. */
+export const STAGED_GUIDE_DIR = "continuity/blockout";
+export const STAGED_GUIDE_PREFIX = "staged-";
+/** Whatever a piece of a set can be, with the size a new one starts at. */
+export const SET_KINDS = {
+  person: { w: 0.5, h: 1.75, d: 0.35 },
+  block: { w: 1.2, h: 0.9, d: 0.8 },
+  wall: { w: 3.2, h: 2.6, d: 0.14 },
+  post: { w: 0.16, h: 2.4, d: 0.16 },
+};
+const SET_FAR = 40;
+const SET_BIG = 20;
+const MOST_SET_PIECES = 200;
+const MOST_MARKS = 64;
+
+const finiteIn = (value, fallback, low, high) => {
+  const number = Number(value);
+  return Math.min(high, Math.max(low, Number.isFinite(number) ? number : fallback));
+};
+const turn = (value) => finiteIn(value, 0, -Math.PI, Math.PI);
+
+/** One piece of a set, filled in and clamped. -> null for a kind nobody draws. */
+export function setPiece(raw, id = raw?.id) {
+  const spec = SET_KINDS[raw?.kind];
+  if (!spec) return null;
+  return {
+    id: Math.max(1, Math.round(finiteIn(id, 1, 1, 9999))),
+    kind: raw.kind,
+    x: finiteIn(raw.x, 0, -SET_FAR, SET_FAR),
+    y: finiteIn(raw.y, 0, 0, SET_BIG),
+    z: finiteIn(raw.z, 0, -SET_FAR, SET_FAR),
+    w: finiteIn(raw.w, spec.w, 0.05, SET_BIG),
+    h: finiteIn(raw.h, spec.h, 0.05, SET_BIG),
+    d: finiteIn(raw.d, spec.d, 0.05, SET_BIG),
+    // `rot` is what the old bench wrote before there were three turns.
+    rx: turn(raw.rx),
+    ry: turn(raw.ry ?? raw.rot),
+    rz: turn(raw.rz),
+    plays: String(raw.plays ?? "").slice(0, 32),
+    word: String(raw.word ?? "").slice(0, 48),
+  };
+}
+
+/** The free look a set was last seen from. Not part of the set: looking
+ *  around releases nothing, so it is kept apart from what a stamp reads. */
+function setView(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  return {
+    yaw: finiteIn(raw.yaw, -0.62, -100, 100),
+    pitch: finiteIn(raw.pitch, -0.2, -1.5, 1.5),
+    orbit: finiteIn(raw.orbit, 12, 0.5, 200),
+    x: finiteIn(raw.x, 0, -SET_FAR, SET_FAR),
+    y: finiteIn(raw.y, 1, -SET_FAR, SET_FAR),
+    z: finiteIn(raw.z, 1.4, -SET_FAR, SET_FAR),
+  };
+}
+
+/** The piece's sets, as read off a blob. Ids are strings and unique. */
+export function parseSets(raw) {
+  if (!Array.isArray(raw)) return [];
+  const seen = new Set();
+  const out = [];
+  for (const item of raw) {
+    if (!item || typeof item !== "object") continue;
+    const id = String(item.id ?? "").slice(0, 32);
+    if (!id || seen.has(id)) continue;
+    seen.add(id);
+    const ids = new Set();
+    const objects = [];
+    for (const piece of Array.isArray(item.objects) ? item.objects : []) {
+      const made = setPiece(piece);
+      if (!made || ids.has(made.id)) continue;
+      ids.add(made.id);
+      objects.push(made);
+      if (objects.length >= MOST_SET_PIECES) break;
+    }
+    const set = { id, name: String(item.name ?? "").slice(0, 48) || id, objects };
+    const view = setView(item.view);
+    if (view) set.view = view;
+    out.push(set);
+  }
+  return out;
+}
+
+function cameraMark(raw) {
+  return {
+    t: finiteIn(raw?.t, 0, 0, 3600),
+    x: finiteIn(raw?.x, 0, -SET_FAR, SET_FAR),
+    y: finiteIn(raw?.y, 1.6, -SET_FAR, SET_FAR),
+    z: finiteIn(raw?.z, -3.6, -SET_FAR, SET_FAR),
+    yaw: finiteIn(raw?.yaw, 0, -100, 100),
+    pitch: finiteIn(raw?.pitch, 0, -1.5, 1.5),
+    mm: finiteIn(raw?.mm, 32, 8, 300),
+  };
+}
+
+function personMark(raw) {
+  return {
+    t: finiteIn(raw?.t, 0, 0, 3600),
+    x: finiteIn(raw?.x, 0, -SET_FAR, SET_FAR),
+    y: finiteIn(raw?.y, 0, 0, SET_BIG),
+    z: finiteIn(raw?.z, 0, -SET_FAR, SET_FAR),
+    rx: turn(raw?.rx),
+    ry: turn(raw?.ry),
+    rz: turn(raw?.rz),
+  };
+}
+
+const byTime = (a, b) => a.t - b.t;
+
+/** A shot's staging, as read off a blob, or null where it has none. */
+export function parseStaging(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const camera = (Array.isArray(raw.camera) ? raw.camera : [])
+    .slice(0, MOST_MARKS).map(cameraMark).sort(byTime);
+  const people = {};
+  if (raw.people && typeof raw.people === "object") {
+    for (const [key, marks] of Object.entries(raw.people)) {
+      const id = Math.round(Number(key));
+      if (!(id >= 1) || !Array.isArray(marks) || !marks.length) continue;
+      people[id] = marks.slice(0, MOST_MARKS).map(personMark).sort(byTime);
+    }
+  }
+  const out = { camera, people };
+  if (raw.pass === "none" || STAGING_PASSES.includes(raw.pass)) out.pass = raw.pass;
+  if (raw.hold === "loose") out.hold = "loose";
+  if (typeof raw.words === "string" && raw.words.trim()) out.words = raw.words.slice(0, 2000);
+  return out;
+}
+
+const roundAll = (object) => Object.fromEntries(
+  Object.entries(object).map(([key, value]) => [key, typeof value === "number" ? round3(value) : value]));
+
+export function serializeSets(sets) {
+  return parseSets(sets).map((set) => ({
+    id: set.id, name: set.name,
+    objects: set.objects.map((piece) => {
+      const out = roundAll(piece);
+      for (const key of ["y", "rx", "ry", "rz"]) if (!out[key]) delete out[key];
+      if (!out.plays) delete out.plays;
+      if (!out.word) delete out.word;
+      return out;
+    }),
+    ...(set.view ? { view: roundAll(set.view) } : {}),
+  }));
+}
+
+export function serializeStaging(staging) {
+  const picked = parseStaging(staging);
+  if (!picked) return null;
+  const people = {};
+  for (const [id, marks] of Object.entries(picked.people)) {
+    people[id] = marks.map((mark) => {
+      const out = roundAll(mark);
+      for (const key of ["y", "rx", "ry", "rz"]) if (!out[key]) delete out[key];
+      return out;
+    });
+  }
+  return {
+    camera: picked.camera.map(roundAll),
+    ...(Object.keys(people).length ? { people } : {}),
+    ...(picked.pass ? { pass: picked.pass } : {}),
+    ...(picked.hold ? { hold: picked.hold } : {}),
+    ...(picked.words ? { words: picked.words } : {}),
+  };
+}
+
+/** The set a shot is staged on, or null. */
+export const setOf = (timeline, segment) =>
+  (segment?.set && (timeline.sets ?? []).find((set) => set.id === segment.set)) || null;
+
+/** Whether a shot has been given a staging. A clip never is. */
+export const isStaged = (timeline, segment) =>
+  !isClip(segment) && Boolean(segment?.staging) && Boolean(setOf(timeline, segment));
+
+/** The piece's default pass. */
+export const pieceStagingPass = (timeline) =>
+  (timeline?.staging_pass === "none" || STAGING_PASSES.includes(timeline?.staging_pass))
+    ? timeline.staging_pass : DEFAULT_STAGING_PASS;
+
+/** The pass a staged shot sends: its own, or the piece's. */
+export const stagingPass = (timeline, segment) =>
+  segment?.staging?.pass ?? pieceStagingPass(timeline);
+
+/** How firmly its guide holds, as the strength the asset carries. */
+export const stagingStrength = (segment) =>
+  STAGING_HOLDS[segment?.staging?.hold === "loose" ? "loose" : "firm"];
+
+/** Which shots are staged on a set, as indices. */
+export const shotsOnSet = (timeline, id) =>
+  timeline.segments.map((segment, index) => (!isClip(segment) && segment.set === id ? index : -1))
+    .filter((index) => index >= 0);
+
+/** The part of a set a stamp reads: everything but where it was looked at from. */
+const setStamped = (set) => (set ? { id: set.id, name: set.name, objects: set.objects } : null);
+
+/**
+ * What the derived guide of shot `index` is drawn from, hashed: the staging,
+ * the set, the pass, the canvas and the length. The guide's file is named after
+ * it, so a shot whose stamp has not moved reuses the file it already has.
+ * Null for a shot that sends no guide.
+ */
+export function stagingStamp(timeline, index) {
+  const segment = timeline.segments[index];
+  if (!isStaged(timeline, segment)) return null;
+  const pass = stagingPass(timeline, segment);
+  if (pass === "none") return null;
+  const { words, ...staging } = serializeStaging(segment.staging);
+  return hash(JSON.stringify([
+    staging, serializeSets([setStamped(setOf(timeline, segment))])[0]?.objects ?? [],
+    pass, timeline.aspect, timeline.short_edge, pieceFamily(timeline),
+    segment.duration_s,
+  ]));
+}
+
+/** The file a staged shot's derived guide is written to. */
+export const stagedGuideName = (timeline, index) => {
+  const stamp = stagingStamp(timeline, index);
+  return stamp ? `${STAGED_GUIDE_PREFIX}${stamp}-${stagingPass(timeline, timeline.segments[index])}` : null;
+};
+
+/** Whether a guide asset is one the bench derived, rather than one somebody picked. */
+export const isStagedGuide = (asset) =>
+  asset?.role === "guide"
+  && String(asset.filename ?? "").startsWith(`${STAGED_GUIDE_DIR}/${STAGED_GUIDE_PREFIX}`);
+
+/**
+ * A scene the old bench saved beside a guide (`{objects, marks, duration, ...}`),
+ * as a set and a first shot's staging. The old bench walked its marks evenly
+ * over the clip, so each is given its even share of the time.
+ */
+export function sceneAsStaging(scene, { id = "s1", name = "" } = {}) {
+  if (!scene || typeof scene !== "object") return null;
+  const objects = (Array.isArray(scene.objects) ? scene.objects : [])
+    .map((piece, at) => setPiece(piece, at + 1)).filter(Boolean);
+  const duration = finiteIn(scene.duration, 4, 1, 60);
+  const raw = Array.isArray(scene.marks) && scene.marks.length
+    ? scene.marks : scene.shot ? [scene.shot] : [];
+  const last = Math.max(1, raw.length - 1);
+  const camera = raw.map((mark, at) => cameraMark({ ...mark, t: raw.length > 1 ? (at / last) * duration : 0 }));
+  const staging = { camera, people: {} };
+  if (STAGING_PASSES.includes(scene.pass)) staging.pass = scene.pass;
+  const set = { id, name: name || id, objects };
+  const view = setView(scene.view && { yaw: scene.view.yaw, pitch: scene.view.pitch });
+  if (view) set.view = view;
+  return { set, staging, duration };
 }
 
 export function emptySegment() {
@@ -3630,6 +3905,10 @@ export function parseTimeline(raw) {
       timeline.upscale_models = parseUpscalerModels(timeline.upscale_models);
       timeline.turbo = parseTurbo(timeline.turbo);
       timeline.guide = parseGuide(timeline.guide, pieceFamily(timeline));
+      timeline.sets = parseSets(parsed.sets);
+      if (!timeline.sets.length) delete timeline.sets;
+      if (pieceStagingPass(parsed) !== DEFAULT_STAGING_PASS) timeline.staging_pass = parsed.staging_pass;
+      else delete timeline.staging_pass;
       // A blob with no `segments` key — a fresh node's widget is "{}" — keeps
       // `emptyTimeline`'s blank shot. One saved with an empty list stays empty:
       // that is a strip whose cards were all deleted, and opening it must not
@@ -3737,6 +4016,16 @@ export function parseTimeline(raw) {
         delete segment.seed;
         const seed = Number(raw?.seed);
         if (Number.isInteger(seed) && seed >= 0) segment.seed = seed;
+        // The set it is staged on and its staging. Neither alone means
+        // anything, and a set that is not on the piece is no set at all.
+        delete segment.set;
+        delete segment.staging;
+        const staging = parseStaging(raw?.staging);
+        if (staging && typeof raw?.set === "string"
+            && (timeline.sets ?? []).some((set) => set.id === raw.set)) {
+          segment.set = raw.set;
+          segment.staging = staging;
+        }
         return segment;
       });
       // Every cast file narrowed to what its slot says — once, on the way in.
@@ -3838,6 +4127,12 @@ export function serializeTimeline(timeline) {
     ...serializeGuide(timeline.guide, pieceFamily(timeline)),
     ...serializeSampling(timeline.sampling, pieceFamily(timeline)),
     ...serializeSamplingSpare(timeline.sampling_spare),
+    // The sets the piece is staged on, and the pass its staged shots send
+    // unless they say otherwise. Absent when nothing is staged, so a piece
+    // that never met the bench round-trips to the bytes it always did.
+    ...(timeline.sets?.length ? { sets: serializeSets(timeline.sets) } : {}),
+    ...(timeline.staging_pass && pieceStagingPass(timeline) !== DEFAULT_STAGING_PASS
+      ? { staging_pass: pieceStagingPass(timeline) } : {}),
     segments: timeline.segments.map((segment, index) => {
       if (isClip(segment)) {
         return {
@@ -3922,6 +4217,11 @@ export function serializeTimeline(timeline) {
       if (segment.hold === true) out.hold = true;
       if (takeOn(segment)) out.take = { ...segment.take };
       if (segmentSeed(segment) !== null) out.seed = segmentSeed(segment);
+      // The set it is staged on and its staging, only where it has them.
+      if (segment.set && segment.staging) {
+        out.set = segment.set;
+        out.staging = serializeStaging(segment.staging);
+      }
       return out;
     }),
   }, null, 2);
