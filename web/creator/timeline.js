@@ -759,9 +759,10 @@ export class TimelineBody {
 
   /** The blockout bench, over the node: the same piece as the strip, staged
    *  in 3D. Lent what the strip is lent, and the way across to it. */
-  openBlockout() {
+  openBlockout({ targets = [], back = null } = {}) {
     let held = null;
-    openStaging({
+    return openStaging({
+      targets, back,
       timeline: this.timeline,
       onCommit: () => this.commit(),
       io: () => this.widgetIO(),

@@ -58,7 +58,7 @@ import { watch as watchQueue } from "./queue.js";
 import { viewUrl } from "./api.js";
 import { el, icon, mark, spinner } from "./dom.js";
 import { buildDashboard } from "./navigate.js";
-import { openBlockout } from "./blockout.js";
+import { openBlockout } from "./staging.js";
 import { openControl } from "./control.js";
 import { openUpscale } from "./upscale.js";
 import { openLift } from "./lift.js";
@@ -902,9 +902,11 @@ class Fullscreen {
         { label: t("Blockout"), glyph: "cube",
           sub: t("Stage a scene out of boxes, walk one camera through it — then render along it"),
           art: { kind: "blocks" },
-          // On a piece, the bench stages the piece: it is the reel's window
-          // with a stage in it, on the same shots and takes.
-          go: () => (this.node.mmcBody?.openBlockout ? this.node.mmcBody.openBlockout() : openBlockout({
+          go: () => openBlockout({
+            // The piece, where the node has one: the bench stages it, on the
+            // same shots and takes the reel shows. Without one it is a piece
+            // of one shot whose guide goes through the targets below.
+            piece: this.node.mmcBody,
             targets: this.guideTargets(),
             // The piece's cast, as handles: who a block can play. The bench
             // writes staging prose around them; the prompt's own substitution
@@ -915,7 +917,7 @@ class Fullscreen {
             // the frame pill offers and the canvas a guide is written at.
             family: this.node.mmcBody?.timeline?.family ?? null,
             back: () => this.openDash(),
-          })) },
+          }) },
         // The other bench, and the one with no doors: what it makes is the
         // finished file rather than something a render reads, so it lands on a
         // shelf beside the renders and nothing here has to take it anywhere.

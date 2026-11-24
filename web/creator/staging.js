@@ -27,7 +27,7 @@ import {
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
   planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
-  joinGap, lineUp, stagingFrom, postureChanges, postureOf,
+  joinGap, lineUp, stagingFrom, postureChanges, postureOf, writeGuide,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
 
@@ -55,6 +55,37 @@ export function openStaging(options) {
   });
 }
 
+/**
+ * Open the blockout bench: the call the shell's Blockout card makes.
+ *
+ * Handed the piece (the node's body), it stages that piece, in the same window
+ * the strip opens, on the same shots and takes. Handed none — opened from the
+ * pre-stage, or anywhere there is no strip — it is a piece of one shot of its
+ * own: no strip, no joins, and *Write the guide* in place of Shoot, its guide
+ * going through the doors `targets` names (`fullscreen.guideTargets`).
+ *
+ * @param {object} [options]
+ * @param {object} [options.piece]    the node's body, where it has a strip
+ * @param {Array}  [options.targets]  where a written guide can be sent
+ * @param {Array}  [options.cast]     who a person can play, without a piece
+ * @param {string} [options.family]   whose canvas a guide is written at, without one
+ * @param {Function} [options.back]   the way back to the tools
+ */
+export function openBlockout(options = {}) {
+  const piece = options.piece;
+  if (piece?.openBlockout && piece.timeline) {
+    return piece.openBlockout({ targets: options.targets ?? [], back: options.back ?? null });
+  }
+  const timeline = S.parseTimeline(JSON.stringify({
+    version: 2, prompt: "", aspect: "16:9",
+    ...(options.family ? { family: options.family } : {}),
+    subjects: (options.cast ?? []).filter((handle) => typeof handle === "string" && handle)
+      .map((handle) => ({ handle, takes: "person" })),
+    segments: [{ prompt: "", duration_s: 4, assets: [], loras: [] }],
+  }));
+  return openStaging({ timeline, single: true, targets: options.targets ?? [], back: options.back ?? null });
+}
+
 const secondsText = (seconds) => t("{s} s", { s: (Number(seconds) || 0).toFixed(1) });
 
 /** "shot 2", "shots 1–3", "shots 1, 4", or "no shot yet". */
@@ -70,6 +101,11 @@ class Blockout extends Reel {
   constructor(options, resolve) {
     super(options, resolve);
     this.openTimelineWindow = options.openTimeline ?? null;
+    // A piece of one shot of its own: no strip, no joins, Write the guide.
+    this.single = options.single === true;
+    this.targets = options.targets ?? [];
+    this.back = options.back ?? null;
+    this.result = null;
     // Where the glass is: which shot, and how far into it.
     this.at = { index: 0, t: 0 };
     this.view = "stage";
@@ -173,16 +209,20 @@ class Blockout extends Reel {
       onclick: () => { const go = this.openTimelineWindow; this.close(); go?.(); },
     });
 
-    this.modal = el("div", { class: "mmc-modal mmc-tl-modal mmc-reel mmc-st-bench" }, [
+    this.writeButton = el("button", { class: "mmc-reel-shoot", text: t("Write the guide"), onclick: () => this.writeHere() });
+    this.modal = el("div", { class: `mmc-modal mmc-tl-modal mmc-reel mmc-st-bench${this.single ? " mmc-st-single" : ""}` }, [
       el("div", { class: "mmc-reel-head" }, [
-        el("span", { class: "mmc-reel-title", text: t("Blockout") }),
+        this.back
+          ? el("button", { class: "mmc-reel-title mmc-st-back", text: t("Blockout"), title: t("Back to the tools"),
+              onclick: () => { const back = this.back; this.close(); back(); } })
+          : el("span", { class: "mmc-reel-title", text: t("Blockout") }),
         this.titleMeta,
         this.undoButton,
         this.redoButton,
         this.planEl,
         this.cancelButton,
         ...(this.openTimelineWindow ? [this.openButton] : []),
-        ...(this.queue ? [this.shootButton] : []),
+        ...(this.single ? [this.writeButton] : this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-reel-main" }, [
@@ -209,6 +249,7 @@ class Blockout extends Reel {
       this.glassWatch.observe(this.glass);
     }
     this.mountGlass?.();
+    if (!this.single) this.adoptSaved();
     // Opened with nothing selected, the glass goes to the first shot.
     this.render();
     this.now = this.capture();
@@ -279,6 +320,13 @@ class Blockout extends Reel {
     const count = this.timeline.segments.length;
     super.renderHead();
     this.titleMeta.textContent = `${t(count === 1 ? "{n} shot" : "{n} shots", { n: count })} · ${secondsText(S.timelineSeconds(this.timeline))}`;
+    if (this.single) {
+      this.planEl.replaceChildren(...(this.writeError ? [el("span", { class: "mmc-reel-problem", text: this.writeError })]
+        : this.result ? [el("span", { text: `${t("Wrote")} ` }), el("b", { text: this.result.path.split("/").pop() })] : []));
+      this.writeButton.textContent = this.writing ?? t("Write the guide");
+      this.writeButton.disabled = Boolean(this.writing) || !this.set();
+      return;
+    }
     if (this.busy() || S.stripProblem(this.timeline) || this.refusal || this.stage?.failure || !count) return;
     const { shoot, kept } = S.shootPlan(this.timeline);
     const runs = S.passes(this.timeline);
@@ -1320,6 +1368,111 @@ class Blockout extends Reel {
     event.preventDefault();
   }
 
+  // ---- writing a guide, and where it can go -----------------------------------
+
+  /** The doors a written guide can go through. On a piece the shot's own guide
+   *  is derived and attached by Shoot, so the door that would attach it by hand
+   *  is not offered; the others (the pre-stage) are. */
+  doors() {
+    return this.targets.filter((target) => this.single || target.id !== "guide");
+  }
+
+  /** Whether the guide this shot writes is a picture rather than a clip. */
+  writesStill(index) {
+    return this.single ? (this.timeline.segments[index]?.staging?.camera?.length ?? 0) < 2 : false;
+  }
+
+  /** The doors, as a row of the shot's inspector, and what was last written. */
+  sendRows(index) {
+    const doors = this.doors();
+    const rows = [];
+    if (this.result && this.single) {
+      rows.push(this.irow(t("Written"), el("span", { class: "mmc-reel-note",
+        text: `${this.result.path.split("/").pop()} · ${this.result.op} · input/${this.result.path.split("/").slice(0, -1).join("/")}` })));
+    }
+    if (!doors.length) return rows;
+    const kind = this.writesStill(index) ? "image" : "video";
+    rows.push(this.irow(t("Send"), el("div", { class: "mmc-reel-inline" }, doors.map((target) => {
+      const frame = Boolean(target.kinds) && !target.kinds.includes(kind);
+      return el("button", {
+        class: `mmc-reel-btn${this.sentTo?.has(target.id) ? " quiet" : ""}`, disabled: Boolean(this.writing) || undefined,
+        title: frame ? t("The frame at the playhead, drawn as a still.")
+          : kind === "image" && target.doesStill ? target.doesStill : target.does ?? "",
+        text: target.label,
+        onclick: () => this.send(target, index, frame || kind === "image"),
+      });
+    })), this.sentTo?.size ? t("Sent. The file is in the input folder either way.") : null));
+    return rows;
+  }
+
+  /** Write the guide of the shot on the glass: a piece of one shot's Shoot. */
+  async writeHere() {
+    if (this.writing || !this.set()) return;
+    await this.write(this.index(), this.writesStill(this.index()));
+  }
+
+  async write(index, still) {
+    this.writing = t("Working…");
+    this.writeError = null;
+    this.renderHead();
+    try {
+      this.result = await writeGuide(this.timeline, index, { at: this.at.t, still,
+        step: (sentence) => { this.writing = sentence; this.renderHead(); } });
+      this.sentTo = new Set();
+    } catch (error) {
+      this.writeError = String(error?.message || error);
+      this.result = null;
+    }
+    this.writing = null;
+    if (this.overlay?.isConnected) { this.renderHead(); this.renderSide(); }
+    return this.result;
+  }
+
+  /** Through a door: written for it, then handed over. */
+  async send(target, index, still) {
+    const result = await this.write(index, still);
+    if (!result) return;
+    target.take(result);
+    (this.sentTo ??= new Set()).add(target.id);
+    if (target.closeOnSend) { this.close(); return; }
+    this.renderSide();
+  }
+
+  /**
+   * Read in the scenes the old bench saved. A shot with no staging whose guide
+   * is an old bench clip, with its `.json` beside it, takes that scene as a new
+   * set and as its own staging, the first time the bench opens on it.
+   */
+  adoptSaved() {
+    this.timeline.segments.forEach((segment) => {
+      if (S.isClip(segment) || segment.staging) return;
+      const guide = S.guideAsset(segment);
+      const path = String(guide?.filename ?? "");
+      if (!/^continuity\/blockout\/blockout-[a-z_]+(?:[-_ ]?\(?\d+\)?)?\.mp4$/.test(path)) return;
+      fetch(viewUrl(path.replace(/\.mp4$/, ".json")))
+        .then((response) => (response.ok ? response.json() : null))
+        .then((sidecar) => {
+          const scene = sidecar?.scene;
+          if (!scene || segment.staging || !this.timeline.segments.includes(segment)) return;
+          const id = this.newSetId();
+          const read = S.sceneAsStaging(scene, { id, name: t("Saved set") });
+          if (!read) return;
+          // The scene's marks over the shot's own length.
+          const k = (Number(segment.duration_s) || read.duration) / read.duration;
+          for (const mark of read.staging.camera) mark.t *= k;
+          for (const marks of Object.values(read.staging.people)) for (const mark of marks) mark.t *= k;
+          this.timeline.sets = [...(this.timeline.sets ?? []), read.set];
+          segment.set = id;
+          segment.staging = read.staging;
+          if (this.overlay?.isConnected) {
+            this.commit();
+            this.say(t("Shot {n}'s saved blockout is its staging now, on a set of its own.", { n: this.timeline.segments.indexOf(segment) + 1 }));
+          }
+        })
+        .catch(() => {});
+    });
+  }
+
   // ---- continuity ------------------------------------------------------------
 
   /** A new shot after a staged one starts where it ended: the same set, the
@@ -1499,12 +1652,23 @@ class Blockout extends Reel {
       const pass = S.stagingPass(this.timeline, segment);
       const guide = S.stagedGuideName(this.timeline, index);
       const frames = Math.max(2, Math.round((Number(segment.duration_s) || 0) * rulesFps(this.timeline)));
+      const words = segment.staging.words || this.wordsOf(index);
+      rows.push(...this.sendRows(index));
       rows.push(el("div", { class: "mmc-reel-machine" }, [
-        el("div", { text: t("What the model is given for this shot") }),
+        el("div", { class: "mmc-reel-inline" }, [
+          el("span", { text: t("What the model is given for this shot") }),
+          el("button", { class: "mmc-reel-link", text: t("Copy"), title: t("Copy the staging and the move, to paste into a prompt as prose."),
+            onclick: (event) => {
+              navigator.clipboard?.writeText(words).catch(() => {});
+              const button = event.currentTarget;
+              button.textContent = t("Copied");
+              setTimeout(() => { if (button.isConnected) button.textContent = t("Copy"); }, 1200);
+            } }),
+        ]),
         el("pre", { class: "mmc-reel-compiled mmc-st-words",
           text: (S.stagingPass(this.timeline, segment) === "none" || !guide
             ? "" : `input/${S.STAGED_GUIDE_DIR}/${guide}.mp4 · ${t("{n} frames", { n: frames })} · ${t(PASSES.find((p) => p.id === pass)?.label ?? pass)}\n`)
-            + (segment.staging.words || this.wordsOf(index)) }),
+            + words }),
       ]));
     }
     return el("div", { class: "mmc-reel-inspect-body" }, rows);

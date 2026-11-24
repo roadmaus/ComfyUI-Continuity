@@ -46,92 +46,116 @@ the file is in the picker either way.
 
 ## Blockout bench
 
-Starts from nothing at all: block a scene out of grey boxes, walk a camera
-through it, and render a guide along the camera's path. No model, no download,
-no queue. The renderer is arithmetic in the browser, and what is on the glass
-is exactly what gets written into `input/continuity/blockout/`.
+Stages the piece in 3D. It is the timeline's window with a stage in it: the
+script as a column on the left, the stage in the middle, one inspector on the
+right, and the piece at its real length underneath. It works the way the reel
+works (a script of shots, joins, kept takes, reshoots, one **Shoot**) and the
+two are windows on the same piece: a shot staged and shot here is a kept take
+in the timeline, and a shot written there is in this script, with no staging
+until it is given one. **Open the timeline** goes across. Nothing selected
+means the piece is selected.
 
-![The blockout bench: a subject block selected with its move handles, the shot camera drawn as a frustum with its path on the floor, and the staging narrated in the foot](img/blockout.png)
+![The blockout bench: the script on the left, the kitchen set on the stage with @ben selected and his handles out, his blocking in the inspector, and the piece underneath with the sets over the film and shot 3's guide on its card](img/blockout.png)
 
-The floor opens bare. Add a **Block**, **Wall** or **Post**, or start from one
-of the five arrangements in the rail (Two-shot, Corridor, Interview, Street
-corner, or Bare floor), each of which brings its own camera and its own move,
-so what lands on the glass is a shot rather than an assembly kit. Starting from
-one replaces whatever is there.
+No model, no download, no queue for the stage itself: the renderer is
+arithmetic in the browser, and what the glass shows in **Guide** is exactly what
+is written.
 
-### Two cameras
+### Sets and staging
 
-The **shot camera** is the one that gets written. It is drawn where it stands,
-as a frustum in blue, with its path along the floor and a diamond at every
-mark. **Free look** flies a second camera around it that touches nothing: WASD
-walks, Q and E drop and rise, drag orbits, shift-drag slides, the wheel zooms,
-and `F` (or a double-click) swings the view round to look at whatever is
-selected. Nothing you do in free look changes the file, stales a result, or
-alters a word of the prose.
+A hard cut starts a scene, and a scene has a **set**: walls, blocks, posts and
+people. A hard cut may also keep the set it had (same room, new angle); the
+join says which. Each shot has its own **staging** on its set: the shot
+camera's marks, and marks for each person. Between two marks a person goes from
+one to the other, and the camera eases through its marks.
 
-**Through the lens** stands you in the shot camera, where the glass is the lens
-and every gesture is a word the model was trained on: drag pans and tilts,
-shift-drag trucks and pedestals, the wheel pushes in and pulls out. **Put the
-camera here** moves the shot camera to where you are standing; **Go to the
-camera** flies the view back to it.
+The set is shared, the blocking is not. Moving a wall or the table changes the
+set, so every shot of its scene is shot again; moving a person changes only the
+shot you are on. The sets show over the film as brackets, and as frames beside
+the cast above the script.
 
-Frame the shot and press **Mark**, frame the next one and mark that; the clip
-walks the marks in order over a duration you set. One mark (or none) writes a
-still instead. Pressing a mark's name puts the camera back on it.
+A shot with no staging offers the sets there are, or one of five ways to start
+a new one: Two-shot, Corridor, Interview, Street corner, or Bare floor. Each
+brings its own people, its own camera and its own move. A shot carrying a guide
+the old bench wrote, with its `.json` saved beside it, takes that scene as its
+set and staging the first time the bench opens on it.
 
-### Editing the set
+Enter at the end of a staged shot writes the next one on the same set, with the
+camera where it stopped and everyone on their last marks, as a continuing join.
 
-Click a piece to select it. Its handles hang off it on the glass. **Move**
-(`1`) slides it along the world axes or, dragged by its body, across the floor;
-**Turn** (`2`) gives it three rings; **Size** (`3`) three square caps. `Shift+D`
-duplicates the selection, `X` removes it, and **Snap** rounds a place to 0.25 m
-or a metre and a turn to 15°. The rail carries the same numbers as figures, in
-the handles' own colours, and they stay in step with whatever the glass does.
+### The glass
 
-The **Frame** pill carries the same aspect popover the strip does: the shape
-grid over one orientation switch, off the family's own manifest, so what is on
-offer is what the weights will accept. The pill says the pixels beside the
-ratio, because a guide is written at that family's native canvas for the shape
-you pick: what the file holds is the size the render will read it at.
+Four views: **Stage** (clay, the grid, the shot camera with its path, where
+people walk, names), **Guide** (the pass exactly as the file will hold it),
+**Still** (one frame from the image model, to check the look: drawn, not built
+yet) and **Take** (what came back, at the playhead). Play runs the shot's time;
+dragging across a shot on the strip scrubs it.
 
-### What the glass shows
+**Free look** flies around the set and changes nothing: drag orbits, shift-drag
+slides, the wheel zooms. **Through the lens** stands you in the shot camera,
+where every gesture writes a camera mark at the playhead: drag pans and tilts,
+shift-drag trucks and pedestals, the wheel pushes in. **Put the camera here**
+moves the shot camera to where you stand.
 
-**Stage** is the set as you handle it: clay, the grid with its five-metre
-lines and coloured world axes, the selection ring, the handles, the camera, the
-names. **Depth** (or whichever pass is selected in Output) is the frame exactly
-as the file will hold it, with no staging aids on it at all.
+Click a piece to select it; its handles hang off it. **Move** (`1`) slides it
+along the world axes or, dragged by its body, across the floor; **Turn** (`2`)
+gives it three rings that snap to 15°; **Lift** (`3`) takes it off the floor.
+Dragging a person writes a mark at the playhead, so move the playhead first to
+give them a second mark. A piece rests by itself: whichever way up it is, its
+lowest point sits at its height off the floor, so a figure laid flat lies on
+it. **+ Person**, **+ Block**, **+ Wall** and **+ Post** add to the set, and
+Delete takes the selection off it.
 
-Four outputs, three of them wearing the ControlNet bench's own names:
+### What a shot sends
+
+| | |
+|---|---|
+| The guide | a clip along the shot camera's path, at the family's native canvas and frame grid, in the shot's pass. Written under `input/continuity/blockout/` by Shoot, named after the shot's staging so an unchanged shot reuses it, and attached as the shot's guide. Families without a ControlNet get the words alone |
+| The words | who stands where, in their posture, and how the camera moves, in the model's own words, added after the shot's prose (refined or not) |
+| How firmly | **Firmly** (1.0) or **Loosely** (0.6); a shot whose people change posture or leave the floor suggests loose |
+
+Four passes, the ControlNet bench's own names:
 
 | Pass | What it writes |
 |---|---|
-| As staged | no tracing, just the clay render itself, as footage, for the families that read a plain clip or picture as a reference or an init |
-| Depth | near bright, far dark, the map Depth Anything draws, taken from the geometry, so nothing is guessed |
+| As staged | no tracing, just the clay render itself, as footage |
+| Depth | near bright, far dark, taken from the geometry, so nothing is guessed |
 | Blocks | each piece one flat field of colour |
 | Lines | the set's edges, white on black |
 
-The grid, the selection ring, the handles, the camera and the names are staging
-aids: they live on the Stage view and never reach the written file.
+The piece sets the pass every staged shot sends; a shot can send its own, or
+**None**. The derived guides nothing points at any more are swept when the
+bench closes.
 
-A piece can be told who or what it is. **Plays** hands it to a cast member
-(the block wears their chip hue on the stage side, never in the written file),
-and **Called** gives a thing its word ("table", "doorway"). Named pieces are
-written into the staging: the bench computes who stands where in frame from
-its own projection, and the foot narrates the whole of it as you work:
-*"@anna stands at centre in the midground; a table at frame left in the
-foreground. The camera pushes in toward @anna at slow speed."* The camera half
-is in the motion-type, amplitude and speed vocabulary the H3 prompt spec
-defines. **Copy** hands you the prose to paste straight into a prompt, where
-`@anna` becomes her references by the same substitution every prompt already
-does. No model reads identity out of pixels. A depth map is identity-free by
-construction, and even mask-injection systems bind a reference to its region
-through the prompt, which is why the words are the mechanism, and why they are
-generated rather than hand-written.
+A person can **Play** a cast member and a thing can be **Called** a word
+("table", "doorway"). Named pieces are written into the staging: *"@anna is
+lying on the floor at centre in the midground; a table at frame left in the
+foreground; @anna ends standing. The camera pushes in toward @anna at slow
+speed."* No model reads identity out of pixels, so the words are the
+mechanism. **Copy** hands you them for any other prompt.
 
-The finished guide goes through the same doors a tracing does, and the scene
-itself is saved as a small `.json` beside the clip, including each named
-piece's screen box at every mark, for conditioning schemes that can ground
-against layout when one arrives.
+### Takes and joins
+
+What releases a take is the reel's rule with staging added: a change to a
+shot's camera marks, a person's marks in it, its pass or how firmly it holds
+releases that shot and the shots that continue from it; a change to a set
+releases every shot staged on it; looking around, selecting, scrubbing and
+switching views release nothing.
+
+At a continuing join the frames handed over come from the previous shot's end,
+so the next shot's first marks should be where the last ones stopped. A join
+that does not line up says what jumps (the camera's distance or turn, who
+moved and how far, a change of posture), wears the accent on the strip, and
+offers **Start shot N where shot N−1 ends**.
+
+### Without a piece
+
+Opened where there is no strip (from the pre-stage), the bench is a piece of
+one shot: no strip, no joins, and **Write the guide** in place of Shoot. One
+camera mark writes a still, more write a clip with the scene beside it, and
+the result goes through the same doors a tracing does (**Aim the shot at it**,
+**Aim the still at it**). On a piece, the pre-stage's door is under the shot as
+**Send**.
 
 ## Upscale bench
 

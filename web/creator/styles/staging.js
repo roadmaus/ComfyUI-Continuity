@@ -21,6 +21,11 @@ export const css = `
 .mmc-st-bench .mmc-reel-side { border-left: 1px solid var(--mmc-line); }
 .mmc-st-cuthint { padding: 6px 0 2px 46px; }
 
+/* A piece of one shot of its own: no strip, no joins, no next shot. */
+.mmc-st-single .mmc-reel-foot, .mmc-st-single .mmc-reel-next, .mmc-st-single .mmc-reel-gap { display: none; }
+.mmc-st-back { background: none; border: 0; padding: 0; cursor: pointer; font: inherit; color: inherit; }
+.mmc-st-back:hover { color: var(--mmc-accent); }
+
 /* --- the glass ------------------------------------------------------------------ */
 .mmc-st-col { min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; }
 .mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: 14px; overflow: hidden; background: var(--mmc-media-bg, #0e0f11); }
@@ -52,8 +57,8 @@ export const css = `
 .mmc-st-bench .mmc-reel-face canvas { width: 38px; height: 26px; border-radius: 6px; display: block; }
 .mmc-st-hue { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--tag, var(--mmc-surface-3)); flex: none; }
 .mmc-st-name { width: 100%; max-width: 240px; }
-.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vec { width: 100%; max-width: 300px; }
-.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vecslot { min-width: 82px; }
+.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vec { width: 100%; max-width: 300px; min-width: 0; }
+.mmc-st-bench .mmc-reel-icontrol .mmc-bo-vecslot { flex: 1 1 0; min-width: 0; padding: 0 5px; gap: 4px; }
 .mmc-st-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.45; }
 .mmc-st-words { white-space: pre-wrap; }
 

@@ -2882,8 +2882,12 @@ export function sceneAsStaging(scene, { id = "s1", name = "" } = {}) {
   const raw = Array.isArray(scene.marks) && scene.marks.length
     ? scene.marks : scene.shot ? [scene.shot] : [];
   const last = Math.max(1, raw.length - 1);
-  const camera = raw.map((mark, at) => cameraMark({ ...mark, t: raw.length > 1 ? (at / last) * duration : 0 }));
-  const staging = { camera, people: {} };
+  // The new bench writes each mark's time and the people's blocking beside the
+  // marks; the old one walked its marks evenly and blocked nobody.
+  const times = Array.isArray(scene.times) && scene.times.length === raw.length ? scene.times : null;
+  const camera = raw.map((mark, at) => cameraMark({ ...mark,
+    t: times ? Number(times[at]) || 0 : raw.length > 1 ? (at / last) * duration : 0 }));
+  const staging = { camera, people: parseStaging({ camera: [], people: scene.people })?.people ?? {} };
   if (STAGING_PASSES.includes(scene.pass)) staging.pass = scene.pass;
   const set = { id, name: name || id, objects };
   const view = setView(scene.view && { yaw: scene.view.yaw, pitch: scene.view.pitch });

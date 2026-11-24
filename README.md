@@ -59,8 +59,9 @@ everything lands in the same output folder. [Chat](docs/tools.md#chat).
 ### Tools
 
 The wordmark opens a dashboard of tools that work over the piece: presets, a
-ControlNet bench, a blockout bench for staging a scene out of boxes and
-walking a camera through it, and an upscale bench. [Tools](docs/tools.md).
+ControlNet bench, a blockout bench that stages the whole piece in 3D (sets,
+blocking and a camera for every shot, rendered along guides it derives), and
+an upscale bench. [Tools](docs/tools.md).
 
 ![The tool dashboard](docs/img/dashboard.png)
 

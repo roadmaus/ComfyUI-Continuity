@@ -23,6 +23,7 @@ node (Join-Path $env:PLAYWRIGHT_MODULE 'cli.js') install chromium
 node tests/browser/test-style-scroll.cjs
 node tests/browser/test-reference-preview.cjs
 node tests/browser/test-timeline-reel.cjs
+node tests/browser/test-blockout-bench.cjs
 ```
 
 On other operating systems, the same scripts work with the equivalent environment
@@ -56,6 +57,16 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   releases, Shoot, Enter/Backspace in the script, cutting and blocked joins,
   the cast and reference inspectors, and dragging a shot's length. Thumbnail
   and take requests are answered empty by the stub and counted as `media`.
+
+- **Blockout bench:** the real `staging.js`, `reel.js`, `blockout.js`,
+  `state.js` and CSS, with the same stubs as the reel's, on a piece of two sets
+  and three shots. Checks cover the three columns, the header, the glass's
+  Stage and Guide, a shot's guide on its card, scrubbing, the staging rows,
+  Shoot deriving and attaching a guide (the frame and write routes are answered
+  locally), starting a set, the handles and what each edit releases, the lens,
+  the adds, joins and lining them up, Enter, the one-shot mode and its doors,
+  reading an old saved scene, Copy and the sweep on close. `SHOT=path.png`
+  writes screenshots at 2×.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a

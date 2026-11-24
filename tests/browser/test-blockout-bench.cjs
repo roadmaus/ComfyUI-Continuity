@@ -21,7 +21,7 @@ const catalog = execFileSync('python3', ['-c',
 const apiStub = "const ok = (body) => new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });\n"
   + "const CATALOG = " + catalog + ";\n"
   + "export const api = {\n"
-  + "  async fetchApi(url, init) { if (/^\\/continuity\\/(blockout|probe)/.test(url)) return fetch(url, init);\n"
+  + "  async fetchApi(url, init) { if (/^\\/(continuity\\/(blockout|probe)|upload\\/image)/.test(url)) return fetch(url, init);\n"
   + "    return url.startsWith('/continuity/families') ? ok(CATALOG) : ok({}); },\n"
   + "  apiURL: (u) => u, getUserData: async () => new Response('{}', { status: 404 }),\n"
   + "  storeUserData: async () => {}, addEventListener() {}, removeEventListener() {},\n"
@@ -31,12 +31,13 @@ const appStub = `export const app = { graph: { _nodes: [] }, extensionManager: {
 let browser, requests = 0, media = 0, guideFrames = 0;
 const writes = [];
 const sweeps = [];
+let uploads = 0;
 const results = [];
 async function check(name, fn) { await fn(); results.push({ name, passed: true }); }
 
 (async () => {
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXECUTABLE_PATH || undefined, headless: true });
-  const page = await browser.newPage({ viewport: { width: 1500, height: 950 } });
+  const page = await browser.newPage({ viewport: { width: 1500, height: 950 }, deviceScaleFactor: process.env.SHOT ? 2 : 1 });
   page.setDefaultTimeout(4000);
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
@@ -53,6 +54,13 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     }
     // Thumbnails and takes, asked of the stubbed ComfyUI server. Answered empty:
     // there are no files here, and the reel has to draw without them.
+    // The scene the old bench saved beside a guide it wrote.
+    if (url.origin === ORIGIN && url.pathname === '/view' && /blockout-depth\.json/.test(url.search)) {
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ continuity_blockout: 1, op: 'depth', fps: 24, scene: {
+        objects: [{ kind: 'block', x: 0, z: 5, w: 0.52, h: 1.74, d: 0.42, plays: 'anna' }, { kind: 'wall', x: 0, z: 7.6, w: 6.2, h: 2.9 }],
+        marks: [{ x: 0, y: 1.6, z: 1.1, yaw: 0, pitch: 0, mm: 50 }, { x: 0, y: 1.58, z: 2.7, yaw: 0, pitch: 0, mm: 50 }],
+        duration: 4, aspect: '16:9', pass: 'depth' } }) });
+    }
     if (url.origin === ORIGIN && (url.pathname === '/view' || url.pathname === '/continuity/thumb')) {
       media++;
       if (process.env.SHOT) return route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="320" height="180"><rect width="320" height="180" fill="${/k1|s2/.test(url.href) ? '#345c4a' : /k2|s3/.test(url.href) ? '#334a78' : '#8a5a34'}"/><circle cx="160" cy="90" r="50" fill="#ffffff55"/></svg>` });
@@ -68,6 +76,10 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       const body = JSON.parse(route.request().postData() || '{}');
       writes.push(body);
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ path: `continuity/blockout/${body.name}.mp4`, kind: 'video' }) });
+    }
+    if (url.origin === ORIGIN && url.pathname === '/upload/image') {
+      uploads++;
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ name: 'blockout-depth.png', subfolder: 'continuity/blockout' }) });
     }
     if (url.origin === ORIGIN && url.pathname === '/continuity/blockout/sweep') {
       sweeps.push(JSON.parse(route.request().postData() || '{}').keep);
@@ -408,6 +420,55 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
         tl.segments.map((seg) => S.isKept(seg))];
     }), [4, 'kitchen', true, 1, true, ['7', '8'],
       'Shot 3 starts where shot 2 ends: same set, same marks, the camera where it stopped.', [true, true, false, false]]);
+  });
+
+  await check('Opened without a piece it is one shot: no strip, Write the guide, and the doors', async () => {
+    const opened = await page.evaluate(async () => {
+      document.querySelectorAll('.mmc-overlay').forEach((node) => node.remove());
+      const B = await import('/ext/web/creator/staging.js');
+      window.taken = [];
+      B.openBlockout({ cast: ['anna'], targets: [
+        { id: 'guide', label: 'Aim the shot at it', does: 'Every frame follows.', take: (r) => window.taken.push(['guide', r.kind, r.path]) },
+        { id: 'pre', kinds: ['image'], label: 'Aim the still at it', does: 'Loads the branch.', take: (r) => window.taken.push(['pre', r.kind, r.path]) },
+      ], back: () => { window.backed = true; } });
+      return 'ok';
+    });
+    assert.equal(opened, 'ok');
+    await page.waitForTimeout(120);
+    const shell = await page.evaluate(() => [getComputedStyle(document.querySelector('.mmc-st-single .mmc-reel-foot')).display,
+      document.querySelector('.mmc-reel-head .mmc-reel-shoot').textContent, document.querySelector('.mmc-reel-head .mmc-reel-shoot').disabled]);
+    assert.deepEqual(shell, ['none', 'Write the guide', true]);
+    await page.locator('.mmc-st-starts').getByText('Interview').click();
+    const before = writes.length;
+    await page.locator('.mmc-reel-head .mmc-reel-shoot').click();
+    await page.waitForFunction(() => /Wrote/.test(document.querySelector('.mmc-reel-plan').textContent), null, { timeout: 15000 });
+    assert.equal(writes.length - before, 1);
+    assert.equal(writes[writes.length - 1].scene.objects.length, 3);
+    assert.equal(writes[writes.length - 1].scene.objects[0].kind, 'person');
+    await page.locator('.mmc-reel-shot .mmc-reel-num').first().click();
+    assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent)
+      .filter((label) => ['Written', 'Send'].includes(label))), ['Written', 'Send']);
+    await page.locator('.mmc-reel-inspect').getByText('Aim the still at it').click();
+    await page.waitForFunction(() => window.taken.length === 1, null, { timeout: 15000 });
+    assert.deepEqual(await page.evaluate(() => window.taken[0].slice(0, 2)), ['pre', 'image']);
+    assert.ok(uploads >= 1);
+    await page.locator('.mmc-st-back').click();
+    assert.deepEqual(await page.evaluate(() => [window.backed, document.querySelectorAll('.mmc-st-bench').length]), [true, 0]);
+  });
+
+  await check('A shot carrying a guide the old bench wrote takes its saved scene as its staging', async () => {
+    await open(`tl.segments[2].staging = undefined; delete tl.segments[2].staging; delete tl.segments[2].set;
+      tl.segments[2].assets = [{ handle: 'vid-1', kind: 'video', role: 'guide', track: 'picture', filename: 'continuity/blockout/blockout-depth.mp4' }];`);
+    await page.waitForFunction(() => Boolean(tl.segments[2].staging), null, { timeout: 5000 });
+    assert.deepEqual(await page.evaluate(() => [tl.sets.length, tl.sets[2].name, tl.sets[2].objects.map((o) => o.plays || o.kind),
+      tl.segments[2].staging.camera.map((m) => m.t), S.isKept(tl.segments[0])]),
+    [3, 'Saved set', ['anna', 'wall'], [0, 5], true]);
+  });
+
+  await check('Copy puts what the model is given for a shot on the clipboard', async () => {
+    await page.evaluate(() => { window.copied = null; navigator.clipboard.writeText = async (text) => { window.copied = text; }; bench.select({ kind: 'shot', index: 0 }); });
+    await page.locator('.mmc-reel-machine').getByText('Copy').click();
+    assert.match(await page.evaluate(() => window.copied), /^@anna .*The camera /);
   });
 
   await check('Open the timeline closes the bench and opens the reel on the same piece', async () => {
