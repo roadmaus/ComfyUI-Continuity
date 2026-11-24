@@ -41,6 +41,10 @@ except Exception as exc:  # noqa: BLE001
 pkg = layout.load("settings", "bench", "blockout")
 blockout = pkg.blockout
 
+check("a queued prompt's guides are found in its text",
+      blockout.staged_in('{"filename": "continuity/blockout/staged-1cx9p7p-as_staged.mp4", "x": "blockout-depth.mp4"}'),
+      ["staged-1cx9p7p-as_staged"])
+
 # ---- the token is hex or it is nothing ---------------------------------------
 #
 # It names a directory. Every rejected shape below is a thing a directory name

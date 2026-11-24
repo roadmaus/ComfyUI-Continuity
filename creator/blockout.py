@@ -143,6 +143,11 @@ def staged_name(name):
     return str(name)
 
 
+def staged_in(text):
+    """Every derived guide a piece of text names, as `staged-…` stems."""
+    return re.findall(r"staged-[0-9a-z]{1,16}-[a-z_]{1,16}", text)
+
+
 def sweep(keep):
     """Remove the derived guides no shot points at. -> how many went.
 
@@ -198,6 +203,7 @@ def write(token, fps, op, scene=None, name=None):
     op = re.sub(r"[^a-z0-9_]", "", str(op or "guide")) or "guide"
 
     out_dir = os.path.join(folder_paths.get_input_directory(), *SUBFOLDER.split("/"))
+    os.makedirs(out_dir, exist_ok=True)
     # A derived guide goes under its staging stamp and overwrites: the same
     # stamp is the same frames. Anything else gets a fresh name, as ever.
     name = (f"{staged_name(name)}.mp4" if name

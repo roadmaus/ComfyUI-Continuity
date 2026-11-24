@@ -100,6 +100,10 @@ async def sweep_guides(request):
     keep = body.get("keep")
     if not isinstance(keep, list):
         return web.json_response({"error": "keep has to be a list"}, status=400)
+    # A queued prompt still has to read its guides, whichever tab queued it.
+    running, pending = PromptServer.instance.prompt_queue.get_current_queue()
+    queued = blockout.staged_in(json.dumps([item[2] for item in running + pending]))
     loop = asyncio.get_running_loop()
-    gone = await loop.run_in_executor(None, blockout.sweep, [str(item) for item in keep])
+    gone = await loop.run_in_executor(
+        None, blockout.sweep, [str(item) for item in keep] + queued)
     return web.json_response({"gone": gone})
