@@ -77,6 +77,8 @@ FILE = "continuity.credentials.json"
 # this is the read side, and a whole-timeline rewrite on a big model genuinely
 # runs for minutes with nothing arriving.
 TIMEOUT = 600
+# The same for `converse`: a model thinking its way through a whole scene.
+CONVERSE_TIMEOUT = 1800
 
 # What a fetched error body may contribute to a message shown in the panel.
 # Enough to read the provider's complaint, not enough to relay a novel.
@@ -613,3 +615,22 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
             f"fewer cards at once."
         )
     return content
+
+
+def converse(model, conversation, tools):
+    """One exchange of a conversation with tools -> the server's whole reply.
+
+    For a caller that holds the conversation itself (`stagehand`): the messages
+    go as they are, nothing is put in front of them, and the model's own
+    defaults stand for everything `chat` would set.
+    """
+    stored = _read()
+    url, key = stored.get("url", ""), stored.get("key", "")
+    if not url:
+        raise refine.RefineError(
+            "no refiner server is configured — set its URL in the refiner's settings")
+    body = _request(f"{url}/chat/completions", key,
+                    {"model": model, "messages": conversation, "tools": tools, "stream": False},
+                    timeout=CONVERSE_TIMEOUT)
+    _content(body)
+    return body

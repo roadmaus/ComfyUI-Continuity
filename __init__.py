@@ -17,6 +17,7 @@ from .creator import refine_routes  # noqa: F401  (registers /continuity/refine)
 from .creator import server_routes  # noqa: F401  (registers /continuity/assets)
 from .creator.creator_node import comfy_entrypoint  # noqa: F401
 from .creator.routes import blockout  # noqa: F401  (registers /continuity/blockout)
+from .creator.routes import stagehand  # noqa: F401  (registers /continuity/stagehand)
 from .creator.routes import chat  # noqa: F401  (registers /continuity/chat)
 from .creator.routes import control  # noqa: F401  (registers /continuity/control)
 from .creator.routes import director  # noqa: F401  (registers /continuity/director)
