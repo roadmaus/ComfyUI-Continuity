@@ -2587,7 +2587,10 @@ export function editedSince(timeline) {
  *  than per call because a strip of twenty would otherwise serialize the piece
  *  twenty times to answer one question about it. */
 function stampsOf(timeline) {
-  const blob = JSON.parse(serializeTimeline(timeline));
+  // Read back once, because that is the form the submitted prompt is stamped in
+  // (`queuedCards` is handed a parsed blob). A live piece can hold the same
+  // facts with their keys in another order, and this is a hash of text.
+  const blob = JSON.parse(serializeTimeline(parseTimeline(serializeTimeline(timeline))));
   // The sets and the piece's default pass are left out of the head: a set
   // belongs to the shots staged on it, and changing one must release those and
   // no others. Each staged card reads its own set and pass below instead.
