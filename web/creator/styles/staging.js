@@ -93,6 +93,9 @@ export const css = `
 .mmc-st-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.45; }
 .mmc-st-range { width: 100%; max-width: 240px; accent-color: var(--mmc-accent); }
 .mmc-st-words { white-space: pre-wrap; }
+.mmc-st-bench .mmc-st-scale { width: 84px; }
+.mmc-st-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.mmc-st-chips .mmc-reel-btn { padding-inline: 10px; }
 
 @media (max-width: 900px) {
   .mmc-st-bench .mmc-reel-main { display: flex; flex-direction: column; }

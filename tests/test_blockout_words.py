@@ -200,6 +200,17 @@ out.frame = [ratio(B.guideSize(piece())), ratio(B.guideSize(framed())),
   S.stagingStamp(framed(), 0) !== S.stagingStamp(piece(), 0),
   S.stagingStamp(framed({ x: 0, y: 0, w: 0.5, h: 0.5 }), 0) !== S.stagingStamp(framed(), 0)];
 F.ASPECT_SIZES.delete("tall.png");
+
+// Size: a person or a model well off its usual size is said to be; a plain block never.
+const sized = (extra) => B.stagingSentence([{ id: 1, kind: "person", x: -0.6, z: 5, w: 0.5, h: 1.75, d: 0.35, plays: "anna", ...extra }],
+  [at(0, 0)], 4, at(0, 0), { w: 16, h: 9 }, { withMove: false });
+const prop = (extra) => B.stagingSentence([{ id: 1, kind: "block", model: "car", x: 0.6, z: 9, w: 1.8, h: 1.45, d: 4.3, word: "car", ...extra }],
+  [at(0, 0)], 4, at(0, 0), { w: 16, h: 9 }, { withMove: false });
+out.size = [sized({}), sized({ w: 1.25, h: 4.4, d: 0.9 }), sized({ w: 0.09, h: 0.3, d: 0.06 }), sized({ h: 1.2 }),
+  prop({}), prop({ w: 5.4, h: 4.35, d: 12.9 }), prop({ w: 0.6, h: 0.5, d: 1.4 }), prop({ model: undefined, w: 9, h: 9, d: 9 })];
+out.sizeWalks = B.stagingSentence([{ id: 1, kind: "person", x: -0.6, z: 5, w: 0.5, h: 6, d: 0.35, plays: "anna" }], [at(0, 0)], 4, at(0, 0),
+  { w: 16, h: 9 }, { withMove: false, people: { 1: [{ t: 0, x: -0.6, z: 5 }, { t: 4, x: 0.6, z: 5 }] } });
+out.sizeKept = S.setPiece({ kind: "person", h: 45 }).h;
 out.frameUnknown = ratio(B.guideSize(framed()));
 
 console.log(JSON.stringify(out));
@@ -282,5 +293,17 @@ check("a car drives front first", abs(said["modelFront"]), 3.14)
 check("the guide is drawn in the frame the render has, a still's where it is taken from one",
       said["frame"], [1.75, 0.57, True, True, True])
 check("...and the preset's until the still has been measured", said["frameUnknown"], 1.75)
+
+check("size is said where it is well off usual, and only there", said["size"], [
+  "@anna stands at centre in the midground.",
+  "@anna, towering at 4.4 m, stands at centre in the midground.",
+  "@anna, tiny, 30 cm tall, stands at centre in the midground.",
+  "@anna stands at centre in the midground.",
+  "A car at centre in the distance.",
+  "A giant car at centre in the distance.",
+  "A tiny car at centre in the distance.",
+  "A car at centre in the distance."])
+check("...when they walk, too", said["sizeWalks"].split(" starts")[0], "@anna, towering at 6 m,")
+check("a set piece may be as big as a building", said["sizeKept"], 45)
 
 passed("the blockout says who is where, and the move in the model's own words")

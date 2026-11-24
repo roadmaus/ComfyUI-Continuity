@@ -77,7 +77,7 @@ import { el } from "./dom.js";
 import { upload, blockoutFrames, blockoutWrite, probe } from "./api.js";
 import { rulesFor, resolveCanvas, framesForSeconds } from "./canvas.js";
 import * as S from "./state.js";
-import { modelTriangles } from "./setmodels.js";
+import { modelTriangles, MODELS } from "./setmodels.js";
 import { frameRatio, measureFrame } from "./framesize.js";
 import { t } from "./i18n.js";
 
@@ -162,7 +162,7 @@ export const MOST_PREVIEW = 1100;
 
 export const clamp = (value, low, high) => Math.min(high, Math.max(low, value));
 export const FAR = 40;
-export const BIG = 20;
+export const BIG = 60;
 export const DEG = 180 / Math.PI;
 
 // ---- what a set can start from ---------------------------------------------------
@@ -719,6 +719,62 @@ export function postureOf(piece, person = piece?.kind === "person") {
   return lift || "";
 }
 
+// ---- size, in words ----------------------------------------------------------------
+//
+// The depth pass shows a person four metres tall; the words have to say so too,
+// or the model is handed a giant and told about somebody ordinary. Only what is
+// well off its usual size is mentioned: a child or a sofa a little long is not.
+
+/** What a piece is usually: a person's own height, a model's own size. Null for
+ *  a plain block, which has no usual size to be off. */
+export function usualSize(piece) {
+  if (piece?.kind === "person") return { ...S.SET_KINDS.person };
+  const model = MODELS.get(piece?.model);
+  return model ? { w: model.w, h: model.h, d: model.d } : null;
+}
+
+/** How much bigger than usual a piece is: a person by height, a model by all
+ *  three at once. 1 for a plain block. */
+export function sizeRatio(piece) {
+  const usual = usualSize(piece);
+  if (!usual) return 1;
+  if (piece.kind === "person") return piece.h / usual.h;
+  return Math.cbrt((piece.w / usual.w) * (piece.h / usual.h) * (piece.d / usual.d));
+}
+
+const metresSaid = (m) => (m < 1 ? t("{n} cm", { n: Math.round(m * 100) }) : t("{n} m", { n: Math.round(m * 10) / 10 }));
+
+/** A person well off their usual height, as words: "towering at 4.4 m",
+ *  "tiny, 30 cm tall". "" when they are near enough ordinary. */
+export function personSize(piece) {
+  if (piece?.kind !== "person") return "";
+  const ratio = sizeRatio(piece);
+  if (ratio >= 1.5) return t("towering at {m}", { m: metresSaid(piece.h) });
+  if (ratio <= 0.45) return t("tiny, {m} tall", { m: metresSaid(piece.h) });
+  return "";
+}
+
+/** What the staging sentence says of a piece's size, or "". */
+export const sizeSaid = (piece) => personSize(piece) || thingSize(piece);
+
+/** A model well off its usual size, as the word before its name. */
+function thingSize(piece) {
+  if (piece?.kind === "person" || !usualSize(piece)) return "";
+  const ratio = sizeRatio(piece);
+  return ratio >= 2.5 ? t("giant") : ratio >= 1.6 ? t("huge") : ratio <= 0.4 ? t("tiny") : ratio <= 0.62 ? t("small") : "";
+}
+
+/** Who or what a clause is about, with its size where that is worth saying.
+ *  A handle comes back without its @, for the templates that add one. */
+function whoSaid(piece) {
+  if (piece.plays) {
+    const size = personSize(piece);
+    return size ? `${piece.plays}, ${size},` : piece.plays;
+  }
+  const size = thingSize(piece);
+  return articled(size ? `${size} ${piece.word}` : piece.word);
+}
+
 /** A word with its article, unless it arrived wearing one. */
 function articled(word) {
   const said = String(word).trim();
@@ -760,7 +816,7 @@ function walkOf(marks) {
  *  "" for somebody never in it. */
 function walkClause(piece, end, walk, from, to, cam) {
   if (!from && !to) return "";
-  const who = piece.plays ? `@${piece.plays}` : articled(piece.word);
+  const who = piece.plays ? `@${whoSaid(piece)}` : whoSaid(piece);
   const posture = postureOf(piece);
   const how = piece.kind !== "person" ? (walk.pace > 5 ? t("moves fast") : walk.pace < 0.5 ? t("moves slowly") : t("moves"))
     : posture || postureOf(end) ? t("moves")
@@ -816,10 +872,10 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const { piece, here } of placed) {
     const posture = postureOf(piece);
     clauses.push(piece.plays
-      ? (posture ? t("@{who} is {posture} {place}", { who: piece.plays, posture, place: here.words })
-                 : t("@{who} stands {place}", { who: piece.plays, place: here.words }))
-      : posture ? t("{what}, {posture}, {place}", { what: articled(piece.word), posture, place: here.words })
-        : t("{what} {place}", { what: articled(piece.word), place: here.words }));
+      ? (posture ? t("@{who} is {posture} {place}", { who: whoSaid(piece), posture, place: here.words })
+                 : t("@{who} stands {place}", { who: whoSaid(piece), place: here.words }))
+      : posture ? t("{what}, {posture}, {place}", { what: whoSaid(piece), posture, place: here.words })
+        : t("{what} {place}", { what: whoSaid(piece), place: here.words }));
   }
   const lastCam = marks.length ? marks[marks.length - 1] : cam;
   for (const { piece, walk, here } of walkers) {

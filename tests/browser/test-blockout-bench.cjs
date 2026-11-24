@@ -531,6 +531,35 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     assert.equal(await shown('.mmc-reel-script'), true);
   });
 
+  await check('Size stretches one side from the other, scales a person from the floor, and says so', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 0 }); bench.select({ kind: 'thing', id: 5 }); });
+    await page.keyboard.press('4');
+    assert.equal(await page.evaluate(() => bench.tool), 'size');
+    const table = () => page.evaluate(() => { const o = tl.sets[0].objects.find((q) => q.id === 5); return { w: o.w, left: o.x - o.w / 2, h: o.h, d: o.d }; });
+    const was = await table();
+    const side = await onGlass('const g = bench.gizmo(bench.eye()); const q = g.handles.find((k) => k.kind === "face" && k.key === "x" && k.sign === 1); [q.x, q.y]');
+    const inward = await onGlass('const g = bench.gizmo(bench.eye()); [g.at.x, g.at.y]');
+    await dragBy(side, (side.x - inward.x) * 0.8, (side.y - inward.y) * 0.8);
+    const now = await table();
+    assert.ok(now.w > was.w + 0.3 && Math.abs(now.left - was.left) < 0.01 && now.h === was.h && now.d === was.d, JSON.stringify([was, now]));
+
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 7 }));
+    const anna = () => page.evaluate(() => { const o = tl.sets[0].objects.find((q) => q.id === 7); return [o.h, o.w / o.h, o.y]; });
+    const before = await anna();
+    const corner = await onGlass('const g = bench.gizmo(bench.eye()); const q = g.handles.find((k) => k.kind === "corner"); [q.x, q.y]');
+    await page.evaluate(async () => { window.BO = await import('/ext/web/creator/blockout.js'); });
+    const feet = await onGlass('const o = bench.selectedThing(); const p = BO.project(bench.eye(), [o.x, 0, o.z], bench.raster.w, bench.raster.h); [p.x, p.y]');
+    await dragBy(corner, corner.x - feet.x, corner.y - feet.y);
+    const after = await anna();
+    assert.ok(after[0] > before[0] * 1.6 && Math.abs(after[1] - before[1]) < 0.02 && after[2] === 0, JSON.stringify([before, after]));
+    assert.match(await page.evaluate(() => tl.segments[0].staging.words), /@anna, towering at/);
+    await page.locator('.mmc-reel-inspect').getByText('Doll 0.3').click();
+    assert.equal(await page.evaluate(() => tl.sets[0].objects.find((q) => q.id === 7).h), 0.3);
+    assert.match(await page.evaluate(() => tl.segments[0].staging.words), /@anna, tiny, 30 cm tall/);
+  });
+
   await check('A set is removed, asking twice; its shots stay, unstaged', async () => {
     await open();
     await page.evaluate(() => bench.select({ kind: 'set', id: 'street' }));

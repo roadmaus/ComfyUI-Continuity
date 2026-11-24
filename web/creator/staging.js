@@ -30,7 +30,7 @@ import {
   Raster, project, cameraAt, lensAt, filmAt, poseAt, reachAt, facingOf, facesAlong, faceArrival, aimedMarks, lookName, stagedSentence, stagedAt, guideSize, stagingSentence, moveSentence,
   PASSES, PRESETS, tagRGB, vfovOf, forwardOf, rightOf, upOf, MOST_PREVIEW, clamp,
   syncStagingWords, drawStaged, START_CAMERA, stagedGuidesOf, cornersOf, centreOf, basisOf, applyM, norm3, dot3,
-  planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG,
+  planeOf, nearPolyline, AXIS_INK, AXES, UNIT, DEG, FAR, BIG, usualSize, sizeRatio, sizeSaid, restHeight,
   referenceSize, joinGap, lineUp, stagingFrom, postureChanges, postureOf, writeGuide,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
@@ -1184,6 +1184,8 @@ class Blockout extends Reel {
           ? t("Turn: drag a ring to turn a piece on that axis. It snaps to 15° and rests on the floor whichever way up it is.")
           : this.tool === "lift"
             ? t("Lift: drag a piece up to take it off the floor, down to put it back. Move the playhead first and it rises or falls between the two marks.")
+          : this.tool === "size"
+            ? t("Size: drag a square to stretch that side, the other side stays put. Drag the round corner to grow or shrink it all, standing where it stands. Shift: from the centre.")
             : t("Move: drag a person to block them, drag a wall or the table to change the set. Pull a path to bend it. Drag the floor to orbit, shift-drag to slide, wheel to zoom.");
     }
     this.statusHost.replaceChildren(
@@ -1211,7 +1213,7 @@ class Blockout extends Reel {
   /** The three tools, as the HUD offers them. */
   toolSwitch(seg) {
     return el("div", { class: "mmc-bo-switch", role: "group", "aria-label": t("What a drag on a piece does") },
-      [["move", t("Move"), "1"], ["turn", t("Turn"), "2"], ["lift", t("Lift"), "3"]].map(([tool, label, key]) =>
+      [["move", t("Move"), "1"], ["turn", t("Turn"), "2"], ["lift", t("Lift"), "3"], ["size", t("Size"), "4"]].map(([tool, label, key]) =>
         seg(label, this.tool === tool, () => this.setTool(tool), { title: `${label} (${key})` })));
   }
 
@@ -1258,6 +1260,7 @@ class Blockout extends Reel {
     const at = project(cam, origin, w, h);
     if (!at) return null;
     const fl = (h / 2) / Math.tan(vfovOf(cam.mm) / 2);
+    if (this.tool === "size") return this.sizeGizmo(cam, piece, origin, at, fl);
     const len = (at.z * h * 0.17) / fl;
     const m = basisOf(piece);
     const parts = [];
@@ -1286,6 +1289,7 @@ class Blockout extends Reel {
   inkGizmo(context, cam, scale) {
     const gizmo = this.gizmo(cam);
     if (!gizmo) return;
+    if (gizmo.handles) { this.inkSize(context, gizmo, scale); return; }
     for (const part of gizmo.parts) {
       context.strokeStyle = AXIS_INK[part.key];
       context.lineWidth = (part.ring ? 1.8 : 2.4) * scale;
@@ -1315,9 +1319,146 @@ class Blockout extends Reel {
     }
   }
 
+  // ---- size: handles on the piece's own box ------------------------------------
+  //
+  // A square on each side but the bottom stretches the box that way; the side
+  // across from it stays put, so a wall is lengthened from one end and a table
+  // pulled out from the wall it stands against. A person, and anything that
+  // moves in the shot, stretches from its centre instead: where it stands is
+  // its blocking, which a change of size must not move. The round corner
+  // scales all three at once, standing where it stands. Shift: from the centre.
+  // A small piece's handles are pushed out from it, so they can still be held.
+
+  sizeGizmo(cam, piece, origin, at, fl) {
+    const { w, h } = this.raster;
+    const scale = this.inkScale();
+    const reach = (at.z * 26 * scale) / fl;
+    const m = basisOf(piece);
+    const half = { x: piece.w / 2, y: piece.h / 2, z: piece.d / 2 };
+    const out = (axis, by) => origin.map((value, k) => value + axis[k] * by);
+    const handles = [];
+    for (const [key, signs] of [["x", [1, -1]], ["z", [1, -1]], ["y", [1]]]) {
+      const axis = applyM(m, UNIT[key]);
+      for (const sign of signs) {
+        const on = project(cam, out(axis, sign * Math.max(half[key], reach)), w, h);
+        if (on) handles.push({ kind: "face", key, sign, axis, x: on.x, y: on.y });
+      }
+    }
+    // The top corner nearest the eye, pushed out along its own diagonal when small.
+    const corners = [[1, 1], [1, -1], [-1, 1], [-1, -1]].map(([sx, sz]) => {
+      const offset = applyM(m, [sx * half.x, half.y, sz * half.z]);
+      const long = Math.hypot(...offset) || 1;
+      const point = origin.map((value, k) => value + offset[k] * Math.max(1, (reach * 1.4) / long));
+      return { point, far: Math.hypot(point[0] - cam.x, point[1] - cam.y, point[2] - cam.z) };
+    }).sort((a, b) => a.far - b.far);
+    const corner = project(cam, corners[0].point, w, h);
+    if (corner) handles.push({ kind: "corner", x: corner.x, y: corner.y });
+    return { piece, origin, at, parts: [], handles };
+  }
+
+  inkSize(context, gizmo, scale) {
+    const ink = "#f0b46e";
+    for (const handle of gizmo.handles) {
+      context.strokeStyle = "rgba(240,180,110,.55)";
+      context.lineWidth = scale;
+      context.setLineDash([3 * scale, 3 * scale]);
+      context.beginPath();
+      context.moveTo(gizmo.at.x, gizmo.at.y);
+      context.lineTo(handle.x, handle.y);
+      context.stroke();
+      context.setLineDash([]);
+      context.fillStyle = ink;
+      context.strokeStyle = "rgba(20,20,20,.75)";
+      context.lineWidth = 1.6 * scale;
+      context.beginPath();
+      if (handle.kind === "corner") context.arc(handle.x, handle.y, 7 * scale, 0, Math.PI * 2);
+      else context.rect(handle.x - 5 * scale, handle.y - 5 * scale, 10 * scale, 10 * scale);
+      context.fill();
+      context.stroke();
+    }
+    // What size it is, beside its corner, always: the number is the point of the tool.
+    const corner = gizmo.handles.find((handle) => handle.kind === "corner") ?? gizmo.at;
+    const piece = gizmo.piece;
+    const usual = usualSize(piece);
+    const text = `${[piece.w, piece.h, piece.d].map((v) => v.toFixed(2)).join(" × ")} m${usual ? ` · ${Math.round(sizeRatio(piece) * 100)}%` : ""}`;
+    context.font = `600 ${Math.round(12 * scale)}px Inter, system-ui, sans-serif`;
+    const width = context.measureText(text).width + 14 * scale;
+    const x = Math.min(corner.x + 12 * scale, this.raster.w - width - 4 * scale), y = Math.max(corner.y - 30 * scale, 4 * scale);
+    context.fillStyle = "rgba(14,15,17,.86)";
+    context.strokeStyle = this.sizing ? ink : "rgba(255,255,255,.18)";
+    context.lineWidth = scale;
+    context.beginPath();
+    context.roundRect?.(x, y, width, 20 * scale, 6 * scale);
+    context.fill();
+    context.stroke();
+    context.fillStyle = "#f0ede7";
+    context.textAlign = "left";
+    context.fillText(text, x + 7 * scale, y + 14 * scale);
+  }
+
+  /** One size handle, dragged. Writes the set's own piece: a size belongs to
+   *  the set, whichever shot it is changed in. */
+  dragSize(handle, event, cam) {
+    const id = this.sel?.id;
+    const base = this.set()?.objects.find((piece) => piece.id === id);
+    const now = this.selectedThing();
+    if (!base || !now) return null;
+    const fixed = base.kind === "person" || Boolean(this.staging().people?.[id]);
+    const start = { w: base.w, h: base.h, d: base.d, x: base.x, y: base.y ?? 0, z: base.z };
+    const centre = centreOf(now);
+    const { w, h } = this.raster;
+    const at0 = this.glassPoint(event);
+    const done = () => { this.sizing = true; this.paint(); };
+    if (handle.kind === "face") {
+      const from = project(cam, centre, w, h);
+      const along = project(cam, centre.map((value, k) => value + handle.axis[k] * handle.sign * 0.5), w, h);
+      if (!from || !along) return null;
+      const dirx = along.x - from.x, diry = along.y - from.y;
+      const len2 = dirx * dirx + diry * diry;
+      if (len2 < 1e-6) return null;
+      const dim = { x: "w", y: "h", z: "d" }[handle.key];
+      return (moved) => {
+        const point = this.glassPoint(moved);
+        const metres = (((point.px - at0.px) * dirx + (point.py - at0.py) * diry) / len2) * 0.5;
+        // Up is always from the floor; the sides from the centre where the piece's
+        // place is not the set's to change, or with Shift.
+        const both = handle.key !== "y" && (fixed || moved.shiftKey);
+        base[dim] = clamp(Math.round((start[dim] + (both ? 2 : 1) * metres) * 20) / 20, 0.05, BIG);
+        if (!both && !fixed) {
+          const by = ((base[dim] - start[dim]) / 2) * handle.sign;
+          const moved3 = centre.map((value, k) => value + handle.axis[k] * by);
+          base.x = clamp(moved3[0], -FAR, FAR);
+          base.z = clamp(moved3[2], -FAR, FAR);
+          base.y = clamp(moved3[1] - restHeight(base), 0, BIG);
+        }
+        done();
+      };
+    }
+    const anchor = (shift) => (shift && !fixed ? centre : [now.x, now.y ?? 0, now.z]);
+    return (moved) => {
+      const pin = project(cam, anchor(moved.shiftKey), w, h);
+      if (!pin) return;
+      const d0 = Math.hypot(at0.px - pin.x, at0.py - pin.y);
+      if (d0 < 4) return;
+      const point = this.glassPoint(moved);
+      const least = Math.max(0.05 / start.w, 0.05 / start.h, 0.05 / start.d);
+      const most = Math.min(BIG / start.w, BIG / start.h, BIG / start.d);
+      const k = clamp(Math.round((Math.hypot(point.px - pin.x, point.py - pin.y) / d0) * 20) / 20, least, most);
+      for (const dim of ["w", "h", "d"]) base[dim] = Math.round(start[dim] * k * 1000) / 1000;
+      if (moved.shiftKey && !fixed) base.y = clamp(centre[1] - restHeight(base), 0, BIG);
+      else base.y = start.y;
+      done();
+    };
+  }
+
   /** Which handle a press landed on, or null. */
   grabbed(gizmo, px, py, scale) {
     if (!gizmo) return null;
+    if (gizmo.handles) {
+      const near = gizmo.handles.map((handle) => ({ handle, away: Math.hypot(handle.x - px, handle.y - py) }))
+        .filter(({ away }) => away <= 13 * scale).sort((a, b) => a.away - b.away)[0];
+      return near ? { size: near.handle } : null;
+    }
     if (this.tool === "move" && Math.hypot(gizmo.at.x - px, gizmo.at.y - py) <= 8 * scale) return { key: "free" };
     let best = null;
     for (const part of gizmo.parts) {
@@ -1409,6 +1550,7 @@ class Blockout extends Reel {
       this.canvas.removeEventListener("pointerup", up);
       this.canvas.removeEventListener("pointercancel", up);
       this.endDrag = null;
+      this.sizing = false;
       this.setDraft(false);
       if (moved && (edits || this.lens)) { this.commit(); return; }
       // A click on the floor, not a drag: back to the shot.
@@ -1438,6 +1580,7 @@ class Blockout extends Reel {
     const id = this.sel?.id;
     const now = this.selectedThing();
     if (!now) return null;
+    if (grab.size) return this.dragSize(grab.size, event, cam);
     if (grab.key === "free") {
       const { px, py } = this.glassPoint(event);
       return this.dragFloor(id, px, py, cam);
@@ -1696,6 +1839,65 @@ class Blockout extends Reel {
     return rows;
   }
 
+  // ---- size, in the inspector ---------------------------------------------------------
+
+  /** Whether a piece's three sizes change together. Kept for a person and a
+   *  model, whose shape is the point of them; free for a plain block. Not part
+   *  of the set: it is how this window edits, for as long as it is open. */
+  sizeLocked(set, base) {
+    const key = `${set.id}:${base.id}`;
+    return this.locks?.has(key) ? this.locks.get(key) : Boolean(usualSize(base));
+  }
+
+  /** All three sizes times `k`, standing where it stands. */
+  scaleBy(base, k) {
+    const least = Math.max(0.05 / base.w, 0.05 / base.h, 0.05 / base.d);
+    const most = Math.min(BIG / base.w, BIG / base.h, BIG / base.d);
+    const by = clamp(k, least, most);
+    for (const dim of ["w", "h", "d"]) base[dim] = Math.round(base[dim] * by * 1000) / 1000;
+  }
+
+  /** Size for every piece, people too: the three sizes, whether they keep to
+   *  each other, and for what has a usual size how far it is off it. */
+  sizeRows(set, base, vec, edit) {
+    const locked = this.sizeLocked(set, base);
+    const sized = (dim) => (v) => {
+      const value = clamp(v, 0.05, BIG);
+      if (locked) this.scaleBy(base, value / base[dim]);
+      else base[dim] = value;
+    };
+    const usual = usualSize(base);
+    const said = sizeSaid(base);
+    const rows = [
+      this.irow(t("Size"), vec([["W", base.w, sized("w")], ["H", base.h, sized("h")], ["D", base.d, sized("d")]]),
+        t("Metres. Size is the set's: it holds in every shot on it.")),
+      this.irow(t("Proportions"), this.switchControl(locked, (on) => {
+        (this.locks ??= new Map()).set(`${set.id}:${base.id}`, on);
+        this.renderSide();
+      }), locked ? t("Kept: changing one size changes all three.") : t("Free: each size on its own.")),
+    ];
+    if (usual) {
+      const percent = Math.round(sizeRatio(base) * 100);
+      rows.push(this.irow(t("Scale"), el("div", { class: "mmc-st-chips" }, [
+        el("input", { class: "mmc-reel-seed mmc-st-scale", type: "number", step: "5", min: "1", value: String(percent), "aria-label": t("Scale, in percent"),
+          onchange: (event) => { const v = parseFloat(event.target.value); if (v > 0) edit(() => this.scaleBy(base, v / 100 / sizeRatio(base))); } }),
+        el("span", { class: "mmc-reel-note", text: base.kind === "person" ? t("% of a person") : t("% of its usual size") }),
+        ...(Math.abs(percent - 100) > 0 || Math.abs(base.w / usual.w - base.h / usual.h) > 0.01
+          ? [el("button", { class: "mmc-reel-btn quiet", text: t("Usual size"), onclick: () => edit(() => Object.assign(base, usual)) })] : []),
+      ]), said ? t("The staging sentence says: {words}.", { words: said }) : null));
+    }
+    if (base.kind === "person") {
+      rows.push(this.irow(t("Height"), el("div", { class: "mmc-st-chips" }, [
+        [0.3, t("Doll")], [1.2, t("Child")], [1.75, t("Adult")], [4, t("Giant")], [15, t("Colossus")],
+      ].map(([metres, label]) => el("button", {
+        class: `mmc-reel-btn${Math.abs(base.h - metres) < 0.01 ? "" : " quiet"}`, text: `${label} ${metres}`,
+        "aria-pressed": String(Math.abs(base.h - metres) < 0.01),
+        onclick: () => edit(() => this.scaleBy(base, metres / base.h)),
+      })))));
+    }
+    return rows;
+  }
+
   /** Take the selected piece off the set, and out of every shot's blocking. */
   removeThing() {
     const set = this.set();
@@ -1736,7 +1938,7 @@ class Blockout extends Reel {
       else this.setFocus(event.shiftKey || !this.focused, { screen: event.shiftKey });
     }
     else if ((event.key === "i" || event.key === "I") && this.focused) this.toggleDrawer();
-    else if (["1", "2", "3"].includes(event.key) && this.set()) this.setTool(["move", "turn", "lift"][Number(event.key) - 1]);
+    else if (["1", "2", "3", "4"].includes(event.key) && this.set()) this.setTool(["move", "turn", "lift", "size"][Number(event.key) - 1]);
     else return;
     event.preventDefault();
   }
@@ -2304,10 +2506,7 @@ class Blockout extends Reel {
             ...(marks && marks.length > 1 ? [el("button", { class: "mmc-reel-btn", text: t("Hold the first mark"),
               onclick: () => edit(() => { this.staging().people[id] = [marks[0]]; }) })] : []),
           ]))] : []),
-      ...(person ? [] : [this.irow(t("Size"), vec([
-            ["W", base.w, (v) => { base.w = clamp(v, 0.05, BIG); }],
-            ["H", base.h, (v) => { base.h = clamp(v, 0.05, BIG); }],
-            ["D", base.d, (v) => { base.d = clamp(v, 0.05, BIG); }]]))]),
+      ...this.sizeRows(set, base, vec, edit),
       el("div", { class: "mmc-reel-actions quiet" }, [el("button", { class: "mmc-reel-btn quiet danger", text: t("Take off the set"),
         onclick: () => this.removeThing() })]),
     ];

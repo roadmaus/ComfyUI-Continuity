@@ -9,6 +9,14 @@ exactly as it was written, wall of text and all.
 **Closing a blockout window no longer deletes another's clips.** It removes only the
 clips it used while it was open and has stopped using, not every one it does not know.
 
+**Anything on a blockout set can be any size.** A fourth tool, **Size** (4), puts
+handles on the selected piece: a square stretches that side while the other stays
+put, the round corner scales the whole thing where it stands, Shift works from the
+centre. People can be sized too, with a proportion lock, a scale in percent and
+heights from doll to colossus, and pieces may now be up to 60 m. A person or a
+model far off its usual size is said to be in the staging sentence ("@anna,
+towering at 4.4 m"), so the words agree with the depth pass.
+
 **The blockout has a focus view.** **Focus** (or F) folds the script and the strip
 away so the stage fills the window, with the inspector as a drawer over it (I);
 Shift+F hides the browser's bars too, and Escape steps back out before it closes.

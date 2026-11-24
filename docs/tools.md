@@ -127,6 +127,18 @@ The inspector becomes a drawer that slides in when a piece or a set is picked; *
 or **Inspector** shows it or puts it away. Shift+F hides the browser's own bars as
 well. Escape leaves focus first, and the window opens as it was last left.
 
+**Size** (4) is the fourth tool beside Move, Turn and Lift. A square on each side of
+the selected piece stretches it that way while the opposite side stays put; the top
+one makes it taller from the floor. A person, and anything that moves in the shot,
+stretches from its centre instead, so where it stands in each shot does not move.
+The round corner grows or shrinks the whole piece where it stands, and Shift does
+either from the centre. Its size is written beside it as you go. In the inspector
+every piece has **Size**, people included, with **Proportions** (kept for people and
+models, free for plain blocks), and anything with a usual size has **Scale** in
+percent and a way back to **Usual size**; a person also has heights from **Doll** to
+**Colossus**. Size belongs to the set and holds in every shot on it. A person or a
+model well off its usual size is said to be in the staging sentence.
+
 **+ Model** opens a shelf of simple things (furniture, parts of buildings, street,
 nature), all drawn in code. Each fills its piece's own box. **Detail** shows it as
 a block, a rough shape or in detail, piece by piece or, on the set's page, for

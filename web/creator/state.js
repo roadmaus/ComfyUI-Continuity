@@ -2675,7 +2675,7 @@ export const SET_KINDS = {
   post: { w: 0.16, h: 2.4, d: 0.16 },
 };
 const SET_FAR = 40;
-const SET_BIG = 20;
+const SET_BIG = 60;
 const MOST_SET_PIECES = 200;
 const MOST_MARKS = 64;
 

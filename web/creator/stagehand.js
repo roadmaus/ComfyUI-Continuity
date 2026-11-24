@@ -16,7 +16,7 @@ import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, 
 /** Where a loop that never ends is ended. */
 export const MOST_TURNS = 60;
 const LOOK_WIDE = 1024;
-const FAR = 40, BIG = 20, SMALL = 0.05, MOST_OBJECTS = 200, MOST_ID = 253;
+const FAR = 40, BIG = 60, SMALL = 0.05, MOST_OBJECTS = 200, MOST_ID = 253;
 
 const KINDS = Object.keys(S.SET_KINDS);
 const WHATS = [...KINDS, ...MODELS.keys()];
