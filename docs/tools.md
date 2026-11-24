@@ -115,6 +115,12 @@ knobs either side of a stop to say how the curve passes it. They move on their
 own level; with **Lift** they go up and down. People face along the curve. At a
 stop, **Sharp corner** and **Smooth again** are beside the speed.
 
+A shot with no staging offers the sets there are, five quick starts of plain
+blocks, and the **Scene library**: sixteen whole sets made of models (rooms at
+home, places of work and public places, streets, and outdoors), each drawn from
+where its camera starts, with people in it and a camera move. Pressing one makes a
+new set from it; everything on it can then be moved, changed or taken away.
+
 **+ Model** opens a shelf of simple things (furniture, parts of buildings, street,
 nature), all drawn in code. Each fills its piece's own box. **Detail** shows it as
 a block, a rough shape or in detail, piece by piece or, on the set's page, for

@@ -44,6 +44,8 @@ export const css = `
   background: rgba(255, 255, 255, .05); color: inherit; font: inherit; font-size: calc(12px * var(--mmc-type, 1)); cursor: pointer; }
 .mmc-st-model:hover, .mmc-st-model:focus-visible { border-color: var(--mmc-accent); }
 .mmc-st-model canvas { position: static; width: 100%; height: auto; border-radius: 6px; }
+.mmc-st-scenes { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
+.mmc-st-shelfnote { margin: 0 0 4px; max-width: 60ch; color: #c9c5bd; font-size: calc(12.5px * var(--mmc-type, 1)); }
 .mmc-st-starts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 560px; }
 .mmc-st .mmc-bo-hud > * { pointer-events: auto; }
 .mmc-st .mmc-bo-hud .mmc-bn-gap { flex: 1; pointer-events: none; }

@@ -21,6 +21,7 @@ import { el, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { viewUrl, blockoutSweep } from "./api.js";
 import { MODEL_GROUPS, MODELS } from "./setmodels.js";
+import { SCENE_GROUPS } from "./setscenes.js";
 import { PaceLane } from "./pacelane.js";
 import * as S from "./state.js";
 import { Reel, fitText } from "./reel.js";
@@ -534,6 +535,9 @@ class Blockout extends Reel {
           onclick: () => this.stageOn(set.id) })),
         ...PRESETS.map((preset) => el("button", { class: "mmc-reel-btn quiet", text: t(preset.label), title: t(preset.note),
           onclick: () => this.startSet(preset) })),
+        el("button", { class: "mmc-reel-btn", text: `${t("Scene library")}…`,
+          title: t("Whole sets made of models, with people in them and a camera move: a kitchen, a bus stop, a forest clearing."),
+          onclick: () => this.openScenes() }),
       ]));
   }
 
@@ -541,6 +545,7 @@ class Blockout extends Reel {
   startSet(preset) {
     const segment = this.segment();
     if (!segment || S.isClip(segment)) return;
+    this.closeShelf();
     const made = preset.make();
     const id = this.newSetId();
     const read = S.sceneAsStaging({ ...made, duration: Number(segment.duration_s) || 4 },
@@ -621,8 +626,10 @@ class Blockout extends Reel {
   /** The HUD over the glass. */
   paintHud() {
     if (!this.hudTop) return;
-    // The shelf belongs to the stage being worked: not to a guide, a take or playing.
-    if (this.shelf && (this.view !== "stage" || !this.set() || this.playing)) { this.closeShelf(); return; }
+    // The model shelf belongs to the stage being worked: not to a guide, a take or
+    // playing. The scene shelf belongs to a shot with no set yet.
+    if (this.shelf && (this.playing || (this.shelfFor === "scenes" ? Boolean(this.set())
+      : this.view !== "stage" || !this.set()))) { this.closeShelf(); return; }
     const seg = (label, on, onclick, extra = {}) => el("button", {
       class: `mmc-bo-seg${on ? " on" : ""}`, "aria-pressed": String(Boolean(on)), onclick, ...extra,
     }, [el("span", { text: label })]);
@@ -1553,6 +1560,7 @@ class Blockout extends Reel {
       raster.shade(canvas.getContext("2d"), "as_staged");
       return el("button", { class: "mmc-st-model", onclick }, [canvas, el("span", { text: label })]);
     };
+    this.shelfFor = "models";
     this.shelf = el("div", { class: "mmc-st-shelf", role: "dialog", "aria-label": t("Models") }, [
       el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.closeShelf() }),
       ...(plain ? [el("div", { class: "mmc-st-models" }, [card(t("Plain block"), () => pick(null))])] : []),
@@ -1568,6 +1576,33 @@ class Blockout extends Reel {
   closeShelf() {
     this.shelf?.remove();
     this.shelf = null;
+    this.shelfFor = null;
+    this.paintHud();
+  }
+
+  /** The scene library, over the glass: each scene seen from where its camera
+   *  starts. Pressing one starts a new set from it, as a quick start does. */
+  openScenes() {
+    if (this.shelf) { this.closeShelf(); return; }
+    const card = (scene) => {
+      const canvas = el("canvas", { width: "240", height: "135" });
+      const raster = new Raster(240, 135);
+      const read = S.sceneAsStaging({ ...scene.make(), duration: 4 });
+      raster.raster(read.set.objects.map((piece) => (piece.model ? { ...piece, detail: "detailed" } : piece)), read.staging.camera[0]);
+      raster.shade(canvas.getContext("2d"), "as_staged");
+      return el("button", { class: "mmc-st-model mmc-st-scene", title: t(scene.note), onclick: () => this.startSet(scene) },
+        [canvas, el("span", { text: t(scene.label) })]);
+    };
+    this.shelfFor = "scenes";
+    this.shelf = el("div", { class: "mmc-st-shelf", role: "dialog", "aria-label": t("Scene library") }, [
+      el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.closeShelf() }),
+      el("p", { class: "mmc-st-shelfnote", text: t("A whole set to start shot {n} on. Everything in it can be moved, changed or taken away.", { n: this.index() + 1 }) }),
+      ...SCENE_GROUPS.flatMap((group) => [
+        el("div", { class: "mmc-st-shelfname", text: t(group.label) }),
+        el("div", { class: "mmc-st-models mmc-st-scenes" }, group.scenes.map(card)),
+      ]),
+    ]);
+    this.glass.append(this.shelf);
     this.paintHud();
   }
 

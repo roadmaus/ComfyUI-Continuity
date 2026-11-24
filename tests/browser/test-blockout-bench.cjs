@@ -258,10 +258,24 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.evaluate(() => bench.select({ kind: 'shot', index: 2 }));
     await page.waitForTimeout(60);
     const offered = await page.evaluate(() => [...document.querySelectorAll('.mmc-st-starts button')].map((b) => b.textContent));
-    assert.deepEqual(offered, ['On the kitchen set', 'On the street set', 'Bare floor', 'Two-shot', 'Corridor', 'Interview', 'Street corner']);
+    assert.deepEqual(offered, ['On the kitchen set', 'On the street set', 'Bare floor', 'Two-shot', 'Corridor', 'Interview', 'Street corner', 'Scene library…']);
     await page.locator('.mmc-st-starts').getByText('Two-shot').click();
     assert.deepEqual(await page.evaluate(() => [tl.segments[2].set, tl.sets.length, tl.segments[2].staging.camera.length,
       S.isKept(tl.segments[0]), S.isKept(tl.segments[1])]), ['s3', 3, 2, true, true]);
+    await page.evaluate(() => bench.step(bench.done, bench.undone));
+    assert.deepEqual(await page.evaluate(() => [tl.segments[2].set ?? null, tl.sets.length]), [null, 2]);
+  });
+
+  await check('The scene library starts a whole set of models, and closes once the shot is on it', async () => {
+    await page.locator('.mmc-st-starts').getByText('Scene library…').click();
+    const shelf = await page.evaluate(() => [...document.querySelectorAll('.mmc-st-scene')].map((b) => b.textContent));
+    assert.ok(shelf.length >= 12 && shelf.includes('Kitchen') && shelf.includes('Forest clearing'), String(shelf));
+    await page.locator('.mmc-st-scene').getByText('Kitchen', { exact: true }).click();
+    assert.deepEqual(await page.evaluate(() => {
+      const set = tl.sets.find((one) => one.id === tl.segments[2].set);
+      return [set.name, set.objects.some((piece) => piece.model === 'table'), set.objects.filter((piece) => piece.kind === 'person').length,
+        tl.segments[2].staging.camera.length, Boolean(document.querySelector('.mmc-st-shelf'))];
+    }), ['Kitchen', true, 2, 2, false]);
     await page.evaluate(() => bench.step(bench.done, bench.undone));
     assert.deepEqual(await page.evaluate(() => [tl.segments[2].set ?? null, tl.sets.length]), [null, 2]);
   });

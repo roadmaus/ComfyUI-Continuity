@@ -9,6 +9,10 @@ exactly as it was written, wall of text and all.
 **Closing a blockout window no longer deletes another's clips.** It removes only the
 clips it used while it was open and has stopped using, not every one it does not know.
 
+**The blockout has a scene library.** Sixteen whole sets to start a shot on: a
+kitchen, a café, a warehouse, a bus stop, a crossroads, a forest clearing and more,
+built from the models, with people in them and a camera move.
+
 **The blockout has models.** Cars, chairs, trees, doorways and the like, as a block, a
 rough shape or in detail, switched for one piece or the whole set.
 
