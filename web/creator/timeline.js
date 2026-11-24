@@ -208,7 +208,13 @@ export class Timeline extends Reel {
       video.addEventListener("timeupdate", show);
       video.addEventListener("loadedmetadata", show);
       const toggle = el("button", { class: "mmc-reel-play", title: t("Play or pause"),
-        onclick: () => (video.paused ? video.play().catch(() => {}) : video.pause()) }, [icon("play", 20)]);
+        onclick: () => (!video.paused ? video.pause()
+          // Nothing selected is the piece, which plays from its first film.
+          : !sel && !made ? this.playFrom(0) : video.play().catch(() => {})) }, [icon("play", 20)]);
+      // A shot runs on into the next one there is film of.
+      if (sel?.kind === "shot") {
+        video.addEventListener("ended", () => this.playFrom(S.passOf(this.timeline, sel.index).end));
+      }
       video.addEventListener("play", () => toggle.classList.add("playing"));
       video.addEventListener("pause", () => toggle.classList.remove("playing"));
       children.push(video, toggle, time);
@@ -229,6 +235,18 @@ export class Timeline extends Reel {
  * The Timeline node's body in the graph: the piece at a glance, the way in, and
  * the sampler settings.
  *
+
+  /** Play the first shot from `index` on that there is film of. */
+  playFrom(index) {
+    const next = this.timeline.segments.findIndex((segment, k) => {
+      if (k < index) return false;
+      const take = S.isClip(segment) ? segment : S.takeOn(S.passOf(this.timeline, k).segments[0]);
+      return take && !this.gone.has(take.filename);
+    });
+    if (next < 0) return;
+    this.select({ kind: "shot", index: next });
+    this.playerHost.querySelector("video")?.play().catch(() => {});
+  }
  * The strip itself lives in the modal — it needs room the node does not have,
  * and drawing an editable one here would be a second implementation to keep in
  * step. What the node shows is the global prompt, the segments at their real
