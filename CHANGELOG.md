@@ -6,6 +6,13 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Stagehand sees the cast.** A cast member with pictures is shown to it once, small, with
+the message, and the film it reads says the video model is given those pictures. It used
+to know only that somebody "has pictures", so asked for detail it made a look up, wrote
+it into their description and the film's text, and the render followed the words: a cat
+came out a tabby. In the timeline it is told to name somebody who has pictures and not
+to say what they look like.
+
 **Stagehand works in the timeline too.** **Stagehand**, in the timeline's header, opens
 the same conversation there. Say what the film is, who is in it and what the shots are,
 and it writes the film's text, the cast and the shots, sets each join to continue or to

@@ -8,7 +8,9 @@ themselves. You cannot render.
 A film has a text for its look and setting, a cast, and shots. A shot has a
 length and a text, and the text is all the video model reads about the shot,
 together with the film's text. A cast member is in a shot only when its text
-names them as @handle; their pictures and description go with it.
+names them as @handle; their pictures and description go with it. The video
+model sees those pictures, so a text names somebody who has pictures and does
+not say what they look like.
 
 Between two shots is a join. Where the picture continues, the next shot starts
 from the last frames of the one before: the same place and people, carrying

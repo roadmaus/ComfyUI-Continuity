@@ -41,7 +41,7 @@ let browser, requests = 0;
 // The model: each exchange takes the next reply off the script, a list of
 // `[tool, arguments]`, and says "done" when the script has run out.
 let script = [], hold = null;
-const sent = [], stops = [], called = new Set();
+const sent = [], stops = [], thumbs = [], called = new Set();
 const results = [];
 async function check(name, fn) { await fn(); results.push({ name, passed: true }); }
 /** The Stop route is told and not waited for: give the word time to arrive. */
@@ -67,6 +67,11 @@ async function stopped(count) {
       if (url.pathname.startsWith('/ext/web/creator/') && url.pathname.endsWith('.js')) {
         const file = path.join(root, url.pathname.slice('/ext/'.length));
         if (fs.existsSync(file)) return route.fulfill({ contentType: 'text/javascript', body: fs.readFileSync(file) });
+      }
+      // The thumbnail of a cast member's picture: one grey pixel, counted.
+      if (url.pathname === '/continuity/thumb') {
+        thumbs.push(url.searchParams.get('filename'));
+        return route.fulfill({ contentType: 'image/png', body: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==', 'base64') });
       }
       if (url.pathname === '/continuity/stagehand/stop') {
         stops.push(JSON.parse(route.request().postData()).session);
@@ -370,7 +375,7 @@ async function stopped(count) {
     const lines = (await one('see_scene')).text.split('\n');
     assert.deepEqual([...lines.slice(0, 8), ...lines.slice(10)], [
       'Film: A small kitchen, early.', 'Sound: Rain on glass.', 'Music: None.',
-      'Cast: @anna (a woman in a grey coat); @ben (a tall man)', 'Sets: "Kitchen", "Street"', 'Set "Kitchen", 5 objects:',
+      'Cast: @anna (a woman in a grey coat; no pictures); @ben (a tall man; no pictures)', 'Sets: "Kitchen", "Street"', 'Set "Kitchen", 5 objects:',
       '#1 wall "far wall", at x 0, z 4, facing 0, 8 wide, 3 tall, 0.2 deep',
       '#2 person plays @anna, at x -1, z 2, facing 0, 0.5 wide, 1.75 tall, 0.35 deep',
       '#6 post at x 3, z 3, facing 0, 0.16 wide, 2.4 tall, 0.16 deep',
@@ -411,7 +416,7 @@ async function stopped(count) {
     assert.equal(sent.length, 2);
     const { session, messages, tools, ...asked } = sent[0];
     assert.match(session, /^[a-z0-9-]{4,64}$/);
-    assert.deepEqual(asked, { backend: 'remote', model: 'big', device: '', eject: true, seen: 0, client_id: 'tab-1' });
+    assert.deepEqual(asked, { backend: 'remote', model: 'big', device: '', eject: true, place: 'blockout', seen: 0, client_id: 'tab-1' });
     assert.equal(tools.length, NAMES.length);
     assert.deepEqual(messages, [{ role: 'user', content: 'Build a street.\n\nOpen: nothing is selected.\n\nThere is no set yet.\nThere are no shots yet.' }]);
     assert.deepEqual([sent[1].seen, sent[1].messages.length, sent[1].messages[2].role, sent[1].messages[2].tool_call_id], [2, 3, 'tool', 'c1-0']);
@@ -565,6 +570,25 @@ async function stopped(count) {
     assert.match(answers[1].text, /^Added #1 table /);
     assert.equal(answers[1].pictures, 1);
     refusedWith(answers[2], 'set_join is a tool of the timeline, and this is the blockout bench');
+  });
+
+  await check('the cast is shown once, a small picture each, and the film says the video model is given them', async () => {
+    await open({ version: 2, prompt: '', models: {},
+      assets: [{ handle: 'ref-1', kind: 'image', role: 'reference', filename: 'count.png' },
+        { handle: 'ref-2', kind: 'image', role: 'reference', filename: 'cat.png' }],
+      subjects: [{ handle: 'count', from: ['ref-1'], takes: 'person' }, { handle: 'cat', from: ['ref-2'], takes: 'person' },
+        { handle: 'mara', from: [], takes: 'person', description: 'a courier' }],
+      segments: [{ prompt: '@count waits.', assets: [], loras: [], duration_s: 5 }, { prompt: '@cat sleeps.', assets: [], loras: [], duration_s: 5 }] });
+    await page.evaluate(() => { window.place = 'reel'; });
+    sent.length = 0; thumbs.length = 0;
+    await say('Write a third shot.', []);
+    const [pictures, words] = [sent[0].messages[0].content.filter((part) => part.type === 'image_url'), sent[0].messages[0].content.at(-1).text];
+    assert.deepEqual([thumbs, pictures.length, pictures.every((part) => part.image_url.url.startsWith('data:image/png;base64,'))], [['count.png', 'cat.png'], 2, true]);
+    assert.ok(words.includes('Cast: @count (has pictures, which the video model is given); @cat (has pictures, which the video model is given); @mara (a courier; no pictures)'));
+    assert.ok(words.endsWith('Small pictures of the cast are attached, in this order: @count, @cat.'));
+    // Seen once, they stay in the conversation and are not sent again.
+    await say('And a fourth.', []);
+    assert.deepEqual([thumbs.length, typeof sent[1].messages.at(-1).content], [2, 'string']);
   });
 
   assert.deepEqual(errors, []);

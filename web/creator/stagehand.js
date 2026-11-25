@@ -15,7 +15,7 @@
 // selected when the message is sent.
 
 import { api } from "../../../scripts/api.js";
-import { JSON_HEADERS } from "./api.js";
+import { JSON_HEADERS, viewUrl } from "./api.js";
 import * as S from "./state.js";
 import { rulesFor } from "./canvas.js";
 import { run as runJob, cancelPrompt } from "./queue.js";
@@ -26,6 +26,9 @@ import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, 
 
 /** Where a loop that never ends is ended. */
 export const MOST_TURNS = 60;
+/** How many of the cast a message shows, a small picture each. */
+const MOST_CAST = 6;
+
 /** How many pictures a person's message carries. */
 export const MOST_PICTURES = 4;
 const LOOK_WIDE = 1024;
@@ -122,7 +125,7 @@ export function sceneText(timeline, setId) {
     timeline.prompt && `Film: ${timeline.prompt}`,
     timeline.soundscape && `Sound: ${timeline.soundscape}`,
     timeline.music && `Music: ${timeline.music}`,
-    timeline.subjects?.length && `Cast: ${timeline.subjects.map((member) => `@${member.handle}${member.description ? ` (${member.description})` : ""}`).join("; ")}`,
+    timeline.subjects?.length && `Cast: ${timeline.subjects.map(castWords).join("; ")}`,
     timeline.sets?.length > 1 && `Sets: ${timeline.sets.map((item) => `"${item.name}"`).join(", ")}`,
     set ? `Set "${set.name}", ${set.objects.length} objects:` : "There is no set yet.",
     ...(set?.objects ?? []).map(objectLine),
@@ -152,8 +155,24 @@ function filmShotLine(timeline, segment, index) {
 
 /** A cast member as the film's text lists them. */
 function castWords(member) {
-  const about = [member.description, member.from?.length ? "has pictures" : "no pictures"].filter(Boolean).join("; ");
+  const about = [member.description, member.from?.length ? "has pictures, which the video model is given" : "no pictures"].filter(Boolean).join("; ");
   return `@${member.handle} (${about})`;
+}
+
+/** The picture a cast member is known by: their first, or null. */
+function castFile(timeline, member) {
+  return S.castAssets(timeline).find((asset) => member.from?.includes(asset.handle) && (asset.kind === "image" || S.isRefMod(asset))) ?? null;
+}
+
+/** That picture, small: the thumbnail the windows show, as a PNG `data:` URL,
+ *  since not every server reads the WebP it is kept as. Null where the file is gone. */
+async function smallPicture(asset) {
+  const answer = await fetch(viewUrl(asset.filename, { preview: true, crop: S.thumbCrop(asset) }));
+  if (!answer.ok) return null;
+  const drawn = await createImageBitmap(await answer.blob());
+  const canvas = Object.assign(document.createElement("canvas"), { width: drawn.width, height: drawn.height });
+  canvas.getContext("2d").drawImage(drawn, 0, 0);
+  return canvas.toDataURL("image/png");
 }
 
 /** The film as the timeline has it: its texts, who and what it cites, and the
@@ -520,7 +539,7 @@ Returns:
 
 Args:
     handle (str): A short name in lowercase letters, digits and underscores.
-    description (str): Who they are and what they look like.
+    description (str): Who they are and what they look like. They have no pictures, so this is all the video model knows of them.
 
 Returns:
     str: The cast.`,
@@ -753,7 +772,7 @@ Returns:
 
 Args:
     handle (str): Their handle.
-    description (str): Who they are and what they look like.
+    description (str): Who they are. What somebody with pictures looks like is in the pictures: say it here only as far as they show it, or leave it out.
 
 Returns:
     str: The cast member as they are now.`,
@@ -984,6 +1003,7 @@ export class Stagehand {
     this.messages = [];
     this.logged = 0;
     this.known = null;      // the scene as the model last knew it
+    this.shown = new Map(); // the cast it has seen: handle -> the file it was shown
     this.setId = null;      // the set it is working on
     this.abort = null;
     this.asking = null;     // the backend and model of the message being worked on
@@ -1025,6 +1045,22 @@ export class Stagehand {
     return sceneText(timeline, (timeline.sets?.length ? this.setIn(timeline) : null)?.id);
   }
 
+  /** The cast the model has not seen as they are now, a small picture each.
+   *  -> `[{handle, url}]`. Pictures in a person's message are never thinned
+   *  out of the conversation, so once is enough. */
+  async castPictures() {
+    const timeline = this.timeline(), out = [];
+    for (const member of timeline.subjects ?? []) {
+      const asset = castFile(timeline, member);
+      if (!asset || this.shown.get(member.handle) === asset.filename || out.length === MOST_CAST) continue;
+      const url = await smallPicture(asset);
+      if (!url) continue;
+      this.shown.set(member.handle, asset.filename);
+      out.push({ handle: member.handle, url });
+    }
+    return out;
+  }
+
   overview(above = false) {
     const timeline = this.timeline();
     const { objects } = this.setIn(timeline);
@@ -1039,13 +1075,17 @@ export class Stagehand {
     // A change of model applies from the next message, never under this one.
     this.asking = this.request();
     const scene = this.scene();
-    const beside = [this.windowState(), scene !== this.known ? scene : ""].filter(Boolean);
-    const said = [words, ...beside].join("\n\n");
-    // A plain string where nothing is attached: the one shape every server reads.
-    this.messages.push({ role: "user", content: !pictures.length ? said
-      : [...pictures.slice(0, MOST_PICTURES).map((url) => ({ type: "image_url", image_url: { url } })), { type: "text", text: said }] });
-    this.known = scene;
     try {
+      const attached = pictures.slice(0, MOST_PICTURES);
+      const cast = await this.castPictures();
+      const beside = [this.windowState(), scene !== this.known ? scene : "",
+        cast.length && `${attached.length ? "After those pictures, s" : "S"}mall pictures of the cast are attached, in this order: ${cast.map(({ handle }) => `@${handle}`).join(", ")}.`].filter(Boolean);
+      const said = [words, ...beside].join("\n\n");
+      attached.push(...cast.map(({ url }) => url));
+      // A plain string where nothing is attached: the one shape every server reads.
+      this.messages.push({ role: "user", content: !attached.length ? said
+        : [...attached.map((url) => ({ type: "image_url", image_url: { url } })), { type: "text", text: said }] });
+      this.known = scene;
       for (let turn = 0; turn < MOST_TURNS; turn++) {
         const message = await this.ask();
         this.messages.push(message);
