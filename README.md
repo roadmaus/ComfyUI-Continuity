@@ -181,7 +181,7 @@ This pack is glue. The work underneath it belongs to other people:
 - [ComfyUI-MiniMaxH3-FirstBlockCache](https://github.com/duckyshell/ComfyUI-MiniMaxH3-FirstBlockCache) by duckyshell - an accelerator on the sampler row
 - [ComfyUI-MiniMaxH3-TeaCache](https://github.com/Icyoung/ComfyUI-MiniMaxH3-TeaCache) by Icyoung - an accelerator on the sampler row
 - [ComfyUI-KJNodes](https://github.com/kijai/ComfyUI-KJNodes) by Kijai - the live preview decoder, sage attention, the low vram pill
-- [ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU) by pollockjj - the device chip on the weights popover
+- [ComfyUI-MultiGPU](https://github.com/roadmaus/ComfyUI-MultiGPU) by pollockjj, in the fork this pack keeps working since the original was archived - the device chip on the weights popover
 - [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) by city96 - loads the `.gguf` files the weights popover offers
 - [ComfyUI#15416](https://github.com/Comfy-Org/ComfyUI/issues/15416) by matlowai - the fix behind H3 single-frame stills
 - [ComfyUI-Fizgig-H3-Still](https://github.com/shootthesound/ComfyUI-Fizgig-H3-Still) by shootthesound - the one-frame latent and the grouped decode MiniMax H3 Still reimplements (MIT)

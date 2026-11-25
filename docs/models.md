@@ -15,7 +15,7 @@ A few notes that apply everywhere:
 - GGUF files work if [ComfyUI-GGUF](https://github.com/city96/ComfyUI-GGUF) is
   installed. Drop the `.gguf` in the same folder and pick it like any other
   file.
-- With [ComfyUI-MultiGPU](https://github.com/pollockjj/ComfyUI-MultiGPU)
+- With [ComfyUI-MultiGPU](https://github.com/roadmaus/ComfyUI-MultiGPU)
   installed, each checkpoint, text encoder and VAE row in the weights popover
   gets a device pill, on the video node and the pre-stage alike. Putting the
   text encoder on a second card leaves the first one to the DiT. With nothing

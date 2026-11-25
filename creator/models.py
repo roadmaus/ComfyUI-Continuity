@@ -78,7 +78,7 @@ PREVIEW_NODE = "ModelPreviewOverrideKJ"
 BUILTIN_PREVIEW_NODE = "ContinuityPreview"
 PREVIEW_SOURCE = "https://github.com/kijai/ComfyUI-KJNodes"
 
-MULTIGPU_SOURCE = "https://github.com/pollockjj/ComfyUI-MultiGPU"
+MULTIGPU_SOURCE = "https://github.com/roadmaus/ComfyUI-MultiGPU"
 
 # ComfyUI-MultiGPU registers a subclass of each core loader carrying one extra
 # optional `device`, and changes nothing else about it. That is the whole reason
