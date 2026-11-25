@@ -14,6 +14,7 @@
 import { api } from "../../../scripts/api.js";
 import { JSON_HEADERS } from "./api.js";
 import * as S from "./state.js";
+import { rulesFor } from "./canvas.js";
 import { run as runJob } from "./queue.js";
 import { settings as refinerSettings, chosenModel } from "./refine.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
@@ -82,7 +83,9 @@ function objectLine(piece) {
 function shotLines(timeline, segment, index) {
   if (S.isClip(segment)) return [`Shot ${index + 1}: a finished clip, ${round(segment.duration_s)} s`];
   const set = S.setOf(timeline, segment), staging = segment.staging;
-  const out = [`Shot ${index + 1}: ${round(segment.duration_s)} s, ${set ? `on set "${set.name}"` : "not staged yet"}. Text: ${segment.prompt || "none"}`];
+  // A kept take is the shot as it was rendered: changing the shot lets it go.
+  const kept = S.takeOn(segment) ? ", has a kept take that a change to the shot releases" : "";
+  const out = [`Shot ${index + 1}: ${round(segment.duration_s)} s, ${set ? `on set "${set.name}"` : "not staged yet"}${kept}. Text: ${segment.prompt || "none"}`];
   if (!staging) return out;
   const at = (mark) => `${round(mark.t)} s (${[mark.x, mark.y ?? 0, mark.z].map(round).join(", ")})`;
   if (staging.camera.length) {
@@ -306,7 +309,7 @@ Args:
     detail (str, optional): How a ready model is drawn: "block", "shape" or "detailed".
 
 Returns:
-    str: The object as it is now.`,
+    str: The object as it is now, and whether a person plays nobody.`,
     properties: { id: whole, name: str, plays: str, detail: { type: "string", enum: S.SET_DETAILS } },
     required: ["id"],
     run: (hand, draft, args) => {
@@ -317,7 +320,8 @@ Returns:
         if (!piece.model) throw new Error(`#${piece.id} is a plain ${piece.kind} and has no detail`);
         piece.detail = oneOf(args.detail, S.SET_DETAILS, "detail");
       }
-      return objectLine(piece);
+      // The bench draws such a person grey and leaves them out of the cast row.
+      return `${objectLine(piece)}${piece.kind === "person" && !piece.plays ? "\nThis person plays nobody in the cast." : ""}`;
     },
   },
 
@@ -493,7 +497,7 @@ Returns:
 
 Args:
     text (str): What happens in the shot. Cast members are named as @handle.
-    seconds (float): How long it lasts, 1 to 60.
+    seconds (float): How long it lasts, from 1 to the longest shot the film's model renders.
 
 Returns:
     str: The shot and its number.`,
@@ -501,7 +505,7 @@ Returns:
     required: ["text", "seconds"],
     run: (hand, draft, args) => {
       const set = hand.setIn(draft, true);
-      const words = text(args, "text"), seconds = number(args, "seconds", 1, 60);
+      const words = text(args, "text"), seconds = number(args, "seconds", 1, longestShot(draft));
       const unused = untouched(draft);
       const segment = unused ? draft.segments[0] : S.emptySegment();
       Object.assign(segment, { prompt: words, duration_s: seconds, set: set.id, staging: { camera: [], people: {} } });
@@ -516,7 +520,7 @@ Returns:
 Args:
     shot (int): Number of the shot, from 1.
     text (str, optional): What happens in the shot.
-    seconds (float, optional): How long it lasts, 1 to 60.
+    seconds (float, optional): How long it lasts, from 1 to the longest shot the film's model renders.
 
 Returns:
     str: The shot as it is now.`,
@@ -525,7 +529,7 @@ Returns:
     run: (hand, draft, args) => {
       const { segment, index } = shotIn(draft, args);
       segment.prompt = text(args, "text", segment.prompt);
-      segment.duration_s = number(args, "seconds", 1, 60, segment.duration_s);
+      if (args.seconds !== undefined && args.seconds !== null) segment.duration_s = number(args, "seconds", 1, longestShot(draft));
       return shotLines(draft, segment, index).join("\n");
     },
   },
@@ -663,6 +667,9 @@ Returns:
 
 export const tools = () => Object.entries(TOOLS).map(([name, { doc, properties = {}, required = [] }]) =>
   ({ type: "function", function: { name, description: doc, parameters: { type: "object", properties, required } } }));
+
+/** The longest shot the piece's family renders, in seconds. */
+export const longestShot = (timeline) => rulesFor(S.pieceFamily(timeline)).maxSeconds;
 
 function freeId(set) {
   if (set.objects.length >= MOST_OBJECTS) throw new Error(`a set holds at most ${MOST_OBJECTS} objects`);

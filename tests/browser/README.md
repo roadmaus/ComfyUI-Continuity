@@ -7,7 +7,7 @@ checks: **ComfyUI does not gain a Playwright/runtime dependency**.
 ## Run
 
 Use a recent Node.js version. If `playwright` is already resolvable, install its
-Chromium browser with `npx playwright install chromium`, then run the three scripts
+Chromium browser with `npx playwright install chromium`, then run the scripts
 below from the repository root. Script paths are resolved relative to the script,
 not the current working directory.
 
@@ -24,6 +24,7 @@ node tests/browser/test-style-scroll.cjs
 node tests/browser/test-reference-preview.cjs
 node tests/browser/test-timeline-reel.cjs
 node tests/browser/test-blockout-bench.cjs
+node tests/browser/test-stagehand-tools.cjs
 ```
 
 On other operating systems, the same scripts work with the equivalent environment
@@ -70,6 +71,18 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   stop, adding one, stepping between them), Draw path, what the model is given
   with whose words it sends, and the labelled pass. `SHOT=path.png` writes
   screenshots at 2×.
+
+- **Stagehand's tools:** the real `stagehand.js` with the same stubs, and a
+  model that is a script: each exchange is answered here with the next calls
+  on a list. Every tool is called for an answer and for a refusal, and the
+  piece that results is read back. Also covered: one picture for the changes
+  of a reply, a shot's length against its own family (one family's longest
+  shot is shortened in the catalog for this), the kept take in the scene's
+  lines, what a message carries and sends, a change of model between messages,
+  Stop under an exchange and between two calls, a server's failure, and the
+  limit on exchanges. The server half has its own suite,
+  `tests/test_stagehand.py`; `tools/stagehand_bench.py --fake` runs the two
+  together.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a
