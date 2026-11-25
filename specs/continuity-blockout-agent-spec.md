@@ -407,6 +407,13 @@ built from walls: `use_set` takes `library`, which starts the new set as one of
 the scene library's, with its furniture and people and without its camera
 move. The names are listed in the tool, as the models are in `add_objects`.
 
+From the same run, where "the camera should follow @marta" took five minutes
+and was stopped: a look through a camera drew the people as two grey boxes
+among grey boxes, and the model took them for furniture in front of the
+people. Every look now numbers and colours the objects as the overview does.
+A camera kept on somebody is listed turned as that makes it, not as its marks
+were set, and `keep_camera_on` says that it only turns the camera.
+
 Left for later, in the order I would take them: remove a set or a cast member, reorder shots, bend a path, the speed
 curve. Each is a small tool over something the bench already does.
 

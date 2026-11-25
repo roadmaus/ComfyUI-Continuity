@@ -19,7 +19,7 @@ import { run as runJob, cancelPrompt } from "./queue.js";
 import { settings as refinerSettings, chosenModel } from "./refine.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
 import { SCENES } from "./setscenes.js";
-import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf } from "./blockout.js";
+import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf, aimedMarks } from "./blockout.js";
 
 /** Where a loop that never ends is ended. */
 export const MOST_TURNS = 60;
@@ -92,7 +92,8 @@ function shotLines(timeline, segment, index) {
   if (!staging) return out;
   const at = (mark) => `${round(mark.t)} s (${[mark.x, mark.y ?? 0, mark.z].map(round).join(", ")})`;
   if (staging.camera.length) {
-    out.push(`  camera: ${staging.camera.map((mark) => `${at(mark)} ${degrees(mark.yaw)}/${degrees(mark.pitch)} ${round(mark.mm)} mm`).join(" -> ")}`
+    // Kept on somebody, it is turned as that makes it, not as its marks say.
+    out.push(`  camera: ${aimedMarks(set, staging, segment.duration_s).map((mark) => `${at(mark)} ${degrees(mark.yaw)}/${degrees(mark.pitch)} ${round(mark.mm)} mm`).join(" -> ")}`
       + `${staging.look ? `, kept on #${staging.look}` : ""}${staging.shake ? `, shake ${staging.shake.kind}` : ""}`);
   }
   for (const [id, marks] of Object.entries(staging.people)) out.push(`  #${id}: ${marks.map(at).join(" -> ")}`);
@@ -183,14 +184,14 @@ function hueOf(id) {
   });
 }
 
-function picture(timeline, objects, cam, { labels = false, mode = "stage" } = {}) {
+function picture(timeline, objects, cam, { labels = false } = {}) {
   const size = lookSize(timeline);
   const canvas = Object.assign(document.createElement("canvas"), { width: size[0], height: size[1] });
   const context = canvas.getContext("2d");
   const raster = new Raster(...size);
   raster.raster(objects, cam);
   // Each object in a colour of its own, where they are to be told apart.
-  raster.shade(context, mode, labels ? { tints: Object.fromEntries(objects.map((piece) => [piece.id, hueOf(piece.id)])) } : {});
+  raster.shade(context, "stage", labels ? { tints: Object.fromEntries(objects.map((piece) => [piece.id, hueOf(piece.id)])) } : {});
   if (labels) writeNumbers(context, objects, cam, size);
   return { type: "image_url", image_url: { url: canvas.toDataURL("image/png") } };
 }
@@ -423,7 +424,7 @@ Returns:
   },
 
   look_from: {
-    doc: `Look at the set from any point.
+    doc: `Look at the set from any point. Each object has its number above it and a colour of its own, as in look_overview. The film has neither.
 
 Args:
     x (float): Where to look from.
@@ -440,12 +441,12 @@ Returns:
     run: (hand, draft, args) => {
       const of = (key) => number(args, key, -1000, 1000);
       const cam = aimed({ x: of("x"), y: of("y"), z: of("z") }, { x: of("at_x"), y: of("at_y"), z: of("at_z") }, 24);
-      return [picture(draft, hand.setIn(draft).objects, cam)];
+      return [picture(draft, hand.setIn(draft).objects, cam, { labels: true })];
     },
   },
 
   look_through_camera: {
-    doc: `Look through a shot's camera at one moment, with everything where it is in that moment.
+    doc: `Look through a shot's camera at one moment, with everything where it is in that moment. Each object has its number above it and a colour of its own, as in look_overview. The film has neither.
 
 Args:
     shot (int): Number of the shot, from 1.
@@ -460,7 +461,7 @@ Returns:
       const set = S.setOf(draft, segment);
       if (!set || !segment.staging?.camera.length) throw new Error(`shot ${index + 1} has no camera yet`);
       const time = number(args, "time", 0, segment.duration_s, 0);
-      return [picture(draft, stagedAt(set, segment.staging, time), filmAt(set, segment.staging, time, S.shakeRun(draft, index)), { mode: "as_staged" })];
+      return [picture(draft, stagedAt(set, segment.staging, time), filmAt(set, segment.staging, time, S.shakeRun(draft, index)), { labels: true })];
     },
   },
 
@@ -579,7 +580,7 @@ Args:
         lens (float, optional): Focal length in millimetres, 8 to 300. 24 is wide, 85 is narrow. Default 32.
 
 Returns:
-    str: The shot as it is now. The first frame follows as a picture.`,
+    str: The shot as it is now. The first frame follows as a picture, numbered as in look_through_camera.`,
     properties: { shot: whole, points: items({ time: num, x: num, y: num, z: num, at_x: num, at_y: num, at_z: num, lens: num }, ["time", "x", "y", "z", "at_x", "at_y", "at_z"]) },
     required: ["shot", "points"],
     run: (hand, draft, args) => {
@@ -596,12 +597,12 @@ Returns:
       }).sort((a, b) => a.t - b.t);
       const set = S.setOf(draft, segment);
       return [{ type: "text", text: shotLines(draft, segment, index).join("\n") },
-        picture(draft, stagedAt(set, segment.staging, 0), filmAt(set, segment.staging, 0, null), { mode: "as_staged" })];
+        picture(draft, stagedAt(set, segment.staging, 0), filmAt(set, segment.staging, 0, null), { labels: true })];
     },
   },
 
   keep_camera_on: {
-    doc: `Keep a shot's camera turned to one object all through the shot, wherever either of them goes.
+    doc: `Keep a shot's camera turned to one object all through the shot, wherever either of them goes. The camera stays where move_camera put it and only turns. What its points point at is not used while this is on.
 
 Args:
     shot (int): Number of the shot, from 1.
