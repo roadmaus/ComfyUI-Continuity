@@ -213,6 +213,31 @@ out.sizeWalks = B.stagingSentence([{ id: 1, kind: "person", x: -0.6, z: 5, w: 0.
 out.sizeKept = S.setPiece({ kind: "person", h: 45 }).h;
 out.frameUnknown = ratio(B.guideSize(framed()));
 
+// The shot's own words, and the labelled clip: what the bench adds is the line
+// that names the clip and nothing about the scene.
+{
+  const t = S.parseTimeline(JSON.stringify({ version: 2, prompt: "", aspect: "16:9", short_edge: 768,
+    sets: [{ id: "k", name: "K", objects: [{ id: 1, kind: "person", x: 0, z: 5, plays: "anna" },
+      { id: 2, kind: "block", x: -1.1, z: 1.8, w: 1.2, h: 0.9, d: 0.8, word: "table" }, { id: 3, kind: "wall", x: 0, z: 8 }] }],
+    segments: [{ prompt: "one", duration_s: 4, loras: [], assets: [], set: "k",
+      staging: { camera: [{ t: 0, x: 0, y: 1.6, z: -0.8, yaw: 0, pitch: 0, mm: 32 }] } }] }));
+  const written = B.stagingWords(t, 0);
+  t.staging_say = "own";
+  const own = B.stagingWords(t, 0);
+  S.attachStagedReference(t.segments[0], "continuity/blockout/staged-a-labelled.mp4");
+  const clip = (text) => text.replace(`@${t.segments[0].assets[0].handle}`, "@clip");
+  const cited = clip(B.stagingWords(t, 0));
+  t.segments[0].staging.pass = "labelled";
+  const labelled = clip(B.stagingWords(t, 0));
+  t.segments[0].staging.say = "written";
+  const back = S.parseTimeline(S.serializeTimeline(t));
+  out.say = [written, own, cited, labelled, B.stagingWords(t, 0).endsWith(written), back.staging_say, back.segments[0].staging.say,
+             S.stagingSay(back, back.segments[0]), S.pieceStagingSay(back)];
+  out.clauses = B.stagedClauses(t.sets[0], t.segments[0].staging, 4, { w: 16, h: 9 }).map((clause) => clause.id);
+  out.tags = [t.sets[0].objects.map(B.tagOf), B.PASSES.some((pass) => pass.id === "labelled" && pass.opId === "as_shot"),
+              S.STAGING_PASSES.includes("labelled")];
+}
+
 console.log(JSON.stringify(out));
 """
 
@@ -305,5 +330,14 @@ check("size is said where it is well off usual, and only there", said["size"], [
   "A car at centre in the distance."])
 check("...when they walk, too", said["sizeWalks"].split(" starts")[0], "@anna, towering at 6 m,")
 check("a set piece may be as big as a building", said["sizeKept"], 45)
+
+check("a shot may send its own words alone: then the bench adds only the line that names the clip", said["say"], [
+  "@anna stands at centre in the midground; a table at frame left in the foreground. The camera holds a static shot.",
+  "",
+  "The camera, framing and staging follow @clip, a rough blockout of this shot.",
+  "The camera, framing and staging follow @clip, a rough blockout of this shot. Its colours and name tags only say who and what each block is: they are not part of the picture.",
+  True, "own", "written", "written", "own"])
+check("each clause knows the piece it is about, the camera's last", said["clauses"], [1, 2, "camera"])
+check("a labelled frame tags the named and nobody else", said["tags"], [["anna", "table", ""], True, True])
 
 passed("the blockout says who is where, and the move in the model's own words")

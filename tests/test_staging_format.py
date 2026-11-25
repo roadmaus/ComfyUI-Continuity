@@ -166,6 +166,15 @@ out.setAdded = after((t) => { t.sets.push({ id: "yard", name: "Yard", objects: [
   out.cut = [fresh, same, made, looked, trimmed, undone, s.isPutTogether(t), s.cutStamp(t, queued.shot) === queued.cut];
 }
 out.clipFull = after((t) => { t.staging_clip = "full"; });
+out.sayOwn = after((t) => { t.staging_say = "own"; });
+out.sayShot = after((t) => { t.segments[1].staging.say = "own"; });
+{
+  const t = s.parseTimeline(JSON.stringify(blob()));
+  const drawn = s.stagingStamp(t, 0);
+  t.staging_say = "own";
+  t.segments[0].staging.say = "written";
+  out.sayGuide = [drawn === s.stagingStamp(t, 0), "staging_say" in JSON.parse(s.serializeTimeline(s.parseTimeline(JSON.stringify(blob()))))];
+}
 {
   const t = s.parseTimeline(JSON.stringify(blob()));
   const small = s.stagingStamp(t, 0);
@@ -222,6 +231,9 @@ check("a staged shot's clip is one reference video at match", got["reference"],
 check("a piece is put together by its own film, until what it plays changes", got["cut"],
       [False, True, [True, True, True], True, False, True, False, False])
 check("a bigger clip releases the staged shots alone", got["clipFull"], [False, False, False, True])
+check("sending the shots' own words releases the staged shots alone", got["sayOwn"], [False, False, False, True])
+check("...and one shot's choice releases that shot", got["sayShot"][1], False)
+check("whose words go with a guide is not what it is drawn from, and written is written nowhere", got["sayGuide"], [True, False])
 check("...is a clip of its own, survives a reload, and small writes nothing", got["clip"], [True, "full", False])
 check("a staged guide keeps its own strength", got["guide"], [0.6, True])
 

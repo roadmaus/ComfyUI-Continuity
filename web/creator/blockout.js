@@ -109,6 +109,13 @@ export const PASSES = [
         + "footage of a scene that happens to be made of boxes.",
   },
   {
+    id: "labelled", opId: "as_shot", label: "Labelled",
+    note: "The stage as you see it: the clay, the cast in their colours, and "
+        + "every named piece with its name drawn into the frame. For a family "
+        + "that is shown the blockout as a reference video, so the picture "
+        + "itself says who and what each block is.",
+  },
+  {
     id: "depth", opId: "depth", label: "Depth",
     note: "Near is bright, far is dark — the map Depth Anything draws from "
         + "footage, drawn here from the geometry itself. No model, and no "
@@ -523,18 +530,19 @@ export class Raster {
    * Shade the rastered buffers into `context`'s canvas.
    *
    * `mode` is a pass id, or `"stage"` for the working view: the same clay as
-   * `as_staged`, plus the aids — the floor grid, the selection ring, the cast
+   * `as_staged` (and `labelled`, which keeps the cast's hues), plus the aids — the floor grid, the selection ring, the cast
    * tints. The aids exist only in `"stage"`, which is why the run can call this
    * with a pass id and be certain the file carries the guide and only the guide.
    */
-  shade(context, mode, { selected = 0, tints = null } = {}) {
+  shade(context, mode, { selected = 0, tints = null, plan = 0 } = {}) {
     const { w, h } = this;
     if (!this.image || this.image.width !== w || this.image.height !== h) {
       this.image = context.createImageData(w, h);
     }
     const data = this.image.data;
     const stage = mode === "stage";
-    const clay = stage || mode === "as_staged";
+    const clay = stage || mode === "as_staged" || mode === "labelled";
+    const tinted = stage || mode === "labelled";
     for (let y = 0; y < h; y++) {
       const row = y * w;
       for (let x = 0; x < w; x++) {
@@ -546,7 +554,9 @@ export class Raster {
             const fade = 1 - y / h;
             r = 38 + 10 * fade; g = 40 + 10 * fade; b = 44 + 12 * fade;
           } else if (id === GROUND_ID) {
-            const z = 1 / this.z[at];
+            // A plan is looked at from far above through a long lens: it is lit
+            // as a floor a few metres off, and its grid is ruled by the pixel.
+            const z = plan ? 6 : 1 / this.z[at];
             let base = 70, tint = null;
             if (stage) {
               // Three grids over each other, in the order a plan is read: the
@@ -557,7 +567,7 @@ export class Raster {
               const wx = this.wx[at], wz = this.wz[at];
               const gx = Math.abs(wx - Math.round(wx));
               const gz = Math.abs(wz - Math.round(wz));
-              const near = 0.009 + z * 0.0022;
+              const near = plan ? plan * 0.8 : 0.009 + z * 0.0022;
               const onX = Math.abs(wx) < near * 1.6;
               const onZ = Math.abs(wz) < near * 1.6;
               if (onX) tint = [96, 143, 226];        // the Z axis runs along x=0
@@ -579,12 +589,12 @@ export class Raster {
             }
           } else {
             const l = this.lit[at] / 255;
-            const haze = clamp(1 - (1 / this.z[at]) / 60, 0.58, 1);
+            const haze = plan ? 1 : clamp(1 - (1 / this.z[at]) / 60, 0.58, 1);
             r = (70 + 112 * l) * haze; g = (68 + 108 * l) * haze; b = (64 + 102 * l) * haze;
             // The member's chip hue, worn as a wash on the clay — stage only,
             // the way every staging aid is. The lambert stays underneath so the
             // piece keeps reading as a solid.
-            const tint = stage && tints ? tints[id] : null;
+            const tint = tinted && tints ? tints[id] : null;
             if (tint) {
               r = r * 0.68 + tint[0] * 0.32;
               g = g * 0.68 + tint[1] * 0.32;
@@ -845,9 +855,24 @@ function walkClause(piece, end, walk, from, to, cam) {
  * is exactly what the prompt's own substitution reads — so pasting this into a
  * prompt binds the words to the cast's references with no new machinery.
  */
-export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null, keeping = "", shake = null } = {}) {
+export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h: 9 }, options = {}) {
+  const told = stagingClauses(objects, marks, duration, cam, size, options);
+  const move = told.find((clause) => clause.id === "camera")?.text ?? "";
+  const clauses = told.filter((clause) => clause.id !== "camera").map((clause) => clause.text);
+  if (!clauses.length) return move;
+  const staging = clauses.join("; ") + ".";
+  return `${staging.charAt(0).toUpperCase()}${staging.slice(1)}${move ? ` ${move}` : ""}`;
+}
+
+/**
+ * The same prose in its parts, each with the piece it is about: `[{ id, text }]`,
+ * the camera's sentence last under the id `"camera"`. What the bench lights up
+ * on the stage when a clause is pointed at; `stagingSentence` joins them.
+ */
+export function stagingClauses(objects, marks, duration, cam, size = { w: 16, h: 9 }, { withMove = true, ends = null, people = null, keeping = "", shake = null } = {}) {
   const first = marks.length ? marks[0] : cam;
   const clauses = [];
+  const say = (piece, text) => clauses.push({ id: piece.id, text });
   const entering = [];
   const placed = [];
   const walkers = [];
@@ -871,7 +896,7 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
     || (p.here.depth - q.here.depth));
   for (const { piece, here } of placed) {
     const posture = postureOf(piece);
-    clauses.push(piece.plays
+    say(piece, piece.plays
       ? (posture ? t("@{who} is {posture} {place}", { who: whoSaid(piece), posture, place: here.words })
                  : t("@{who} stands {place}", { who: whoSaid(piece), place: here.words }))
       : posture ? t("{what}, {posture}, {place}", { what: whoSaid(piece), posture, place: here.words })
@@ -881,7 +906,7 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
   for (const { piece, walk, here } of walkers) {
     const end = ends?.find((other) => other.id === piece.id) ?? { ...piece, ...walk.last };
     const clause = walkClause(piece, end, walk, here, placeOf(end, lastCam, size.w, size.h), lastCam);
-    if (clause) clauses.push(clause);
+    if (clause) say(piece, clause);
   }
   // A change of posture within the shot, said once at the end: "@anna ends
   // standing". `ends` is the set as it stands at the shot's last frame.
@@ -891,15 +916,13 @@ export function stagingSentence(objects, marks, duration, cam, size = { w: 16, h
     const was = postureOf(start), now = postureOf(end);
     if (was === now) continue;
     const who = end.plays ? `@${end.plays}` : articled(end.word);
-    clauses.push(t("{who} ends {posture}", { who, posture: now || (end.kind === "person" ? t("standing") : t("upright")) }));
+    say(end, t("{who} ends {posture}", { who, posture: now || (end.kind === "person" ? t("standing") : t("upright")) }));
   }
   for (const piece of entering) {
-    clauses.push(t("@{who} comes into frame as the camera moves", { who: piece.plays }));
+    say(piece, t("@{who} comes into frame as the camera moves", { who: piece.plays }));
   }
-  const move = withMove ? moveSentence(marks, duration, moveTarget(ends ?? objects, marks, cam, size.w, size.h), { keeping, shake }) : "";
-  if (!clauses.length) return move;
-  const staging = clauses.join("; ") + ".";
-  return `${staging.charAt(0).toUpperCase()}${staging.slice(1)}${move ? ` ${move}` : ""}`;
+  if (withMove) clauses.push({ id: "camera", text: moveSentence(marks, duration, moveTarget(ends ?? objects, marks, cam, size.w, size.h), { keeping, shake }) });
+  return clauses;
 }
 
 // ---- the move, in words --------------------------------------------------------
@@ -1426,6 +1449,12 @@ export function stagedSentence(set, staging, seconds, size, { withMove = true } 
     { withMove, ends: stagedAt(set, staging, seconds), people: staging.people, keeping: lookName(set, staging), shake: staging.shake ?? null });
 }
 
+/** `stagedSentence` in its parts: `[{ id, text }]`, the camera's last. */
+export function stagedClauses(set, staging, seconds, size) {
+  return stagingClauses(stagedAt(set, staging, 0), aimedMarks(set, staging, seconds), seconds, lensAt(set, staging, 0), size,
+    { ends: stagedAt(set, staging, seconds), people: staging.people, keeping: lookName(set, staging), shake: staging.shake ?? null });
+}
+
 /** The pixels a piece's guide is written at: the family's native canvas at the
  *  piece's ratio, snapped to its own grid. */
 export function guideSize(timeline) {
@@ -1455,10 +1484,23 @@ export function stagingWords(timeline, index) {
   if (!set || !segment.staging) return "";
   const { w, h } = guideSize(timeline);
   const seconds = Number(segment.duration_s) || 0;
-  const words = stagedSentence(set, segment.staging, seconds, { w, h });
+  // "own": the shot's prose says the scene, and the bench adds nothing about it.
+  const words = S.stagingSay(timeline, segment) === "own" ? "" : stagedSentence(set, segment.staging, seconds, { w, h });
+  const cite = clipCite(timeline, segment);
+  return cite ? `${cite} ${words}`.trim() : words;
+}
+
+/** The one line that points the model at a staged shot's reference clip, or ""
+ *  where the shot has none. A clip is only followed where the words name it, so
+ *  this stays even when the bench writes nothing else. A labelled clip's tags
+ *  are said to be labels, so they are read and not painted. */
+export function clipCite(timeline, segment) {
   const clip = S.stagedClip(segment);
-  if (clip?.role !== "reference") return words;
-  return `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot. ${words}`.trim();
+  if (clip?.role !== "reference") return "";
+  const follow = `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot.`;
+  return S.stagingPass(timeline, segment) === "labelled"
+    ? `${follow} Its colours and name tags only say who and what each block is: they are not part of the picture.`
+    : follow;
 }
 
 /**
@@ -1588,10 +1630,63 @@ export function guidesWanted(timeline) {
   return out;
 }
 
+/** The hue each piece playing somebody wears, by piece id: the member's chip hue. */
+export function castTints(objects) {
+  const tints = {};
+  for (const piece of objects) if (piece.plays) tints[piece.id] = tagRGB(S.tagIndex(piece.plays));
+  return tints;
+}
+
+/** What a labelled frame calls a piece: the handle as the prose spells it less
+ *  its @, or the word it was given. "" for a piece with neither. */
+export const tagOf = (piece) => piece.plays || piece.word || "";
+
+/**
+ * The name tags of a labelled frame, drawn into it: over each named piece, far
+ * ones first so a near one's tag lies on top. A cast member's is their hue with
+ * dark letters, a thing's dark with light ones. Sized by the frame, not the
+ * screen: this is part of the file.
+ */
+export function drawLabels(context, cam, objects, width, height) {
+  const size = Math.max(10, Math.round(width / 46));
+  context.save();
+  context.font = `600 ${size}px -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif`;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  const tags = [];
+  for (const piece of objects) {
+    const text = tagOf(piece);
+    if (!text) continue;
+    const top = Math.max(...cornersOf(piece).map((corner) => corner[1]));
+    const at = project(cam, [piece.x, top + 0.12, piece.z], width, height);
+    if (!at || at.x < 0 || at.x > width || at.y < -size || at.y > height) continue;
+    tags.push({ piece, text, at });
+  }
+  tags.sort((a, b) => b.at.z - a.at.z);
+  for (const { piece, text, at } of tags) {
+    const wide = Math.round(context.measureText(text).width + size * 0.9), tall = Math.round(size * 1.55);
+    const x = Math.round(clamp(at.x - wide / 2, 0, width - wide)), y = Math.round(clamp(at.y - tall, 0, height - tall));
+    const hue = piece.plays ? tagRGB(S.tagIndex(piece.plays)) : null;
+    context.fillStyle = hue ? `rgb(${hue[0]},${hue[1]},${hue[2]})` : "rgb(14,15,17)";
+    context.fillRect(x, y, wide, tall);
+    context.fillStyle = hue ? "rgb(14,15,17)" : "rgb(240,237,231)";
+    context.fillText(text, x + wide / 2, y + tall / 2 + 1);
+  }
+  context.restore();
+}
+
+/** One frame in a pass, as the file holds it: the set as it stands, through a
+ *  camera. The one place a pass is drawn, for the file, the glass and a card. */
+export function paintPass(raster, context, pass, objects, cam) {
+  raster.raster(objects, cam);
+  if (pass !== "labelled") { raster.shade(context, pass); return; }
+  raster.shade(context, "labelled", { tints: castTints(objects) });
+  drawLabels(context, cam, objects, raster.w, raster.h);
+}
+
 /** One frame of a staged shot, drawn at `size` in `pass`, as a PNG blob. */
 export function drawStaged(raster, canvas, context, set, staging, at, pass, run = null) {
-  raster.raster(stagedAt(set, staging, at), filmAt(set, staging, at, run));
-  raster.shade(context, pass);
+  paintPass(raster, context, pass, stagedAt(set, staging, at), filmAt(set, staging, at, run));
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded")))), "image/png");
   });

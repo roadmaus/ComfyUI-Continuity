@@ -2617,7 +2617,7 @@ function stampsOf(timeline) {
   // where a shot has a drawing), so it is stamped into those shots alone —
   // otherwise the first shot the bench gives a guide would release every kept
   // take on the piece by throwing the switch.
-  const { segments, sets, staging_pass, staging_clip, guide, cut, ...piece } = blob;
+  const { segments, sets, staging_pass, staging_clip, staging_say, guide, cut, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card, index) => {
     const { hold, take, card_id, ...rest } = card;
@@ -2628,7 +2628,10 @@ function stampsOf(timeline) {
     // stamps exactly as it always did and no old take is released by this.
     const staged = rest.staging && rest.set
       ? JSON.stringify([setStamped((sets ?? []).find((set) => set.id === rest.set)),
-                        stagingPass(blob, rest), ...(staging_clip ? [staging_clip] : [])])
+                        stagingPass(blob, rest), ...(staging_clip ? [staging_clip] : []),
+                        // Only where it is not the bench's own words, so no
+                        // take shot before there was a choice is released.
+                        ...(stagingSay(blob, rest) === "own" ? ["own"] : [])])
       : "";
     const guided = (rest.assets ?? []).some((asset) => asset.role === "guide")
       ? JSON.stringify(guide ?? null) : "";
@@ -2656,8 +2659,10 @@ function hash(text) {
 // shot of its scene and moving a person changes only the shot it is moved in.
 // A piece without either behaves exactly as it always did.
 
-/** The four passes a staged shot can send, plus none (the words alone). */
-export const STAGING_PASSES = ["as_staged", "depth", "blocks", "lines"];
+/** The passes a staged shot can send, plus none (the words alone). Labelled is
+ *  the stage as it is handled: the clay with the cast in their hues and every
+ *  named piece's name drawn into the frame. */
+export const STAGING_PASSES = ["as_staged", "labelled", "depth", "blocks", "lines"];
 export const DEFAULT_STAGING_PASS = "depth";
 /** How firmly a staged shot's guide holds: the strength the asset carries. */
 export const STAGING_HOLDS = { firm: 1.0, loose: 0.6 };
@@ -2830,6 +2835,7 @@ export function parseStaging(raw) {
   const out = { camera, people };
   if (raw.pass === "none" || STAGING_PASSES.includes(raw.pass)) out.pass = raw.pass;
   if (raw.hold === "loose") out.hold = "loose";
+  if (raw.say === "own" || raw.say === "written") out.say = raw.say;
   const look = Math.round(Number(raw.look));
   if (look >= 1) out.look = look;
   const shake = parseShake(raw.shake);
@@ -2872,6 +2878,7 @@ export function serializeStaging(staging) {
     ...(Object.keys(people).length ? { people } : {}),
     ...(picked.pass ? { pass: picked.pass } : {}),
     ...(picked.hold ? { hold: picked.hold } : {}),
+    ...(picked.say ? { say: picked.say } : {}),
     ...(picked.look ? { look: picked.look } : {}),
     ...(picked.shake ? { shake: roundAll(picked.shake) } : {}),
     ...(picked.words ? { words: picked.words } : {}),
@@ -2909,6 +2916,15 @@ export const pieceStagingPass = (timeline) =>
 /** The pass a staged shot sends: its own, or the piece's. */
 export const stagingPass = (timeline, segment) =>
   segment?.staging?.pass ?? pieceStagingPass(timeline);
+
+/** Whose words a piece's staged shots send where they say nothing: "written",
+ *  the staging and the move said by the bench after the shot's own prose, or
+ *  "own", the shot's prose and nothing the bench wrote about the scene. */
+export const pieceStagingSay = (timeline) => (timeline?.staging_say === "own" ? "own" : "written");
+
+/** Whose words a staged shot sends: its own choice, or the piece's. */
+export const stagingSay = (timeline, segment) =>
+  segment?.staging?.say ?? pieceStagingSay(timeline);
 
 /** How firmly its guide holds, as the strength the asset carries. */
 export const stagingStrength = (segment) =>
@@ -2953,7 +2969,8 @@ export function stagingStamp(timeline, index) {
   if (!isStaged(timeline, segment)) return null;
   const pass = stagingPass(timeline, segment);
   if (pass === "none") return null;
-  const { words, ...staging } = serializeStaging(segment.staging);
+  // Whose words go with it is not what the guide is drawn from.
+  const { words, say, ...staging } = serializeStaging(segment.staging);
   const run = shakeRun(timeline, index);
   return hash(JSON.stringify([
     STAGING_MOTION,
@@ -4066,6 +4083,7 @@ export function parseTimeline(raw) {
       if (pieceStagingPass(parsed) !== defaultStagingPass(parsed)) timeline.staging_pass = parsed.staging_pass;
       else delete timeline.staging_pass;
       if (parsed.staging_clip !== "full") delete timeline.staging_clip;
+      if (parsed.staging_say !== "own") delete timeline.staging_say;
       // A blob with no `segments` key — a fresh node's widget is "{}" — keeps
       // `emptyTimeline`'s blank shot. One saved with an empty list stays empty:
       // that is a strip whose cards were all deleted, and opening it must not
@@ -4291,6 +4309,7 @@ export function serializeTimeline(timeline) {
     ...(timeline.staging_pass && pieceStagingPass(timeline) !== defaultStagingPass(timeline)
       ? { staging_pass: pieceStagingPass(timeline) } : {}),
     ...(fullStagingClip(timeline) ? { staging_clip: "full" } : {}),
+    ...(pieceStagingSay(timeline) === "own" ? { staging_say: "own" } : {}),
     // What the last finished film was made from; see `cutStamp`.
     ...(timeline.cut ? { cut: timeline.cut } : {}),
     segments: timeline.segments.map((segment, index) => {
