@@ -17,7 +17,7 @@
 // how firmly the guide holds — is drawn and attached by Shoot (`deriveGuides`),
 // so the timeline renders a staged shot exactly as this window does.
 
-import { el, mountOverlay } from "./dom.js";
+import { el, icon, mountOverlay } from "./dom.js";
 import { t } from "./i18n.js";
 import { viewUrl, blockoutSweep } from "./api.js";
 import { MODEL_GROUPS, MODELS } from "./setmodels.js";
@@ -336,9 +336,9 @@ class Blockout extends Reel {
     this.getsHost = el("div", { class: "mmc-st-gets", hidden: true });
     this.glass = el("div", { class: "mmc-st-glass" }, [this.stageEl]);
     this.openButton = el("button", {
-      class: "mmc-reel-btn quiet", text: t("Open the timeline"), title: t("The reel, on the same piece"),
+      class: "mmc-reel-btn", title: t("The reel, on the same piece"),
       onclick: () => { const go = this.openTimelineWindow; this.close(); go?.(); },
-    });
+    }, [icon("timeline", 16), el("span", { text: t("Open the timeline") })]);
 
     this.writeButton = el("button", { class: "mmc-reel-shoot", text: t("Write the guide"), onclick: () => this.writeHere() });
     // The conversation about this piece, which may be older than this window
@@ -347,9 +347,9 @@ class Blockout extends Reel {
     this.agent.attach(this, this.writeNode);
     this.handWindow = new StagehandWindow(this, this.agent);
     this.handDot = el("i", { class: "mmc-st-handdot", hidden: true });
-    this.handButton = el("button", { class: "mmc-reel-btn quiet mmc-st-handbtn", "aria-pressed": "false",
+    this.handButton = el("button", { class: "mmc-reel-btn mmc-st-handbtn", "aria-pressed": "false",
       title: t("Build or change the blockout by talking. It runs on the model the refiner has selected."),
-      onclick: () => this.handWindow.toggle() }, [el("span", { text: t("Stagehand") }), this.handDot]);
+      onclick: () => this.handWindow.toggle() }, [icon("wand", 16), el("span", { text: t("Stagehand") }), this.handDot]);
     this.sideEl = el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost, this.getsHost, this.handWindow.node]);
     this.modal = el("div", { class: `mmc-modal mmc-tl-modal mmc-reel mmc-st-bench${this.single ? " mmc-st-single" : ""}` }, [
       el("div", { class: "mmc-reel-head" }, [

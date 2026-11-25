@@ -116,6 +116,8 @@ export const ICONS = {
   res: `<path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3"/>`,
   play: `<path d="M8 5.5l11 6.5-11 6.5z"/>`,
   pause: `<path d="M8 5v14M16 5v14"/>`,
+  // Lucide's `wand-sparkles`, verbatim: Stagehand's door in the blockout.
+  wand: `<path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/>`,
   // Lucide's `skip-back` and `skip-forward`: the stop before, the next stop.
   skipBack: `<path d="M19 20L9 12l10-8z"/><path d="M5 19V5"/>`,
   skipForward: `<path d="M5 4l10 8-10 8z"/><path d="M19 5v14"/>`,

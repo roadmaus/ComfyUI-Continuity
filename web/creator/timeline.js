@@ -62,9 +62,9 @@ export class Timeline extends Reel {
         this.planEl,
         this.cancelButton,
         ...(this.openBlockoutWindow ? [el("button", {
-          class: "mmc-reel-btn quiet", text: t("Open the blockout"), title: t("The stage, on the same piece"),
+          class: "mmc-reel-btn", title: t("The stage, on the same piece"),
           onclick: () => { const go = this.openBlockoutWindow; this.close(); go(); },
-        })] : []),
+        }, [icon("cube", 16), el("span", { text: t("Open the blockout") })])] : []),
         ...(this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
