@@ -190,8 +190,8 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
   await check('The header says what the next render shoots and what it plays', async () => {
     assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-reel-meta').textContent,
       document.querySelector('.mmc-reel-plan').textContent, document.querySelector('.mmc-reel-shoot').textContent,
-      document.querySelector('.mmc-reel-head .mmc-reel-btn.quiet:not([hidden])')?.textContent]),
-    ['3 shots · 14.1 s', 'Shoots 1 shot · plays 2 kept takes', 'Shoot', 'Open the timeline']);
+      [...document.querySelectorAll('.mmc-reel-head .mmc-reel-btn:has(svg)')].map((button) => button.textContent).join(', ')]),
+    ['3 shots · 14.1 s', 'Shoots 1 shot · plays 2 kept takes', 'Shoot', 'Open the timeline, Stagehand']);
   });
 
   await check('The glass draws the stage, and the guide exactly as the file will hold it', async () => {
@@ -851,7 +851,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
     const win = document.querySelector('.mmc-sh');
     return { open: !win.hidden, pressed: document.querySelector('.mmc-st-handbtn').getAttribute('aria-pressed'),
       model: win.querySelector('.mmc-sh-model').textContent, size: win.querySelector('.mmc-sh-size').textContent,
-      box: win.querySelector('.mmc-sh-box').disabled, send: [win.querySelector('.mmc-sh-send').textContent, win.querySelector('.mmc-sh-send').disabled],
+      box: win.querySelector('.mmc-sh-box').contentEditable === 'false', send: [win.querySelector('.mmc-sh-send').textContent, win.querySelector('.mmc-sh-send').disabled],
       note: win.querySelector('.mmc-sh-note').hidden ? '' : win.querySelector('.mmc-sh-note').textContent };
   });
   const lines = () => page.evaluate(() => [...document.querySelector('.mmc-sh-log').children].map((node) =>
@@ -905,6 +905,55 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
     await page.locator('.mmc-st-handbtn').click();
     await page.locator('.mmc-sh-x').click();
     assert.equal((await handState()).open, false);
+  });
+
+  await check('An @ in a message lists the piece\'s cast, then the cast library; somebody picked from there is cast onto the piece', async () => {
+    // One kept member, as the library's index holds them.
+    await page.evaluate(async () => {
+      const { api } = await import('/scripts/api.js');
+      const P = await import('/ext/web/creator/presets.js');
+      const real = api.getUserData;
+      api.getUserData = async () => new Response(JSON.stringify({ presets: [{ id: 'vera', name: 'vera', scope: 'cast', builtin: true, updated: 1,
+        note: 'A night guard.', facts: {}, data: { cast: { handle: 'vera', takes: 'person', description: 'A night guard.', files: [] } } }] }), { status: 200 });
+      await P.listPresets({ force: true });
+      api.getUserData = real;
+    });
+    const box = page.locator('.mmc-sh-box');
+    const listed = () => page.evaluate(() => {
+      const list = document.querySelector('.mmc-mention');
+      return list ? { heads: [...list.querySelectorAll('.mmc-mention-head')].map((node) => node.textContent),
+        names: [...list.querySelectorAll('.mmc-mention-handle')].map((node) => node.textContent) } : null;
+    });
+    const state = () => page.evaluate(() => ({ words: bench.handWindow.box.getValue(), draft: bench.agent.draft,
+      cast: bench.timeline.subjects.map((member) => member.handle), open: !document.querySelector('.mmc-sh').hidden }));
+    // The box's own grace for a press landing on a menu row, after the window before closed.
+    await page.waitForTimeout(200);
+    await page.locator('.mmc-st-handbtn').click();
+    await box.click();
+    await page.keyboard.type('Put @');
+    await page.waitForTimeout(150);
+    const all = await listed();
+    assert.deepEqual(all.names.slice(0, 3), ['@anna', '@ben', '@vera'], JSON.stringify(all));
+    await page.keyboard.type('be');
+    await page.waitForTimeout(80);
+    assert.deepEqual((await listed()).names, ['@ben']);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(80);
+    assert.deepEqual([await listed(), (await state()).words.trim(), (await state()).open], [null, 'Put @ben', true]);
+    await page.keyboard.type(' beside @ver');
+    await page.waitForTimeout(80);
+    assert.deepEqual((await listed()).names, ['@vera']);
+    await page.keyboard.press('Enter');
+    await page.waitForTimeout(200);
+    const cast = await state();
+    assert.deepEqual([cast.cast, cast.words.replace(/\s+/g, ' ').trim(), cast.draft === cast.words], [['anna', 'ben', 'vera'], 'Put @ben beside @vera', true]);
+    await page.keyboard.type(' and @');
+    await page.waitForTimeout(80);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(80);
+    assert.deepEqual([await listed(), (await state()).open], [null, true], 'Escape closes the list, not the window');
+    await page.evaluate(() => { bench.handWindow.box.setValue(''); bench.agent.draft = ''; bench.timeline.subjects.pop(); bench.commit(); });
+    await page.locator('.mmc-st-handbtn').click();
   });
 
   await check('Its header names the refiner\'s model on either backend, and Change opens the refiner\'s settings', async () => {

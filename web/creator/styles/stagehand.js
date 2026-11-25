@@ -51,16 +51,15 @@ export const css = `
 .mmc-sh-working i { width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-sh-pulse 1.1s ease-in-out infinite; }
 @keyframes mmc-sh-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 
-.mmc-sh-composer { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; border-top: 1px solid var(--mmc-line); }
-/* The cast under an @, over the conversation and as wide as the composer. */
-.mmc-sh-mention { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: calc(100% + 4px); width: auto; max-height: 220px; }
+.mmc-sh-composer { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; border-top: 1px solid var(--mmc-line); }
 .mmc-sh-write { align-items: flex-end; }
 .mmc-sh-picture { flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: calc(10px * var(--mmc-round));
   border: 1px solid var(--mmc-edge); background: none; color: var(--mmc-text); cursor: pointer; }
 .mmc-sh-picture:disabled { opacity: .45; cursor: default; }
-.mmc-sh-box { flex: 1; min-width: 0; min-height: 44px; max-height: 160px; box-sizing: border-box; resize: none; padding: 6px 10px; border-radius: calc(10px * var(--mmc-round));
-  border: 1px solid var(--mmc-edge); background: var(--mmc-bg); color: var(--mmc-strong); font: inherit; line-height: 1.35; field-sizing: content; }
-.mmc-sh-box:disabled { opacity: .6; }
+/* The node's prompt box, as a message's: three classes, to sit over the box's own sheet. */
+.mmc-sh .mmc-prompt.mmc-sh-box { flex: 1; min-width: 0; min-height: 44px; max-height: 160px; overflow-y: auto; box-sizing: border-box; padding: 6px 10px; border-radius: calc(10px * var(--mmc-round));
+  border: 1px solid var(--mmc-edge); background: var(--mmc-bg); color: var(--mmc-strong); font: inherit; line-height: 1.35; }
+.mmc-sh .mmc-prompt.mmc-sh-box.off { opacity: .6; }
 .mmc-sh-send { flex: none; height: 44px; padding: 0 16px; border-radius: calc(10px * var(--mmc-round)); border: 0; background: var(--mmc-accent); color: var(--mmc-on-accent);
   font: inherit; font-weight: 700; cursor: pointer; }
 .mmc-sh-send.stop { background: none; border: 1px solid var(--mmc-dim); color: var(--mmc-strong); font-weight: 600; }

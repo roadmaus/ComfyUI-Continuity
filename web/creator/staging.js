@@ -381,7 +381,7 @@ class Blockout extends Reel {
     // Escape puts down the path being drawn, then Stagehand's list of the cast and
     // its window, then in focus gives the window its
     // columns back, before it closes it.
-    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.handWindow.mentioning ? this.handWindow.closeMention()
+    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.handWindow.mentioning ? null
       : this.handWindow.open ? this.handWindow.toggle(false)
       : this.focused ? this.setFocus(false) : this.close()));
     this.onUndoKey = (event) => this.undoKey(event);

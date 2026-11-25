@@ -261,8 +261,10 @@ cast, the scene's text, shots, a camera for each, and who walks where. It
 looks at what it built before it says it is done, and the pictures it looked
 at are in the conversation. It never renders: Shoot stays yours.
 
-Type `@` in the message to pick somebody from the piece's cast, so it stages
-that member and does not invent one.
+The message box is the node's prompt box. `@` lists who is in the piece's cast
+and, under them, the cast library; somebody picked from the library is cast
+onto the piece with their files, so Stagehand stages that member and does not
+invent one.
 
 ![Stagehand at work in the blockout bench: the conversation over the inspector with one line for each thing it did, the picture it looked at, a call it was refused, and a pill on the glass saying what it is doing](img/stagehand.png)
 

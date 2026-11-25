@@ -16,6 +16,8 @@ import { t } from "./i18n.js";
 import * as S from "./state.js";
 import { syncStagingWords } from "./blockout.js";
 import { Stagehand, refinerRequest, MOST_PICTURES } from "./stagehand.js";
+import { PromptBox } from "./prompt.js";
+import { viewUrl } from "./api.js";
 import { remoteStatus, openSettings as openRefinerSettings } from "./refine.js";
 
 /** The long edge a person's picture is scaled to before it is sent. */
@@ -282,25 +284,29 @@ export class StagehandWindow {
       onchange: () => { this.attach([...this.file.files]); this.file.value = ""; } });
     this.pictureButton = el("button", { class: "mmc-sh-picture", "aria-label": t("Attach a picture"),
       title: t("Attach a picture: a reference for the set, or a frame to match"), onclick: () => this.file.click() }, [glyph(PICTURE_ICON)]);
-    this.box = el("textarea", { class: "mmc-sh-box", rows: "2", "aria-label": t("Message to Stagehand"),
-      oninput: () => { this.talk.draft = this.box.value; this.offerCast(); },
-      onclick: () => this.offerCast(),
-      onblur: () => this.closeMention(),
-      onkeydown: (event) => {
-        if (this.mentionKey(event)) return;
-        if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
-        event.preventDefault();
-        this.send();
-      },
-      onpaste: (event) => {
-        const files = [...(event.clipboardData?.files ?? [])].filter(isPicture);
-        if (!files.length) return;
-        event.preventDefault();
-        this.attach(files);
-      } });
-    // The cast, offered under an @ being typed: a name the model is told with the scene.
-    this.mention = el("div", { class: "mmc-mention mmc-sh-mention", role: "listbox", "aria-label": t("The cast"), hidden: true });
-    this.offered = [];
+    // The node's own prompt box, as the chat has it: `@` cites who is in the
+    // piece's cast and offers the cast library, and somebody picked from there
+    // is cast onto the piece, so the scene the model is told names them.
+    this.box = new PromptBox({
+      placeholder: t("Say what to build or change"),
+      getState: () => ({ assets: [] }),
+      onInput: (text) => { this.talk.draft = text; },
+      onSubmit: () => this.send(),
+      // A picture out of the input folder rides the message, as a dropped one does.
+      onAttach: (row) => { this.attachRow(row); return null; },
+      attachBlocked: () => null,
+      getCast: () => this.talk.timeline.subjects ?? [],
+      castFromLibrary: (member) => this.bench.castFromLibrary(member),
+    });
+    this.box.root.classList.add("mmc-sh-box");
+    this.box.root.setAttribute("aria-label", t("Message to Stagehand"));
+    this.box.root.addEventListener("paste", (event) => {
+      const files = [...(event.clipboardData?.files ?? [])].filter(isPicture);
+      if (!files.length) return;
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      this.attach(files);
+    }, true);
     this.sendButton = el("button", { class: "mmc-sh-send", onclick: () => (this.talk.working ? this.talk.stop() : this.send()) });
     this.note = el("div", { class: "mmc-sh-note", hidden: true });
     this.node = el("section", {
@@ -325,9 +331,8 @@ export class StagehandWindow {
       ]),
       this.log,
       el("div", { class: "mmc-sh-composer" }, [
-        this.mention,
         this.chips,
-        el("div", { class: "mmc-sh-row mmc-sh-write" }, [this.pictureButton, this.box, this.sendButton, this.file]),
+        el("div", { class: "mmc-sh-row mmc-sh-write" }, [this.pictureButton, this.box.root, this.sendButton, this.file]),
         this.note,
       ]),
     ]);
@@ -335,56 +340,8 @@ export class StagehandWindow {
     talk.listeners.add(this.onTalk);
   }
 
-  /** The @ being typed at the caret, as `{ from, typed }`, or null. */
-  mentionAt() {
-    const caret = this.box.selectionStart;
-    const found = /(?:^|\s)@([a-z0-9-]*)$/i.exec(this.box.value.slice(0, caret));
-    return found ? { from: caret - found[1].length - 1, typed: found[1].toLowerCase() } : null;
-  }
-
-  /** The cast whose names start with what is typed after an @, to pick from. */
-  offerCast() {
-    const at = this.mentionAt();
-    this.offered = at ? (this.talk.timeline.subjects ?? []).filter((member) => member.handle.startsWith(at.typed)) : [];
-    this.picked = Math.min(this.picked ?? 0, Math.max(0, this.offered.length - 1));
-    this.mention.hidden = !this.offered.length;
-    this.mention.replaceChildren(...this.offered.map((member, index) => el("button", {
-      class: "mmc-mention-row", role: "option", "aria-selected": String(index === this.picked),
-      // The box keeps the caret: a press that took it would close the list first.
-      onpointerdown: (event) => { event.preventDefault(); this.pickCast(member); },
-    }, [el("span", { class: "mmc-mention-text" }, [
-      el("span", { class: `mmc-mention-handle mmc-tag-${S.tagIndex(member.handle)}`, text: `@${member.handle}` }),
-      ...(member.description ? [el("span", { class: "mmc-mention-sub", text: member.description })] : []),
-    ])])));
-  }
-
-  get mentioning() { return !this.mention.hidden; }
-
-  closeMention() {
-    this.offered = [];
-    this.mention.hidden = true;
-  }
-
-  pickCast(member) {
-    const at = this.mentionAt();
-    if (!at) return;
-    const caret = this.box.selectionStart;
-    this.box.setRangeText(`@${member.handle} `, at.from, caret, "end");
-    this.talk.draft = this.box.value;
-    this.closeMention();
-  }
-
-  /** The keys the list takes while it is open. -> whether it took this one. */
-  mentionKey(event) {
-    if (!this.mentioning || event.isComposing) return false;
-    const step = { ArrowDown: 1, ArrowUp: -1 }[event.key];
-    if (step) this.picked = (this.picked + step + this.offered.length) % this.offered.length;
-    else if (event.key !== "Enter" && event.key !== "Tab") return false;
-    event.preventDefault();
-    if (step) this.offerCast();
-    else this.pickCast(this.offered[this.picked]);
-    return true;
-  }
+  /** Whether the box's menu is up: Escape is the menu's then, not the window's. */
+  get mentioning() { return Boolean(this.box.menu); }
 
   /** Taken out of its bench: the conversation goes on without a window. */
   unmount() {
@@ -397,13 +354,19 @@ export class StagehandWindow {
     this.bench.handOpened?.();
     if (!open) return;
     this.render();
-    this.box.focus();
+    this.box.root.focus();
     // Whose server it is on is the server's to say, once.
     remoteStatus().then((status) => { this.remote = status; this.renderModel(); }, () => {});
   }
 
   openSettings(anchor) {
     openRefinerSettings(anchor, () => this.render(), S.pieceFamily(this.talk.timeline));
+  }
+
+  async attachRow(row) {
+    if (row.kind !== "image") { this.said = t("Only a picture can go with a message."); this.render(); return; }
+    const blob = await (await fetch(viewUrl(row.path))).blob();
+    this.attach([new File([blob], row.path.split("/").pop(), { type: blob.type })]);
   }
 
   async attach(files) {
@@ -419,13 +382,13 @@ export class StagehandWindow {
   }
 
   send() {
-    const words = this.box.value.trim();
+    const words = this.box.getValue().trim();
     if (!words || this.talk.working || !refinerRequest().model) return;
     const pictures = this.talk.pictures.map((picture) => picture.url);
     this.talk.draft = "";
     this.talk.pictures = [];
     this.said = "";
-    this.box.value = "";
+    this.box.setValue("");
     this.talk.send(words, pictures);
   }
 
@@ -447,9 +410,10 @@ export class StagehandWindow {
     this.restartButton.disabled = working || !this.talk.items.length;
     this.renderLog();
     // The composer: free unless it is working, and shut only by having no model.
-    this.box.disabled = working || !model;
-    this.box.placeholder = working ? t("Stagehand is working") : t("Say what to build or change");
-    if (this.box.value !== this.talk.draft && document.activeElement !== this.box) this.box.value = this.talk.draft;
+    this.box.root.contentEditable = working || !model ? "false" : "true";
+    this.box.root.classList.toggle("off", working || !model);
+    this.box.root.dataset.placeholder = working ? t("Stagehand is working") : t("Say what to build or change");
+    if (this.box.getValue() !== this.talk.draft && document.activeElement !== this.box.root) this.box.setValue(this.talk.draft);
     this.pictureButton.disabled = working || !model;
     this.sendButton.textContent = working ? t("Stop") : t("Send");
     this.sendButton.classList.toggle("stop", working);
