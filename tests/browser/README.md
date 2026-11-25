@@ -65,8 +65,11 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   Shoot deriving and attaching a guide (the frame and write routes are answered
   locally), starting a set, the handles and what each edit releases, the lens,
   the adds, joins and lining them up, Enter, the one-shot mode and its doors,
-  reading an old saved scene, Copy and the sweep on close. `SHOT=path.png`
-  writes screenshots at 2×.
+  reading an old saved scene, Copy and the sweep on close; and, handled by
+  hand, the plan and the monitor, the badge, the sheet of stops (retiming a
+  stop, adding one, stepping between them), Draw path, what the model is given
+  with whose words it sends, and the labelled pass. `SHOT=path.png` writes
+  screenshots at 2×.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a

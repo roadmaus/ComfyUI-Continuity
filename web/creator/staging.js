@@ -225,7 +225,8 @@ class Blockout extends Reel {
     const { w, h } = this.raster ? { w: this.raster.w, h: this.raster.h } : guideSize(this.timeline);
     const wide = Math.max(...xs) - Math.min(...xs), deep = Math.max(...zs) - Math.min(...zs);
     return { x: (Math.min(...xs) + Math.max(...xs)) / 2, z: (Math.min(...zs) + Math.max(...zs)) / 2,
-             span: clamp(Math.max(deep, (wide * h) / w) * 1.16 + 1, 4, 150) };
+             // Room above and below for the tools that float over the glass.
+             span: clamp(Math.max(deep, (wide * h) / w) * 1.4 + 1, 4, 150) };
   }
 
   /** The plan's camera: straight down from far above through a long lens, so

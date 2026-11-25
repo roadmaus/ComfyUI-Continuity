@@ -125,11 +125,11 @@ export const css = `
 .mmc-st-sheethead .mmc-reel-btn[aria-pressed="true"] { color: var(--mmc-strong); background: var(--mmc-wash-2); }
 
 /* --- what the model is given, under the inspector ----------------------------------- */
-.mmc-st-gets { flex: none; max-height: 56%; overflow: auto; display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 18px;
+.mmc-st-gets { flex: none; max-height: 50%; overflow: auto; display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 18px;
   border-top: 1px solid var(--mmc-line); background: color-mix(in oklab, var(--mmc-bg) 94%, var(--mmc-media-bg)); }
 .mmc-st-gets[hidden] { display: none; }
 .mmc-st-gets > * { flex: none; }
-.mmc-st-bench .mmc-reel-inspect { min-height: 30%; }
+.mmc-st-bench .mmc-reel-inspect { min-height: 38%; }
 .mmc-st-getshead { display: flex; align-items: baseline; gap: 8px; }
 .mmc-st-getshead b { font-size: calc(14px * var(--mmc-type, 1)); color: var(--mmc-strong); }
 .mmc-st-getshead span { flex: 1; font-size: calc(12.5px * var(--mmc-type, 1)); color: var(--mmc-dim); }

@@ -57,7 +57,7 @@ blockout** comes back. Nothing selected means the piece is selected. A set is
 taken off the piece from its own page in the inspector; its shots stay, with no
 staging.
 
-![The blockout bench: the script on the left, the kitchen set on the stage with @ben selected and his handles out, his blocking in the inspector, and the piece underneath with the sets over the film and shot 3's guide on its card](img/blockout.png)
+![The blockout bench: the script on the left; the kitchen set as a floor plan with @ben selected, the shot camera's frame in the corner and the sheet of stops under it; his blocking in the inspector over what the model is given; and the piece underneath with the sets over the film and shot 3's guide on its card](img/blockout.png)
 
 No model, no download, no queue for the stage itself: the renderer is
 arithmetic in the browser, and what the glass shows in **Guide** is exactly what
@@ -94,17 +94,32 @@ people walk, names), **Guide** (the pass exactly as the file will hold it),
 yet) and **Take** (what came back, at the playhead). Play runs the shot's time;
 dragging across a shot on the strip scrubs it.
 
-**Look around** flies around the set and changes nothing: drag orbits, shift-drag
-slides, the wheel zooms. **What the camera sees** stands you in the shot camera,
-where every gesture writes a camera mark at the playhead: drag turns it,
-shift-drag moves it sideways and up, the wheel moves it forward. **Put the camera here**
-moves the shot camera to where you stand.
+The set is handled from one of three places. **Plan** is the set from above, as
+a floor plan, and is where the bench opens: drag the floor to slide it, the
+wheel zooms. **Look around** flies around the set: drag orbits, shift-drag
+slides, the wheel zooms. Neither changes anything, and in both the stage is the
+whole of the glass while the shot camera's frame stays in a **monitor** in the
+corner, as the stage or as the guide; pressing it stands you in the camera.
+**What the camera sees** is that: every gesture writes a camera stop at the
+playhead, drag turns it, shift-drag moves it sideways and up, the wheel moves it
+forward. **Put the camera here**, in Look around, moves the shot camera to where
+you stand.
+
+A **badge** on the glass says what a drag is about to do before it does it:
+move the stop the playhead is on, or write a new one where it is not; and that
+a table or a wall is the set, so moving it changes every shot staged on it.
+
+**Thirds and depths** draws the lines the staging sentence is read from: the
+two that part frame left, centre and frame right, and the two depths where the
+foreground and the midground end.
 
 Click a piece to select it; its handles hang off it. **Move** (`1`) slides it
 along the world axes or, dragged by its body, across the floor; **Turn** (`2`)
 gives it three rings that snap to 15°; **Lift** (`3`) takes it off the floor.
-Dragging a person writes a mark at the playhead, so move the playhead first to
-give them a second mark. A piece rests by itself: whichever way up it is, its
+Dragging a person writes a stop at the playhead, so move the playhead first to
+give them a second one, or use **Draw path** (`5` or `P`): each click on the
+floor is the next stop of whoever is selected, or of the camera when nobody is,
+and the stops are spread at one pace over the shot. Escape puts the tool down. A piece rests by itself: whichever way up it is, its
 lowest point sits at its height off the floor, so a figure laid flat lies on
 it. **+ Person**, **+ Block**, **+ Wall** and **+ Post** add to the set, and
 Delete takes the selection off it.
@@ -122,7 +137,8 @@ where its camera starts, with people in it and a camera move. Pressing one makes
 new set from it; everything on it can then be moved, changed or taken away.
 
 **Focus** (or F) gives the stage the whole window: the script and the strip fold
-away, the tools float over the picture, and the camera's speed lane stays under it.
+away, the tools float over the picture, and the sheet of stops stays under it, with
+the way to the shot before and the next.
 The inspector becomes a drawer that slides in when a piece or a set is picked; **I**
 or **Inspector** shows it or puts it away. Shift+F hides the browser's own bars as
 well. Escape leaves focus first, and the window opens as it was last left.
@@ -157,8 +173,16 @@ sees, in Guide and in the file; the path stays smooth. The same shot always
 shakes the same way until **Another shake**, and a shot continuing from another
 goes on with its shake.
 
-Under the glass is the **speed** of whoever is selected, or of the camera. Each
-stop keeps its time; the curve says how fast the stretch between two is taken,
+Under the glass is the **sheet of stops**: a lane for the camera, for everyone on
+the set and for whatever moves in the shot, a diamond for each stop, and one
+playhead through them all. Drag a diamond to change when; double-click a lane to
+add a stop there; press anywhere else on it to move the playhead, which snaps to
+a stop. **Add stop** (`K`) makes one at the playhead for whoever is selected, or
+the camera, and `,` and `.` step from stop to stop. The arrows at its right go
+to the shot before and the next.
+
+**Speed** opens the speed of whoever is selected, or of the camera, under the
+sheet. Each stop keeps its time; the curve says how fast the stretch between two is taken,
 and dragging a point up there slows it elsewhere, so it still arrives when it
 did. The buttons take the stretch the playhead is in: **Natural**, **Steady**,
 **Start gently**, **Stop gently**, **Rush in**, **Rush off**. **Wait until here**
@@ -168,17 +192,26 @@ else moves the playhead.
 
 ### What a shot sends
 
+Under the inspector, whatever is selected, is **What the model is given** for
+the shot on the glass: the first and the last frame of its clip as the file
+will hold them, the file, and the words. Pointing at a clause of the words
+lights the piece it is about, pressing it selects that piece, and a clause the
+last edit changed is lit for a moment. The words are read off the first and the
+last frame alone; stops in between, bends and speed reach the model only as the
+clip.
+
 | | |
 |---|---|
 | The guide | a clip along the shot camera's path, at the family's native canvas and frame grid, in the shot's pass. Written under `input/continuity/blockout/` by Shoot, named after the shot's staging so an unchanged shot reuses it, and attached as the shot's guide. Families without a ControlNet get the words alone |
-| The words | who stands where, in their posture, and how the camera moves, in the model's own words, added after the shot's prose (refined or not) |
+| The words | who stands where, in their posture, and how the camera moves, in the model's own words, added after the shot's prose (refined or not). **Words** chooses: **Yours, then the staging** is that, and **Yours only** sends the shot's prose and nothing the bench wrote about the scene, for the piece or for one shot. Where the clip is a reference video, the one line that names it stays, because a clip is only followed where the words name it |
 | How firmly | **Firmly** (1.0) or **Loosely** (0.6); a shot whose people change posture or leave the floor suggests loose |
 
-Four passes, the ControlNet bench's own names:
+Five passes, four of them the ControlNet bench's own names:
 
 | Pass | What it writes |
 |---|---|
 | As staged | no tracing, just the clay render itself, as footage |
+| Labelled | the stage as you see it: the clay, the cast in their colours, and the name of every named piece drawn into the frame. For a family that is shown the blockout as a reference video; the line that names the clip then says its colours and name tags are labels and not part of the picture |
 | Depth | near bright, far dark, taken from the geometry, so nothing is guessed |
 | Blocks | each piece one flat field of colour |
 | Lines | the set's edges, white on black |
@@ -191,13 +224,17 @@ A person can **Play** a cast member and a thing can be **Called** a word
 ("table", "doorway"). Named pieces are written into the staging: *"@anna is
 lying on the floor at centre in the midground; a table at frame left in the
 foreground; @anna ends standing. The camera pushes in toward @anna at slow
-speed."* No model reads identity out of pixels, so the words are the
-mechanism. **Copy** hands you them for any other prompt.
+speed."* A depth map says nothing of who is who, so there the words are the
+mechanism. **Labelled** with **Yours only** is the other way round: the clip
+itself says who and what each block is, and the words are only the ones you
+wrote. Whether a model paints the name tags into its picture, or the cast's
+colours onto their clothes, has not been measured yet. **Copy** hands you what
+the bench adds for any other prompt.
 
 ### Takes and joins
 
 What releases a take is the reel's rule with staging added: a change to a
-shot's camera marks, a person's marks in it, its pass or how firmly it holds
+shot's camera marks, a person's marks in it, its pass, whose words it sends or how firmly it holds
 releases that shot and the shots that continue from it; a change to a set
 releases every shot staged on it; looking around, selecting, scrubbing and
 switching views release nothing.

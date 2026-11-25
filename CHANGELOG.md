@@ -6,6 +6,26 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout is easier to work by hand.** The set opens as a floor plan, with
+Look around and What the camera sees beside it, and the shot camera's frame stays in
+a corner while you work, as the stage or as the guide. Under the glass every mover
+has a lane and every stop a diamond: drag one to change when, double-click a lane to
+add one, and K, comma and full stop make and walk them. **Draw path** (5 or P) lays a
+walk by clicking the floor. A badge says whether a drag will move a stop or write a
+new one, **Thirds and depths** draws the lines the staging sentence is read from, and
+the speed lane opens from **Speed**.
+
+**What the model is given is always in sight.** Under the inspector, for the shot on
+the glass: the first and last frame of its clip, the file, and the words, where a
+clause pointed at lights its piece and a clause an edit changed is lit for a moment.
+
+**A staged shot can send your words alone, and a labelled blockout.** **Words: Yours
+only** sends the shot's own prose and nothing the bench wrote about the scene, for the
+piece or for one shot; with a reference clip the one line that names it stays.
+**Labelled** is a fifth pass: the stage as you see it, the cast in their colours and
+every name drawn into the frame, for a family shown the blockout as a reference video.
+Whether a model paints the tags or the colours into its picture is not measured yet.
+
 **Closing a blockout window no longer deletes another's clips.** It removes only the
 clips it used while it was open and has stopped using, not every one it does not know.
 

@@ -795,10 +795,10 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
   if (process.env.SHOT) {
     await open();
     await page.waitForTimeout(300);
-    await page.evaluate(() => bench.select({ kind: 'shot', index: 1 }));
+    await page.evaluate(() => { bench.setLook('plan'); bench.select({ kind: 'shot', index: 1 }); bench.at.t = 2; bench.select({ kind: 'thing', id: 8 }); });
     await page.waitForTimeout(300);
     await page.screenshot({ path: process.env.SHOT });
-    await page.evaluate(() => { bench.at.t = 2; bench.select({ kind: 'thing', id: 8 }); });
+    await page.evaluate(() => { bench.setLook('lens'); bench.select({ kind: 'shot', index: 1 }); });
     await page.waitForTimeout(300);
     await page.screenshot({ path: process.env.SHOT.replace('.png', '2.png') });
   }
