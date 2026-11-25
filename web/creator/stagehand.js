@@ -1,15 +1,21 @@
 // The blockout's agent: a conversation with the user's own chat model, and the
 // tools it stages the piece with.
 //
-// There is no system prompt. Each tool's docstring says what it does, what it
-// takes and what it answers, and none says how a scene should look. A tool does
-// one small thing, checks it, and answers with what now stands there or why it
-// does not; nothing is put right behind the model's back. When the calls of one
-// reply have changed the set, the last of them is answered with a picture of it.
+// The system prompt is the server's (`creator/prompts/stagehand/system.txt`) and
+// is short. Each tool's docstring says what it does, what it takes and what it
+// answers, and none says how a scene should look. A tool does one small thing,
+// checks it, and answers with what now stands there or why it does not; nothing
+// is put right behind the model's back. When the calls of one reply have changed
+// the set, the last of them is answered with a picture of it.
+//
+// The model is the refiner's: each message asks whatever its settings have
+// selected when the message is sent.
 
 import { api } from "../../../scripts/api.js";
 import { JSON_HEADERS } from "./api.js";
 import * as S from "./state.js";
+import { run as runJob } from "./queue.js";
+import { settings as refinerSettings, chosenModel } from "./refine.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
 import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf } from "./blockout.js";
 
@@ -720,20 +726,36 @@ function stagedIn(hand, draft, args) {
  * One conversation about one piece. The caller owns the piece and the window:
  * `timeline()` is the piece, `apply(next)` puts a changed one in its place,
  * `windowState()` is what the user has open and selected, or "", and
- * `told(event)` hears what happens.
+ * `told(event)` hears what happens. `request()` is which model to ask, and is
+ * the refiner's own answer unless the caller has another.
  */
+export function refinerRequest(current = refinerSettings()) {
+  const backend = current.backend === "remote" ? "remote" : "local";
+  return { backend, model: chosenModel(current), device: current.chatDevice || "", eject: backend === "remote" && current.eject === true };
+}
+
+const ROUTE = "/continuity/stagehand";
+
 export class Stagehand {
-  constructor({ model, timeline, apply, windowState = () => "", told = () => {} }) {
-    Object.assign(this, { model, timeline, apply, windowState, told });
+  constructor({ timeline, apply, request = refinerRequest, windowState = () => "", told = () => {} }) {
+    Object.assign(this, { timeline, apply, request, windowState, told });
     this.session = `${new Date().toISOString().slice(0, 19).replace(/[^0-9]/g, "-")}-${Math.random().toString(36).slice(2, 8)}`;
     this.messages = [];
     this.logged = 0;
     this.known = null;      // the scene as the model last knew it
     this.setId = null;      // the set it is working on
     this.abort = null;
+    this.asking = null;     // the backend and model of the message being worked on
   }
 
-  stop() { this.abort?.abort(); }
+  /** End the work at once. What was done stays. */
+  stop() { this.abort?.abort(new Error("Stopped.")); }
+
+  /** Tell the server a message ended without the model's closing words: it
+   *  closes what it has out, and drops the model if the settings ask for that. */
+  release() {
+    api.fetchApi(`${ROUTE}/stop`, { method: "POST", headers: JSON_HEADERS, body: JSON.stringify({ session: this.session }) }).catch(() => {});
+  }
 
   /** The set being worked on: the one chosen, or the first. */
   setIn(timeline, make = false) {
@@ -765,6 +787,8 @@ export class Stagehand {
   async send(words) {
     if (this.abort) throw new Error("it is still working");
     this.abort = new AbortController();
+    // A change of model applies from the next message, never under this one.
+    this.asking = this.request();
     const scene = this.scene();
     const beside = [this.windowState(), scene !== this.known ? scene : ""].filter(Boolean);
     this.messages.push({ role: "user", content: [words, ...beside].join("\n\n") });
@@ -782,6 +806,9 @@ export class Stagehand {
         this.known = this.scene();
       }
       throw new Error(`stopped after ${MOST_TURNS} turns`);
+    } catch (exc) {
+      this.release();
+      throw exc;
     } finally {
       this.settle();
       this.abort = null;
@@ -798,13 +825,17 @@ export class Stagehand {
     }
   }
 
+  /** One exchange. The answer comes on the socket, as a chat turn's does: a
+   *  model building a set outlasts a fetch. */
   async ask() {
-    const response = await api.fetchApi("/continuity/stagehand", {
-      method: "POST", headers: JSON_HEADERS, signal: this.abort.signal,
-      body: JSON.stringify({ session: this.session, model: this.model, messages: this.messages, tools: tools(), seen: this.logged }),
-    });
-    const body = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(body.error || `the server answered ${response.status}`);
+    const { signal } = this.abort;
+    signal.throwIfAborted();
+    const asked = runJob(ROUTE, { session: this.session, ...this.asking, messages: this.messages, tools: tools(), seen: this.logged });
+    // Left behind by a Stop, it still ends, and nobody is listening.
+    asked.catch(() => {});
+    const body = await Promise.race([asked, new Promise((_, reject) => {
+      signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+    })]);
     const { message } = body.choices[0];
     this.usage = body.usage;
     // Its own reply is in the log already.

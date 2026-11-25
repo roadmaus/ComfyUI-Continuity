@@ -61,6 +61,8 @@ import base64
 import io
 import json
 import os
+import socket
+import threading
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -238,7 +240,62 @@ def _headers(url, key):
     return headers
 
 
-def _request(url, key, payload=None, timeout=TIMEOUT, parse=True):
+class Held:
+    """The connection one request is waiting on, where another thread can close it.
+
+    `urlopen` gives nothing back until the whole reply is in, and a model
+    building a scene takes minutes over one: a Stop has to reach the socket
+    itself. Closing it is also what stops a server on the LAN generating:
+    llama.cpp and LM Studio both give up on a request whose client has gone.
+    """
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        self._connection = None
+        self.closed = False
+
+    def took(self, connection):
+        with self._lock:
+            self._connection = connection
+            # Closed before it was open: a Stop that came in while connecting.
+            if self.closed:
+                self._shut()
+
+    def close(self):
+        with self._lock:
+            self.closed = True
+            self._shut()
+
+    def _shut(self):
+        sock = getattr(self._connection, "sock", None)
+        if sock is not None:
+            try:
+                sock.shutdown(socket.SHUT_RDWR)
+            except OSError:
+                pass
+
+
+def _opener(held):
+    """`urlopen` whose connection `held` gets to keep. Everything else, the
+    proxy and the TLS context included, is urllib's own."""
+    class Holding:
+        def do_open(self, http_class, req, **http_conn_args):
+            class Connection(http_class):
+                def connect(self):
+                    super().connect()
+                    held.took(self)
+            return super().do_open(Connection, req, **http_conn_args)
+
+    class Plain(Holding, urllib.request.HTTPHandler):
+        pass
+
+    class Secure(Holding, urllib.request.HTTPSHandler):
+        pass
+
+    return urllib.request.build_opener(Plain, Secure).open
+
+
+def _request(url, key, payload=None, timeout=TIMEOUT, parse=True, held=None):
     """One HTTP exchange -> the parsed JSON body, every failure a RefineError.
 
     The provider's own complaint is worth relaying — "model not found" beats
@@ -253,7 +310,7 @@ def _request(url, key, payload=None, timeout=TIMEOUT, parse=True):
     request = urllib.request.Request(url, data=data, headers=_headers(url, key),
                                      method="POST" if data else "GET")
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        with (_opener(held) if held else urllib.request.urlopen)(request, timeout=timeout) as response:
             return json.load(response) if parse else None
     except urllib.error.HTTPError as exc:
         detail = ""
@@ -617,20 +674,31 @@ def chat(model, system, message, images=(), temperature=0.7, seed=-1,
     return content
 
 
-def converse(model, conversation, tools):
+def converse(model, conversation, tools, reasoning=None, held=None):
     """One exchange of a conversation with tools -> the server's whole reply.
 
     For a caller that holds the conversation itself (`stagehand`): the messages
-    go as they are, nothing is put in front of them, and the model's own
-    defaults stand for everything `chat` would set.
+    go as they are, and the model's own defaults stand for the temperature, the
+    seed and the length of a reply. Thinking is the one setting that is
+    followed, the way `chat` follows it: off asks for no reasoning, on leaves
+    the server's default, and a server that refuses the word is asked without.
+    `held` is given the connection, so the caller can close it under the wait.
     """
     stored = _read()
     url, key = stored.get("url", ""), stored.get("key", "")
     if not url:
         raise refine.RefineError(
             "no refiner server is configured — set its URL in the refiner's settings")
-    body = _request(f"{url}/chat/completions", key,
-                    {"model": model, "messages": conversation, "tools": tools, "stream": False},
-                    timeout=CONVERSE_TIMEOUT)
+    payload = {"model": model, "messages": conversation, "tools": tools, "stream": False}
+    if not refine.reasoning(reasoning):
+        payload["reasoning_effort"] = "none"
+    for _ in range(2):
+        try:
+            body = _request(f"{url}/chat/completions", key, payload,
+                            timeout=CONVERSE_TIMEOUT, held=held)
+            break
+        except ServerError as exc:
+            if exc.code != 400 or not adapt(exc.detail, payload):
+                raise
     _content(body)
     return body

@@ -100,6 +100,7 @@ MODULES = {
     "neural_route": "routes.neural",
     "plate_route": "routes.plate",
     "reveal_route": "routes.reveal",
+    "stagehand_route": "routes.stagehand",
 }
 
 
