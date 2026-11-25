@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the blockout's agent headless: the real `stagehand.js` and its real tools
+"""Run Stagehand headless: the real `stagehand.js` and its real tools
 in a browser without a window, against the refiner server saved in the pack.
 
     python3 tools/stagehand_bench.py --out DIR --brief "a lighthouse..."
@@ -8,6 +8,9 @@ in a browser without a window, against the refiner server saved in the pack.
 Nothing is rendered or queued. `--brief` may be given again for a next message.
 `--fake` takes a list of `[tool, arguments]` and asks no model. DIR gets the log,
 the pictures the model looked at, and the piece it made (`piece.json`).
+
+`--place reel` starts it in the timeline, with the timeline's prompt and tools,
+where `open_blockout` takes it to the bench; left out, it starts in the bench.
 
 `--fenced` asks the server in the fenced form, so that form can be read on a
 model without a GPU here. The model is the one the refiner's settings have selected, unless `--model`
@@ -41,6 +44,7 @@ parser.add_argument("--fenced", action="store_true",
                     help="ask the server the way a model in ComfyUI is asked: tools in words, a fenced JSON reply")
 parser.add_argument("--browser", default=os.environ.get("BROWSER_EXECUTABLE_PATH"))
 parser.add_argument("--piece", help="a piece to start from, as JSON")
+parser.add_argument("--place", choices=("blockout", "reel"), default="blockout", help="where it starts")
 parser.add_argument("--comfy", default=os.path.dirname(os.path.dirname(ROOT)))
 parser.add_argument("--minutes", type=float, default=30)
 args = parser.parse_args()
@@ -119,13 +123,15 @@ try {
   const { Stagehand } = await import('/ext/web/creator/stagehand.js');
   t = S.parseTimeline(PIECE);
   S.syncTimeline(t);
-  const hand = new Stagehand({ request: () => (REQUEST), timeline: () => t, apply: (next) => { t = next; }, told: tell });
+  let place = PLACE;
+  const hand = new Stagehand({ request: () => (REQUEST), timeline: () => t, apply: (next) => { t = next; }, told: tell,
+    place: () => place, cross: () => { place = 'blockout'; } });
   for (const brief of BRIEFS) { const said = await hand.send(brief); await tell({ kind: 'said', said, usage: hand.usage }); }
 } catch (exc) { await tell({ kind: 'error', error: String(exc), stack: exc.stack }); }
 await tell({ kind: 'end', piece: t && (await import('/ext/web/creator/state.js')).serializeTimeline(t) });
 </script>"""
 piece = open(args.piece).read() if args.piece else "{}"
-for key, value in (("PIECE", piece), ("REQUEST", refiner()), ("BRIEFS", args.brief or ["go"])):
+for key, value in (("PIECE", piece), ("PLACE", args.place), ("REQUEST", refiner()), ("BRIEFS", args.brief or ["go"])):
     PAGE = PAGE.replace(key, json.dumps(value).replace("</", "<\\/"), 1)
 ended = threading.Event()
 # Stopped from outside, it still closes its browser.
@@ -165,7 +171,8 @@ class Handler(http.server.BaseHTTPRequestHandler):
             try:
                 answer = pkg.stagehand.turn(body["session"], body["model"], body["messages"], body["tools"],
                                             body["seen"], backend=body["backend"], eject=body["eject"],
-                                            root=OUT, ask=scripted if fake is not None else None, fenced=args.fenced)
+                                            root=OUT, ask=scripted if fake is not None else None, fenced=args.fenced,
+                                            place=body["place"])
                 # Inside the request: this server has no socket to answer on.
                 self.out("application/json", json.dumps({"result": answer}).encode())
             except Exception as exc:  # noqa: BLE001 — told to the page, as the route does

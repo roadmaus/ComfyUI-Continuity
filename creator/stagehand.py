@@ -1,10 +1,12 @@
-"""The blockout's agent, server side: put the prompt in front, pass an exchange
-on, and write it down.
+"""Stagehand, server side: put the prompt in front, pass an exchange on, and
+write it down.
 
 The conversation and its tools live in the browser (`web/creator/stagehand.js`),
 where the piece and the renderer are. What is left here is what a browser must
-not do: hold the server's key, and keep a log. The one prompt is a file,
-`prompts/stagehand/system.txt`, and goes in front of every exchange as it is.
+not do: hold the server's key, and keep a log. There is a prompt for each place
+it works in, a file each: `prompts/stagehand/system.txt` for the blockout bench
+and `reel.txt` for the timeline. The one of the place an exchange comes from
+goes in front of it as it is.
 
 **Two ways of asking.** A server is asked with native tool calls: the
 conversation goes as the browser holds it, with the tools as `tools`. A model
@@ -58,7 +60,8 @@ FENCED_TEMPERATURE = 0.3
 NO_TOOLS = "This server does not call tools; Stagehand is asking in plain JSON instead."
 
 _PROMPTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "prompts", "stagehand")
-_PROMPT = os.path.join(_PROMPTS, "system.txt")
+# Where it works, and the prompt of each.
+PLACES = {"blockout": "system.txt", "reel": "reel.txt"}
 _PICTURE = re.compile(r"data:image/(png|jpeg|webp);base64,")
 _EXTENSIONS = {"png": "png", "jpeg": "jpg", "webp": "webp"}
 _read = {}
@@ -75,18 +78,19 @@ class _Session:
         self.warm = ""       # the model a server still holds for this conversation
         self.fenced = False  # the server refused tools, and is asked in plain JSON
         self.moved = False   # the server refused a picture in a tool's answer
+        self.place = ""      # where the last exchange came from
 
 
 _SESSIONS = {}
 _LOCK = threading.Lock()
 
 
-def system():
-    """The system prompt, read once and held."""
-    if "system" not in _read:
-        with open(_PROMPT, "r", encoding="utf-8") as handle:
-            _read["system"] = handle.read().strip()
-    return _read["system"]
+def system(place="blockout"):
+    """The system prompt of a place, read once and held."""
+    if place not in _read:
+        with open(os.path.join(_PROMPTS, PLACES[place]), "r", encoding="utf-8") as handle:
+            _read[place] = handle.read().strip()
+    return _read[place]
 
 
 def fenced_prompt():
@@ -153,7 +157,7 @@ def _sweep(root):
 
 
 def turn(session, model, messages, tools, seen, backend="remote", eject=False, reasoning=None,
-         root=None, ask=None, write=None, fenced=False):
+         root=None, ask=None, write=None, fenced=False, place="blockout"):
     """One exchange -> the reply, as a chat-completions server gives one.
 
     `ask(model, conversation, tools, reasoning=, held=)` is a server asked with
@@ -167,12 +171,18 @@ def turn(session, model, messages, tools, seen, backend="remote", eject=False, r
     are new to the log, unless the log knows better: after an exchange that
     failed or was stopped the browser has not heard what was written.
 
+    `place` is where the exchange comes from, "blockout" or "reel": whose
+    prompt goes in front. It can change within a conversation, and the tools
+    the browser sends change with it.
+
     `eject` asks the server to drop the model when the message is over: on the
     reply that calls no tool, and on any failure. Between the exchanges of one
     message it stays loaded, and `stop` drops it if the message ends there.
     """
     if not SESSION.fullmatch(session):
         raise ValueError("bad session id")
+    if place not in PLACES:
+        raise ValueError("bad place")
     refused = refusal(backend, model)
     if refused:
         raise refine.RefineError(refused)
@@ -187,7 +197,7 @@ def turn(session, model, messages, tools, seen, backend="remote", eject=False, r
         if backend != "remote" and write is None:
             raise refine.RefineError("a model in ComfyUI is asked on ComfyUI's queue")
         body = _exchange(state, session, model, messages, tools, seen, backend, reasoning,
-                         root or log_root(), ask or refine_remote.converse, held, write, fenced)
+                         root or log_root(), ask or refine_remote.converse, held, write, fenced, place)
         over = not body["choices"][0]["message"].get("tool_calls")
         return body
     finally:
@@ -198,7 +208,7 @@ def turn(session, model, messages, tools, seen, backend="remote", eject=False, r
             refine_remote.unload(model)
 
 
-def _exchange(state, session, model, messages, tools, seen, backend, reasoning, root, ask, held, write, fenced):
+def _exchange(state, session, model, messages, tools, seen, backend, reasoning, root, ask, held, write, fenced, place):
     folder = os.path.join(root, session)
     new = not os.path.isdir(folder)
     os.makedirs(folder, exist_ok=True)
@@ -210,8 +220,10 @@ def _exchange(state, session, model, messages, tools, seen, backend, reasoning, 
             log.flush()
 
         start = max(int(seen), state.logged)
-        if not start:
-            write_log("tools", backend=backend, model=model, system=system(), tools=tools)
+        # Again when the place changed: the prompt and the tools did with it.
+        if not start or state.place != place:
+            write_log("tools", backend=backend, model=model, place=place, system=system(place), tools=tools)
+        state.place = place
         for at in range(start, len(messages)):
             write_log("message", message=_readable(messages[at], folder, str(at)))
         state.logged = len(messages)
@@ -231,14 +243,14 @@ def _exchange(state, session, model, messages, tools, seen, backend, reasoning, 
             body = None
             if not (local or fenced or state.fenced):
                 try:
-                    body = _native(state, ask, model, sent, tools, reasoning, held)
+                    body = _native(state, ask, model, sent, tools, reasoning, held, place)
                 except refine_remote.ServerError as exc:
                     if not _refuses_tools(exc):
                         raise
                     # Said once, and remembered for the conversation.
                     state.fenced, note = True, NO_TOOLS
             if body is None:
-                body = _fenced(written, sent, tools, fold=local)
+                body = _fenced(written, sent, tools, local, place)
         except Exception as exc:
             if held.closed:
                 write_log("stopped", seconds=time.time() - started)
@@ -273,14 +285,14 @@ def _refuses_tools(exc):
     return exc.code in (400, 404, 422, 501) and "tool" in str(exc.detail).lower() and "image" not in str(exc.detail).lower()
 
 
-def _native(state, ask, model, sent, tools, reasoning, held):
+def _native(state, ask, model, sent, tools, reasoning, held, place):
     """The conversation as it is, with the tools as `tools`.
 
     A server that will not take a picture in a tool's answer refuses the whole
     request. It is asked once more with each picture moved into a user message
     straight after the answers, and the session remembers to send them so.
     """
-    conversation = [{"role": "system", "content": system()}, *(moved(sent) if state.moved else sent)]
+    conversation = [{"role": "system", "content": system(place)}, *(moved(sent) if state.moved else sent)]
     try:
         return ask(model, conversation, tools, reasoning=reasoning, held=held)
     except refine_remote.ServerError as exc:
@@ -289,7 +301,7 @@ def _native(state, ask, model, sent, tools, reasoning, held):
             raise
         first = exc
     try:
-        body = ask(model, [{"role": "system", "content": system()}, *moved(sent)], tools,
+        body = ask(model, [{"role": "system", "content": system(place)}, *moved(sent)], tools,
                    reasoning=reasoning, held=held)
     except refine_remote.ServerError:
         # Not the pictures, then: the server's first words are the ones to hear.
@@ -367,13 +379,13 @@ class Unreadable(ValueError):
     """A fenced reply that names neither calls nor words, with why."""
 
 
-def fenced_system(tools):
+def fenced_system(tools, place="blockout"):
     """The system text of the fenced form: the prompt, how to reply, and each
     tool's name and docstring as `stagehand.js` writes them. One source for
     both ways of asking."""
     described = "\n\n".join(f"## {tool['function']['name']}\n{tool['function'].get('description', '').strip()}"
                             for tool in tools)
-    return f"{system()}\n\n{fenced_prompt()}\n\n{described}"
+    return f"{system(place)}\n\n{fenced_prompt()}\n\n{described}"
 
 
 def _as_fence(message):
@@ -504,10 +516,10 @@ def read(reply, at=0):
     raise Unreadable('the object has to hold "calls", a list with at least one call, or "say", your words.')
 
 
-def _fenced(written, messages, tools, fold):
+def _fenced(written, messages, tools, fold, place):
     """One exchange in the fenced form. A reply that cannot be read is asked
     for once more with the reason; a second ends the message."""
-    system_text, asked = fenced_system(tools), turns(messages, fold=fold)
+    system_text, asked = fenced_system(tools, place), turns(messages, fold=fold)
     raw = [written(system_text, asked)]
     try:
         message = read(raw[0], len(messages))

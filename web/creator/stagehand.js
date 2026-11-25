@@ -1,5 +1,8 @@
-// The blockout's agent: a conversation with the user's own chat model, and the
-// tools it stages the piece with.
+// Stagehand: a conversation with the user's own chat model, and the tools it
+// builds a piece with. It works in two places, each with a prompt and a set of
+// tools of its own: the timeline, where a film is shots and joins, and the
+// blockout bench, where a shot is staged in 3D. `open_blockout` is the one way
+// from the first to the second.
 //
 // The system prompt is the server's (`creator/prompts/stagehand/system.txt`) and
 // is short. Each tool's docstring says what it does, what it takes and what it
@@ -61,6 +64,13 @@ function text(args, key, fallback, most = 4000) {
   return value;
 }
 
+/** A whole number within bounds, or a sentence about it. */
+function count(args, key, low, high) {
+  const value = number(args, key, low, high);
+  if (!Number.isInteger(value)) throw new Error(`${key} has to be a whole number`);
+  return value;
+}
+
 function list(args, key) {
   if (!Array.isArray(args?.[key]) || !args[key].length) throw new Error(`${key} has to be a list with something in it`);
   return args[key];
@@ -117,6 +127,46 @@ export function sceneText(timeline, setId) {
     set ? `Set "${set.name}", ${set.objects.length} objects:` : "There is no set yet.",
     ...(set?.objects ?? []).map(objectLine),
     ...(untouched(timeline) ? ["There are no shots yet."] : timeline.segments.flatMap((segment, index) => shotLines(timeline, segment, index))),
+  ].filter(Boolean).join("\n");
+}
+
+/** The join in front of a shot, in the words the tools take. */
+function joinWords(timeline, segment, index) {
+  if (S.passOf(timeline, index).start !== index) return "rendered in one generation with the shot before";
+  return `${S.continues(segment) ? `the picture continues from shot ${S.continueSource(segment, index)}` : "the picture cuts"}, `
+    + `the sound ${S.continuesAudio(segment) ? "carries over" : "starts fresh"}`;
+}
+
+function filmShotLine(timeline, segment, index) {
+  const join = index ? `, ${joinWords(timeline, segment, index)}` : "";
+  if (S.isClip(segment)) return `Shot ${index + 1}: a finished clip, ${round(segment.duration_s)} s${join}`;
+  const set = S.setOf(timeline, segment);
+  const kept = S.takeOn(segment) ? ", has a kept take that a change to the shot releases" : "";
+  // Who the video model is sent with this shot: whoever its text or the film's names.
+  const cast = timeline.subjects ?? [];
+  const named = S.citedSubjects([segment.prompt, timeline.prompt], cast);
+  const sent = !cast.length || !segment.prompt ? "" : named.size ? ` Cast in it: ${cast.filter((member) => named.has(member.handle)).map((member) => `@${member.handle}`).join(", ")}.`
+    : " Cast in it: nobody, since the text names no @handle.";
+  return `Shot ${index + 1}: ${round(segment.duration_s)} s${join}${set ? `, staged in 3D on set "${set.name}"` : ""}${kept}. Text: ${segment.prompt || "none"}${sent}`;
+}
+
+/** A cast member as the film's text lists them. */
+function castWords(member) {
+  const about = [member.description, member.from?.length ? "has pictures" : "no pictures"].filter(Boolean).join("; ");
+  return `@${member.handle} (${about})`;
+}
+
+/** The film as the timeline has it: its texts, who and what it cites, and the
+ *  shots with their joins. */
+export function filmText(timeline) {
+  return [
+    timeline.prompt && `Film: ${timeline.prompt}`,
+    timeline.soundscape && `Sound: ${timeline.soundscape}`,
+    timeline.music && `Music: ${timeline.music}`,
+    timeline.subjects?.length && `Cast: ${timeline.subjects.map(castWords).join("; ")}`,
+    timeline.assets?.length && `References: ${timeline.assets.map((asset) => `@${asset.handle}`).join(", ")}`,
+    ...(untouched(timeline) ? ["There are no shots yet."]
+      : [...timeline.segments.map((segment, index) => filmShotLine(timeline, segment, index)), `The film is ${round(S.timelineSeconds(timeline))} s long.`]),
   ].filter(Boolean).join("\n");
 }
 
@@ -469,7 +519,7 @@ Returns:
     doc: `Add somebody to the cast, so that texts can name them as @handle and a person in the set can play them.
 
 Args:
-    handle (str): A short name in lowercase letters, digits and dashes.
+    handle (str): A short name in lowercase letters, digits and underscores.
     description (str): Who they are and what they look like.
 
 Returns:
@@ -478,7 +528,7 @@ Returns:
     required: ["handle", "description"],
     run: (hand, draft, args) => {
       const handle = text(args, "handle", undefined, 32);
-      if (!/^[a-z][a-z0-9-]*$/.test(handle)) throw new Error("handle has to be lowercase letters, digits and dashes");
+      if (!/^[a-z][a-z0-9_]*$/.test(handle)) throw new Error("handle has to be lowercase letters, digits and underscores, starting with a letter");
       if ((draft.subjects ?? []).some((member) => member.handle === handle)) throw new Error(`@${handle} is in the cast already`);
       draft.subjects = [...(draft.subjects ?? []), { handle, takes: "person", from: [], description: text(args, "description") }];
       return draft.subjects.map((member) => `@${member.handle}`).join(", ");
@@ -559,7 +609,11 @@ Returns:
     run: (hand, draft, args) => {
       const { index } = shotIn(draft, args);
       if (draft.segments.length === 1) throw new Error("it is the only shot");
+      // As a hand removes one: the cast's pictures stay with the piece, and a
+      // join that named a shot by number follows it.
+      S.rescueCastFiles(draft, draft.segments[index]);
       draft.segments.splice(index, 1);
+      S.remapContinueFrom(draft, (n) => (n === index + 1 ? null : n > index + 1 ? n - 1 : n));
       return `${draft.segments.length} shots`;
     },
   },
@@ -677,7 +731,164 @@ Returns:
   },
 };
 
-export const tools = () => Object.entries(TOOLS).map(([name, { doc, properties = {}, required = [] }]) =>
+const JOINS = ["continues", "cuts"], SOUNDS = ["carries", "fresh"];
+
+/** The tools of the timeline. What the two places share is the same tool. */
+const REEL_TOOLS = {
+  see_scene: {
+    doc: `Read everything that is there now: the film's text, the cast, the references, and the shots with their joins.
+
+Args:
+    None.
+
+Returns:
+    str: One line for each shot.`,
+    run: (hand) => hand.scene(),
+  },
+
+  add_cast: TOOLS.add_cast,
+
+  change_cast: {
+    doc: `Change the description of somebody in the cast.
+
+Args:
+    handle (str): Their handle.
+    description (str): Who they are and what they look like.
+
+Returns:
+    str: The cast member as they are now.`,
+    properties: { handle: str, description: str },
+    required: ["handle", "description"],
+    run: (hand, draft, args) => {
+      const handle = text(args, "handle", undefined, 33).replace(/^@/, "");
+      const member = (draft.subjects ?? []).find((item) => item.handle === handle);
+      if (!member) throw new Error(`there is no @${handle} in the cast`);
+      member.description = text(args, "description");
+      return castWords(member);
+    },
+  },
+
+  write_film_text: TOOLS.write_film_text,
+
+  add_shot: {
+    doc: `Add a shot to the film.
+
+Args:
+    text (str): What happens in the shot. A cast member is sent with the shot only when the text names them as @handle.
+    seconds (float): How long it lasts, from 1 to the longest shot the film's model renders.
+    after (int, optional): Number of the shot it comes after, or 0 to put it first. Left out, it goes at the end.
+    join (str, optional): How it joins the shot before it: "continues" or "cuts". Left out, it continues. The sound does as the picture does.
+
+Returns:
+    str: The shot and its number.`,
+    properties: { text: str, seconds: num, after: whole, join: { type: "string", enum: JOINS } },
+    required: ["text", "seconds"],
+    run: (hand, draft, args) => {
+      const words = text(args, "text"), seconds = number(args, "seconds", 1, longestShot(draft));
+      const join = oneOf(args.join ?? "continues", JOINS, "join");
+      const unused = untouched(draft);
+      const at = unused ? 0 : args.after === undefined || args.after === null ? draft.segments.length : count(args, "after", 0, draft.segments.length);
+      const segment = unused ? draft.segments[0] : join === "continues" ? S.continuingSegment(draft) : S.emptySegment();
+      Object.assign(segment, { prompt: words, duration_s: seconds });
+      if (!unused) {
+        draft.segments.splice(at, 0, segment);
+        S.remapContinueFrom(draft, (n) => (n > at ? n + 1 : n));
+      }
+      S.syncTimeline(draft);
+      return filmShotLine(draft, segment, at);
+    },
+  },
+
+  change_shot: {
+    ...TOOLS.change_shot,
+    run: (hand, draft, args) => {
+      const { segment, index } = shotIn(draft, args);
+      segment.prompt = text(args, "text", segment.prompt);
+      if (args.seconds !== undefined && args.seconds !== null) segment.duration_s = number(args, "seconds", 1, longestShot(draft));
+      S.syncTimeline(draft);
+      return filmShotLine(draft, segment, index);
+    },
+  },
+
+  move_shot: {
+    doc: `Move a shot to another place in the film. The shots between move by one number, and a shot keeps the join in front of it.
+
+Args:
+    shot (int): Number of the shot, from 1.
+    to (int): The number it has afterwards.
+
+Returns:
+    str: The shots in their new order.`,
+    properties: { shot: whole, to: whole },
+    required: ["shot", "to"],
+    run: (hand, draft, args) => {
+      if (untouched(draft)) throw new Error("there are no shots yet");
+      const from = count(args, "shot", 1, draft.segments.length) - 1, to = count(args, "to", 1, draft.segments.length) - 1;
+      if (!S.moveSegment(draft, from, to)) throw new Error(`shot ${from + 1} is there already`);
+      S.syncTimeline(draft);
+      return draft.segments.map((segment, index) => filmShotLine(draft, segment, index)).join("\n");
+    },
+  },
+
+  remove_shot: TOOLS.remove_shot,
+
+  set_join: {
+    doc: `Change the join between a shot and the one before it. What is left out stays as it is.
+
+Args:
+    shot (int): Number of the shot the join is in front of, from 2.
+    picture (str, optional): "continues" or "cuts".
+    sound (str, optional): "carries" or "fresh".
+
+Returns:
+    str: The shot as it is now.`,
+    properties: { shot: whole, picture: { type: "string", enum: JOINS }, sound: { type: "string", enum: SOUNDS } },
+    required: ["shot"],
+    run: (hand, draft, args) => {
+      if (draft.segments.length < 2) throw new Error("there is no join yet: the film has one shot");
+      const index = count(args, "shot", 2, draft.segments.length) - 1;
+      const segment = draft.segments[index], clip = S.isClip(segment);
+      if (S.passOf(draft, index).start !== index) throw new Error(`shot ${index + 1} renders in one generation with the shot before it, so this join is the video model's`);
+      const refuse = (why) => { if (why) throw new Error(why); };
+      if (args.picture !== undefined && args.picture !== null) {
+        const on = oneOf(args.picture, JOINS, "picture join") === "continues";
+        if (on && !S.continues(segment)) refuse(clip ? S.clipSeamBlocked(draft, index, "continue") : S.blockedReason(segment, "continue"));
+        segment.continue = on;
+      }
+      if (args.sound !== undefined && args.sound !== null) {
+        const on = oneOf(args.sound, SOUNDS, "sound join") === "carries";
+        if (on && !S.continuesAudio(segment)) {
+          refuse(clip ? S.clipSeamBlocked(draft, index, "continue_audio")
+            : S.silentSource(draft, index) ? "the clip it continues from has no sound playing to carry over" : S.blockedReason(segment, "continue_audio"));
+        }
+        segment.continue_audio = on;
+      }
+      S.syncTimeline(draft);
+      return filmShotLine(draft, segment, index);
+    },
+  },
+
+  open_blockout: {
+    doc: `Open a shot in the blockout bench, where it is staged in 3D: a rough set of plain shapes with a camera and people who move, given to the video model as a guide for the shot. Only when the person asks for a 3D scene, a blockout or a staged shot. The timeline closes, and from then on you have the bench's tools in place of these.
+
+Args:
+    shot (int): Number of the shot, from 1.
+
+Returns:
+    str: The scene as the bench has it.`,
+    properties: { shot: whole },
+    required: ["shot"],
+    run: (hand, draft, args) => {
+      const { index } = shotIn(draft, args);
+      hand.cross(index);
+      return hand.scene();
+    },
+  },
+};
+
+const PLACES = { blockout: TOOLS, reel: REEL_TOOLS };
+
+export const tools = (place = "blockout") => Object.entries(PLACES[place]).map(([name, { doc, properties = {}, required = [] }]) =>
   ({ type: "function", function: { name, description: doc, parameters: { type: "object", properties, required } } }));
 
 /** The longest shot the piece's family renders, in seconds. */
@@ -746,7 +957,10 @@ function stagedIn(hand, draft, args) {
  * `timeline()` is the piece, `apply(next)` puts a changed one in its place,
  * `windowState()` is what the user has open and selected, or "", and
  * `told(event)` hears what happens. `request()` is which model to ask, and is
- * the refiner's own answer unless the caller has another.
+ * the refiner's own answer unless the caller has another. `place()` is where
+ * the person is, "reel" or "blockout": whose prompt and tools the next exchange
+ * has. `cross(index)` opens the blockout on a shot, so that `place()` answers
+ * with it from then on, or throws a sentence about why it cannot.
  *
  * What is told, in order: `{kind: "call", id, name, args}` before a call is
  * answered; `{kind: "result", id, name, args, content, refused, changed}` once
@@ -763,8 +977,9 @@ export function refinerRequest(current = refinerSettings()) {
 const ROUTE = "/continuity/stagehand";
 
 export class Stagehand {
-  constructor({ timeline, apply, request = refinerRequest, windowState = () => "", told = () => {} }) {
-    Object.assign(this, { timeline, apply, request, windowState, told });
+  constructor({ timeline, apply, request = refinerRequest, windowState = () => "", told = () => {}, place = () => "blockout",
+    cross = () => { throw new Error("the blockout cannot be opened from here"); } }) {
+    Object.assign(this, { timeline, apply, request, windowState, told, place, cross });
     this.session = `${new Date().toISOString().slice(0, 19).replace(/[^0-9]/g, "-")}-${Math.random().toString(36).slice(2, 8)}`;
     this.messages = [];
     this.logged = 0;
@@ -806,6 +1021,7 @@ export class Stagehand {
 
   scene() {
     const timeline = this.timeline();
+    if (this.place() === "reel") return filmText(timeline);
     return sceneText(timeline, (timeline.sets?.length ? this.setIn(timeline) : null)?.id);
   }
 
@@ -871,7 +1087,8 @@ export class Stagehand {
     const { signal } = this.abort;
     signal.throwIfAborted();
     this.queued = null;
-    const asked = runJob(ROUTE, { session: this.session, ...this.asking, messages: this.messages, tools: tools(), seen: this.logged },
+    const place = this.place();
+    const asked = runJob(ROUTE, { session: this.session, ...this.asking, place, messages: this.messages, tools: tools(place), seen: this.logged },
       { onQueued: (id) => { this.queued = id; } });
     // Left behind by a Stop, it still ends, and nobody is listening.
     asked.catch(() => {});
@@ -892,10 +1109,15 @@ export class Stagehand {
   async answer(call) {
     this.abort.signal.throwIfAborted();
     const { name } = call.function;
-    const tool = Object.hasOwn(TOOLS, name) ? TOOLS[name] : null;
+    const here = PLACES[this.place()];
+    const tool = Object.hasOwn(here, name) ? here[name] : null;
     let content, changed = false, refused = false, args = {};
     try {
-      if (!tool) throw new Error(`there is no tool ${name}`);
+      if (!tool) {
+        // One of the other place's is said as that, so it is not tried again.
+        throw new Error(!Object.values(PLACES).some((set) => Object.hasOwn(set, name)) ? `there is no tool ${name}`
+          : this.place() === "reel" ? `${name} is a tool of the blockout bench, and this is the timeline` : `${name} is a tool of the timeline, and this is the blockout bench`);
+      }
       args = JSON.parse(call.function.arguments || "{}");
       this.told({ kind: "call", id: call.id, name, args });
       const draft = S.parseTimeline(S.serializeTimeline(this.timeline()));

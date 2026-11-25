@@ -278,6 +278,10 @@ invent one.
 | Undo | everything one message made it do is one step back, and one step forward again |
 | The transcript | one line for each thing it did, which opens to the tool's own answer. A call that was refused is drawn as that, with the reason. **New conversation** forgets what was said and leaves the piece alone |
 
+The timeline has the same button, on the same conversation, with a film's tools
+in place of the bench's: see [Stagehand in the timeline](timeline.md#stagehand).
+Asked there for a 3D scene, it opens the bench on that shot and goes on here.
+
 A server is asked with tool calls. A model in ComfyUI has none, so it is asked
 in words and answers with a list of calls in JSON; each exchange is a job on
 ComfyUI's queue, behind a render that is running. A server that does not call

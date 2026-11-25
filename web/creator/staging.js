@@ -397,7 +397,11 @@ class Blockout extends Reel {
     }
     this.mountGlass?.();
     if (!this.single) this.adoptSaved();
-    // Opened with nothing selected, the glass goes to the first shot.
+    // Opened on a shot, the glass is on it; with nothing selected, on the first.
+    if (this.timeline.segments[this.openOnMount]) {
+      this.sel = { kind: "shot", index: this.openOnMount };
+      this.goTo(this.openOnMount);
+    }
     this.render();
     this.now = this.capture();
     fitText(this.soundscapeBox);
@@ -444,23 +448,18 @@ class Blockout extends Reel {
     this.handDot.hidden = !working;
   }
 
-  /** Lead the eye to what a call touched, for a moment: an object on the
-   *  stage, a text in the script, a shot on the strip. The view is not moved. */
-  lit({ things = [], texts = [], shot = null } = {}) {
-    clearTimeout(this.litTimer);
-    for (const node of this.litNodes ?? []) node.classList.remove("mmc-st-lit");
+  /** As the reel leads the eye, and to an object on the stage as well. */
+  lit({ things = [], ...rest } = {}) {
+    super.lit(rest);
     this.litThings = new Set(things);
-    this.litNodes = [
-      ...texts.map((key) => ({ look: this.promptBox?.frame, sound: this.soundscapeBox, music: this.musicBox }[key])),
-      ...(shot ? [this.rows.get(this.timeline.segments[shot - 1]?.card_id)?.el, this.reelHost.querySelectorAll(".mmc-reel-card")[shot - 1]] : []),
-    ].filter(Boolean);
-    for (const node of this.litNodes) node.classList.add("mmc-st-lit");
     this.paint();
-    this.litTimer = setTimeout(() => {
-      for (const node of this.litNodes) node.classList.remove("mmc-st-lit");
-      this.litThings = null;
-      this.paint();
-    }, 1600);
+  }
+
+  unlit() {
+    super.unlit();
+    if (!this.litThings) return;
+    this.litThings = null;
+    this.paint();
   }
 
   renderLock() {
@@ -523,7 +522,7 @@ class Blockout extends Reel {
     // The conversation goes on without a window, and is found again.
     this.agent?.detach(this);
     this.handWindow?.unmount();
-    clearTimeout(this.litTimer);
+    this.unlit();
     // The derived guides this window's pieces named while it was open and name no
     // longer. Never the rest of the folder: another window, or a workflow that
     // is not open, may be what the other files belong to.

@@ -6,6 +6,18 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Stagehand works in the timeline too.** **Stagehand**, in the timeline's header, opens
+the same conversation there. Say what the film is, who is in it and what the shots are,
+and it writes the film's text, the cast and the shots, sets each join to continue or to
+cut, and puts the shots in order, while you watch. It builds nothing in 3D there. Ask
+for a 3D scene and it opens the blockout on that shot and goes on with the bench's
+tools; the way back is yours. The timeline and the blockout of one piece share the
+conversation. Editing waits while it works, one message is one Undo, and it never
+renders. Each shot it writes is answered with who of the cast is in it, since a cast
+member goes with a shot only when its text names them. A handle it gives a cast member
+is letters, digits and underscores, as the pack's are; it used to ask for dashes, which
+a render refuses. How well any model writes a film this way has not been measured yet.
+
 **The blockout can be staged by talking.** **Stagehand**, in the bench's header, opens
 a conversation over the inspector. Say what the set is, who is in it and what the shots
 are, with up to four pictures if you have some, and it builds that while you watch: each

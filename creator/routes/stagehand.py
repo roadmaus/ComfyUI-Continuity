@@ -1,5 +1,5 @@
-"""`/continuity/stagehand`: one exchange between the blockout's agent and its
-model, and the Stop under it."""
+"""`/continuity/stagehand`: one exchange between Stagehand and its model, and
+the Stop under it."""
 
 import asyncio
 import base64
@@ -39,7 +39,7 @@ def _local(body):
             **({"device": device} if device else {}))
 
     return stagehand.turn(body["session"], body["model"], body["messages"], body["tools"], int(body["seen"]),
-                          backend="local", write=write)
+                          backend="local", write=write, place=body["place"])
 
 
 def _job(body):
@@ -57,7 +57,7 @@ jobs.register("stagehand", _job)
 @PromptServer.instance.routes.post("/continuity/stagehand")
 @same_origin
 async def take_turn(request):
-    """`{session, backend, model, device, eject, messages, tools, seen, client_id}`
+    """`{session, backend, model, device, eject, place, messages, tools, seen, client_id}`
     -> an id, and the reply on the socket.
 
     As a chat turn is answered, and for its reasons (`jobs.py`). A server is off
@@ -71,7 +71,8 @@ async def take_turn(request):
         session, model = str(body["session"]), str(body.get("model") or "")
         backend = "remote" if body.get("backend") == "remote" else "local"
         messages, tools, seen = body["messages"], body["tools"], int(body["seen"])
-        if not isinstance(messages, list) or not isinstance(tools, list):
+        place = body.get("place", "blockout")
+        if not isinstance(messages, list) or not isinstance(tools, list) or place not in stagehand.PLACES:
             raise TypeError
     except (json.JSONDecodeError, KeyError, TypeError, ValueError):
         return web.json_response({"error": "expected a JSON body"}, status=400)
@@ -81,14 +82,14 @@ async def take_turn(request):
         return web.json_response({"error": refused}, status=400)
     if backend != "remote":
         try:
-            prompt_id = await jobs.submit("stagehand", {**body, "session": session, "model": model},
+            prompt_id = await jobs.submit("stagehand", {**body, "session": session, "model": model, "place": place},
                                           body.get("client_id"))
         except jobs.JobError as problem:
             return web.json_response({"error": str(problem)}, status=500)
         return web.json_response({"prompt_id": prompt_id})
     answer_id = jobs.answer_later(
         lambda: stagehand.turn(session, model, messages, tools, seen, backend=backend,
-                               eject=body.get("eject") is True),
+                               eject=body.get("eject") is True, place=place),
         body.get("client_id"), (refine.RefineError, ValueError))
     return web.json_response({"answer_id": answer_id})
 

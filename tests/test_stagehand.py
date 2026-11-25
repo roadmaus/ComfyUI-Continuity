@@ -60,6 +60,23 @@ system = {"role": "system", "content": stagehand.system()}
 assert system["content"].startswith("You are staging a film in a blockout bench")
 assert "You cannot render." in system["content"]
 
+# The timeline has a prompt of its own, put in front of what comes from there,
+# and a change of place within a conversation is written down with its tools.
+reel = {"role": "system", "content": stagehand.system("reel")}
+assert reel["content"].startswith("You are building a film on a timeline") and "You cannot render." in reel["content"]
+with tempfile.TemporaryDirectory() as root:
+    said = [{"role": "user", "content": "a chase, six shots"}]
+    stagehand.turn("2026-reel", "m", said, [{"type": "function"}], 0, root=root, ask=ask, place="reel")
+    assert asked[-1] == [reel, *said], "the timeline's prompt goes in front of the timeline's exchange"
+    across = said + [{"role": "assistant", "content": "ok"}, {"role": "tool", "tool_call_id": "c", "content": "The blockout is open."}]
+    stagehand.turn("2026-reel", "m", across, [], 2, root=root, ask=ask, place="blockout")
+    assert asked[-1] == [system, *across], "and the bench's once the conversation is there"
+    log = entries(root, "2026-reel")
+    assert [(entry["kind"], entry.get("place")) for entry in log if entry["kind"] == "tools"] == [("tools", "reel"), ("tools", "blockout")], log
+    assert refused(lambda: stagehand.turn("2026-reel", "m", said, [], 0, root=root, ask=ask, place="attic"), ValueError) == "bad place"
+    assert stagehand.fenced_system([], "reel").startswith(reel["content"])
+del asked[:]
+
 # ---- the prompt, and the log ------------------------------------------------------
 
 with tempfile.TemporaryDirectory() as root:

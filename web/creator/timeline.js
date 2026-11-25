@@ -32,6 +32,7 @@ import * as Guide from "./guide.js";
 import { describeRatio, rulesFor } from "./canvas.js";
 import { openStaging } from "./staging.js";
 import { Reel, probeAspectSizes, timelineGeometry, fitText, compiledFor } from "./reel.js";
+import { talkOf, StagehandWindow } from "./stagehandwindow.js";
 
 export function openTimeline(options) {
   return new Promise((resolve) => {
@@ -48,10 +49,20 @@ export class Timeline extends Reel {
   constructor(options, resolve) {
     super(options, resolve);
     this.openBlockoutWindow = options.openBlockout ?? null;
+    this.writeNode = options.onCommit ?? null;
   }
 
   mount() {
     this.buildParts();
+    // The conversation about this piece, which may be older than this window
+    // and still working, and the window it is held in.
+    this.agent = talkOf(this.timeline);
+    this.agent.attach(this, this.writeNode, "reel");
+    this.handWindow = new StagehandWindow(this, this.agent);
+    this.handDot = el("i", { class: "mmc-st-handdot", hidden: true });
+    this.handButton = el("button", { class: "mmc-reel-btn mmc-st-handbtn", "aria-pressed": "false",
+      title: t("Build or change the film by talking. It runs on the model the refiner has selected."),
+      onclick: () => this.handWindow.toggle() }, [icon("wand", 16), el("span", { text: t("Stagehand") }), this.handDot]);
 
     this.modal = el("div", { class: "mmc-modal mmc-tl-modal mmc-reel" }, [
       el("div", { class: "mmc-reel-head" }, [
@@ -61,16 +72,17 @@ export class Timeline extends Reel {
         this.redoButton,
         this.planEl,
         this.cancelButton,
-        ...(this.openBlockoutWindow ? [el("button", {
+        ...(this.openBlockoutWindow ? [(this.blockoutButton = el("button", {
           class: "mmc-reel-btn", title: t("The stage, on the same piece"),
           onclick: () => { const go = this.openBlockoutWindow; this.close(); go(); },
-        }, [icon("cube", 16), el("span", { text: t("Open the blockout") })])] : []),
+        }, [icon("cube", 16), el("span", { text: t("Open the blockout") })]))] : []),
+        this.handButton,
         ...(this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-reel-main" }, [
-        this.scriptColumn(),
-        el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost]),
+        (this.scriptEl = this.scriptColumn()),
+        el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost, this.handWindow.node]),
       ]),
       el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
     ]);
@@ -80,7 +92,9 @@ export class Timeline extends Reel {
       onpointerdown: (event) => { if (event.target === this.overlay) this.close(); },
     }, [this.modal]);
 
-    this.unmount = mountOverlay(this.overlay, () => this.close());
+    // Escape closes Stagehand's list of the cast, then its window, then this one.
+    this.unmount = mountOverlay(this.overlay, () => (this.handWindow.mentioning ? null
+      : this.handWindow.open ? this.handWindow.toggle(false) : this.close()));
     this.onUndoKey = (event) => this.undoKey(event);
     window.addEventListener("keydown", this.onUndoKey, true);
     this.toldFailure = this.stage?.failure ?? null;
@@ -100,9 +114,57 @@ export class Timeline extends Reel {
       this.focusShot(this.openOnMount);
       this.openOnMount = null;
     }
+    // Opened on a piece an agent is still working on.
+    if (this.locked) this.renderLock();
+  }
+
+  // ---- Stagehand: the agent's window, and what waits while it works ---------------
+
+  /** The window was opened or closed. */
+  handOpened() {
+    this.handButton.setAttribute("aria-pressed", String(this.handWindow.open));
+  }
+
+  /** What the timeline has selected, said beside each message, so that "this
+   *  shot" means the one the person is looking at. */
+  agentSees() {
+    const sel = this.sel;
+    const { width, height } = timelineGeometry(this.timeline);
+    return [
+      "The timeline is open.",
+      sel?.kind === "shot" ? `Selected: shot ${sel.index + 1}.`
+        : sel?.kind === "join" ? `Selected: the join between shot ${sel.index} and shot ${sel.index + 1}.`
+        : sel?.kind === "cast" || sel?.kind === "ref" ? `Selected: @${sel.handle}.` : "Nothing is selected.",
+      `The frame is ${width} by ${height}. The longest shot this film's model renders is ${rulesFor(S.pieceFamily(this.timeline)).maxSeconds} s.`,
+    ].join(" ");
+  }
+
+  /** The dot on the button: it is working. */
+  paintAgent() {
+    this.handDot.hidden = !this.locked;
+  }
+
+  renderLock() {
+    super.renderLock();
+    // Looking stays: the player, the strip. What writes waits.
+    for (const node of [this.scriptEl, this.inspectHost]) node.inert = this.locked;
+    if (this.blockoutButton) this.blockoutButton.disabled = this.locked;
+    this.paintAgent();
+  }
+
+  /** The blockout on a shot, in place of this window: Stagehand's way across. */
+  openBlockoutOn(index) {
+    const go = this.openBlockoutWindow;
+    if (!go) throw new Error("the blockout cannot be opened from here");
+    this.close();
+    go(index);
   }
 
   close() {
+    // The conversation goes on without a window, and is found again.
+    this.agent.detach(this);
+    this.handWindow.unmount();
+    this.unlit();
     this.endDrag?.(false);
     window.removeEventListener("keydown", this.onUndoKey, true);
     this.resize?.disconnect();
@@ -792,17 +854,18 @@ export class TimelineBody {
       ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
       stage: this.stage,
       run: () => this.currentRun(),
-      openBlockout: () => this.openBlockout(bench),
+      openBlockout: (shot = null) => this.openBlockout({ ...bench, shot }),
       opened: (reel) => { held = reel; this.reel = reel; this.stage.onChange = () => reel.staged(); },
     }).then(() => { if (this.reel === held) { this.reel = null; this.stage.onChange = null; } });
   }
 
   /** The blockout bench, over the node: the same piece as the strip, staged
    *  in 3D. Lent what the strip is lent, and the way across to it. */
-  openBlockout({ targets = [], back = null } = {}) {
+  openBlockout({ targets = [], back = null, shot = null } = {}) {
     let held = null;
     return openStaging({
       targets, back,
+      edit: shot,
       timeline: this.timeline,
       onCommit: () => this.commit(),
       io: () => this.widgetIO(),

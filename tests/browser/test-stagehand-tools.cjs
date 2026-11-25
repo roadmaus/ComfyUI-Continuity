@@ -34,6 +34,8 @@ const appStub = `export const app = { graph: { _nodes: [] }, extensionManager: {
 const NAMES = ['see_scene', 'add_objects', 'move_object', 'resize_object', 'describe_object', 'copy_object', 'remove_objects',
   'use_set', 'look_overview', 'look_from', 'look_through_camera', 'add_cast', 'write_film_text', 'add_shot', 'change_shot',
   'remove_shot', 'move_camera', 'keep_camera_on', 'shake_camera', 'walk'];
+const REEL_NAMES = ['see_scene', 'add_cast', 'change_cast', 'write_film_text', 'add_shot', 'change_shot', 'move_shot', 'remove_shot',
+  'set_join', 'open_blockout'];
 
 let browser, requests = 0;
 // The model: each exchange takes the next reply off the script, a list of
@@ -98,10 +100,11 @@ async function stopped(count) {
     const H = await import('/ext/web/creator/stagehand.js');
     let tl = S.parseTimeline(JSON.stringify(piece));
     S.syncTimeline(tl);
-    Object.assign(window, { S, H, applied: 0, told: [], request, open: 'Open: nothing is selected.', piece: () => tl });
+    Object.assign(window, { S, H, applied: 0, told: [], request, open: 'Open: nothing is selected.', piece: () => tl, place: 'blockout', crossed: null });
     window.put = (next) => { tl = next; };
     window.hand = new H.Stagehand({ request: () => window.request, timeline: () => tl, windowState: () => window.open,
-      apply: (next) => { tl = next; window.applied += 1; }, told: (event) => window.told.push(event) });
+      apply: (next) => { tl = next; window.applied += 1; }, told: (event) => window.told.push(event),
+      place: () => window.place, cross: (index) => { window.crossed = index; window.place = 'blockout'; } });
   }, [piece, request]);
 
   /** Say something with the model's replies scripted. -> what each call was
@@ -175,7 +178,7 @@ async function stopped(count) {
     assert.equal((await one('add_cast', { handle: 'anna', description: 'a woman in a grey coat' })).text, '@anna');
     assert.equal((await one('add_cast', { handle: 'ben', description: 'a tall man' })).text, '@anna, @ben');
     refusedWith(await one('add_cast', { handle: 'anna', description: 'again' }), '@anna is in the cast already');
-    refusedWith(await one('add_cast', { handle: 'Big Ben', description: 'a clock' }), 'lowercase letters, digits and dashes');
+    refusedWith(await one('add_cast', { handle: 'Big Ben', description: 'a clock' }), 'lowercase letters, digits and underscores');
     refusedWith(await one('add_cast', { handle: 'carl' }), 'description is missing');
     assert.deepEqual((await piece()).subjects.map((member) => [member.handle, member.takes, member.description]),
       [['anna', 'person', 'a woman in a grey coat'], ['ben', 'person', 'a tall man']]);
@@ -503,6 +506,65 @@ async function stopped(count) {
     refusedWith(await one('use_set', { name: 'Café', library: 'cafe' }), 'there is a set "Café" already, and library only starts a new one');
     refusedWith(await one('use_set', { name: 'Moon', library: 'moon' }), 'there is no library set "moon"');
     assert.equal((await piece()).sets.length, before + 1);
+  });
+
+  // ---- the timeline: a film of shots and joins, and the one way into the bench ----
+
+  await open();
+  await page.evaluate(() => { window.place = 'reel'; });
+
+  await check('the timeline has tools of its own, each with a docstring, and is sent as the place it is', async () => {
+    const tools = await page.evaluate(() => window.H.tools('reel'));
+    assert.deepEqual(tools.map((tool) => tool.function.name), REEL_NAMES);
+    for (const { function: { name, description, parameters } } of tools) {
+      assert.ok(/\nArgs:\n/.test(description) && /\nReturns:\n/.test(description), `${name} says what it takes and answers`);
+      for (const key of parameters.required) assert.ok(parameters.properties[key], `${name} requires ${key} and describes it`);
+    }
+    sent.length = 0;
+    assert.equal((await one('see_scene')).text, 'There are no shots yet.');
+    assert.deepEqual([sent[0].place, sent[0].tools.map((tool) => tool.function.name)], ['reel', REEL_NAMES]);
+    refusedWith(await one('add_objects', { objects: [{ what: 'table', x: 0, z: 2 }] }), 'add_objects is a tool of the blockout bench, and this is the timeline');
+  });
+
+  await check('add_shot makes no set, joins as asked and goes where asked', async () => {
+    assert.equal((await one('add_shot', { text: 'She runs down the quay.', seconds: 5 })).text, 'Shot 1: 5 s. Text: She runs down the quay.');
+    const second = await one('add_shot', { text: 'She turns into an alley.', seconds: 4 });
+    assert.equal(second.text, 'Shot 2: 4 s, the picture continues from shot 1, the sound carries over. Text: She turns into an alley.');
+    assert.equal(second.pictures, 0);
+    assert.equal((await one('add_shot', { text: 'Gulls lift off.', seconds: 3, join: 'cuts' })).text, 'Shot 3: 3 s, the picture cuts, the sound starts fresh. Text: Gulls lift off.');
+    assert.equal((await one('add_shot', { text: 'Wide of the harbour.', seconds: 4, after: 0, join: 'cuts' })).text, 'Shot 1: 4 s. Text: Wide of the harbour.');
+    refusedWith(await one('add_shot', { text: 'x', seconds: 4, after: 1.5 }), 'after has to be a whole number');
+    refusedWith(await one('add_shot', { text: 'x', seconds: 4, join: 'fades' }), 'there is no join "fades"');
+    const made = await piece();
+    assert.deepEqual([made.sets ?? [], made.segments.map((segment) => [segment.prompt.split(' ')[0], segment.continue === true, Boolean(segment.staging)])],
+      [[], [['Wide', false, false], ['She', false, false], ['She', true, false], ['Gulls', false, false]]]);
+  });
+
+  await check('set_join sets the picture and the sound apart, and the first shot has no join', async () => {
+    assert.equal((await one('set_join', { shot: 3, picture: 'cuts' })).text, 'Shot 3: 4 s, the picture cuts, the sound carries over. Text: She turns into an alley.');
+    assert.equal((await one('set_join', { shot: 4, picture: 'continues' })).text, 'Shot 4: 3 s, the picture continues from shot 3, the sound starts fresh. Text: Gulls lift off.');
+    refusedWith(await one('set_join', { shot: 1, picture: 'cuts' }), 'shot has to be between 2 and 4');
+  });
+
+  await check('move_shot reorders, and change_cast rewrites a description', async () => {
+    assert.deepEqual((await one('move_shot', { shot: 4, to: 2 })).text.split('\n').map((line) => line.split('Text: ')[1].split(' ')[0]), ['Wide', 'Gulls', 'She', 'She']);
+    refusedWith(await one('move_shot', { shot: 2, to: 2 }), 'shot 2 is there already');
+    await one('add_cast', { handle: 'mara', description: 'a courier in a yellow raincoat' });
+    assert.equal((await one('change_cast', { handle: '@mara', description: 'a courier in a red raincoat' })).text, '@mara (a courier in a red raincoat; no pictures)');
+    refusedWith(await one('change_cast', { handle: 'ivo', description: 'x' }), 'there is no @ivo in the cast');
+    assert.match((await one('see_scene')).text, /^Cast: @mara \(a courier in a red raincoat; no pictures\)\nShot 1: 4 s\. Text: Wide of the harbour\. Cast in it: nobody, since the text names no @handle\.\n[^]*\nThe film is [\d.]+ s long\.$/);
+  });
+
+  await check('open_blockout crosses to the bench: its scene is answered, and its tools are the next exchange\'s', async () => {
+    sent.length = 0;
+    const { answers } = await say('Stage shot 2 in 3D.', [['open_blockout', { shot: 2 }], ['add_objects', { objects: [{ what: 'table', x: 0, z: 2 }] }], ['set_join', { shot: 2, picture: 'cuts' }]]);
+    assert.match(answers[0].text, /There is no set yet\.\nShot 1: 4 s, not staged yet\./);
+    assert.equal(await page.evaluate(() => window.crossed), 1);
+    assert.deepEqual(sent.map((body) => body.place), ['reel', 'blockout', 'blockout', 'blockout']);
+    assert.deepEqual(sent[1].tools.map((tool) => tool.function.name), NAMES);
+    assert.match(answers[1].text, /^Added #1 table /);
+    assert.equal(answers[1].pictures, 1);
+    refusedWith(answers[2], 'set_join is a tool of the timeline, and this is the blockout bench');
   });
 
   assert.deepEqual(errors, []);

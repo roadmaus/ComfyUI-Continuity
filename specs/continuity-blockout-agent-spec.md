@@ -440,10 +440,13 @@ so the header's line about size rests on something.
 
 ## 10. Not in this pass
 
-- **The reel.** Its work is joins, takes, look and Shoot: other tools, and a
-  different promise, since some of them spend the GPU. The conversation class
-  takes its tools and its window from the caller, so a reel agent is a second
-  tool set and not a second agent.
+- **The reel.** Built since, as a second place and not a second agent
+  (2026-11-25): the conversation is told where it is, `reel` or `blockout`,
+  and each has a prompt (`prompts/stagehand/reel.txt`) and a tool set of its
+  own. The reel's tools write the film: cast, texts, shots, their order and
+  their joins. None stages, and none renders. `open_blockout` is the one way
+  from the reel into the bench, in the middle of a message; there is no tool
+  back. Takes, look and Shoot are still not the agent's.
 - Token streaming.
 - A conversation saved with the piece.
 - A model choice, a server or a key of its own.

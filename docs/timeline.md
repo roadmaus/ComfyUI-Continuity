@@ -74,6 +74,28 @@ their own sheets for now: the LoRA library, the file picker, a cast member's
 full card, and a shot's rarer settings (*More for this shot*). See
 `specs/continuity-reel-deep-tools-spec.md`.
 
+## Stagehand
+
+**Stagehand** in the reel's header opens a conversation over the inspector. Say
+what the film is, who is in it and what the shots are, and it builds that on
+the timeline while you watch: the film's text, its sound and music, the cast,
+and the shots, each with its text, its length and the join in front of it. It
+can add a shot anywhere, move one, change or remove one, set a join's picture
+to continue or to cut and its sound to carry over or to start fresh, and
+rewrite a cast member's description. It never renders: Shoot stays yours.
+
+It builds nothing in 3D here. Ask it for a 3D scene, a blockout or a staged
+shot and it opens the [blockout bench](tools.md#blockout-bench) on that shot and goes
+on there with the bench's tools. That way is one way: the timeline's tools are
+not the bench's, and **Open the timeline** brings you back when it is done.
+
+The conversation is the piece's, so the reel and the bench show the same one,
+and it is told where you are with each message. Everything else is as in the
+bench: the model is the refiner's, a message can carry up to four pictures,
+`@` lists the cast and the cast library, editing and Shoot wait while it works,
+**Stop** ends it at once, and everything one message did is one Undo. See
+[Stagehand](tools.md#stagehand) for the whole of it.
+
 ## Passes
 
 A pass is one generation. Most passes are one shot. **Render with shot N as

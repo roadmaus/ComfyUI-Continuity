@@ -200,7 +200,7 @@ export const css = `
 @keyframes mmc-st-lit { 0%, 35% { background-color: color-mix(in srgb, var(--mmc-accent) 26%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 26%, transparent); }
   100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; } }
 /* What writes waits while it works; what looks does not. */
-.mmc-st-bench.mmc-agent-working [inert] { opacity: .6; }
+.mmc-reel.mmc-agent-working [inert] { opacity: .6; }
 .mmc-st-bench.mmc-agent-working .mmc-reel-edge { pointer-events: none; }
 @media (prefers-reduced-motion: reduce) { .mmc-st-handdot, .mmc-st-agentpill i, .mmc-st-lit { animation: none; } }
 `;

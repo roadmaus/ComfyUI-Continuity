@@ -569,6 +569,24 @@ export class Reel {
     this.renderSteps();
   }
 
+  /** Lead the eye to what a call touched, for a moment: a text in the script,
+   *  a shot in the script and on the strip. The view is not moved. */
+  lit({ texts = [], shot = null } = {}) {
+    this.unlit();
+    this.litNodes = [
+      ...texts.map((key) => ({ look: this.promptBox?.frame, sound: this.soundscapeBox, music: this.musicBox }[key])),
+      ...(shot ? [this.rows.get(this.timeline.segments[shot - 1]?.card_id)?.el, this.reelHost.querySelectorAll(".mmc-reel-card")[shot - 1]] : []),
+    ].filter(Boolean);
+    for (const node of this.litNodes) node.classList.add("mmc-st-lit");
+    this.litTimer = setTimeout(() => this.unlit(), 1600);
+  }
+
+  unlit() {
+    clearTimeout(this.litTimer);
+    for (const node of this.litNodes ?? []) node.classList.remove("mmc-st-lit");
+    this.litNodes = [];
+  }
+
   /** The agent began or ended: draw what is locked and what is free again. */
   renderLock() {
     this.modal?.classList.toggle("mmc-agent-working", this.locked);

@@ -1,14 +1,17 @@
-// Stagehand's window in the blockout bench, and the conversation it shows.
+// Stagehand's window in the timeline and in the blockout bench, and the
+// conversation it shows.
 //
 // The agent itself is `stagehand.js`: a conversation with the refiner's model
-// and the tools it stages a piece with. This file is what a person sees of it.
+// and the tools it builds a piece with. This file is what a person sees of it.
 // A `Talk` is one conversation about one piece. It lives for as long as the
-// page does, so closing the bench and opening it again finds the conversation
-// there, and an agent still working. A `StagehandWindow` is the window a bench
-// opens over its inspector: header, transcript, composer.
+// page does, so closing a window and opening it again finds the conversation
+// there, and an agent still working; the timeline and the bench of one piece
+// show the same one. A `StagehandWindow` is the window either opens over its
+// inspector: header, transcript, composer. Here the window a piece is open in
+// is called the bench, whichever of the two it is.
 //
 // The piece is changed the way a hand changes it: each call lands through the
-// bench's own commit (`Reel.land`) and is drawn before the next is answered,
+// window's own commit (`Reel.land`) and is drawn before the next is answered,
 // editing waits while the agent works, and a whole message is one step back.
 
 import { el } from "./dom.js";
@@ -51,10 +54,14 @@ export function statusOf(name, args = {}) {
     look_from: () => t("looking at the set"),
     look_through_camera: () => t("looking through the camera of shot {n}", shot),
     add_cast: () => t("adding to the cast"),
+    change_cast: () => t("describing @{handle}", { handle: args.handle ?? "" }),
     write_film_text: () => t("writing the scene"),
     add_shot: () => t("adding a shot"),
     change_shot: () => t("changing shot {n}", shot),
+    move_shot: () => t("moving shot {n}", shot),
     remove_shot: () => t("removing shot {n}", shot),
+    set_join: () => t("changing the join before shot {n}", shot),
+    open_blockout: () => t("opening the blockout on shot {n}", shot),
     move_camera: () => t("placing the camera of shot {n}", shot),
     keep_camera_on: () => t("turning the camera of shot {n}", shot),
     shake_camera: () => t("shaking the camera of shot {n}", shot),
@@ -79,6 +86,10 @@ export function lineOf(name, args = {}, content = "", set = "") {
     look_from: () => t("Looked at the set from a point"),
     look_through_camera: () => t("Looked through the camera of shot {n}", shot),
     add_cast: () => t("Added @{handle} to the cast", { handle: args.handle ?? "" }),
+    change_cast: () => t("Described @{handle}", { handle: args.handle ?? "" }),
+    move_shot: () => t("Moved shot {n} to {to}", { n: args.shot, to: args.to }),
+    set_join: () => t("Changed the join before shot {n}", shot),
+    open_blockout: () => t("Opened the blockout on shot {n}", shot),
     write_film_text: () => t("Wrote the film's text"),
     add_shot: () => t("Added a shot, {s} s", { s: args.seconds }),
     change_shot: () => (args.seconds != null && args.text == null ? t("Shot {n} is {s} s now", { n: args.shot, s: args.seconds }) : t("Changed shot {n}", shot)),
@@ -99,7 +110,8 @@ function touchedBy(name, args = {}, content = "") {
   if (name === "walk") return { things: [args.id], shot: args.shot };
   if (name === "write_film_text") return { texts: ["look", "sound", "music"].filter((key) => args[key] != null) };
   if (name === "add_shot") return { shot: Number(/^Shot (\d+)/.exec(text)?.[1]) || null };
-  if (["change_shot", "move_camera", "keep_camera_on", "shake_camera"].includes(name)) return { shot: args.shot };
+  if (["change_shot", "set_join", "move_camera", "keep_camera_on", "shake_camera"].includes(name)) return { shot: args.shot };
+  if (name === "move_shot") return { shot: args.to };
   return {};
 }
 
@@ -109,6 +121,7 @@ export class Talk {
   constructor(timeline) {
     this.timeline = timeline;
     this.bench = null;       // the window on the piece, while one is open
+    this.place = "blockout"; // which it is, or was: "reel" is the timeline
     this.write = null;       // how the node is written when none is
     this.items = [];         // the transcript
     this.working = false;
@@ -126,12 +139,27 @@ export class Talk {
       apply: (next) => this.land(next),
       windowState: () => this.bench?.agentSees() ?? "",
       told: (event) => this.heard(event),
+      place: () => this.place,
+      cross: (index) => this.cross(index),
     });
   }
 
-  attach(bench, write) {
+  attach(bench, write, place = "blockout") {
     this.bench = bench;
     this.write = write ?? this.write;
+    this.place = place;
+  }
+
+  /** From the timeline into the blockout, on a shot, in the middle of a
+   *  message: the timeline closes and the bench that opens attaches itself,
+   *  with Stagehand's window open as it was. */
+  cross(index) {
+    const from = this.bench;
+    if (!from?.openBlockoutOn) throw new Error("the blockout cannot be opened from here");
+    from.openBlockoutOn(index);
+    if (!this.bench || this.bench === from) throw new Error("the blockout did not open");
+    this.hand.setId = this.bench.set()?.id ?? this.hand.setId;
+    this.bench.handWindow.toggle(true);
   }
 
   detach(bench) {
@@ -175,7 +203,7 @@ export class Talk {
     this.status = "";
     this.held = { state: structuredClone(this.timeline), text: S.serializeTimeline(this.timeline) };
     // It starts on the set the glass shows.
-    const shown = this.bench?.set()?.id;
+    const shown = this.bench?.set?.()?.id;
     if (shown) this.hand.setId = shown;
     this.bench?.renderLock();
     this.changed();
@@ -283,7 +311,7 @@ export class StagehandWindow {
     this.file = el("input", { type: "file", accept: "image/*", multiple: "", hidden: true,
       onchange: () => { this.attach([...this.file.files]); this.file.value = ""; } });
     this.pictureButton = el("button", { class: "mmc-sh-picture", "aria-label": t("Attach a picture"),
-      title: t("Attach a picture: a reference for the set, or a frame to match"), onclick: () => this.file.click() }, [glyph(PICTURE_ICON)]);
+      title: talk.place === "reel" ? t("Attach a picture of what you have in mind") : t("Attach a picture: a reference for the set, or a frame to match"), onclick: () => this.file.click() }, [glyph(PICTURE_ICON)]);
     // The node's own prompt box, as the chat has it: `@` cites who is in the
     // piece's cast and offers the cast library, and somebody picked from there
     // is cast onto the piece, so the scene the model is told names them.
@@ -442,7 +470,11 @@ export class StagehandWindow {
     for (const item of this.drawn.keys()) if (!items.includes(item)) this.drawn.delete(item);
     this.workingLine ??= el("div", { class: "mmc-sh-working" }, [el("i", {}), el("span", { text: t("Working") })]);
     const all = [...nodes, ...(working ? [this.workingLine] : [])];
-    if (!all.length) all.push(this.empty ??= el("div", { class: "mmc-sh-empty", text: t("Say what the set should be, who is in it and what the shots are. Stagehand builds it here while you watch, and never renders.") }));
+    if (!all.length) {
+      all.push(this.empty ??= el("div", { class: "mmc-sh-empty", text: this.talk.place === "reel"
+        ? t("Say what the film is, who is in it and what the shots are. Stagehand builds it here while you watch, and never renders. Ask for a 3D scene and it opens the blockout.")
+        : t("Say what the set should be, who is in it and what the shots are. Stagehand builds it here while you watch, and never renders.") }));
+    }
     const now = [...this.log.children];
     if (now.length !== all.length || now.some((node, at) => node !== all[at])) this.log.replaceChildren(...all);
     // The newest line stays in view.

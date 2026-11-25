@@ -1007,7 +1007,7 @@ export const css = `
 .mmc-reel-hint { font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-faint); }
 
 /* The side: the player, then the inspector. */
-.mmc-reel-side { min-height: 0; display: flex; flex-direction: column; }
+.mmc-reel-side { position: relative; min-height: 0; display: flex; flex-direction: column; }
 .mmc-reel-player {
   position: relative; flex: none; margin: 16px 20px 0; height: clamp(150px, 24vh, 290px); border-radius: calc(14px * var(--mmc-round));
   overflow: hidden; background: var(--mmc-media-bg);

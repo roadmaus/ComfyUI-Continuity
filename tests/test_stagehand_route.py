@@ -87,13 +87,17 @@ check("an exchange is answered with an id", post("/continuity/stagehand", body),
 check("addressed to the tab that asked", later[0][0], "tab")
 check("with a refusal said as a sentence", pkg.prompting.RefineError in later[0][1], True)
 check("and the agent given the request", turned,
-      [(("2026-a", "big", said, [], 0), {"backend": "remote", "eject": True})])
+      [(("2026-a", "big", said, [], 0), {"backend": "remote", "eject": True, "place": "blockout"})])
+post("/continuity/stagehand", {**body, "place": "reel"})
+check("and told where it comes from", turned.pop()[1]["place"], "reel")
+del later[1:]
 
 for label, change, said_as in (
         ("no model", {"model": ""}, "No model chosen"),
         ("no text encoder", {"model": "", "backend": "local"}, "No text encoder chosen"),
         ("a bad session", {"session": "../up"}, "bad session id"),
-        ("no messages", {"messages": None}, "expected a JSON body")):
+        ("no messages", {"messages": None}, "expected a JSON body"),
+        ("a place there is not", {"place": "attic"}, "expected a JSON body")):
     status, answer = post("/continuity/stagehand", {**body, **change})
     check(f"{label} is refused inside the request", (status, said_as in answer["error"]), (400, True))
 check("no body is refused", post("/continuity/stagehand", None)[0], 400)
