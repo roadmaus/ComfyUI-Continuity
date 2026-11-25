@@ -6,6 +6,10 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A blockout clip can carry its depth.** **Depth as alpha**, on As staged and Labelled,
+lays the clip over black with its depth as the alpha: near is as drawn, far fades out.
+For the piece or for one shot. How a model reads it is not measured yet.
+
 **The blockout is easier to work by hand.** The set opens as a floor plan, with
 Look around and What the camera sees beside it, and the shot camera's frame stays in
 a corner while you work, as the stage or as the guide. Under the glass every mover

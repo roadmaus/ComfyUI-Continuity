@@ -534,7 +534,7 @@ export class Raster {
    * tints. The aids exist only in `"stage"`, which is why the run can call this
    * with a pass id and be certain the file carries the guide and only the guide.
    */
-  shade(context, mode, { selected = 0, tints = null, plan = 0 } = {}) {
+  shade(context, mode, { selected = 0, tints = null, plan = 0, fade = false } = {}) {
     const { w, h } = this;
     if (!this.image || this.image.width !== w || this.image.height !== h) {
       this.image = context.createImageData(w, h);
@@ -603,6 +603,13 @@ export class Raster {
             if (stage && id === selected && this.edgeOf(at, x, y)) {
               r = 107; g = 163; b = 214;   // the trim bar's blue: held, not run
             }
+          }
+          // Depth as an alpha, flattened over black: the depth pass's own grey
+          // is how opaque the pixel is. Never on the stage, which is handled.
+          if (fade && !stage) {
+            const near = id === SKY_ID ? 4 / 255
+              : (8 + Math.pow(clamp(1 - (1 / this.z[at] - DNEAR) / (DFAR - DNEAR), 0, 1), 1.3) * 247) / 255;
+            r *= near; g *= near; b *= near;
           }
         } else if (mode === "depth") {
           if (id === SKY_ID) { r = g = b = 4; } else {
@@ -1692,16 +1699,16 @@ export function drawLabels(context, cam, objects, width, height) {
 
 /** One frame in a pass, as the file holds it: the set as it stands, through a
  *  camera. The one place a pass is drawn, for the file, the glass and a card. */
-export function paintPass(raster, context, pass, objects, cam) {
+export function paintPass(raster, context, pass, objects, cam, { fade = false } = {}) {
   raster.raster(objects, cam);
-  if (pass !== "labelled") { raster.shade(context, pass); return; }
-  raster.shade(context, "labelled", { tints: castTints(objects) });
+  if (pass !== "labelled") { raster.shade(context, pass, { fade }); return; }
+  raster.shade(context, "labelled", { tints: castTints(objects), fade });
   drawLabels(context, cam, objects, raster.w, raster.h);
 }
 
 /** One frame of a staged shot, drawn at `size` in `pass`, as a PNG blob. */
-export function drawStaged(raster, canvas, context, set, staging, at, pass, run = null) {
-  paintPass(raster, context, pass, stagedAt(set, staging, at), filmAt(set, staging, at, run));
+export function drawStaged(raster, canvas, context, set, staging, at, pass, run = null, fade = false) {
+  paintPass(raster, context, pass, stagedAt(set, staging, at), filmAt(set, staging, at, run), { fade });
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => (blob ? resolve(blob) : reject(new Error(t("a frame could not be encoded")))), "image/png");
   });
@@ -1756,7 +1763,7 @@ export async function deriveGuides(timeline, { step = () => {} } = {}) {
     for (let frame = 0; frame < count; frame++) {
       step(t("Drawing the guide for shot {n}, frame {f} of {count}…", { n: index + 1, f: frame + 1, count }));
       const at = (frame / (count - 1)) * seconds;
-      batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, segment.staging, at, pass, run) });
+      batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, segment.staging, at, pass, run, S.stagingDepth(timeline, segment)) });
       if (batch.length >= BATCH || frame === count - 1) {
         await blockoutFrames(token, batch);
         batch = [];
@@ -1805,9 +1812,10 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   canvas.height = h;
   const context = canvas.getContext("2d");
   const meta = { op: t(pass.label), opId: pass.opId, words };
+  const fade = S.stagingDepth(timeline, segment);
   if (still || staging.camera.length < 2) {
     step(t("Tracing the frame…"));
-    const blob = await drawStaged(raster, canvas, context, set, staging, at, passId, run);
+    const blob = await drawStaged(raster, canvas, context, set, staging, at, passId, run, fade);
     const asset = await upload(new File([blob], `blockout-${passId}.png`, { type: "image/png" }), WRITES.slice(0, -1));
     return { path: asset.path, kind: "image", ...meta };
   }
@@ -1818,7 +1826,7 @@ export async function writeGuide(timeline, index, { at = 0, still = false, step 
   let batch = [];
   for (let frame = 0; frame < count; frame++) {
     step(t("Drawing frame {n} of {count}…", { n: frame + 1, count }));
-    batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, staging, (frame / (count - 1)) * seconds, passId, run) });
+    batch.push({ index: frame, blob: await drawStaged(raster, canvas, context, set, staging, (frame / (count - 1)) * seconds, passId, run, fade) });
     if (batch.length >= BATCH || frame === count - 1) {
       step(t("Sending frame {n} of {count}…", { n: frame + 1, count }));
       await blockoutFrames(token, batch);

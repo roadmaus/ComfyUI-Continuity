@@ -238,7 +238,7 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       document.querySelector('.mmc-st-gets .mmc-st-file').textContent.replace(/staged-[0-9a-z]+-/, 'staged-#-'),
     ]), ['Shot 2', '4.0 s · the kitchen set',
       ['Length', 'Camera', 'Keep looking at', 'Camera shake', 'Lens', 'Seed'],
-      ['Guide', 'Words'],
+      ['Guide', 'Words', 'Depth as alpha'],
       'input/continuity/blockout/staged-#-as_staged.mp4 · 96 frames · As staged']);
   });
 
@@ -790,6 +790,36 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     const clip = await page.evaluate(() => { const a = S.stagedClip(tl.segments[1]); return [a.role, /-labelled\.mp4$/.test(a.filename), tl.segments[1].staging.words.replace(`@${a.handle}`, '@clip')]; });
     assert.deepEqual(clip, ['reference', true, 'The camera, framing and staging follow @clip, a rough blockout of this shot. Its colours and name tags only say who and what each block is: they are not part of the picture.']);
     assert.ok(writes.some((body) => body.op === 'labelled'), JSON.stringify(writes));
+  });
+
+  await check('Depth as alpha lays the clip over black by how near it is: far fades, near stays, and it is another clip', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 1 }); bench.setView('guide'); });
+    await page.waitForTimeout(120);
+    // The mean light of the top third (the far wall) and of the bottom rows (the floor at the camera's feet).
+    const light = () => page.evaluate(() => {
+      const canvas = document.querySelector('.mmc-st > canvas');
+      const context = canvas.getContext('2d');
+      const mean = (y, rows) => { const d = context.getImageData(0, y, canvas.width, rows).data; let sum = 0; for (let i = 0; i < d.length; i += 4) sum += d[i] + d[i + 1] + d[i + 2]; return sum / (d.length / 4) / 3; };
+      return [mean(Math.round(canvas.height * 0.3), 8), mean(canvas.height - 9, 8)];
+    });
+    const name = () => page.evaluate(() => S.stagedGuideName(tl, 1));
+    const plain = await light(), before = await name();
+    await page.locator('.mmc-st-gets .mmc-reel-irow', { hasText: 'Depth as alpha' }).locator('.mmc-reel-switch').click();
+    await page.waitForTimeout(150);
+    const faded = await light();
+    // A kitchen is a few metres deep on the depth pass's own scale of twenty-five, so its far wall loses a fifth.
+    assert.ok(faded[0] < plain[0] * 0.85, `the far wall fades: ${JSON.stringify([plain, faded])}`);
+    assert.ok(faded[1] > plain[1] * 0.85 && faded[1] / plain[1] > faded[0] / plain[0] + 0.05, `the near floor fades less: ${JSON.stringify([plain, faded])}`);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[1].staging.depth, S.stagingDepth(tl, tl.segments[1]), S.stagingDepth(tl, tl.segments[0]),
+      /depth as alpha$/.test(document.querySelector('.mmc-st-file').textContent), S.isKept(tl.segments[1])]), [true, true, false, true, false]);
+    assert.notEqual(await name(), before);
+    // A traced pass has no footage to lay it into, and the switch goes with it.
+    await page.locator('.mmc-st-gets').getByText('Depth', { exact: true }).click();
+    await page.waitForTimeout(80);
+    assert.deepEqual(await page.evaluate(() => [S.stagingDepth(tl, tl.segments[1]),
+      [...document.querySelectorAll('.mmc-st-gets .mmc-reel-ilabel')].map((n) => n.textContent)]), [false, ['Guide', 'Words']]);
   });
 
   if (process.env.SHOT) {

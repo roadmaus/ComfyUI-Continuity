@@ -2617,7 +2617,7 @@ function stampsOf(timeline) {
   // where a shot has a drawing), so it is stamped into those shots alone —
   // otherwise the first shot the bench gives a guide would release every kept
   // take on the piece by throwing the switch.
-  const { segments, sets, staging_pass, staging_clip, staging_say, guide, cut, ...piece } = blob;
+  const { segments, sets, staging_pass, staging_clip, staging_say, staging_depth, guide, cut, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card, index) => {
     const { hold, take, card_id, ...rest } = card;
@@ -2631,7 +2631,8 @@ function stampsOf(timeline) {
                         stagingPass(blob, rest), ...(staging_clip ? [staging_clip] : []),
                         // Only where it is not the bench's own words, so no
                         // take shot before there was a choice is released.
-                        ...(stagingSay(blob, rest) === "own" ? ["own"] : [])])
+                        ...(stagingSay(blob, rest) === "own" ? ["own"] : []),
+                        ...(stagingDepth(blob, rest) ? ["depth"] : [])])
       : "";
     const guided = (rest.assets ?? []).some((asset) => asset.role === "guide")
       ? JSON.stringify(guide ?? null) : "";
@@ -2836,6 +2837,7 @@ export function parseStaging(raw) {
   if (raw.pass === "none" || STAGING_PASSES.includes(raw.pass)) out.pass = raw.pass;
   if (raw.hold === "loose") out.hold = "loose";
   if (raw.say === "own" || raw.say === "written") out.say = raw.say;
+  if (typeof raw.depth === "boolean") out.depth = raw.depth;
   const look = Math.round(Number(raw.look));
   if (look >= 1) out.look = look;
   const shake = parseShake(raw.shake);
@@ -2879,6 +2881,7 @@ export function serializeStaging(staging) {
     ...(picked.pass ? { pass: picked.pass } : {}),
     ...(picked.hold ? { hold: picked.hold } : {}),
     ...(picked.say ? { say: picked.say } : {}),
+    ...(picked.depth !== undefined ? { depth: picked.depth } : {}),
     ...(picked.look ? { look: picked.look } : {}),
     ...(picked.shake ? { shake: roundAll(picked.shake) } : {}),
     ...(picked.words ? { words: picked.words } : {}),
@@ -2921,6 +2924,21 @@ export const stagingPass = (timeline, segment) =>
  *  the staging and the move said by the bench after the shot's own prose, or
  *  "own", the shot's prose and nothing the bench wrote about the scene. */
 export const pieceStagingSay = (timeline) => (timeline?.staging_say === "own" ? "own" : "written");
+
+/** The passes that are footage of the set, which depth can be laid into. */
+export const CLAY_PASSES = ["as_staged", "labelled"];
+
+/**
+ * Whether a staged shot's clip carries its depth as an alpha, flattened: the
+ * frame laid over black with how near each pixel is as its opacity, so what is
+ * near is as drawn and what is far fades out. A video file and a model's
+ * encoder hold three channels, so an alpha reaches neither as a fourth; this
+ * is what an alpha is once it has been put on a ground, and it puts depth
+ * into a clip that is otherwise only footage. The shot's own choice or the
+ * piece's, and only on a pass that is footage.
+ */
+export const stagingDepth = (timeline, segment) =>
+  CLAY_PASSES.includes(stagingPass(timeline, segment)) && (segment?.staging?.depth ?? timeline?.staging_depth === true);
 
 /** Whose words a staged shot sends: its own choice, or the piece's. */
 export const stagingSay = (timeline, segment) =>
@@ -2970,7 +2988,7 @@ export function stagingStamp(timeline, index) {
   const pass = stagingPass(timeline, segment);
   if (pass === "none") return null;
   // Whose words go with it is not what the guide is drawn from.
-  const { words, say, ...staging } = serializeStaging(segment.staging);
+  const { words, say, depth, ...staging } = serializeStaging(segment.staging);
   const run = shakeRun(timeline, index);
   return hash(JSON.stringify([
     STAGING_MOTION,
@@ -2981,6 +2999,8 @@ export function stagingStamp(timeline, index) {
     // drawn in its shape, so another source is another guide.
     ...(frameSource(timeline) ? [frameSource(timeline)] : []),
     stagesByReference(timeline) ? (fullStagingClip(timeline) ? "full" : "half") : "",
+    // Only where it is on, so every guide drawn before there was a choice keeps its name.
+    ...(stagingDepth(timeline, segment) ? ["depth"] : []),
     ...(run ? [run] : []),
   ]));
 }
@@ -4084,6 +4104,7 @@ export function parseTimeline(raw) {
       else delete timeline.staging_pass;
       if (parsed.staging_clip !== "full") delete timeline.staging_clip;
       if (parsed.staging_say !== "own") delete timeline.staging_say;
+      if (parsed.staging_depth !== true) delete timeline.staging_depth;
       // A blob with no `segments` key — a fresh node's widget is "{}" — keeps
       // `emptyTimeline`'s blank shot. One saved with an empty list stays empty:
       // that is a strip whose cards were all deleted, and opening it must not
@@ -4310,6 +4331,7 @@ export function serializeTimeline(timeline) {
       ? { staging_pass: pieceStagingPass(timeline) } : {}),
     ...(fullStagingClip(timeline) ? { staging_clip: "full" } : {}),
     ...(pieceStagingSay(timeline) === "own" ? { staging_say: "own" } : {}),
+    ...(timeline.staging_depth === true ? { staging_depth: true } : {}),
     // What the last finished film was made from; see `cutStamp`.
     ...(timeline.cut ? { cut: timeline.cut } : {}),
     segments: timeline.segments.map((segment, index) => {

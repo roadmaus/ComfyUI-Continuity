@@ -216,6 +216,13 @@ Five passes, four of them the ControlNet bench's own names:
 | Blocks | each piece one flat field of colour |
 | Lines | the set's edges, white on black |
 
+**Depth as alpha**, on As staged and Labelled, lays the clip over black with its
+depth as the alpha: what is near is as drawn, what is far fades out, so footage
+of the set also says how far things are. A video file and the model's own
+encoder hold three channels, so an alpha cannot reach the model as a fourth;
+this is the alpha once it is on a ground. For the piece, or for one shot. How a
+model reads it has not been measured.
+
 The piece sets the pass every staged shot sends; a shot can send its own, or
 **None**. The derived guides nothing points at any more are swept when the
 bench closes.

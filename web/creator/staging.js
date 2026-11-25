@@ -650,7 +650,7 @@ class Blockout extends Reel {
           : t("This shot carries no guide. The model gets the words alone."));
         return;
       }
-      paintPass(this.raster, this.context, pass, this.objectsNow(), this.filmCam());
+      paintPass(this.raster, this.context, pass, this.objectsNow(), this.filmCam(), { fade: S.stagingDepth(this.timeline, segment) });
       return;
     }
     const cam = this.eye();
@@ -679,7 +679,10 @@ class Blockout extends Reel {
     const cam = this.filmCam();
     const pass = S.stagingPass(this.timeline, this.segment());
     this.monitorName.textContent = `${t("Camera")} · ${Math.round(cam.mm)} mm`;
-    if (this.monitorGuide && pass !== "none") { paintPass(this.monitorRaster, context, pass, objects, cam); return; }
+    if (this.monitorGuide && pass !== "none") {
+      paintPass(this.monitorRaster, context, pass, objects, cam, { fade: S.stagingDepth(this.timeline, this.segment()) });
+      return;
+    }
     this.monitorRaster.raster(objects, cam);
     this.monitorRaster.shade(context, "stage", { tints });
     if (!this.reads) return;
@@ -1390,7 +1393,8 @@ class Blockout extends Reel {
       const pass = S.stagingPass(this.timeline, segment);
       for (let k = 0; k < tiles; k++) {
         const at = ((k + 0.5) / tiles) * this.seconds(index);
-        paintPass(raster, scratchContext, pass === "none" ? "as_staged" : pass, stagedAt(set, segment.staging, at), lensAt(set, segment.staging, at));
+        paintPass(raster, scratchContext, pass === "none" ? "as_staged" : pass, stagedAt(set, segment.staging, at), lensAt(set, segment.staging, at),
+          { fade: S.stagingDepth(this.timeline, segment) });
         context.drawImage(scratch, Math.max(0, (tile.w - each) / 2), 0, Math.min(tile.w, each), tile.h, k * each, 0, each, tile.h);
       }
     }
@@ -2532,6 +2536,10 @@ class Blockout extends Reel {
       }), S.pieceStagingSay(this.timeline) === "own"
         ? t("A staged shot sends its own words and nothing the bench wrote about the scene. With a reference clip, one line names it.")
         : t("After each staged shot's own words the bench says who stands where and how the camera moves.")),
+      ...(S.CLAY_PASSES.includes(pass) ? [this.irow(t("Depth as alpha"), this.switchControl(this.timeline.staging_depth === true, (on) => {
+        if (on) this.timeline.staging_depth = true; else delete this.timeline.staging_depth;
+        this.commit();
+      }), t("Every staged shot's clip laid over black with its depth as the alpha: near as drawn, far faded out."))] : []),
       this.irow(t("Sets"), el("div", { class: "mmc-reel-inline" }, sets.length
         ? sets.map((set) => el("button", { class: "mmc-reel-value", onclick: () => this.select({ kind: "set", id: set.id }) }, [
             el("span", { text: set.name }), el("small", { text: rangeText(S.shotsOnSet(this.timeline, set.id)) })]))
@@ -2591,6 +2599,7 @@ class Blockout extends Reel {
     const control = S.controlOf(family), reference = S.stagesByReference(this.timeline);
     const pass = S.stagingPass(this.timeline, segment), say = S.stagingSay(this.timeline, segment);
     const sends = pass !== "none" && Boolean(control || reference);
+    const fade = S.stagingDepth(this.timeline, segment);
     const seconds = this.seconds(index);
     const frames = Math.max(2, Math.round(seconds * rulesFps(this.timeline)));
     const name = S.stagedGuideName(this.timeline, index);
@@ -2628,6 +2637,11 @@ class Blockout extends Reel {
         if (value === pieceSay) delete staging.say; else staging.say = value;
         this.commit();
       }), staging.say !== undefined ? t("Differs from the piece.") : null),
+      ...(sends && S.CLAY_PASSES.includes(pass) ? [this.irow(t("Depth as alpha"), this.switchControl(fade, (on) => {
+        if (on === (this.timeline.staging_depth === true)) delete staging.depth; else staging.depth = on;
+        this.commit();
+      }), fade ? t("The clip is laid over black with its depth as the alpha: what is near is as drawn, what is far fades out. A video file and the model's own encoder hold three channels, so this is how an alpha reaches it.")
+        : t("Lay the clip's depth into it, so footage of the set says how far things are as well."))] : []),
       ...(sends && control && !reference ? [this.irow(t("Guide holds"), this.segmented(
         [["loose", t("Loosely"), "0.6"], ["firm", t("Firmly"), "1.0"]], staging.hold === "loose" ? "loose" : "firm",
         (value) => { if (value === "loose") staging.hold = "loose"; else delete staging.hold; this.commit(); }),
@@ -2650,9 +2664,9 @@ class Blockout extends Reel {
       for (const [canvas, at] of [[first, 0], [last, seconds]]) {
         canvas.width = fw;
         canvas.height = fh;
-        paintPass(this.getsRaster, canvas.getContext("2d"), pass, stagedAt(set, staging, at), filmAt(set, staging, at, run));
+        paintPass(this.getsRaster, canvas.getContext("2d"), pass, stagedAt(set, staging, at), filmAt(set, staging, at, run), { fade });
       }
-      rows.push(el("div", { class: "mmc-st-file", text: `${name ? `input/${S.STAGED_GUIDE_DIR}/${name}.mp4` : t("drawn when it is shot")} · ${t("{n} frames", { n: frames })} · ${passLabel}` }));
+      rows.push(el("div", { class: "mmc-st-file", text: `${name ? `input/${S.STAGED_GUIDE_DIR}/${name}.mp4` : t("drawn when it is shot")} · ${t("{n} frames", { n: frames })} · ${passLabel}${fade ? ` · ${t("depth as alpha")}` : ""}` }));
     }
     // A clause the last edit changed is lit for a moment: what an edit did to
     // the words is seen where the words are.

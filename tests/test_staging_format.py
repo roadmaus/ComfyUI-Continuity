@@ -168,6 +168,18 @@ out.setAdded = after((t) => { t.sets.push({ id: "yard", name: "Yard", objects: [
 out.clipFull = after((t) => { t.staging_clip = "full"; });
 out.sayOwn = after((t) => { t.staging_say = "own"; });
 out.sayShot = after((t) => { t.segments[1].staging.say = "own"; });
+// Depth as an alpha: only on a pass that is footage, and another clip where it is on.
+out.depthOn = after((t) => { t.staging_depth = true; });
+{
+  const t = s.parseTimeline(JSON.stringify(blob()));
+  const plain = s.stagingStamp(t, 0);
+  t.staging_depth = true;
+  const back = s.parseTimeline(s.serializeTimeline(t));
+  t.segments[2].staging.depth = false;
+  out.depth = [t.segments.slice(0, 3).map((seg) => s.stagingDepth(t, seg)), plain !== s.stagingStamp(t, 0), back.staging_depth,
+               s.parseTimeline(s.serializeTimeline(t)).segments[2].staging.depth,
+               "staging_depth" in JSON.parse(s.serializeTimeline(s.parseTimeline(JSON.stringify(blob()))))];
+}
 {
   const t = s.parseTimeline(JSON.stringify(blob()));
   const drawn = s.stagingStamp(t, 0);
@@ -233,6 +245,9 @@ check("a piece is put together by its own film, until what it plays changes", go
 check("a bigger clip releases the staged shots alone", got["clipFull"], [False, False, False, True])
 check("sending the shots' own words releases the staged shots alone", got["sayOwn"], [False, False, False, True])
 check("...and one shot's choice releases that shot", got["sayShot"][1], False)
+check("depth as an alpha releases the staged shots it reaches, and those that continue from them", got["depthOn"], [False, False, False, True])
+check("...is the piece's or the shot's, never on a traced pass, names another clip and is kept",
+      got["depth"], [[True, False, False], True, True, False, False])
 check("whose words go with a guide is not what it is drawn from, and written is written nowhere", got["sayGuide"], [True, False])
 check("...is a clip of its own, survives a reload, and small writes nothing", got["clip"], [True, "full", False])
 check("a staged guide keeps its own strength", got["guide"], [0.6, True])
