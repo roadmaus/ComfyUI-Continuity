@@ -186,7 +186,8 @@ export const css = `
 }
 
 /* --- an agent at work: said on the glass, on its button, and on what it touched ------- */
-.mmc-st-bench .mmc-reel-side { position: relative; }
+/* Stagehand's window is laid over the inspector; in focus the drawer is already positioned. */
+.mmc-st-bench:not(.mmc-st-focus) .mmc-reel-side { position: relative; }
 .mmc-st-handbtn { display: inline-flex; align-items: center; gap: 8px; }
 .mmc-st-handbtn[aria-pressed="true"] { background: var(--mmc-wash); color: var(--mmc-strong); }
 .mmc-st-handdot, .mmc-st-agentpill i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-st-agent 1.1s ease-in-out infinite; }

@@ -116,6 +116,9 @@ export const ICONS = {
   res: `<path d="M4 8V5a1 1 0 011-1h3M16 4h3a1 1 0 011 1v3M20 16v3a1 1 0 01-1 1h-3M8 20H5a1 1 0 01-1-1v-3"/>`,
   play: `<path d="M8 5.5l11 6.5-11 6.5z"/>`,
   pause: `<path d="M8 5v14M16 5v14"/>`,
+  // Lucide's `skip-back` and `skip-forward`: the stop before, the next stop.
+  skipBack: `<path d="M19 20L9 12l10-8z"/><path d="M5 19V5"/>`,
+  skipForward: `<path d="M5 4l10 8-10 8z"/><path d="M19 5v14"/>`,
   scissors: `<circle cx="6" cy="6" r="2.4"/><circle cx="6" cy="18" r="2.4"/><path d="M8 7.4L20 18M8 16.6L20 6"/>`,
   // The framing editor's door: two crop marks, the corner brackets the editor
   // itself draws — so the button and the thing it opens share a shape.

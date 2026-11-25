@@ -555,6 +555,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
     }, selector);
     assert.deepEqual([await shown('.mmc-reel-script'), await shown('.mmc-reel-lane'), await shown('.mmc-reel-side')], [false, false, false]);
     assert.ok(await width() > before * 1.4, `the stage did not grow: ${before} -> ${await width()}`);
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.mmc-reel-side')).position), 'absolute', 'the drawer takes room from the stage');
     await page.evaluate(() => bench.select({ kind: 'thing', id: 4 }));
     await page.waitForTimeout(250);
     assert.equal(await shown('.mmc-reel-side'), true);

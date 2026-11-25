@@ -13,7 +13,7 @@
 // playhead nor the way to the next shot. The speed lane (`pacelane.js`) sits
 // under it, for whoever is being worked on.
 
-import { el } from "./dom.js";
+import { el, icon } from "./dom.js";
 import { t } from "./i18n.js";
 import { clamp } from "./blockout.js";
 import { PaceLane } from "./pacelane.js";
@@ -30,8 +30,9 @@ export class MarkSheet {
   constructor(bench) {
     this.bench = bench;
     this.pace = new PaceLane(bench);
-    const button = (text, title, onclick, extra = "") => el("button", { class: `mmc-reel-btn mmc-st-key${extra}`, title, "aria-label": title, onclick }, [el("span", { text })]);
-    this.playButton = button("▶", t("Play (Space)"), () => (bench.playing ? bench.stopPlay() : bench.startPlay()));
+    const button = (face, title, onclick, extra = "") => el("button", { class: `mmc-reel-btn mmc-st-key${extra}`, title, "aria-label": title, onclick }, [face]);
+    const glyph = (text) => el("span", { text });
+    this.playButton = button(icon("play", 16), t("Play (Space)"), () => (bench.playing ? bench.stopPlay() : bench.startPlay()));
     this.addButton = el("button", { class: "mmc-reel-btn", title: t("A stop at the playhead for whoever is selected, or the camera (K)"),
       onclick: () => bench.addStop() }, [el("span", { text: `◆ ${t("Add stop")}` })]);
     // The speed lane is the sheet's second page: there for a stretch that needs
@@ -42,14 +43,14 @@ export class MarkSheet {
       onclick: () => { this.paced = !this.paced; this.sync(); bench.paint(); } }, [el("span", { text: t("Speed") })]);
     this.paceHost = el("div", { class: "mmc-st-pacehost", hidden: true }, [this.pace.node]);
     this.shotName = el("span", { class: "mmc-st-shotname" });
-    this.before = button("‹", t("The shot before"), () => this.shot(-1), " quiet");
-    this.after = button("›", t("The next shot"), () => this.shot(1), " quiet");
+    this.before = button(glyph("‹"), t("The shot before"), () => this.shot(-1), " quiet");
+    this.after = button(glyph("›"), t("The next shot"), () => this.shot(1), " quiet");
     this.stepper = el("div", { class: "mmc-st-stepper" }, [this.before, this.shotName, this.after]);
     this.lanes = el("div", { class: "mmc-st-lanes", hidden: true });
     this.head = el("div", { class: "mmc-st-sheethead" }, [
-      button("⏮", t("The stop before (,)"), () => bench.stepStop(-1)),
+      button(icon("skipBack", 16), t("The stop before (,)"), () => bench.stepStop(-1)),
       this.playButton,
-      button("⏭", t("The next stop (.)"), () => bench.stepStop(1)),
+      button(icon("skipForward", 16), t("The next stop (.)"), () => bench.stepStop(1)),
       bench.timeSaid,
       this.addButton,
       this.paceButton,
@@ -230,8 +231,10 @@ export class MarkSheet {
     for (const node of this.lanes.querySelectorAll(".mmc-st-stop[data-t]")) {
       node.classList.toggle("here", Math.abs(Number(node.dataset.t) - bench.at.t) < 0.07);
     }
-    const label = bench.playing ? "❚❚" : "▶";
-    if (this.playButton.firstChild.textContent !== label) this.playButton.firstChild.textContent = label;
+    if (this.playButton.dataset.playing !== String(bench.playing)) {
+      this.playButton.dataset.playing = String(bench.playing);
+      this.playButton.replaceChildren(icon(bench.playing ? "pause" : "play", 16));
+    }
     this.addButton.disabled = !bench.set() || bench.view !== "stage" || bench.stopHere() != null;
     const paced = this.paced && !this.lanes.hidden;
     this.paceHost.hidden = !paced;
