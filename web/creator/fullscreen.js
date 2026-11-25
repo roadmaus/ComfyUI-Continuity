@@ -1662,11 +1662,16 @@ class Fullscreen {
   paintFrame() {
     const spec = this.front?.mmcBody?.frame?.();
     if (!spec?.width || !spec?.height) { this.frame.replaceChildren(); return; }
+    // The corner follows the theme's roundness the way every CSS corner does;
+    // as a property rather than a second attribute so it turns with the theme
+    // while the frame is up, with the attribute left as what it falls back to.
+    const corner = Math.round(spec.width / 45);
     const holder = document.createElement("span");
     holder.innerHTML = '<svg class="mmc-fs-frame-box" viewBox="0 0 ' + spec.width + ' '
       + spec.height + '" width="' + spec.width + '" height="' + spec.height
       + '"><rect x="0.5" y="0.5" width="' + (spec.width - 1) + '" height="' + (spec.height - 1)
-      + '" rx="' + Math.round(spec.width / 45)
+      + '" rx="' + corner
+      + '" style="rx: calc(' + corner + 'px * var(--mmc-round, 1))'
       + '" vector-effect="non-scaling-stroke"/></svg>';
     this.frame.replaceChildren(
       holder.firstElementChild,

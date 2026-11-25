@@ -1618,6 +1618,17 @@ try {
   packStyles.noteFullscreen(true);
   out.settings.followClass = document.documentElement.classList.contains("mmc-force-dark");
   packStyles.noteFullscreen(false);
+  // Slate is the pin with a second class on it, under the same two facts.
+  const themeClasses = () => ["mmc-force-dark", "mmc-slate"].map((name) => document.documentElement.classList.contains(name));
+  await press("theme", 2);
+  out.settings.slatePosted = globalThis.__posted.at(-1);
+  out.settings.slateIdle = themeClasses();
+  packStyles.noteFullscreen(true);
+  out.settings.slateOpen = themeClasses();
+  await press("theme", 1);
+  out.settings.slateToDark = themeClasses();
+  packStyles.noteFullscreen(false);
+  await press("theme", 0);
 
   await press("surface_lift", 2);
   out.settings.liftPosted = globalThis.__posted.at(-1);
@@ -3730,7 +3741,7 @@ check("...with the whole of each list on offer", settings.get("stops"), {
     "video_crf": 4, "seam_handoff": 4, "motion_fix_abstain": 4, "lora_loader": 2,
     "latent_cache": 2, "latent_cache_days": 6, "latent_cache_gb": 9, "advanced": 2,
     "show_shift_pills": 2, "autoplay_previews": 2, "preview_max_px": 7, "preview_quality": 7,
-    "text_scale": 4, "theme": 2, "surface_lift": 4,
+    "text_scale": 4, "theme": 3, "surface_lift": 4,
 })
 check("the retention row is live while there is a store to bound",
       settings.get("daysDisabled"), False)
@@ -3773,6 +3784,14 @@ check("...and leaving the shell puts the palette back",
       settings.get("darkClassShut"), False)
 check("...and following again stays light even with the shell up",
       settings.get("followClass"), False)
+check("choosing Slate posts the theme", settings.get("slatePosted"),
+      {"theme": "slate"})
+check("...and like the pin it changes nothing until the shell is up",
+      settings.get("slateIdle"), [False, False])
+check("...where it is the pinned dark with its own class on top",
+      settings.get("slateOpen"), [True, True])
+check("...and going back to plain dark takes only the Slate class off",
+      settings.get("slateToDark"), [True, False])
 check("choosing a separation posts the multiplier", settings.get("liftPosted"),
       {"surface_lift": 1.4})
 check("...and writes it where the stylesheet reads it",

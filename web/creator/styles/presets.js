@@ -10,7 +10,7 @@ export const css = `
    for mouse users; override only this library strip, not every hidden rail. */
 .mmc-overlay .mmc-preset-shelf-strip { scrollbar-width: thin; scrollbar-color: var(--mmc-line-3) transparent; }
 .mmc-overlay .mmc-preset-shelf-strip::-webkit-scrollbar { display: block; height: 6px; }
-.mmc-overlay .mmc-preset-shelf-strip::-webkit-scrollbar-thumb { background: var(--mmc-line-3); border-radius: 3px; }
+.mmc-overlay .mmc-preset-shelf-strip::-webkit-scrollbar-thumb { background: var(--mmc-line-3); border-radius: calc(3px * var(--mmc-round)); }
 .mmc-overlay .mmc-preset-shelf-strip .mmc-shelf:focus-visible {
   outline: 2px solid var(--mmc-accent); outline-offset: -2px;
 }
@@ -34,7 +34,7 @@ export const css = `
 
 .mmc-preset-card {
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 14px; padding: 12px 13px 11px; text-align: left;
+  border-radius: calc(14px * var(--mmc-round)); padding: 12px 13px 11px; text-align: left;
   display: flex; flex-direction: column; gap: 10px; position: relative;
   color: var(--mmc-text); font-family: inherit; cursor: pointer; min-width: 0;
 }
@@ -52,7 +52,7 @@ export const css = `
    is the flat blocks it always was. Fixed height throughout, so the grid keeps
    its rhythm whatever a card holds. */
 .mmc-preset-hero {
-  height: 96px; border-radius: 9px; overflow: hidden; position: relative;
+  height: 96px; border-radius: calc(9px * var(--mmc-round)); overflow: hidden; position: relative;
   /* Darker than the blocks that sit on it, so a shot with no picture still
      reads as a block rather than as a hole in the band. */
   background: var(--mmc-float); display: flex; flex-direction: column;
@@ -67,10 +67,10 @@ export const css = `
 .mmc-preset-lane { display: flex; gap: 2px; height: 100%; align-items: stretch; padding: 0; }
 .mmc-preset-pass {
   display: flex; gap: 1px; min-width: 0;
-  border: 1px solid var(--mmc-line-2); border-radius: 5px; padding: 1px;
+  border: 1px solid var(--mmc-line-2); border-radius: calc(5px * var(--mmc-round)); padding: 1px;
 }
 .mmc-preset-blk {
-  background: var(--mmc-surface-3); border-radius: 3px; min-width: 2px; position: relative;
+  background: var(--mmc-surface-3); border-radius: calc(3px * var(--mmc-round)); min-width: 2px; position: relative;
   overflow: hidden;
 }
 .mmc-preset-blk img {
@@ -91,10 +91,10 @@ export const css = `
   background: linear-gradient(transparent, var(--mmc-scrim-2));
 }
 .mmc-preset-hero[data-cover] .mmc-preset-pass {
-  border-color: color-mix(in srgb, var(--mmc-strong) 55%, transparent); border-radius: 2px; padding: 0;
+  border-color: color-mix(in srgb, var(--mmc-strong) 55%, transparent); border-radius: calc(2px * var(--mmc-round)); padding: 0;
 }
 .mmc-preset-hero[data-cover] .mmc-preset-blk {
-  background: color-mix(in srgb, var(--mmc-strong) 72%, transparent); border-radius: 1px;
+  background: color-mix(in srgb, var(--mmc-strong) 72%, transparent); border-radius: calc(1px * var(--mmc-round));
 }
 .mmc-preset-hero[data-cover] .mmc-preset-blk img { display: none; }
 .mmc-preset-hero[data-cover] .mmc-preset-blk[data-clip]::after { opacity: .5; }
@@ -104,7 +104,7 @@ export const css = `
 .mmc-preset-canvas { height: 100%; display: flex; align-items: center; justify-content: center; }
 .mmc-preset-canvas span {
   display: block; height: 84px; position: relative; overflow: hidden;
-  border: 1.5px solid var(--mmc-line-2); border-radius: 4px;
+  border: 1.5px solid var(--mmc-line-2); border-radius: calc(4px * var(--mmc-round));
   background: var(--mmc-surface-3);
 }
 .mmc-preset-canvas img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -148,7 +148,7 @@ export const css = `
 .mmc-preset-chips { display: flex; gap: 5px; flex-wrap: wrap; }
 .mmc-preset-chip {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: calc(10px * var(--mmc-type)); letter-spacing: .04em; padding: 2px 7px; border-radius: 7px;
+  font-size: calc(10px * var(--mmc-type)); letter-spacing: .04em; padding: 2px 7px; border-radius: calc(7px * var(--mmc-round));
   color: var(--tag, var(--mmc-dim));
   background: color-mix(in srgb, var(--tag, var(--mmc-off)) 14%, transparent);
   border: 1px solid color-mix(in srgb, var(--tag, var(--mmc-off)) 26%, transparent);
@@ -166,7 +166,7 @@ export const css = `
   font-size: calc(16px * var(--mmc-type)); font-weight: 600; letter-spacing: -.01em; line-height: 1.3;
 }
 .mmc-preset-insp-name {
-  width: 100%; box-sizing: border-box; height: calc(34px * var(--mmc-type)); border-radius: 9px;
+  width: 100%; box-sizing: border-box; height: calc(34px * var(--mmc-type)); border-radius: calc(9px * var(--mmc-round));
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); color: var(--mmc-text);
   padding: 0 11px; font-size: calc(14px * var(--mmc-type)); font-family: inherit; outline: none;
 }
@@ -184,13 +184,13 @@ export const css = `
 .mmc-preset-rows { display: flex; flex-direction: column; gap: 1px; }
 .mmc-preset-row {
   display: flex; align-items: flex-start; gap: 9px; padding: 7px 8px;
-  border-radius: 8px; background: none; border: 0; text-align: left;
+  border-radius: calc(8px * var(--mmc-round)); background: none; border: 0; text-align: left;
   color: var(--mmc-text); font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-preset-row:hover:not(:disabled) { background: var(--mmc-surface-2); }
 .mmc-preset-row:disabled { opacity: .45; cursor: default; }
 .mmc-preset-box {
-  width: 14px; height: 14px; border-radius: 4px; flex: none; margin-top: 2px;
+  width: 14px; height: 14px; border-radius: calc(4px * var(--mmc-round)); flex: none; margin-top: 2px;
   border: 1px solid var(--mmc-line-3); display: grid; place-items: center;
 }
 .mmc-preset-row[aria-checked="true"] .mmc-preset-box { background: var(--mmc-ink); border-color: var(--mmc-ink); }
@@ -209,12 +209,12 @@ export const css = `
 }
 
 .mmc-preset-apply {
-  margin-top: auto; height: calc(38px * var(--mmc-type)); border-radius: 19px; background: var(--mmc-ink); border: 0;
+  margin-top: auto; height: calc(38px * var(--mmc-type)); border-radius: calc(19px * var(--mmc-round)); background: var(--mmc-ink); border: 0;
   color: var(--mmc-on-ink); font-size: calc(13.5px * var(--mmc-type)); font-weight: 500; font-family: inherit; cursor: pointer;
 }
 .mmc-preset-apply:disabled { background: var(--mmc-surface-3); color: var(--mmc-off); cursor: default; }
 .mmc-preset-danger {
-  height: calc(32px * var(--mmc-type)); border-radius: 16px; background: none; color: var(--mmc-dim);
+  height: calc(32px * var(--mmc-type)); border-radius: calc(16px * var(--mmc-round)); background: none; color: var(--mmc-dim);
   border: 1px solid var(--mmc-line); font-size: calc(12.5px * var(--mmc-type)); font-family: inherit; cursor: pointer;
 }
 .mmc-preset-danger:hover { color: var(--mmc-tag-3); border-color: color-mix(in srgb, var(--mmc-tag-3) 40%, transparent); }
@@ -225,7 +225,7 @@ export const css = `
 .mmc-preset-insp-acts button { flex: 1; }
 
 .mmc-preset-problem {
-  margin: 0 22px 12px; padding: 9px 12px; border-radius: 10px;
+  margin: 0 22px 12px; padding: 9px 12px; border-radius: calc(10px * var(--mmc-round));
   background: color-mix(in srgb, var(--mmc-tag-3) 12%, transparent); border: 1px solid color-mix(in srgb, var(--mmc-tag-3) 30%, transparent);
   color: color-mix(in srgb, var(--mmc-tag-3) 60%, var(--mmc-ink)); font-size: calc(12.5px * var(--mmc-type));
 }
@@ -259,7 +259,7 @@ export const css = `
 /* One descriptor can be read off several clips. The first fills the band and the
    rest are counted here; all of them are in the inspector. */
 .mmc-style-more {
-  position: absolute; right: 6px; bottom: 6px; padding: 1px 6px; border-radius: 7px;
+  position: absolute; right: 6px; bottom: 6px; padding: 1px 6px; border-radius: calc(7px * var(--mmc-round));
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: calc(9.5px * var(--mmc-type)); font-style: normal; color: var(--mmc-text); background: var(--mmc-scrim-2);
 }
@@ -274,7 +274,7 @@ export const css = `
 .mmc-style-shots figure { margin: 0; width: 74px; }
 .mmc-style-shots img {
   width: 74px; height: 56px; object-fit: cover; display: block;
-  border-radius: 6px; background: var(--mmc-float);
+  border-radius: calc(6px * var(--mmc-round)); background: var(--mmc-float);
 }
 .mmc-style-shots figcaption {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -284,7 +284,7 @@ export const css = `
    show — one of them is the one that gets cast. A single-clip style has nothing
    to choose, so its figure stays a figure. */
 .mmc-style-shot {
-  padding: 0; border: 0; background: none; cursor: pointer; border-radius: 8px;
+  padding: 0; border: 0; background: none; cursor: pointer; border-radius: calc(8px * var(--mmc-round));
 }
 .mmc-style-shot:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; }
 .mmc-style-shot img { opacity: .55; transition: opacity .12s ease; }
@@ -299,7 +299,7 @@ export const css = `
    Under it the file's sentence as chips, the strength dial the refiner draws,
    and the library's own Apply button saying what it does here. */
 .mmc-restyle-wipe {
-  position: relative; aspect-ratio: 16 / 9; border-radius: 9px; overflow: hidden;
+  position: relative; aspect-ratio: 16 / 9; border-radius: calc(9px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-media-bg); --seam: 50%;
 }
 .mmc-restyle-wipe img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -317,7 +317,7 @@ export const css = `
 .mmc-restyle-tag {
   position: absolute; bottom: 7px; left: 7px; pointer-events: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(10px * var(--mmc-type));
-  color: #fff; background: rgba(0, 0, 0, .55); padding: 2px 6px; border-radius: 4px;
+  color: #fff; background: rgba(0, 0, 0, .55); padding: 2px 6px; border-radius: calc(4px * var(--mmc-round));
 }
 .mmc-restyle-tag.end { left: auto; right: 7px; }
 .mmc-restyle-says { display: flex; flex-direction: column; gap: 7px; padding-top: 10px; border-top: 1px solid var(--mmc-line); }
@@ -330,7 +330,7 @@ export const css = `
 .mmc-restyle-chip {
   display: inline-flex; align-items: center; gap: 4px; font-size: calc(12px * var(--mmc-type));
   color: var(--mmc-text); background: var(--mmc-wash); border: 1px solid var(--mmc-line);
-  border-radius: 999px; padding: 3px 5px 3px 10px;
+  border-radius: var(--mmc-pill-r); padding: 3px 5px 3px 10px;
 }
 .mmc-restyle-chip.marked { border-color: color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
 .mmc-restyle-x {
@@ -341,7 +341,7 @@ export const css = `
 .mmc-restyle-chip.marked .mmc-restyle-x { color: var(--mmc-accent); }
 .mmc-restyle-add {
   width: 96px; font: inherit; font-size: calc(12px * var(--mmc-type)); color: var(--mmc-text);
-  background: none; border: 1px dashed var(--mmc-line-2); border-radius: 999px; padding: 3px 10px; outline: none;
+  background: none; border: 1px dashed var(--mmc-line-2); border-radius: var(--mmc-pill-r); padding: 3px 10px; outline: none;
 }
 .mmc-restyle-add:focus { border-color: var(--mmc-accent); }
 .mmc-restyle-add::placeholder { color: var(--mmc-dim); }
@@ -353,7 +353,7 @@ export const css = `
    only half you can get anywhere else. */
 .mmc-style-cast {
   display: flex; align-items: center; justify-content: center; gap: 6px;
-  width: 100%; padding: 7px 10px; border-radius: 8px; cursor: pointer;
+  width: 100%; padding: 7px 10px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   border: 1px solid var(--mmc-line); background: var(--mmc-surface-2);
   color: var(--mmc-text); font-size: calc(12px * var(--mmc-type));
 }
@@ -393,7 +393,7 @@ export const css = `
   position: absolute; left: 8px; bottom: 8px; z-index: 1;
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: calc(9.5px * var(--mmc-type)); font-weight: 600; letter-spacing: .03em;
-  padding: 3px 6px; border-radius: 5px; background: var(--mmc-accent); color: var(--mmc-on-accent);
+  padding: 3px 6px; border-radius: calc(5px * var(--mmc-round)); background: var(--mmc-accent); color: var(--mmc-on-accent);
 }
 .mmc-preset-import-kinds {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -467,7 +467,7 @@ export const css = `
 /* At a size you recognise somebody at. The card's 46px is for a row; this is
    their page. */
 .mmc-cast-sheet-face {
-  width: 112px; height: 112px; border-radius: 16px; object-fit: cover; flex: none;
+  width: 112px; height: 112px; border-radius: calc(16px * var(--mmc-round)); object-fit: cover; flex: none;
   background: var(--mmc-surface-3); box-shadow: 0 0 0 2px var(--tag, transparent);
 }
 .mmc-cast-sheet-face-blank {
@@ -495,7 +495,7 @@ export const css = `
 /* A word inside the sentence "@ana is a person", not a control of the same
    weight as the name beside it. */
 .mmc-cast-sheet-takes {
-  padding: 3px 8px; border-radius: 7px; border: 0; background: var(--mmc-surface-2);
+  padding: 3px 8px; border-radius: calc(7px * var(--mmc-round)); border: 0; background: var(--mmc-surface-2);
   color: var(--mmc-dim); font-family: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-cast-sheet-takes:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
@@ -505,7 +505,7 @@ export const css = `
    of those and hid the rest in a tooltip. */
 .mmc-cast-sheet-files {
   display: flex; flex-direction: column; min-width: 0;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 12px; overflow: hidden;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(12px * var(--mmc-round)); overflow: hidden;
 }
 .mmc-cast-sheet-file {
   display: grid; grid-template-columns: 40px 5em minmax(0, 1fr) auto auto; gap: 12px; align-items: center;
@@ -522,7 +522,7 @@ export const css = `
 .mmc-role-voice { --role: var(--mmc-role-voice); }
 .mmc-role-replaces { --role: var(--mmc-role-replaces); }
 .mmc-cast-sheet-thumb {
-  width: 40px; height: 40px; border-radius: 9px; object-fit: cover; display: flex;
+  width: 40px; height: 40px; border-radius: calc(9px * var(--mmc-round)); object-fit: cover; display: flex;
   align-items: center; justify-content: center; color: var(--mmc-dim);
   background: var(--mmc-surface-3);
 }
@@ -553,7 +553,7 @@ export const css = `
   overflow: hidden; text-overflow: ellipsis;
 }
 .mmc-cast-sheet-wake::before {
-  content: ""; width: 7px; height: 7px; border-radius: 999px; flex: none;
+  content: ""; width: 7px; height: 7px; border-radius: var(--mmc-pill-r); flex: none;
   box-shadow: inset 0 0 0 1.5px var(--mmc-accent);
 }
 /* How the file is encoded, right-aligned in the marker's monospace numbers:
@@ -571,7 +571,7 @@ export const css = `
 }
 .mmc-cast-sheet-files > .mmc-cast-sheet-file-add:first-child { border-top: 0; }
 .mmc-cast-sheet-addfile {
-  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: var(--mmc-pill-r);
   border: 1px solid transparent; background: none; color: var(--mmc-dim); font: inherit;
   font-size: calc(11.5px * var(--mmc-type)); cursor: pointer; white-space: nowrap;
 }
@@ -587,7 +587,7 @@ export const css = `
    window, which read as a form waiting for an essay. */
 .mmc-cast-sheet-desc {
   width: 100%; box-sizing: border-box; background: var(--mmc-surface-2);
-  border: 1px solid transparent; border-radius: 10px; padding: 11px 13px;
+  border: 1px solid transparent; border-radius: calc(10px * var(--mmc-round)); padding: 11px 13px;
   color: var(--mmc-text); font: inherit; font-size: calc(13.5px * var(--mmc-type)); line-height: 1.55;
   outline: none; resize: vertical; min-height: calc(112px * var(--mmc-type)); field-sizing: content;
 }
@@ -618,13 +618,13 @@ export const css = `
 .mmc-mod-panel { gap: 10px; }
 .mmc-mod-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .mmc-mod-panel-import {
-  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: var(--mmc-pill-r);
   border: 1px solid var(--mmc-line-2); background: none; color: var(--mmc-dim); font: inherit;
   font-size: calc(11.5px * var(--mmc-type)); cursor: pointer; white-space: nowrap;
 }
 .mmc-mod-panel-import:hover { border-color: var(--mmc-line-3); color: var(--mmc-text); }
 .mmc-mod-panel-empty, .mmc-mod-panel-bad {
-  margin: 4px 0 0; padding: 12px 14px; border: 1px dashed var(--mmc-line); border-radius: 10px;
+  margin: 4px 0 0; padding: 12px 14px; border: 1px dashed var(--mmc-line); border-radius: calc(10px * var(--mmc-round));
   font-size: calc(12px * var(--mmc-type)); line-height: 1.55; color: var(--mmc-dim);
 }
 .mmc-mod-panel-bad { color: var(--mmc-bad); border-style: solid; }
@@ -633,7 +633,7 @@ export const css = `
    and clip its rows instead of pushing the column into a scroll. */
 .mmc-mod-list {
   display: flex; flex-direction: column; flex: none; min-width: 0;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 10px; overflow: hidden;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(10px * var(--mmc-round)); overflow: hidden;
 }
 .mmc-mod-folder {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -651,7 +651,7 @@ export const css = `
 /* The one a card's "Show in library" asked for. */
 .mmc-mod-row.lit { box-shadow: inset 3px 0 0 var(--mmc-accent); }
 .mmc-mod-thumb {
-  width: 40px; height: 40px; border-radius: 9px; object-fit: cover; display: flex;
+  width: 40px; height: 40px; border-radius: calc(9px * var(--mmc-round)); object-fit: cover; display: flex;
   align-items: center; justify-content: center; color: var(--mmc-dim); background: var(--mmc-surface-3);
   box-shadow: inset 0 0 0 1.5px color-mix(in srgb, var(--mmc-accent) 65%, transparent);
 }

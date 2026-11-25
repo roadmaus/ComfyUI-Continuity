@@ -6,7 +6,7 @@ export const css = `
    head, same Done. Wider than it was, because a row is now a name and a set of
    buttons side by side rather than a card of options stacked under a heading —
    and the index down the left takes its own column. */
-.mmc-settings { width: min(920px, 100%); height: min(700px, 100%); border-radius: 12px; }
+.mmc-settings { width: min(920px, 100%); height: min(700px, 100%); border-radius: calc(12px * var(--mmc-round)); }
 .mmc-set-title { font-size: calc(15px * var(--mmc-type)); color: var(--mmc-strong); font-weight: 600; }
 /* A shallow head: the title and the way out, and no band under it that the
    first row has to wait beneath. */
@@ -25,14 +25,14 @@ export const css = `
 /* The current group is a filled pill: the one lifted surface in the rail, and
    no accent — the amber is the answers', and the rail is not an answer. */
 .mmc-set-ix {
-  position: relative; text-align: left; padding: 0 12px; border-radius: 6px; border: 0; background: none;
+  position: relative; text-align: left; padding: 0 12px; border-radius: calc(6px * var(--mmc-round)); border: 0; background: none;
   color: var(--mmc-dim); font-family: inherit; font-size: calc(13px * var(--mmc-type)); font-weight: 500;
   cursor: pointer; line-height: 32px; height: 32px;
 }
 .mmc-set-ix:hover { color: var(--mmc-text); background: var(--mmc-wash); }
 .mmc-set-ix[aria-current="true"] { color: var(--mmc-strong); background: var(--mmc-wash-2); }
 .mmc-set-ix[aria-current="true"]::before {
-  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: 1px;
+  content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 2px; border-radius: calc(1px * var(--mmc-round));
   background: var(--mmc-accent);
 }
 .mmc-set-ix:focus-visible { outline: 2px solid var(--mmc-blue); outline-offset: -2px; }
@@ -115,7 +115,7 @@ export const css = `
    border: the pressed block is the chrome. */
 .mmc-set-seg { display: flex; align-items: center; gap: 8px; }
 .mmc-set-seg-row {
-  display: inline-flex; gap: 2px; padding: 2px; border-radius: 15px;
+  display: inline-flex; gap: 2px; padding: 2px; border-radius: calc(15px * var(--mmc-round));
   background: var(--mmc-bg); border: 1px solid var(--mmc-line);
 }
 .mmc-set-seg-opt {
@@ -124,7 +124,7 @@ export const css = `
 }
 .mmc-set-seg-in {
   display: inline-block; height: calc(26px * var(--mmc-type)); line-height: calc(26px * var(--mmc-type));
-  padding: 0 14px; border-radius: 13px;
+  padding: 0 14px; border-radius: calc(13px * var(--mmc-round));
 }
 /* A button carrying a picture of its option in front of the word. */
 .mmc-set-seg-marked { display: inline-flex; align-items: center; gap: 7px; padding-left: 10px; }
@@ -138,11 +138,11 @@ export const css = `
 .mmc-set-seg.off .mmc-set-seg-opt[aria-pressed="true"] { color: var(--mmc-dim); }
 /* A number on a scale: a step down, the value in mono, a step up. */
 .mmc-set-stepper {
-  display: inline-flex; align-items: center; height: calc(30px * var(--mmc-type)); border-radius: 15px;
+  display: inline-flex; align-items: center; height: calc(30px * var(--mmc-type)); border-radius: calc(15px * var(--mmc-round));
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line); padding: 0 6px;
 }
 .mmc-set-step {
-  width: 26px; height: 100%; border: 0; border-radius: 13px; background: none; color: var(--mmc-text);
+  width: 26px; height: 100%; border: 0; border-radius: calc(13px * var(--mmc-round)); background: none; color: var(--mmc-text);
   font-family: inherit; font-size: calc(14px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-set-step:hover:not(:disabled) { color: var(--mmc-strong); }
@@ -159,7 +159,7 @@ export const css = `
    count: a hairline box in the text colour, quiet until hovered. */
 .mmc-set-reset {
   height: calc(30px * var(--mmc-type)); padding: 0 14px; background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  border-radius: 15px; color: var(--mmc-text); font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
+  border-radius: calc(15px * var(--mmc-round)); color: var(--mmc-text); font-family: inherit; font-size: calc(12.5px * var(--mmc-type));
   cursor: pointer; white-space: nowrap;
 }
 .mmc-set-reset:hover:not(:disabled) { background: var(--mmc-surface-3); color: var(--mmc-strong); }
@@ -184,7 +184,7 @@ export const css = `
    between. The box wears the border; the field inside it wears none. */
 .mmc-set-path {
   display: flex; align-items: center; gap: 0; min-width: 0; justify-self: stretch; height: 30px;
-  padding: 0 12px; border: 1px solid var(--mmc-line); border-radius: 15px; background: var(--mmc-surface);
+  padding: 0 12px; border: 1px solid var(--mmc-line); border-radius: calc(15px * var(--mmc-round)); background: var(--mmc-surface);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12px * var(--mmc-type));
   cursor: text;
 }
@@ -214,7 +214,7 @@ export const css = `
 .mmc-neural-field { flex: 1; min-width: 0; }
 .mmc-neural-row { display: flex; gap: 8px; align-items: center; }
 .mmc-neural-path {
-  flex: 1; min-width: 0; height: 30px; padding: 0 12px; border-radius: 15px; box-sizing: border-box;
+  flex: 1; min-width: 0; height: 30px; padding: 0 12px; border-radius: calc(15px * var(--mmc-round)); box-sizing: border-box;
   border: 1px solid var(--mmc-line); background: var(--mmc-surface); color: var(--mmc-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12px * var(--mmc-type));
   text-overflow: ellipsis;
@@ -266,7 +266,7 @@ export const css = `
 .mmc-zone-row[data-empty="true"] .mmc-zone-held { color: var(--mmc-off); }
 
 .mmc-zone-go {
-  height: calc(30px * var(--mmc-type)); padding: 0 14px; border-radius: 15px;
+  height: calc(30px * var(--mmc-type)); padding: 0 14px; border-radius: calc(15px * var(--mmc-round));
   border: 1px solid var(--mmc-line); background: var(--mmc-surface-2);
   color: var(--mmc-text); font-family: inherit; font-size: calc(12px * var(--mmc-type));
   white-space: nowrap; cursor: pointer;

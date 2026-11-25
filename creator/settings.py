@@ -290,6 +290,10 @@ DEFAULTS = {
     # is dark for that reason. There is deliberately no "light": a light editor
     # over a dark graph is the one combination nobody asks for.
     #
+    # "slate" is that same pinned dark with the hue taken out: a near-black
+    # neutral ground, the accent drawn in the ink, square corners. The values
+    # are in `styles/base.js` under `.mmc-slate`.
+    #
     # It reaches the fullscreen shell and not the node faces. A node body sits
     # inside a node ComfyUI draws in its own palette — title, chrome, the padding
     # around whatever the custom node put there — so a dark body on a light desk
@@ -369,8 +373,9 @@ MIN_TEXT_SCALE = 0.8
 MAX_TEXT_SCALE = 1.6
 
 # What the pack may wear. "follow" reads ComfyUI's palette; "dark" pins a dark
-# ground regardless of it. No "light": see the note on the setting itself.
-THEMES = ("follow", "dark")
+# ground regardless of it, and "slate" pins a monochrome one. No "light": see
+# the note on the setting itself.
+THEMES = ("follow", "dark", "slate")
 
 # How far the surface ladder may be pushed. The floor is where the four surfaces
 # stop being four; the ceiling is where the cards stop looking like they belong

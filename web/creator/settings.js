@@ -183,7 +183,7 @@ const TEXT_SCALE = [
 // the viewport and has no such argument to lose.
 //
 // `settings.py` decides what is allowed; this decides what is offered, and here
-// they happen to be the same two.
+// they happen to be the same three.
 const THEMES = [
   { value: "follow", label: "Follow ComfyUI",
     note: "Every colour this pack draws comes from the palette in ComfyUI's own "
@@ -194,6 +194,11 @@ const THEMES = [
         + "a dark ground. For judging pictures: a frame read against white is "
         + "read against the wrong thing, which is why the tools that cut and "
         + "grade are dark." },
+  { value: "slate", label: "Slate in fullscreen",
+    note: "The fullscreen editor in black and white: a near-black ground, "
+        + "square corners, and no accent colour — what is selected or ready "
+        + "is drawn in white, so the only colour on screen is in the picture. "
+        + "Node faces still follow the palette." },
 ];
 
 // How far the surfaces step off the ground. A tuned control rather than a chosen
@@ -1404,7 +1409,7 @@ class SettingsPage {
    */
   interfaceCard() {
     const scale = Number(this.settings.text_scale) || 1;
-    const theme = this.settings.theme === "dark" ? "dark" : "follow";
+    const theme = THEMES.some((row) => row.value === this.settings.theme) ? this.settings.theme : "follow";
     const lift = Number(this.settings.surface_lift) || 1;
     const percent = (value) => `${Math.round(value * 100)}%`;
     return this.card("Interface", [

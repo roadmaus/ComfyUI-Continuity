@@ -1512,6 +1512,8 @@ export const zh = {
  "Every colour this pack draws comes from the palette in ComfyUI's own Appearance settings, so the pack changes when the desk does — including palettes you made yourself.": "本套节点绘制的每一种颜色都取自 ComfyUI 自身外观设置中的配色，所以工作台变，它就跟着变——包括你自己做的配色。",
  "Dark in fullscreen": "仅全屏使用深色",
  "Node faces still follow the palette, but the fullscreen editor keeps a dark ground. For judging pictures: a frame read against white is read against the wrong thing, which is why the tools that cut and grade are dark.": "节点面板仍然跟随配色，但全屏编辑器保持深色背景。这是为了判断画面：在白底上读一帧，等于在错误的底色上读它，剪辑和调色的工具之所以都是深色，正是这个原因。",
+ "Slate in fullscreen": "全屏使用石板黑白",
+ "The fullscreen editor in black and white: a near-black ground, square corners, and no accent colour — what is selected or ready is drawn in white, so the only colour on screen is in the picture. Node faces still follow the palette.": "全屏编辑器以黑白呈现：接近纯黑的背景、方正的边角、没有强调色 — 选中或就绪的内容以白色绘制，因此屏幕上唯一的颜色来自画面本身。节点表面仍然跟随调色板。",
  "The cards barely leave the ground. Quietest on a palette that already has plenty of contrast of its own.": "卡片几乎不从背景上浮起。在本身对比度就足够的配色下最为安静。",
  "The ladder as drawn.": "绘制时的层级。",
  "Raised": "抬高",

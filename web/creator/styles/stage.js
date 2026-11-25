@@ -32,7 +32,7 @@ export const css = `
      latent2rgb decodes the latent itself, which is 30x17 on an LTX canvas. */
   position: relative; height: 100%; min-width: 240px;
   display: flex; flex-direction: column; min-height: 0;
-  border-radius: 16px; overflow: hidden;
+  border-radius: calc(16px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
   box-shadow: 0 8px 30px var(--mmc-shadow-soft);
 }
@@ -133,7 +133,7 @@ export const css = `
 }
 .mmc-stage-side.end { justify-content: flex-end; }
 .mmc-stage-chip {
-  color: var(--mmc-text); border-radius: 999px; padding: 3px 9px;
+  color: var(--mmc-text); border-radius: var(--mmc-pill-r); padding: 3px 9px;
   background: var(--mmc-scrim-2); border: 1px solid var(--mmc-line);
   white-space: nowrap;
 }
@@ -206,7 +206,7 @@ export const css = `
     .mmc-fs-review-card[data-media="video"]) .mmc-stage-times .mmc-stage-clock {
   display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 7px;
   min-width: 0; max-width: 100%; box-sizing: border-box;
-  white-space: normal; border-radius: 8px;
+  white-space: normal; border-radius: calc(8px * var(--mmc-round));
 }
 /* Labelled clocks also appear on a live picture or a finished still. Give
    those the same readable separator, without touching legacy text-only chips. */
@@ -235,7 +235,7 @@ export const css = `
 }
 .mmc-weight-name { flex: none; color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); width: 112px; }
 .mmc-weight-file, .mmc-weight-device {
-  background: none; border: 0; border-radius: 8px; padding: 5px 8px;
+  background: none; border: 0; border-radius: calc(8px * var(--mmc-round)); padding: 5px 8px;
   color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type));
   text-align: left; cursor: pointer;
 }

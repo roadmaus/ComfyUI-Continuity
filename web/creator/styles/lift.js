@@ -27,7 +27,7 @@ export const css = `
    is dimmed rather than hidden, so the mesh can still be turned by a part that
    is out of shot; its size in the corner is the photo's, in pixels. */
 .mmc-lf-frame {
-  position: absolute; z-index: 1; pointer-events: none; border-radius: 2px;
+  position: absolute; z-index: 1; pointer-events: none; border-radius: calc(2px * var(--mmc-round));
   border: 1px solid color-mix(in srgb, var(--mmc-strong) 55%, transparent);
   box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--mmc-media-bg) 55%, transparent);
 }
@@ -54,12 +54,12 @@ export const css = `
   text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--mmc-line-3);
 }
 .mmc-lf-reopen:hover { color: var(--mmc-strong); text-decoration-color: currentColor; }
-.mmc-lf-reopen:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: 4px; }
+.mmc-lf-reopen:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: calc(4px * var(--mmc-round)); }
 
 /* Open mesh, in the bar: the shelf, in the picker. */
 .mmc-lf-open {
   display: flex; align-items: center; gap: 7px; margin-right: 6px; padding: 5px 11px;
-  border-radius: 10px; border: 1px solid var(--mmc-line); background: none; cursor: pointer;
+  border-radius: calc(10px * var(--mmc-round)); border: 1px solid var(--mmc-line); background: none; cursor: pointer;
   font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text);
 }
 .mmc-lf-open svg { stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linejoin: round; opacity: .8; }
@@ -76,7 +76,7 @@ export const css = `
 .mmc-lf-slots { display: flex; gap: 8px; }
 .mmc-lf-slot {
   position: relative; width: calc(64px * var(--mmc-type)); aspect-ratio: 1; padding: 0;
-  border-radius: 9px; overflow: hidden; cursor: pointer;
+  border-radius: calc(9px * var(--mmc-round)); overflow: hidden; cursor: pointer;
   border: 1px solid var(--mmc-line-2); background: var(--mmc-surface);
   display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
   font-family: inherit; color: var(--mmc-text);
@@ -113,12 +113,12 @@ export const css = `
   display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
 }
 .mmc-lf-seg {
-  display: inline-flex; gap: 2px; padding: 3px; border-radius: 10px;
+  display: inline-flex; gap: 2px; padding: 3px; border-radius: calc(10px * var(--mmc-round));
   background: color-mix(in srgb, var(--mmc-bg) 84%, transparent);
   border: 1px solid var(--mmc-line); backdrop-filter: blur(8px);
 }
 .mmc-lf-seg button {
-  border: 0; background: none; padding: 5px 10px; border-radius: 7px; cursor: pointer;
+  border: 0; background: none; padding: 5px 10px; border-radius: calc(7px * var(--mmc-round)); cursor: pointer;
   font-family: inherit; font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
   white-space: nowrap;
 }
@@ -132,7 +132,7 @@ export const css = `
 .mmc-lf-chips { display: flex; gap: 6px; }
 .mmc-lf-chip {
   display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
-  padding: 5px 11px; border-radius: 999px; font-family: inherit;
+  padding: 5px 11px; border-radius: var(--mmc-pill-r); font-family: inherit;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-dim);
   border: 1px solid var(--mmc-line); backdrop-filter: blur(8px);
   background: color-mix(in srgb, var(--mmc-bg) 84%, transparent);
@@ -149,7 +149,7 @@ export const css = `
   position: absolute; left: 50%; bottom: calc(96px * var(--mmc-type)); z-index: 2;
   transform: translateX(-50%); max-width: calc(100% - 32px);
   display: flex; gap: 8px; align-items: baseline; justify-content: center; flex-wrap: wrap;
-  padding: 6px 14px; border-radius: 999px; pointer-events: none;
+  padding: 6px 14px; border-radius: var(--mmc-pill-r); pointer-events: none;
   font-size: calc(12.5px * var(--mmc-type)); color: var(--mmc-text); text-align: center;
   background: color-mix(in srgb, var(--mmc-media-bg) 80%, transparent);
   border: 1px solid var(--mmc-line); backdrop-filter: blur(8px);
@@ -160,7 +160,7 @@ export const css = `
 .mmc-lf-toast {
   position: absolute; left: 50%; top: 16px; z-index: 4; max-width: calc(100% - 32px);
   transform: translate(-50%, -8px); opacity: 0; pointer-events: none;
-  padding: 8px 14px; border-radius: 10px; font-size: calc(12.5px * var(--mmc-type));
+  padding: 8px 14px; border-radius: calc(10px * var(--mmc-round)); font-size: calc(12.5px * var(--mmc-type));
   background: var(--mmc-surface-3); border: 1px solid var(--mmc-line-2);
   transition: opacity 160ms ease, transform 160ms ease;
 }
@@ -179,11 +179,11 @@ export const css = `
 .mmc-lf-step {
   position: relative; flex: 1 1 0; min-width: calc(88px * var(--mmc-type)); overflow: hidden;
   display: flex; flex-direction: column; gap: 1px; text-align: left; cursor: default;
-  padding: 8px 10px 10px; border-radius: 8px; font-family: inherit; color: var(--mmc-text);
+  padding: 8px 10px 10px; border-radius: calc(8px * var(--mmc-round)); font-family: inherit; color: var(--mmc-text);
   background: color-mix(in srgb, var(--mmc-surface) 92%, transparent); border: 1px solid var(--mmc-line);
 }
-.mmc-lf-step:first-child { border-radius: 12px 8px 8px 12px; }
-.mmc-lf-step:last-child { border-radius: 8px 12px 12px 8px; }
+.mmc-lf-step:first-child { border-radius: calc(12px * var(--mmc-round)) calc(8px * var(--mmc-round)) calc(8px * var(--mmc-round)) calc(12px * var(--mmc-round)); }
+.mmc-lf-step:last-child { border-radius: calc(8px * var(--mmc-round)) calc(12px * var(--mmc-round)) calc(12px * var(--mmc-round)) calc(8px * var(--mmc-round)); }
 .mmc-lf-steptop { display: flex; align-items: baseline; gap: 6px; }
 .mmc-lf-stepn { font-size: calc(11px * var(--mmc-type)); color: var(--mmc-off); font-variant-numeric: tabular-nums; }
 .mmc-lf-stepname { font-size: calc(13px * var(--mmc-type)); font-weight: 600; white-space: nowrap; color: var(--mmc-dim); }
@@ -214,7 +214,7 @@ export const css = `
   display: flex; flex-direction: column; justify-content: center; gap: 4px;
 }
 .mmc-lf-run {
-  border: 0; border-radius: 12px; padding: 11px 14px; cursor: pointer; font-family: inherit;
+  border: 0; border-radius: calc(12px * var(--mmc-round)); padding: 11px 14px; cursor: pointer; font-family: inherit;
   background: var(--mmc-accent); color: var(--mmc-on-accent);
   font-size: calc(13.5px * var(--mmc-type)); font-weight: 650;
 }
@@ -243,12 +243,12 @@ export const css = `
 }
 .mmc-lf-model {
   display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-  border-radius: 12px; background: var(--mmc-surface); border: 1px solid var(--mmc-line);
+  border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
 .mmc-lf-modelname { font-size: calc(13px * var(--mmc-type)); font-weight: 600; color: var(--mmc-strong); }
 .mmc-lf-modelsub { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); }
 .mmc-lf-dots { display: flex; gap: 3px; margin-left: auto; }
-.mmc-lf-dots i { width: 7px; height: 10px; border-radius: 2px; background: var(--mmc-surface-3); }
+.mmc-lf-dots i { width: 7px; height: 10px; border-radius: calc(2px * var(--mmc-round)); background: var(--mmc-surface-3); }
 .mmc-lf-dots i.on { background: var(--mmc-text); }
 .mmc-lf-field { display: flex; flex-direction: column; gap: 7px; }
 .mmc-lf-label {
@@ -281,7 +281,7 @@ export const css = `
 }
 .mmc-lf-map img {
   width: 100%; aspect-ratio: 1; object-fit: cover; display: block;
-  border-radius: 6px; border: 1px solid var(--mmc-line);
+  border-radius: calc(6px * var(--mmc-round)); border: 1px solid var(--mmc-line);
 }
 .mmc-lf-map:hover span { color: var(--mmc-text); }
 
@@ -292,7 +292,7 @@ export const css = `
 }
 .mmc-lf-file { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .mmc-lf-glyph {
-  flex: none; width: 34px; height: 34px; border-radius: 9px; display: grid; place-items: center;
+  flex: none; width: 34px; height: 34px; border-radius: calc(9px * var(--mmc-round)); display: grid; place-items: center;
   background: var(--mmc-surface-2); color: var(--mmc-dim);
   font-size: calc(10.5px * var(--mmc-type)); font-weight: 700; letter-spacing: .02em;
 }
@@ -304,7 +304,7 @@ export const css = `
 .mmc-lf-filepath { font-size: calc(12px * var(--mmc-type)); color: var(--mmc-dim); overflow-wrap: anywhere; }
 .mmc-lf-reveal {
   flex: none; margin-left: auto; width: 32px; height: 32px; display: grid; place-items: center;
-  border-radius: 9px; border: 1px solid var(--mmc-line); background: none; cursor: pointer; color: var(--mmc-dim);
+  border-radius: calc(9px * var(--mmc-round)); border: 1px solid var(--mmc-line); background: none; cursor: pointer; color: var(--mmc-dim);
 }
 .mmc-lf-reveal svg { stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linejoin: round; }
 .mmc-lf-reveal:hover:not(:disabled) { color: var(--mmc-strong); background: var(--mmc-surface-2); }
@@ -315,7 +315,7 @@ export const css = `
 .mmc-lf-doors { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .mmc-lf-door {
   display: flex; flex-direction: column; gap: 1px; text-align: left; cursor: pointer;
-  padding: 8px 10px; border-radius: 10px; font-family: inherit; color: var(--mmc-text);
+  padding: 8px 10px; border-radius: calc(10px * var(--mmc-round)); font-family: inherit; color: var(--mmc-text);
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
 }
 .mmc-lf-door:hover:not(:disabled) { background: var(--mmc-surface-2); border-color: var(--mmc-line-2); }

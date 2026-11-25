@@ -154,14 +154,22 @@ export function applySurfaceLift(lift) {
  * reads as "follow", which is the default and what the stylesheet does unaided.
  */
 let pinDark = false;
+let slate = false;
 let shellOpen = false;
 
+/* Slate is a pinned dark with a second class on it rather than a third state:
+ * everything the pin has to do -- hold off until the shell is up, turn the
+ * light-accent correction off -- Slate has to do as well, and .mmc-slate only
+ * restates the tokens it disagrees with. */
 function syncTheme() {
-  document.documentElement.classList.toggle("mmc-force-dark", pinDark && shellOpen);
+  const root = document.documentElement.classList;
+  root.toggle("mmc-force-dark", pinDark && shellOpen);
+  root.toggle("mmc-slate", slate && shellOpen);
 }
 
 export function applyTheme(theme) {
-  pinDark = theme === "dark";
+  slate = theme === "slate";
+  pinDark = slate || theme === "dark";
   syncTheme();
 }
 

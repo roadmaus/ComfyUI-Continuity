@@ -21,7 +21,7 @@ export const css = `
 .mmc-tl-modal { width: min(1800px, 100%); height: 100%; }
 .mmc-tl-prompt {
   width: 100%; box-sizing: border-box; min-height: calc(84px * var(--mmc-type)); max-height: 30vh; resize: vertical;
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   color: var(--mmc-text); font-family: inherit; font-size: calc(14px * var(--mmc-type)); line-height: 1.5;
   padding: 14px 16px; outline: none;
 }
@@ -34,7 +34,7 @@ export const css = `
    the reason .mmc-prompt is: a long prompt scrolls inside the modal instead of
    pushing the strip off the bottom of it. */
 .mmc-tl-prompt-frame {
-  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: 14px;
+  background: var(--mmc-surface); border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round));
   padding: 14px 16px; flex: 0 0 auto;
 }
 .mmc-tl-prompt-frame:focus-within { border-color: var(--mmc-line-2); }
@@ -53,7 +53,7 @@ export const css = `
 .mmc-tl-section-head { display: flex; align-items: stretch; gap: 8px; flex-wrap: wrap; min-width: 0; }
 .mmc-tl-section-toggle {
   display: flex; flex: 1 1 220px; min-width: 0; gap: 8px; align-items: center;
-  padding: 8px 10px; border: 1px solid var(--mmc-line); border-radius: 7px;
+  padding: 8px 10px; border: 1px solid var(--mmc-line); border-radius: calc(7px * var(--mmc-round));
   background: var(--mmc-surface); color: var(--mmc-text); font-family: inherit;
   text-align: left; cursor: pointer;
 }
@@ -158,12 +158,12 @@ export const css = `
 .mmc-board {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
   width: 132px; aspect-ratio: 16 / 9; margin: 8px 10px 4px; padding: 2px;
-  border-radius: 6px; background: var(--mmc-ground);
+  border-radius: calc(6px * var(--mmc-round)); background: var(--mmc-ground);
 }
 /* The row of earlier shots to draw the sheet on, as toggles. Lit ones are in. */
 .mmc-board-picks { display: flex; flex-wrap: wrap; gap: 4px; padding: 4px 10px 2px; }
 .mmc-board-pick {
-  border: 1px solid var(--mmc-line); border-radius: 6px; padding: 3px 8px;
+  border: 1px solid var(--mmc-line); border-radius: calc(6px * var(--mmc-round)); padding: 3px 8px;
   background: var(--mmc-surface-2); color: var(--mmc-dim); cursor: pointer;
   font-family: inherit; font-size: calc(11px * var(--mmc-type));
 }
@@ -189,7 +189,7 @@ export const css = `
 .mmc-board-holds { flex-wrap: nowrap; }
 .mmc-board-hold { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; }
 .mmc-board-hold-bars { display: inline-flex; align-items: flex-end; gap: 1.5px; height: 9px; }
-.mmc-board-hold-bars i { width: 2.5px; border-radius: 1px; background: currentColor; opacity: .22; }
+.mmc-board-hold-bars i { width: 2.5px; border-radius: calc(1px * var(--mmc-round)); background: currentColor; opacity: .22; }
 .mmc-board-hold-bars i:nth-child(1) { height: 4px; }
 .mmc-board-hold-bars i:nth-child(2) { height: 6.5px; }
 .mmc-board-hold-bars i:nth-child(3) { height: 9px; }
@@ -201,7 +201,7 @@ export const css = `
    sentence wherever the frame is clicked. */
 .mmc-board-line {
   display: block; margin: 8px 10px 0; padding: 8px 10px 6px; cursor: text;
-  border: 1px solid var(--mmc-line); border-radius: 10px; background: var(--mmc-ground);
+  border: 1px solid var(--mmc-line); border-radius: calc(10px * var(--mmc-round)); background: var(--mmc-ground);
 }
 .mmc-board-line:focus-within { border-color: color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
 .mmc-board-line-marker {
@@ -300,7 +300,7 @@ export const css = `
    casing's reading at a tenth the size. A pass of one is just its own tick. */
 .mmc-tl-run { display: flex; gap: 4px; min-width: 0; }
 .mmc-tl-run.on {
-  gap: 0; border: 1px solid color-mix(in srgb, var(--mmc-accent) 32%, transparent); border-radius: 8px; padding: 1px;
+  gap: 0; border: 1px solid color-mix(in srgb, var(--mmc-accent) 32%, transparent); border-radius: calc(8px * var(--mmc-round)); padding: 1px;
   background: color-mix(in srgb, var(--mmc-accent) 8%, transparent);
 }
 .mmc-tl-run.on .mmc-tl-tick {
@@ -310,7 +310,7 @@ export const css = `
 .mmc-tl-tick {
   display: flex; align-items: center; justify-content: center; gap: 5px;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
-  border-radius: 8px; min-width: 18px; overflow: hidden; padding: 0 4px;
+  border-radius: calc(8px * var(--mmc-round)); min-width: 18px; overflow: hidden; padding: 0 4px;
 }
 .mmc-tl-tick svg { width: 13px; height: 13px; stroke: currentColor; fill: none;
   stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
@@ -342,7 +342,7 @@ export const css = `
    are roomy on a wide node and crowded on a narrow one. */
 
 .mmc-tl-lane.dense {
-  gap: 0; border: 1px solid var(--mmc-line); border-radius: 4px;
+  gap: 0; border: 1px solid var(--mmc-line); border-radius: calc(4px * var(--mmc-round));
   /* Lit from the top, so the row of cells reads as one physical strip rather
      than as a grid of empty boxes. */
   background: linear-gradient(180deg, var(--mmc-wash), transparent 60%),
@@ -412,7 +412,7 @@ export const css = `
 /* Where the Creator puts its mode badge: the right end of the pill row. */
 .mmc-tl-open {
   margin-left: auto; height: var(--mmc-pill-h); padding: 0 14px; display: flex; align-items: center; gap: 8px;
-  border-radius: 999px; background: var(--mmc-surface-3); border: 1px solid var(--mmc-line);
+  border-radius: var(--mmc-pill-r); background: var(--mmc-surface-3); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-family: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-tl-open:hover { background: var(--mmc-surface-3); border-color: var(--mmc-line-2); }
@@ -529,7 +529,7 @@ export const css = `
 .mmc-seed-pop { width: max-content; min-width: 250px; padding: 10px; }
 .mmc-seed-fieldrow {
   display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 10px 0 9px;
-  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: 12px;
+  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: calc(12px * var(--mmc-round));
   color: var(--mmc-strong);
 }
 .mmc-seed-fieldrow .mmc-seed-mark { flex: none; }
@@ -539,10 +539,10 @@ export const css = `
 }
 .mmc-seed-ways {
   display: grid; grid-template-columns: 1fr 1fr; gap: 2px; padding: 3px; margin-top: 8px;
-  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: 12px;
+  background: var(--mmc-bg); border: 1px solid var(--mmc-line); border-radius: calc(12px * var(--mmc-round));
 }
 .mmc-seed-way {
-  height: 28px; padding: 0 12px; border: 0; border-radius: 9px; background: none; color: var(--mmc-dim);
+  height: 28px; padding: 0 12px; border: 0; border-radius: calc(9px * var(--mmc-round)); background: none; color: var(--mmc-dim);
   font: inherit; font-size: calc(12.5px * var(--mmc-type)); cursor: pointer; white-space: nowrap;
 }
 .mmc-seed-way:hover { color: var(--mmc-text); }
@@ -595,7 +595,7 @@ export const css = `
 .mmc-snd-pass {
   position: absolute; top: 0; bottom: 0;
   display: flex; align-items: center; justify-content: center;
-  background: var(--mmc-surface-3); border-radius: 3px;
+  background: var(--mmc-surface-3); border-radius: calc(3px * var(--mmc-round));
   color: var(--mmc-dim); font-size: calc(10px * var(--mmc-type));
   /* The gap between passes is the cut, and it is drawn by inset rather than by
      a margin so the block's own left edge stays the true frame it starts on —
@@ -617,7 +617,7 @@ export const css = `
    were the sound there — which is the one thing this surface must not imply. */
 .mmc-snd-lane {
   position: relative; height: calc(52px * var(--mmc-type));
-  border-radius: 8px; background: var(--mmc-surface); overflow: hidden;
+  border-radius: calc(8px * var(--mmc-round)); background: var(--mmc-surface); overflow: hidden;
   border: 1px solid var(--mmc-line);
 }
 .mmc-snd-lane.has-refs { height: calc(68px * var(--mmc-type)); }
@@ -673,14 +673,14 @@ export const css = `
   color: var(--mmc-off); font-size: calc(9px * var(--mmc-type));
   letter-spacing: .04em; pointer-events: none;
 }
-.mmc-snd-gap span { background: var(--mmc-surface); padding: 0 6px; border-radius: 4px; }
+.mmc-snd-gap span { background: var(--mmc-surface); padding: 0 6px; border-radius: calc(4px * var(--mmc-round)); }
 
 /* A laid-down track. The blue is the trim bar's, on purpose: what you drag here
    is the same act as what you drag in the trim modal, and a second accent for
    it would say they were different things. */
 .mmc-snd-block {
   position: absolute; top: 3px; bottom: 3px;
-  border-radius: 6px; overflow: hidden; cursor: grab;
+  border-radius: calc(6px * var(--mmc-round)); overflow: hidden; cursor: grab;
   background: color-mix(in srgb, var(--mmc-blue) 26%, transparent);
   box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--mmc-blue) 55%, transparent);
 }
@@ -727,7 +727,7 @@ export const css = `
 .mmc-snd-grip:focus-visible { opacity: 1; }
 .mmc-snd-grip::after {
   content: ""; position: absolute; top: 4px; bottom: 4px; left: 4px; width: 3px;
-  border-radius: 2px; background: var(--mmc-blue);
+  border-radius: calc(2px * var(--mmc-round)); background: var(--mmc-blue);
   box-shadow: 0 0 0 1px var(--mmc-scrim-2);
 }
 .mmc-snd-grip:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: -2px; }
@@ -748,7 +748,7 @@ export const css = `
 .mmc-snd-drop {
   position: absolute; right: 11px; bottom: 3px; z-index: 2;
   display: grid; place-items: center; width: 18px; height: 18px;
-  border: 1px solid transparent; border-radius: 5px; padding: 0;
+  border: 1px solid transparent; border-radius: calc(5px * var(--mmc-round)); padding: 0;
   background: none; cursor: pointer; color: var(--mmc-text); opacity: .5;
   transition: opacity .12s ease, background .12s ease, border-color .12s ease;
 }
@@ -783,7 +783,7 @@ export const css = `
      there is a drag to talk about. */
   opacity: 0;
   display: flex; gap: 7px; align-items: baseline; pointer-events: none;
-  padding: 3px 8px; border-radius: 5px; white-space: nowrap;
+  padding: 3px 8px; border-radius: calc(5px * var(--mmc-round)); white-space: nowrap;
   background: var(--mmc-float); border: 1px solid var(--mmc-line-2);
   box-shadow: 0 2px 10px var(--mmc-shadow-soft);
   font-size: calc(10px * var(--mmc-type)); font-variant-numeric: tabular-nums;
@@ -819,7 +819,7 @@ export const css = `
 .mmc-snd-ref {
   position: absolute; top: 2px; bottom: 2px;
   display: flex; align-items: center; padding: 0 6px; overflow: hidden;
-  border-radius: 3px;
+  border-radius: calc(3px * var(--mmc-round));
   border: 1px dashed color-mix(in srgb, var(--mmc-ink) 22%, transparent);
   color: var(--mmc-off); font-size: calc(9px * var(--mmc-type));
   white-space: nowrap; cursor: help;

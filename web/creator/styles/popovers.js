@@ -4,7 +4,7 @@ export const css = `
 /* --- popovers ------------------------------------------------------------- */
 .mmc-pop {
   position: fixed; z-index: 1300; background: var(--mmc-float); border: 1px solid var(--mmc-line);
-  border-radius: 16px; padding: 8px; min-width: 190px;
+  border-radius: calc(16px * var(--mmc-round)); padding: 8px; min-width: 190px;
   /* Said out loud, because a popover is portaled to document.body and so stands
      outside every root this pack draws: what it inherits is ComfyUI's own body
      colour, whatever the installed theme makes that. Every other line in here
@@ -58,7 +58,7 @@ export const css = `
 .mmc-out-field {
   width: 100%; box-sizing: border-box; padding: 8px 10px;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
-  border-radius: 10px; color: var(--mmc-text);
+  border-radius: calc(10px * var(--mmc-round)); color: var(--mmc-text);
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: calc(12.5px * var(--mmc-type));
   /* A contenteditable, not an input — see folderRow. So it has to be told the
      things an input knows by itself: that it is one line tall when empty, that
@@ -74,7 +74,7 @@ export const css = `
    control sitting on top of one — the tile says "this part is filled in later",
    and saying more than that would make the literal text look like the guest. */
 .mmc-out-tile {
-  display: inline-block; padding: 0 4px; border-radius: 5px;
+  display: inline-block; padding: 0 4px; border-radius: calc(5px * var(--mmc-round));
   background: var(--mmc-surface-3); color: var(--mmc-text);
   /* The caret parks either side of a tile and never inside it; a drag across
      the field must not be able to take half of one either. */
@@ -105,7 +105,7 @@ export const css = `
    than only in the reading underneath. */
 .mmc-out-token {
   display: inline-flex; align-items: baseline; gap: 5px;
-  padding: 3px 7px; background: var(--mmc-surface-2); border: 0; border-radius: 7px;
+  padding: 3px 7px; background: var(--mmc-surface-2); border: 0; border-radius: calc(7px * var(--mmc-round));
   color: var(--mmc-dim); font-size: calc(11px * var(--mmc-type)); font-family: ui-monospace, Menlo, monospace;
   cursor: pointer;
 }
@@ -115,7 +115,7 @@ export const css = `
 
 .mmc-opt {
   display: flex; align-items: center; justify-content: space-between; width: 100%;
-  padding: 9px 10px; background: none; border: 0; border-radius: 10px;
+  padding: 9px 10px; background: none; border: 0; border-radius: calc(10px * var(--mmc-round));
   color: var(--mmc-text); font-size: calc(14px * var(--mmc-type)); font-family: inherit; cursor: pointer;
   /* A button centres its text by default, which nothing notices while every
      option is one short word and looks broken the moment one wraps. */
@@ -131,7 +131,7 @@ export const css = `
   width: 18px; height: 18px; flex: none;
   display: flex; align-items: center; justify-content: center;
 }
-.mmc-aspect-glyph > span { box-sizing: border-box; border: 1.5px solid var(--mmc-edge-2); border-radius: 2px; }
+.mmc-aspect-glyph > span { box-sizing: border-box; border: 1.5px solid var(--mmc-edge-2); border-radius: calc(2px * var(--mmc-round)); }
 .mmc-opt[aria-checked="true"] .mmc-aspect-glyph > span { border-color: var(--mmc-blue); }
 /* On a pill it is a glyph beside a label rather than a swatch in a list, so it
    takes the pill's own colour — and greys out with it when the ratio is coming
@@ -149,7 +149,7 @@ export const css = `
 .mmc-aspect-head { display: flex; align-items: center; gap: 8px; padding: 2px 2px 6px; }
 .mmc-aspect-title { flex: 1; padding: 0 0 0 8px; }
 .mmc-aspect-flip {
-  flex: 1; display: flex; height: 26px; border-radius: 13px; overflow: hidden;
+  flex: 1; display: flex; height: 26px; border-radius: calc(13px * var(--mmc-round)); overflow: hidden;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line);
 }
 .mmc-flip-opt {
@@ -165,7 +165,7 @@ export const css = `
 .mmc-aspect-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
 .mmc-aspect-tile {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
-  padding: 10px 4px; background: none; border: 0; border-radius: 10px; cursor: pointer;
+  padding: 10px 4px; background: none; border: 0; border-radius: calc(10px * var(--mmc-round)); cursor: pointer;
   color: var(--mmc-dim); font-family: inherit;
   font-size: calc(12px * var(--mmc-type)); font-variant-numeric: tabular-nums;
 }
@@ -235,7 +235,7 @@ export const css = `
      the tick has to land on the value, not on the box. */
   left: calc(8px + var(--p) * (100% - 16px)); margin-left: -17px;
 }
-.mmc-slider-mark::before { content: ""; width: 2px; height: 4px; border-radius: 1px; background: currentColor; }
+.mmc-slider-mark::before { content: ""; width: 2px; height: 4px; border-radius: calc(1px * var(--mmc-round)); background: currentColor; }
 .mmc-slider-mark:hover { color: var(--mmc-text); }
 .mmc-slider-mark.on { color: var(--mmc-blue); }
 
@@ -303,10 +303,10 @@ export const css = `
 .mmc-glora-section { display: flex; flex-direction: column; gap: 8px; }
 .mmc-glora-roles {
   display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 2px;
-  padding: 2px; border-radius: 9px; background: var(--mmc-wash); border: 1px solid var(--mmc-line);
+  padding: 2px; border-radius: calc(9px * var(--mmc-round)); background: var(--mmc-wash); border: 1px solid var(--mmc-line);
 }
 .mmc-glora-role {
-  padding: 5px 6px; border: 0; border-radius: 7px; cursor: pointer; font-family: inherit;
+  padding: 5px 6px; border: 0; border-radius: calc(7px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type));
   transition: color 120ms ease, background 120ms ease;
 }
@@ -329,7 +329,7 @@ export const css = `
 .mmc-glora-missing .dim { color: var(--mmc-dim); }
 .mmc-glora-versions { display: flex; flex-wrap: wrap; gap: 4px; }
 .mmc-glora-version {
-  padding: 3px 8px; border-radius: 8px; cursor: pointer; font-family: inherit;
+  padding: 3px 8px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; border: 1px solid transparent; color: var(--mmc-dim);
   font-size: calc(11px * var(--mmc-type)); max-width: 100%;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -342,7 +342,7 @@ export const css = `
 }
 .mmc-glora-lookrow { display: flex; align-items: center; gap: 9px; min-width: 0; }
 .mmc-glora-thumb {
-  width: 36px; height: 36px; border-radius: 6px; object-fit: cover; flex: none;
+  width: 36px; height: 36px; border-radius: calc(6px * var(--mmc-round)); object-fit: cover; flex: none;
   background: var(--mmc-media-bg); border: 1px solid var(--mmc-line);
 }
 .mmc-glora-thumb.blank { display: inline-block; }
@@ -351,14 +351,14 @@ export const css = `
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .mmc-glora-change {
-  flex: none; padding: 4px 9px; border-radius: 6px; cursor: pointer; font-family: inherit;
+  flex: none; padding: 4px 9px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: none; border: 1px solid var(--mmc-line); color: var(--mmc-text);
   font-size: calc(11px * var(--mmc-type));
 }
 .mmc-glora-change:hover { border-color: var(--mmc-line-2); }
 .mmc-glora-door {
   display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
-  padding: 8px 10px; border-radius: 8px; cursor: pointer; font-family: inherit;
+  padding: 8px 10px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: var(--mmc-wash); border: 1px dashed var(--mmc-line-2); color: var(--mmc-text);
 }
 .mmc-glora-door:hover { border-color: var(--mmc-accent); }
@@ -369,14 +369,14 @@ export const css = `
 .mmc-glora-file.searching { flex-direction: column; align-items: stretch; gap: 6px; }
 .mmc-glora-pick {
   flex: 1; min-width: 0; text-align: left; overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; padding: 4px 9px; border-radius: 6px; cursor: pointer;
+  white-space: nowrap; padding: 4px 9px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   font-family: inherit; background: var(--mmc-wash); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-size: calc(11px * var(--mmc-type));
 }
 .mmc-glora-pick.empty { color: var(--mmc-dim); border-style: dashed; }
 .mmc-glora-pick:hover { border-color: var(--mmc-line-2); }
 .mmc-glora-search, .mmc-glora-text {
-  width: 100%; box-sizing: border-box; padding: 5px 8px; border-radius: 6px;
+  width: 100%; box-sizing: border-box; padding: 5px 8px; border-radius: calc(6px * var(--mmc-round));
   font-family: inherit; font-size: calc(11px * var(--mmc-type)); color: var(--mmc-text);
   background: var(--mmc-wash); border: 1px solid var(--mmc-line); outline: none;
 }
@@ -388,7 +388,7 @@ export const css = `
      and past three rows the list would squash the buttons instead of scrolling. */
   flex: none; text-align: left; padding: 4px 8px; border: 0; background: none; cursor: pointer;
   font-family: inherit; color: var(--mmc-text); font-size: calc(11px * var(--mmc-type));
-  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-radius: calc(4px * var(--mmc-round));
 }
 .mmc-glora-row:hover { background: var(--mmc-wash); }
 .mmc-glora-row.on { color: var(--mmc-accent); }
@@ -402,7 +402,7 @@ export const css = `
 }
 .mmc-neural-chips { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; justify-content: flex-end; }
 .mmc-neural-chip {
-  padding: 3px 9px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 3px 9px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   background: var(--mmc-wash); border: 1px solid transparent; color: var(--mmc-text);
   font-size: calc(11px * var(--mmc-type));
   transition: color 120ms ease, border-color 120ms ease;
@@ -410,14 +410,14 @@ export const css = `
 .mmc-neural-chip:hover { border-color: var(--mmc-line-2); }
 .mmc-neural-chip.on { color: var(--mmc-accent); border-color: var(--mmc-accent); }
 .mmc-neural-keep {
-  padding: 3px 9px; border-radius: 999px; cursor: pointer; font-family: inherit;
+  padding: 3px 9px; border-radius: var(--mmc-pill-r); cursor: pointer; font-family: inherit;
   background: none; border: 1px dashed var(--mmc-line-2); color: var(--mmc-dim);
   font-size: calc(11px * var(--mmc-type));
   transition: color 120ms ease, border-color 120ms ease;
 }
 .mmc-neural-keep:hover { color: var(--mmc-text); border-color: var(--mmc-line-3); }
 .mmc-neural-name {
-  flex: 1; min-width: 110px; padding: 3px 9px; border-radius: 999px;
+  flex: 1; min-width: 110px; padding: 3px 9px; border-radius: var(--mmc-pill-r);
   background: var(--mmc-bg); border: 1px solid var(--mmc-accent); color: var(--mmc-text);
   font-family: inherit; font-size: calc(11px * var(--mmc-type));
 }
@@ -427,7 +427,7 @@ export const css = `
    drawn as the one thing to do here that is not a number. */
 .mmc-neural-see {
   display: flex; align-items: center; justify-content: center; gap: 7px;
-  padding: 7px 12px; border-radius: 9px; cursor: pointer; font-family: inherit;
+  padding: 7px 12px; border-radius: calc(9px * var(--mmc-round)); cursor: pointer; font-family: inherit;
   background: var(--mmc-surface-2); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
   transition: border-color 120ms ease, color 120ms ease;
@@ -483,7 +483,7 @@ export const css = `
 .mmc-refsheet-opts { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
 .mmc-refsheet-opt {
   padding: 4px 9px; background: var(--mmc-surface-2); border: 1px solid transparent;
-  border-radius: 8px; color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type));
+  border-radius: calc(8px * var(--mmc-round)); color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type));
   cursor: pointer; line-height: 1.3;
 }
 .mmc-refsheet-opt:hover { background: var(--mmc-surface-3); color: var(--mmc-text); }
@@ -506,7 +506,7 @@ export const css = `
 }
 .mmc-refsheet-go {
   padding: 5px 10px; background: none; border: 1px solid var(--mmc-line);
-  border-radius: 9px; color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type)); cursor: pointer;
+  border-radius: calc(9px * var(--mmc-round)); color: var(--mmc-dim); font: inherit; font-size: calc(11.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-refsheet-go:hover { background: var(--mmc-surface-2); color: var(--mmc-text); }
 .mmc-refsheet-go.danger { margin-left: auto; }
@@ -527,7 +527,7 @@ export const css = `
   font-variant-numeric: tabular-nums; font-size: calc(10.5px * var(--mmc-type));
 }
 .mmc-pl-row .mmc-pl-thumb {
-  flex: none; width: 26px; height: 26px; border-radius: 5px; object-fit: cover;
+  flex: none; width: 26px; height: 26px; border-radius: calc(5px * var(--mmc-round)); object-fit: cover;
   border: 1px solid var(--mmc-line-2);
 }
 .mmc-pl-handle {

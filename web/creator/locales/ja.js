@@ -1510,6 +1510,8 @@ export const ja = {
  "Every colour this pack draws comes from the palette in ComfyUI's own Appearance settings, so the pack changes when the desk does — including palettes you made yourself.": "このパックが描くすべての色を、ComfyUI 自身の外観設定にあるパレットから取ります。デスクが変われば、このパックも変わります——自分で作ったパレットも含めて。",
  "Dark in fullscreen": "全画面のみ暗く",
  "Node faces still follow the palette, but the fullscreen editor keeps a dark ground. For judging pictures: a frame read against white is read against the wrong thing, which is why the tools that cut and grade are dark.": "ノードの面は引き続きパレットに従いますが、全画面エディターは暗い背景を保ちます。映像を見極めるためです。白を背景に読むフレームは、間違ったものを背景に読んでいることになります。カットやグレーディングを行う道具が暗いのは、そのためです。",
+ "Slate in fullscreen": "全画面をスレートに",
+ "The fullscreen editor in black and white: a near-black ground, square corners, and no accent colour — what is selected or ready is drawn in white, so the only colour on screen is in the picture. Node faces still follow the palette.": "全画面エディターを白と黒で描きます。ほぼ黒の背景、角ばった輪郭、アクセントカラーなし — 選択中のものや準備のできたものは白で描かれるので、画面上の色は映像の中にしかありません。ノードの面は引き続きパレットに従います。",
  "The cards barely leave the ground. Quietest on a palette that already has plenty of contrast of its own.": "カードが背景からほとんど浮き上がりません。もともと十分なコントラストを持つパレットで最も落ち着いて見えます。",
  "The ladder as drawn.": "描かれたままの段階。",
  "Raised": "持ち上げる",

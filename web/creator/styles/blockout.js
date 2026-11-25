@@ -33,7 +33,7 @@ export const css = `
 .mmc-bo-adds .mmc-bn-verb { flex: 1; min-width: 0; }
 .mmc-bo-piece {
   display: flex; flex-direction: column; gap: 10px;
-  padding: 10px; border-radius: 10px;
+  padding: 10px; border-radius: calc(10px * var(--mmc-round));
   background: var(--mmc-tint); border: 1px solid var(--mmc-line);
 }
 .mmc-bo-piecename {
@@ -45,14 +45,14 @@ export const css = `
   color: var(--mmc-off); font-family: inherit; font-size: calc(11px * var(--mmc-type));
 }
 .mmc-bo-remove:hover { color: var(--mmc-text); }
-.mmc-bo-remove:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; border-radius: 4px; }
+.mmc-bo-remove:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; border-radius: calc(4px * var(--mmc-round)); }
 
 /* --- who a piece is --------------------------------------------------------- */
 /* The chooser reads like the pack's other pills: the member's dot wears the
    same hue their chip does everywhere else, which is the whole point of it. */
 .mmc-bo-who {
   display: flex; align-items: center; gap: 7px; width: 100%;
-  height: calc(28px * var(--mmc-type)); padding: 0 9px; border-radius: 7px;
+  height: calc(28px * var(--mmc-type)); padding: 0 9px; border-radius: calc(7px * var(--mmc-round));
   cursor: pointer; text-align: left; font-family: inherit;
   background: var(--mmc-wash); border: 1px solid var(--mmc-line-2);
   color: var(--mmc-text); font-size: calc(12px * var(--mmc-type));
@@ -82,7 +82,7 @@ export const css = `
 }
 /* The mark. A diamond in the trim bar's blue — a held position, not a job. */
 .mmc-bo-markdot {
-  flex: none; width: 7px; height: 7px; border-radius: 2px;
+  flex: none; width: 7px; height: 7px; border-radius: calc(2px * var(--mmc-round));
   background: var(--mmc-blue); transform: rotate(45deg);
 }
 .mmc-bo-runs {
@@ -94,7 +94,7 @@ export const css = `
   font-variant-numeric: tabular-nums; font-size: calc(11.5px * var(--mmc-type));
 }
 .mmc-bo-step {
-  width: 20px; height: 20px; padding: 0; border-radius: 6px; cursor: pointer;
+  width: 20px; height: 20px; padding: 0; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   color: var(--mmc-text); font-family: inherit; font-size: calc(11px * var(--mmc-type));
@@ -107,7 +107,7 @@ export const css = `
 .mmc-bo-play {
   flex: none; width: calc(30px * var(--mmc-type)); height: calc(30px * var(--mmc-type));
   display: flex; align-items: center; justify-content: center;
-  border-radius: 8px; cursor: pointer;
+  border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line); color: var(--mmc-text);
 }
 .mmc-bo-play:hover { background: var(--mmc-surface-2); }
@@ -115,23 +115,23 @@ export const css = `
 .mmc-bo-play:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
 .mmc-bo-track {
   position: relative; flex: 1; height: calc(30px * var(--mmc-type));
-  border-radius: 8px; cursor: pointer; touch-action: none;
+  border-radius: calc(8px * var(--mmc-round)); cursor: pointer; touch-action: none;
   background: var(--mmc-tint); border: 1px solid var(--mmc-line);
 }
 .mmc-bo-track .mmc-bo-mark {
   position: absolute; top: 50%; width: 8px; height: 8px; pointer-events: none;
   transform: translate(-50%, -50%) rotate(45deg);
-  background: var(--mmc-blue); border-radius: 2px;
+  background: var(--mmc-blue); border-radius: calc(2px * var(--mmc-round));
 }
 .mmc-bo-playhead {
-  position: absolute; top: 2px; bottom: 2px; width: 2px; border-radius: 1px;
+  position: absolute; top: 2px; bottom: 2px; width: 2px; border-radius: calc(1px * var(--mmc-round));
   background: var(--mmc-blue); pointer-events: none;
 }
 /* The one control on the row that makes something: outlined in the marks' own
    blue, because pressing it mints one. Not amber — amber is the run's. */
 .mmc-bo-markbtn {
   flex: none; display: flex; align-items: center; gap: 7px;
-  height: calc(30px * var(--mmc-type)); padding: 0 13px; border-radius: 8px; cursor: pointer;
+  height: calc(30px * var(--mmc-type)); padding: 0 13px; border-radius: calc(8px * var(--mmc-round)); cursor: pointer;
   background: none; border: 1px solid var(--mmc-blue); color: var(--mmc-blue);
   font-family: inherit; font-size: calc(12px * var(--mmc-type)); font-weight: 500;
 }
@@ -161,12 +161,12 @@ export const css = `
 .mmc-bo-hud.bottom { bottom: 10px; }
 .mmc-bo-hud .mmc-bo-switch { pointer-events: auto; }
 .mmc-bo-switch {
-  display: flex; gap: 2px; padding: 2px; border-radius: 9px;
+  display: flex; gap: 2px; padding: 2px; border-radius: calc(9px * var(--mmc-round));
   background: rgba(14, 15, 17, .74); border: 1px solid rgba(255, 255, 255, .1);
   -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
 }
 .mmc-bo-seg {
-  height: calc(24px * var(--mmc-type)); padding: 0 10px; border: 0; border-radius: 7px;
+  height: calc(24px * var(--mmc-type)); padding: 0 10px; border: 0; border-radius: calc(7px * var(--mmc-round));
   background: none; cursor: pointer; white-space: nowrap;
   font-family: inherit; font-size: calc(11.5px * var(--mmc-type));
   color: rgba(233, 231, 226, .58);
@@ -184,7 +184,7 @@ export const css = `
 /* --- starting points --------------------------------------------------------- */
 .mmc-bo-presets { display: flex; flex-wrap: wrap; gap: 5px; }
 .mmc-bo-preset {
-  height: calc(24px * var(--mmc-type)); padding: 0 9px; border-radius: 6px; cursor: pointer;
+  height: calc(24px * var(--mmc-type)); padding: 0 9px; border-radius: calc(6px * var(--mmc-round)); cursor: pointer;
   background: var(--mmc-surface); border: 1px solid var(--mmc-line);
   color: var(--mmc-dim); font-family: inherit; font-size: calc(11px * var(--mmc-type));
 }
@@ -197,7 +197,7 @@ export const css = `
 .mmc-bo-vec { display: flex; gap: 5px; }
 .mmc-bo-vecslot {
   flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px;
-  height: calc(26px * var(--mmc-type)); padding: 0 7px; border-radius: 7px;
+  height: calc(26px * var(--mmc-type)); padding: 0 7px; border-radius: calc(7px * var(--mmc-round));
   background: var(--mmc-wash); border: 1px solid var(--mmc-line-2);
 }
 .mmc-bo-vecslot:focus-within { border-color: var(--mmc-line-3); }
@@ -224,7 +224,7 @@ export const css = `
   font: inherit; color: inherit; text-align: left;
 }
 .mmc-bo-markgo:hover { color: var(--mmc-text); }
-.mmc-bo-markgo:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: 4px; }
+.mmc-bo-markgo:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 2px; border-radius: calc(4px * var(--mmc-round)); }
 
 @media (max-width: 900px) {
   .mmc-bo-cut { flex-wrap: wrap; }

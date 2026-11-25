@@ -1511,6 +1511,8 @@ export const ko = {
  "Every colour this pack draws comes from the palette in ComfyUI's own Appearance settings, so the pack changes when the desk does — including palettes you made yourself.": "이 팩이 그리는 모든 색을 ComfyUI 자체 외형 설정의 팔레트에서 가져옵니다. 작업대가 바뀌면 이 팩도 바뀝니다 — 직접 만든 팔레트까지 포함해서.",
  "Dark in fullscreen": "전체 화면만 어둡게",
  "Node faces still follow the palette, but the fullscreen editor keeps a dark ground. For judging pictures: a frame read against white is read against the wrong thing, which is why the tools that cut and grade are dark.": "노드 면은 계속 팔레트를 따르지만, 전체 화면 편집기는 어두운 바탕을 유지합니다. 그림을 판단하기 위해서입니다. 흰 바탕에서 읽는 프레임은 잘못된 바탕에서 읽는 것이며, 자르고 색을 잡는 도구들이 어두운 이유가 바로 그것입니다.",
+ "Slate in fullscreen": "전체 화면을 슬레이트로",
+ "The fullscreen editor in black and white: a near-black ground, square corners, and no accent colour — what is selected or ready is drawn in white, so the only colour on screen is in the picture. Node faces still follow the palette.": "전체 화면 편집기를 흑백으로 그립니다. 검정에 가까운 바탕, 각진 모서리, 강조색 없음 — 선택되었거나 준비된 것은 흰색으로 그려지므로 화면의 색은 영상 안에만 있습니다. 노드 면은 계속 팔레트를 따릅니다.",
  "The cards barely leave the ground. Quietest on a palette that already has plenty of contrast of its own.": "카드가 바탕에서 거의 떠오르지 않습니다. 이미 충분한 대비를 가진 팔레트에서 가장 차분합니다.",
  "The ladder as drawn.": "그려진 그대로의 단계.",
  "Raised": "띄우기",
