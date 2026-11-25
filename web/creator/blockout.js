@@ -1497,8 +1497,13 @@ export function stagingWords(timeline, index) {
 export function clipCite(timeline, segment) {
   const clip = S.stagedClip(segment);
   if (clip?.role !== "reference") return "";
-  const follow = `The camera, framing and staging follow @${clip.handle}, a rough blockout of this shot.`;
-  return S.stagingPass(timeline, segment) === "labelled"
+  return citeLine(clip.handle, S.stagingPass(timeline, segment) === "labelled");
+}
+
+/** That line, for a clip of a given handle. */
+export function citeLine(handle, labelled) {
+  const follow = `The camera, framing and staging follow @${handle}, a rough blockout of this shot.`;
+  return labelled
     ? `${follow} Its colours and name tags only say who and what each block is: they are not part of the picture.`
     : follow;
 }
@@ -1662,10 +1667,20 @@ export function drawLabels(context, cam, objects, width, height) {
     if (!at || at.x < 0 || at.x > width || at.y < -size || at.y > height) continue;
     tags.push({ piece, text, at });
   }
-  tags.sort((a, b) => b.at.z - a.at.z);
-  for (const { piece, text, at } of tags) {
-    const wide = Math.round(context.measureText(text).width + size * 0.9), tall = Math.round(size * 1.55);
-    const x = Math.round(clamp(at.x - wide / 2, 0, width - wide)), y = Math.round(clamp(at.y - tall, 0, height - tall));
+  // The nearest keeps its place over its piece; one behind that would lie under
+  // it is moved up until it is clear, so no name is hidden by another.
+  tags.sort((a, b) => a.at.z - b.at.z);
+  const tall = Math.round(size * 1.55), placed = [];
+  for (const tag of tags) {
+    tag.wide = Math.round(context.measureText(tag.text).width + size * 0.9);
+    tag.x = Math.round(clamp(tag.at.x - tag.wide / 2, 0, Math.max(0, width - tag.wide)));
+    tag.y = Math.round(clamp(tag.at.y - tall, 0, height - tall));
+    const under = () => placed.some((other) => tag.x < other.x + other.wide + 2 && other.x < tag.x + tag.wide + 2
+      && tag.y < other.y + tall + 2 && other.y < tag.y + tall + 2);
+    for (let tries = 0; tries < 8 && tag.y > 0 && under(); tries++) tag.y = Math.max(0, tag.y - Math.ceil(tall / 2));
+    placed.push(tag);
+  }
+  for (const { piece, text, x, y, wide } of tags.reverse()) {
     const hue = piece.plays ? tagRGB(S.tagIndex(piece.plays)) : null;
     context.fillStyle = hue ? `rgb(${hue[0]},${hue[1]},${hue[2]})` : "rgb(14,15,17)";
     context.fillRect(x, y, wide, tall);

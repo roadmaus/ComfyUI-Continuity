@@ -66,13 +66,96 @@ export const css = `
 .mmc-st .mmc-bo-seg { display: inline-flex; align-items: center; gap: 5px; }
 .mmc-st .mmc-bo-seg:disabled { opacity: .4; cursor: not-allowed; }
 
+/* --- the shot camera's frame in its corner, and what a drag is about to do --------- */
+.mmc-st-monitor { position: absolute; z-index: 3; top: 50px; right: 12px; width: min(31%, 320px); border-radius: 8px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .22); background: #000; box-shadow: 0 8px 26px rgba(0, 0, 0, .5); }
+.mmc-st-monitor.tall { width: min(17%, 170px); }
+.mmc-st-monitor[hidden] { display: none; }
+.mmc-st .mmc-st-monitor canvas { position: static; width: 100%; height: auto; cursor: pointer; }
+.mmc-st-monitorcap { position: absolute; inset: 0 0 auto 0; display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 3px 4px 8px 8px;
+  font-size: calc(11px * var(--mmc-type, 1)); color: #f0ede7; font-variant-numeric: tabular-nums; background: linear-gradient(rgba(0, 0, 0, .7), transparent); pointer-events: none; }
+.mmc-st-monitorswitch { display: inline-flex; gap: 2px; pointer-events: auto; }
+.mmc-st-monitorswitch .mmc-bo-seg { height: calc(20px * var(--mmc-type, 1)); padding: 0 7px; font-size: calc(10.5px * var(--mmc-type, 1)); }
+.mmc-st-focus.mmc-st-drawer .mmc-st-monitor { right: calc(min(360px, 100% - 60px) + 28px); transition: right .18s ease; }
+.mmc-st-badge { position: absolute; z-index: 3; top: 50px; left: 12px; max-width: calc(64% - 24px); display: flex; align-items: center; gap: 7px; padding: 4px 10px;
+  border-radius: 8px; background: rgba(14, 15, 17, .78); border: 1px solid rgba(255, 255, 255, .16); color: #f0ede7; pointer-events: none;
+  font-size: calc(11.5px * var(--mmc-type, 1)); line-height: 1.35; font-variant-numeric: tabular-nums; }
+.mmc-st-badge[hidden] { display: none; }
+.mmc-st-badge i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--mmc-dim); }
+.mmc-st-badge.new i { background: var(--mmc-accent); }
+.mmc-st-badge.move i { background: var(--mmc-role-motion, #6ebeff); }
+.mmc-st-badge.path i { border-radius: 2px; transform: rotate(45deg); background: var(--mmc-accent); }
+
+/* --- the mark sheet under the glass: a lane for each mover, a diamond for each stop -- */
+.mmc-st-sheet { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 8px; border-radius: 12px; background: var(--mmc-surface); }
+.mmc-st-sheet [hidden] { display: none; }
+.mmc-st-sheethead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0 10px; }
+.mmc-st-sheethead .mmc-bn-gap { flex: 1; }
+.mmc-st-sheethead .mmc-st-said { color: var(--mmc-strong); font-size: calc(12.5px * var(--mmc-type, 1)); }
+.mmc-st-bench .mmc-st-key { width: calc(30px * var(--mmc-type, 1)); padding: 0; justify-content: center; }
+.mmc-st-stepper { display: inline-flex; align-items: center; gap: 2px; }
+.mmc-st-shotname { font-size: calc(12px * var(--mmc-type, 1)); color: var(--mmc-dim); font-variant-numeric: tabular-nums; }
+.mmc-st-lanes { position: relative; --mmc-st-lab: 104px; --mmc-st-pad: 12px; }
+.mmc-st-lane { display: grid; grid-template-columns: var(--mmc-st-lab) minmax(0, 1fr); align-items: center; }
+.mmc-st-lane.held { background: var(--mmc-wash); }
+.mmc-st-lanename { display: flex; align-items: center; gap: 7px; min-width: 0; height: 26px; padding: 0 6px 0 12px; border: 0; background: none; cursor: pointer; text-align: left;
+  font: inherit; font-size: calc(12px * var(--mmc-type, 1)); color: var(--mmc-dim); }
+.mmc-st-lanename span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mmc-st-lane.held .mmc-st-lanename { color: var(--mmc-strong); font-weight: 600; }
+.mmc-st-lanename:focus-visible, .mmc-st-stop:focus-visible, .mmc-st-clause:focus-visible { outline: 2px solid var(--mmc-accent); outline-offset: 1px; }
+.mmc-st-track { position: relative; height: 26px; margin: 0 var(--mmc-st-pad); cursor: ew-resize; touch-action: none; }
+.mmc-st-track::before { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 1px; background: var(--mmc-line-2); }
+.mmc-st-ruler { height: 18px; }
+.mmc-st-ruler::before { display: none; }
+.mmc-st-tick { position: absolute; top: 2px; bottom: 0; padding-left: 4px; border-left: 1px solid var(--mmc-line-2); pointer-events: none; white-space: nowrap;
+  font-size: calc(10.5px * var(--mmc-type, 1)); color: var(--mmc-off); font-variant-numeric: tabular-nums; }
+.mmc-st-tick.end { transform: translateX(-100%); padding: 0 4px 0 0; border-left: 0; border-right: 1px solid var(--mmc-line-2); }
+.mmc-st-leg { position: absolute; top: 50%; height: 4px; margin-top: -2px; border-radius: 2px; pointer-events: none; background: color-mix(in srgb, var(--hue) 55%, transparent); }
+.mmc-st-leg.still { background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--hue) 45%, transparent) 0 4px, transparent 4px 8px); }
+.mmc-st-stop { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; padding: 0; transform: rotate(45deg); border-radius: 2px;
+  background: var(--mmc-surface); border: 2px solid var(--hue); cursor: grab; touch-action: none; }
+.mmc-st-stop::after { content: ""; position: absolute; inset: -8px; }
+.mmc-st-stop.here { background: var(--hue); }
+.mmc-st-stop.rest { border-style: dotted; cursor: default; pointer-events: none; opacity: .7; }
+.mmc-st-stop:active { cursor: grabbing; }
+.mmc-st-playwrap { position: absolute; top: 0; bottom: 0; left: calc(var(--mmc-st-lab) + var(--mmc-st-pad)); right: var(--mmc-st-pad); pointer-events: none; }
+.mmc-st-playhead { position: absolute; top: 0; bottom: 0; width: 0; border-left: 1.5px solid var(--mmc-accent); }
+.mmc-st-playhead::before { content: ""; position: absolute; top: 0; left: -5.5px; border: 5px solid transparent; border-top: 7px solid var(--mmc-accent); }
+.mmc-st-pacehost { padding: 6px 12px 0; border-top: 1px solid var(--mmc-line); }
+.mmc-st-sheethead .mmc-reel-btn[aria-pressed="true"] { color: var(--mmc-strong); background: var(--mmc-wash-2); }
+
+/* --- what the model is given, under the inspector ----------------------------------- */
+.mmc-st-gets { flex: none; max-height: 56%; overflow: auto; display: flex; flex-direction: column; gap: 10px; padding: 14px 20px 18px;
+  border-top: 1px solid var(--mmc-line); background: color-mix(in oklab, var(--mmc-bg) 94%, var(--mmc-media-bg)); }
+.mmc-st-gets[hidden] { display: none; }
+.mmc-st-gets > * { flex: none; }
+.mmc-st-bench .mmc-reel-inspect { min-height: 30%; }
+.mmc-st-getshead { display: flex; align-items: baseline; gap: 8px; }
+.mmc-st-getshead b { font-size: calc(14px * var(--mmc-type, 1)); color: var(--mmc-strong); }
+.mmc-st-getshead span { flex: 1; font-size: calc(12.5px * var(--mmc-type, 1)); color: var(--mmc-dim); }
+.mmc-st-frames { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mmc-st-frames figure { margin: 0; min-width: 0; }
+.mmc-st-frames canvas { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--mmc-line); }
+.mmc-st-frames figcaption { margin-top: 3px; font-size: calc(11px * var(--mmc-type, 1)); color: var(--mmc-off); }
+.mmc-st-file { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: calc(11px * var(--mmc-type, 1)); color: var(--mmc-dim); overflow-wrap: anywhere; }
+.mmc-st-given { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--mmc-line); background: var(--mmc-surface);
+  font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.55; color: var(--mmc-text); }
+.mmc-st-prose { white-space: pre-wrap; }
+.mmc-st-prose.none { color: var(--mmc-off); }
+.mmc-st-cite { color: var(--mmc-role-motion, #6ebeff); }
+.mmc-st-clause { border-radius: 4px; cursor: pointer; border-bottom: 1px dotted var(--mmc-line-3); }
+.mmc-st-clause:hover { background: color-mix(in srgb, var(--tag, var(--mmc-role-motion, #6ebeff)) 28%, transparent); }
+.mmc-st-clause.changed { animation: mmc-st-flash 1.8s ease-out; }
+@keyframes mmc-st-flash { from { background: color-mix(in srgb, var(--mmc-accent) 60%, transparent); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .mmc-st-clause.changed { animation: none; } }
+
 /* --- the speed lane under the glass ----------------------------------------------- */
 .mmc-st-pace { position: relative; flex: none; display: flex; flex-direction: column; gap: 6px; }
 .mmc-st-pace[hidden], .mmc-st-pace [hidden] { display: none; }
 .mmc-st-pacehead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px; }
 .mmc-st-pacename { font-weight: 600; font-size: calc(12.5px * var(--mmc-type, 1)); }
-.mmc-st-pacenow { position: absolute; right: 14px; bottom: 64px; pointer-events: none; font-size: calc(12px * var(--mmc-type, 1)); font-variant-numeric: tabular-nums; color: var(--mmc-dim); }
-.mmc-st-pace canvas { width: 100%; height: 84px; display: block; border-radius: 10px; cursor: pointer; touch-action: none;
+.mmc-st-pacenow { position: absolute; right: 22px; bottom: 44px; pointer-events: none; font-size: calc(12px * var(--mmc-type, 1)); font-variant-numeric: tabular-nums; color: var(--mmc-dim); }
+.mmc-st-pace canvas { width: 100%; height: 64px; display: block; border-radius: 10px; cursor: pointer; touch-action: none;
   color: var(--mmc-text); background: var(--mmc-surface-2); }
 
 /* --- the strip: the sets over the film, a shot's guide on its card, the playhead -- */
@@ -92,7 +175,6 @@ export const css = `
 .mmc-st-bench .mmc-reel-icontrol .mmc-bo-vecslot { flex: 1 1 0; min-width: 0; padding: 0 5px; gap: 4px; }
 .mmc-st-warn { color: var(--mmc-accent); font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.45; }
 .mmc-st-range { width: 100%; max-width: 240px; accent-color: var(--mmc-accent); }
-.mmc-st-words { white-space: pre-wrap; }
 .mmc-st-bench .mmc-st-scale { width: 84px; }
 .mmc-st-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .mmc-st-chips .mmc-reel-btn { padding-inline: 10px; }

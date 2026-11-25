@@ -141,13 +141,15 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     window.S = S; window.tl = tl; window.queued = 0; window.timelineOpened = 0;
     if (extra) (0, eval)(extra);
     B.openStaging({ timeline: tl, onCommit: () => {}, queue: () => { window.queued++; },
-      openTimeline: () => { window.timelineOpened++; }, opened: (bench) => { window.bench = bench; } });
+      openTimeline: () => { window.timelineOpened++; },
+      // The checks written for the flown-round view keep it; the plan has its own below.
+      opened: (bench) => { window.bench = bench; bench.plan = false; } });
     return 'ok';
   }, extra);
   assert.equal(await open(), 'ok');
   await page.waitForTimeout(250);
   const ink = () => page.evaluate(() => {
-    const canvas = document.querySelector('.mmc-st canvas');
+    const canvas = document.querySelector('.mmc-st > canvas');
     const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
     let lit = 0;
     for (let i = 0; i < data.length; i += 4 * 97) if (data[i] + data[i + 1] + data[i + 2] > 60) lit++;
@@ -175,19 +177,25 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
   });
 
   await check('The glass draws the stage, and the guide exactly as the file will hold it', async () => {
+    // Handled from outside the shot camera, the stage is the whole of the glass.
     const stage = await ink();
     assert.ok(stage.lit > 50, `the stage drew nothing: ${JSON.stringify(stage)}`);
-    assert.ok(stage.w >= 320 && Math.abs(stage.w / stage.h - 1344 / 768) < 0.02, JSON.stringify(stage));
+    const room = await page.evaluate(() => { const r = document.querySelector('.mmc-st-glass').getBoundingClientRect(); return r.width / r.height; });
+    assert.ok(stage.w >= 320 && Math.abs(stage.w / stage.h - room) < 0.02, JSON.stringify([stage, room]));
+    // The shot camera's frustum is drawn in the marks' blue on the stage, and nowhere in a guide.
+    const inked = () => page.evaluate(() => {
+      const canvas = document.querySelector('.mmc-st > canvas');
+      const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      let blue = 0;
+      for (let i = 0; i < data.length; i += 4) if (data[i + 2] > 220 && data[i] < 150 && data[i + 1] > 150) blue++;
+      return blue;
+    });
+    assert.ok(await inked() > 20, 'the stage shows the shot camera');
     await page.locator('.mmc-bo-hud.top').getByText('Guide', { exact: true }).click();
     await page.waitForTimeout(80);
-    const depth = await page.evaluate(() => {
-      const canvas = document.querySelector('.mmc-st canvas');
-      const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
-      let grey = true;
-      for (let i = 0; i < data.length; i += 4 * 131) if (data[i] !== data[i + 1] || data[i] !== data[i + 2]) grey = false;
-      return grey;
-    });
-    assert.equal(depth, true, 'the depth pass is grey');
+    const guide = await ink();
+    assert.ok(Math.abs(guide.w / guide.h - 1344 / 768) < 0.02, `the guide is the render's frame: ${JSON.stringify(guide)}`);
+    assert.equal(await inked(), 0, 'the guide carries no staging aid');
     assert.equal(await page.locator('.mmc-bo-hud.top button', { hasText: 'Still' }).isDisabled(), true);
     await page.locator('.mmc-bo-hud.top').getByText('Stage', { exact: true }).click();
   });
@@ -226,9 +234,11 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       document.querySelector('.mmc-reel-ihead b').textContent,
       document.querySelector('.mmc-reel-ihead span').textContent,
       [...document.querySelectorAll('.mmc-reel-inspect .mmc-reel-ilabel')].map((n) => n.textContent),
-      document.querySelector('.mmc-reel-inspect .mmc-reel-compiled').textContent.split('\n')[0].replace(/staged-[0-9a-z]+-/, 'staged-#-'),
+      [...document.querySelectorAll('.mmc-st-gets .mmc-reel-ilabel')].map((n) => n.textContent),
+      document.querySelector('.mmc-st-gets .mmc-st-file').textContent.replace(/staged-[0-9a-z]+-/, 'staged-#-'),
     ]), ['Shot 2', '4.0 s · the kitchen set',
-      ['Length', 'Camera', 'Marks', 'Lens', 'Staging', 'Guide', 'Seed'],
+      ['Length', 'Camera', 'Keep looking at', 'Camera shake', 'Lens', 'Seed'],
+      ['Guide', 'Words'],
       'input/continuity/blockout/staged-#-as_staged.mp4 · 96 frames · As staged']);
   });
 
@@ -355,7 +365,7 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await open();
     await page.waitForTimeout(120);
     await page.evaluate(() => { bench.select({ kind: 'shot', index: 0 }); });
-    const glass = await page.locator('.mmc-st canvas').boundingBox();
+    const glass = await page.locator('.mmc-st > canvas').boundingBox();
     const middle = { x: glass.x + glass.width / 2, y: glass.y + glass.height * 0.75 };
     const noView = () => page.evaluate(() => JSON.stringify(JSON.parse(S.serializeTimeline(tl)), (k, v) => (k === 'view' ? undefined : v)));
     const before = await noView();
@@ -481,7 +491,7 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
 
   await check('Copy puts what the model is given for a shot on the clipboard', async () => {
     await page.evaluate(() => { window.copied = null; navigator.clipboard.writeText = async (text) => { window.copied = text; }; bench.select({ kind: 'shot', index: 0 }); });
-    await page.locator('.mmc-reel-machine').getByText('Copy').click();
+    await page.locator('.mmc-st-gets').getByText('Copy').click();
     assert.match(await page.evaluate(() => window.copied), /^@anna .*The camera /);
   });
 
@@ -499,10 +509,18 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
   await check('The stage is the render\'s frame: a new ratio reshapes it at once', async () => {
     await open();
     await page.waitForTimeout(120);
+    // Through the shot camera the glass is the frame; handled from outside, the monitor is.
+    const monitor = () => page.evaluate(() => { const c = document.querySelector('.mmc-st-monitor canvas'); return c.width / c.height; });
+    assert.ok(await monitor() > 1.7, 'the monitor is the frame');
+    await page.evaluate(() => bench.setLook('lens'));
+    await page.waitForTimeout(120);
     const wide = await ink();
     await page.evaluate(() => { tl.aspect = '9:16'; bench.commit(); });
     await page.waitForTimeout(120);
     const tall = await ink();
+    await page.evaluate(() => bench.setLook('around'));
+    await page.waitForTimeout(120);
+    assert.ok(await monitor() < 0.6, 'the monitor follows the ratio');
     assert.ok(wide.w > wide.h && tall.h > tall.w && tall.lit > 50, JSON.stringify([wide, tall]));
   });
 
@@ -576,6 +594,202 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.locator('.mmc-reel-inspect-body .mmc-asset-x').click();
     await page.getByText('Really remove?', { exact: true }).click();
     assert.equal(await page.evaluate(() => tl.segments.length), 2);
+  });
+
+  // ---- handled by hand: the plan, the sheet of stops, and what the model is given ----
+
+  await check('The plan looks straight down, the shot camera keeps its corner, and a person dragged on it is blocked', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.setLook('plan'); bench.select({ kind: 'shot', index: 1 }); bench.at.t = 2; bench.select({ kind: 'thing', id: 8 }); });
+    await page.waitForTimeout(120);
+    assert.deepEqual(await page.evaluate(() => [bench.eye().pitch < -1.5, bench.eye().y > 100,
+      document.querySelector('.mmc-bo-hud.top button[aria-pressed="true"]:not(:first-child)')?.textContent ?? '',
+      [...document.querySelectorAll('.mmc-bo-hud.top [aria-label="Which camera"] button')].map((b) => [b.textContent, b.getAttribute('aria-pressed')].join(':')),
+      document.querySelector('.mmc-st-monitor').hidden, document.querySelector('.mmc-st-monitor span').textContent]),
+    [true, true, '', ['Plan:true', 'Look around:false', 'What the camera sees:false'], false, 'Camera · 28 mm']);
+    // On a plan a drag to the right is a move along x and nothing else.
+    const before = await page.evaluate(() => { const p = bench.objectsNow().find((o) => o.id === 8); return [p.x, p.z]; });
+    const centre = await onGlass('const g = bench.gizmo(bench.eye()); [g.at.x, g.at.y]');
+    await dragBy({ x: centre.x, y: centre.y + 4 }, 50, 0);
+    const moved = await page.evaluate(() => { const m = tl.segments[1].staging.people[8].find((mark) => mark.t === 2); return [m.x, m.z, tl.segments[1].staging.people[8].length]; });
+    assert.ok(moved[0] > before[0] + 0.3 && Math.abs(moved[1] - before[1]) < 0.08 && moved[2] === 3, JSON.stringify([before, moved]));
+    // The floor dragged slides the plan, and is not an edit.
+    const text = await page.evaluate(() => S.serializeTimeline(tl));
+    const view = await page.evaluate(() => ({ ...bench.planView() }));
+    const rect = await page.evaluate(() => { const r = bench.canvas.getBoundingClientRect(); return { x: r.left + 30, y: r.bottom - 70 }; });
+    await dragBy(rect, 40, -20);
+    assert.deepEqual(await page.evaluate(([text, view]) => [S.serializeTimeline(tl) === text, bench.planView().x < view.x, bench.planView().z < view.z], [text, view]), [true, true, true]);
+    // The monitor is the way into the shot camera.
+    await page.locator('.mmc-st-monitor canvas').click();
+    await page.waitForTimeout(80);
+    assert.deepEqual(await page.evaluate(() => [bench.lens, document.querySelector('.mmc-st-monitor').hidden]), [true, true]);
+  });
+
+  await check('The badge says what a drag is about to do before it does it', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    const badge = () => page.evaluate(() => { const b = document.querySelector('.mmc-st-badge'); return b.hidden ? null : [b.className.split(' ')[1], b.textContent]; });
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 1 }); });
+    assert.equal(await badge(), null);
+    await page.evaluate(() => { bench.at.t = 2; bench.select({ kind: 'thing', id: 8 }); });
+    await page.waitForTimeout(60);
+    assert.deepEqual(await badge(), ['new', 'A drag writes a new stop for @ben at 2.0 s']);
+    await page.evaluate(() => { bench.at.t = 4; bench.paint(); });
+    await page.waitForTimeout(60);
+    assert.deepEqual(await badge(), ['move', 'A drag moves @ben\'s stop at 4.0 s']);
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 5 }));
+    await page.waitForTimeout(60);
+    assert.deepEqual(await badge(), ['set', 'Table is the set: moving it changes every shot staged on it']);
+    await page.evaluate(() => { bench.at.t = 1; bench.setLook('lens'); });
+    await page.waitForTimeout(60);
+    assert.deepEqual(await badge(), ['new', 'A drag writes a new camera stop at 1.0 s']);
+  });
+
+  await check('The sheet has a lane for each mover: a diamond dragged is another moment, a lane double-clicked gains a stop', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => bench.select({ kind: 'shot', index: 1 }));
+    await page.waitForTimeout(60);
+    assert.deepEqual(await page.evaluate(() => [
+      [...document.querySelectorAll('.mmc-st-lane button.mmc-st-lanename')].map((n) => n.textContent),
+      [...document.querySelectorAll('.mmc-st-lane')].slice(1).map((lane) => lane.querySelectorAll('.mmc-st-stop').length),
+      document.querySelector('.mmc-st-lane.held .mmc-st-lanename').textContent,
+      document.querySelector('.mmc-st-shotname').textContent, document.querySelector('.mmc-st-pacehost').hidden,
+      [...document.querySelectorAll('.mmc-st-tick')].map((n) => n.textContent)]),
+    [['Camera', '@anna', '@ben'], [2, 2, 2], 'Camera', 'Shot 2 of 3', true, ['0 s', '1 s', '2 s', '3 s', '4 s']]);
+    // @ben's last stop, dragged a quarter of the lane to the left: he arrives a second sooner.
+    const lane = page.locator('.mmc-st-lane', { hasText: '@ben' });
+    const track = await lane.locator('.mmc-st-track').boundingBox();
+    const last = await lane.locator('.mmc-st-stop').last().boundingBox();
+    await dragBy({ x: last.x + last.width / 2, y: last.y + last.height / 2 }, -track.width / 4, 0);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[1].staging.people[8].map((m) => m.t), bench.at.t, bench.sel.kind, bench.sel.id,
+      tl.segments.map((seg) => S.isKept(seg)), document.querySelector('.mmc-st-lane.held .mmc-st-lanename').textContent]),
+    [[0, 3], 3, 'thing', 8, [true, false, false], '@ben']);
+    // A press on a lane moves the playhead and snaps to a stop.
+    await page.mouse.click(track.x + track.width * 0.5, track.y + track.height / 2);
+    assert.equal(await page.evaluate(() => bench.at.t), 2);
+    await page.mouse.click(track.x + track.width * 0.745, track.y + track.height / 2);
+    assert.equal(await page.evaluate(() => bench.at.t), 3);
+    // The camera's lane, double-clicked a quarter of the way in.
+    const cam = await page.locator('.mmc-st-lane', { hasText: 'Camera' }).locator('.mmc-st-track').boundingBox();
+    await page.mouse.dblclick(cam.x + cam.width * 0.25, cam.y + cam.height / 2);
+    await page.waitForTimeout(60);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[1].staging.camera.map((m) => m.t), bench.sel.kind]), [[0, 1, 4], 'shot']);
+    // K is a stop at the playhead, and the comma and the full stop walk the stops.
+    await page.evaluate(() => { bench.goTo(1, 2.5); bench.paint(); });
+    await page.keyboard.press('k');
+    assert.deepEqual(await page.evaluate(() => tl.segments[1].staging.camera.map((m) => m.t)), [0, 1, 2.5, 4]);
+    await page.keyboard.press(',');
+    await page.keyboard.press(',');
+    assert.equal(await page.evaluate(() => bench.at.t), 0);
+    await page.keyboard.press('.');
+    assert.equal(await page.evaluate(() => bench.at.t), 1);
+    // The speed lane is the sheet's second page.
+    await page.locator('.mmc-st-sheethead').getByText('Speed', { exact: true }).click();
+    assert.deepEqual(await page.evaluate(() => [document.querySelector('.mmc-st-pacehost').hidden, document.querySelector('.mmc-st-pacename').textContent]), [false, 'Camera: speed']);
+    // And the way to the next shot stays when the reel is folded away.
+    await page.keyboard.press('f');
+    await page.locator('.mmc-st-stepper button').last().click();
+    assert.deepEqual(await page.evaluate(() => [bench.index(), document.querySelector('.mmc-st-shotname').textContent]), [2, 'Shot 3 of 3']);
+    await page.keyboard.press('f');
+  });
+
+  await check('Draw path lays a walk by clicking the floor, spread over the shot at one pace', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.setLook('plan'); bench.select({ kind: 'shot', index: 0 }); bench.select({ kind: 'thing', id: 7 }); });
+    await page.waitForTimeout(80);
+    await page.keyboard.press('p');
+    assert.deepEqual(await page.evaluate(() => [bench.tool, document.querySelector('.mmc-st-badge').textContent]), ['path', 'Click the floor: each click is @anna\'s next stop']);
+    // Two clicks on bare floor in front of the counter.
+    const spot = (x, z) => onGlass(`const B = bench.eye(); const p = (() => { const sy = Math.sin(B.yaw), cy = Math.cos(B.yaw), sp = Math.sin(B.pitch), cp = Math.cos(B.pitch); const dx = ${x} - B.x, dy = -B.y, dz = ${z} - B.z; const x1 = cy * dx - sy * dz, z1 = sy * dx + cy * dz; const y2 = cp * dy - sp * z1, z2 = sp * dy + cp * z1; const fl = (bench.raster.h / 2) / Math.tan(Math.atan(12 / B.mm)); return [bench.raster.w / 2 + fl * x1 / z2, bench.raster.h / 2 - fl * y2 / z2]; })(); p`);
+    const a = await spot(-0.5, 1.6), b = await spot(0.4, -0.6);
+    await page.mouse.click(a.x, a.y);
+    await page.waitForTimeout(60);
+    await page.mouse.click(b.x, b.y);
+    await page.waitForTimeout(60);
+    const marks = await page.evaluate(() => tl.segments[0].staging.people[7].map((m) => [m.t, Math.round(m.x * 10) / 10, Math.round(m.z * 10) / 10]));
+    assert.equal(marks.length, 3, JSON.stringify(marks));
+    assert.deepEqual([marks[0], marks[1].slice(1), marks[2]], [[0, -1.5, 2.8], [-0.5, 1.6], [5, 0.4, -0.6]], JSON.stringify(marks));
+    // One pace: the stop in between falls where the distance puts it.
+    const d1 = Math.hypot(1, 1.15), d2 = Math.hypot(0.9, 2.2);
+    assert.ok(Math.abs(marks[1][0] - (5 * d1) / (d1 + d2)) < 0.12, JSON.stringify(marks));
+    assert.deepEqual(await page.evaluate(() => [tl.segments.map((seg) => S.isKept(seg)), /@anna: 3 stops/.test(bench.statusHost.textContent)]), [[false, false, false], true]);
+    // A set piece stays put, and says how it could move.
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 5 }));
+    await page.mouse.click(a.x, a.y);
+    assert.match(await page.evaluate(() => bench.statusHost.textContent), /part of the set and stays put/);
+    await page.keyboard.press('Escape');
+    assert.equal(await page.evaluate(() => bench.tool), 'move');
+  });
+
+  await check('What the model is given stays under the inspector: the frames, the words, and whose words they are', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 5 }));
+    await page.waitForTimeout(80);
+    const given = () => page.evaluate(() => ({
+      head: document.querySelector('.mmc-st-getshead').textContent,
+      frames: [...document.querySelectorAll('.mmc-st-frames canvas')].map((c) => c.width / c.height > 1.7),
+      prose: document.querySelector('.mmc-st-prose').textContent.slice(0, 22),
+      cite: document.querySelector('.mmc-st-cite')?.textContent ?? null,
+      clauses: [...document.querySelectorAll('.mmc-st-clause')].map((n) => n.dataset.id),
+      told: document.querySelector('.mmc-st-told')?.textContent.slice(0, 40) ?? null,
+      seg: [...document.querySelectorAll('.mmc-st-gets .mmc-reel-seg button[aria-pressed="true"]')].map((n) => n.textContent),
+    }));
+    // A piece of the set is selected, and the panel is still the shot's.
+    assert.deepEqual(await given(), { head: 'What the model is givenshot 1Copy', frames: [true, true], prose: '@anna stands at the co',
+      cite: 'The camera, framing and staging follow @the-clip, a rough blockout of this shot.',
+      clauses: ['7', '5', '6', '4', '3', '8', 'camera'], told: '@anna stands at frame left in the midgro', seg: ['As staged', 'Yours, then the staging'] });
+    // A clause pointed at lights its piece; pressed, it is selected.
+    await page.locator('.mmc-st-clause[data-id="8"]').hover();
+    assert.equal(await page.evaluate(() => bench.hot), 8);
+    await page.locator('.mmc-st-clause[data-id="8"]').click();
+    assert.deepEqual(await page.evaluate(() => [bench.sel.kind, bench.sel.id]), ['thing', 8]);
+    // The shot's own words alone: nothing written about the scene, and the takes say so.
+    await page.locator('.mmc-st-gets').getByText('Yours only', { exact: true }).click();
+    await page.waitForTimeout(80);
+    const own = await given();
+    assert.deepEqual([own.clauses, own.told, own.seg, own.cite], [[], null, ['As staged', 'Yours only'],
+      'The camera, framing and staging follow @the-clip, a rough blockout of this shot.']);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[0].staging.say, tl.segments[0].staging.words ?? null, tl.staging_say ?? null, tl.segments.map((seg) => S.isKept(seg))]),
+      ['own', null, null, [false, false, false]]);
+    // For the piece: every staged shot follows, and one that says otherwise keeps its say.
+    await page.evaluate(() => bench.select(null));
+    await page.locator('.mmc-reel-inspect').getByText('Yours only', { exact: true }).click();
+    assert.deepEqual(await page.evaluate(() => [tl.staging_say, tl.segments.map((seg) => S.stagingSay(tl, seg)), tl.segments.map((seg) => seg.staging.words ?? null)]),
+      ['own', ['own', 'own', 'own'], [null, null, null]]);
+  });
+
+  await check('A labelled guide is the stage as it is seen: the cast in their colours, every name in the frame', async () => {
+    await open();
+    await page.waitForTimeout(120);
+    await page.evaluate(() => { bench.select({ kind: 'shot', index: 1 }); bench.goTo(1, 2); });
+    await page.locator('.mmc-st-gets').getByText('Labelled', { exact: true }).click();
+    await page.waitForTimeout(80);
+    await page.locator('.mmc-bo-hud.top').getByText('Guide', { exact: true }).click();
+    await page.waitForTimeout(120);
+    // A tag is a flat field of the member's own hue, which no clay pixel is.
+    const hues = await page.evaluate(async () => {
+      const B = await import('/ext/web/creator/blockout.js');
+      const canvas = document.querySelector('.mmc-st > canvas');
+      const data = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height).data;
+      const count = (rgb) => { let n = 0; for (let i = 0; i < data.length; i += 4) if (data[i] === rgb[0] && data[i + 1] === rgb[1] && data[i + 2] === rgb[2]) n++; return n; };
+      return [count(B.tagRGB(S.tagIndex('anna'))) > 80, count(B.tagRGB(S.tagIndex('ben'))) > 80, count([14, 15, 17]) > 200];
+    });
+    assert.deepEqual(hues, [true, true, true]);
+    assert.deepEqual(await page.evaluate(() => [tl.segments[1].staging.pass, S.stagedGuideName(tl, 1).endsWith('-labelled'),
+      document.querySelector('.mmc-st-cite').textContent]),
+    ['labelled', true, 'The camera, framing and staging follow @the-clip, a rough blockout of this shot. Its colours and name tags only say who and what each block is: they are not part of the picture.']);
+    // Shot, it is one reference clip, and the words that go with it are the shot's and the line that names it.
+    await page.evaluate(() => { tl.staging_say = 'own'; bench.commit(); });
+    writes.length = 0;
+    await page.locator('.mmc-reel-shoot').click();
+    await page.waitForFunction(() => window.queued > 0, null, { timeout: 20000 });
+    const clip = await page.evaluate(() => { const a = S.stagedClip(tl.segments[1]); return [a.role, /-labelled\.mp4$/.test(a.filename), tl.segments[1].staging.words.replace(`@${a.handle}`, '@clip')]; });
+    assert.deepEqual(clip, ['reference', true, 'The camera, framing and staging follow @clip, a rough blockout of this shot. Its colours and name tags only say who and what each block is: they are not part of the picture.']);
+    assert.ok(writes.some((body) => body.op === 'labelled'), JSON.stringify(writes));
   });
 
   if (process.env.SHOT) {
