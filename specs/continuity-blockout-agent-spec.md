@@ -402,8 +402,12 @@ window makes them matter:
   differently.
 - The scene's lines gain the kept take (§4).
 
-Left for later, in the order I would take them: start a set from the scene
-library, remove a set or a cast member, reorder shots, bend a path, the speed
+Added after the first run in the window, where a kitchen was asked for and
+built from walls: `use_set` takes `library`, which starts the new set as one of
+the scene library's, with its furniture and people and without its camera
+move. The names are listed in the tool, as the models are in `add_objects`.
+
+Left for later, in the order I would take them: remove a set or a cast member, reorder shots, bend a path, the speed
 curve. Each is a small tool over something the bench already does.
 
 ## 9. Testing

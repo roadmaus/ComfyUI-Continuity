@@ -169,6 +169,11 @@ async function stopped(count) {
     assert.match((await one('use_set', { name: 'Street' })).text, /^Sets: "Kitchen", "Street"\nSet "Street", 0 objects:/);
     assert.match((await one('use_set', { name: 'Kitchen' })).text, /Set "Kitchen", 0 objects:/);
     assert.deepEqual((await piece()).sets.map((set) => [set.id, set.name]), [['set-1', 'Kitchen'], ['set-2', 'Street']]);
+    assert.match((await one('use_set', { name: 'Café', library: 'cafe' })).text, /Set "Café", \d+ objects:\n#1 /);
+    assert.ok((await piece()).sets[2].objects.some((object) => object.model === 'counter'));
+    refusedWith(await one('use_set', { name: 'Café', library: 'cafe' }), 'there is a set "Café" already, and library only starts a new one');
+    refusedWith(await one('use_set', { name: 'Moon', library: 'moon' }), 'there is no library set "moon"');
+    assert.equal((await piece()).sets.length, 3);
   });
 
   await check('add_cast adds somebody once, under a handle a text can name', async () => {

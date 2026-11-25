@@ -18,6 +18,7 @@ import { rulesFor } from "./canvas.js";
 import { run as runJob, cancelPrompt } from "./queue.js";
 import { settings as refinerSettings, chosenModel } from "./refine.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
+import { SCENES } from "./setscenes.js";
 import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf } from "./blockout.js";
 
 /** Where a loop that never ends is ended. */
@@ -388,15 +389,23 @@ Returns:
 
 Args:
     name (str): Name of the set. If no set has that name, an empty one is made.
+    library (str, optional): Start the new set as a ready one from the library, furnished and with people in it, instead of empty. Everything on it can be moved, changed or taken out. One of: ${[...SCENES.keys()].join(", ")}.
 
 Returns:
     str: The set's name and its objects.`,
-    properties: { name: str },
+    properties: { name: str, library: str },
     required: ["name"],
     run: (hand, draft, args) => {
       const name = text(args, "name", undefined, 48).trim();
       if (!name) throw new Error("name is empty");
-      hand.setId = ((draft.sets ?? []).find((set) => set.name === name) ?? newSet(draft, name)).id;
+      const scene = args.library == null ? null : SCENES.get(oneOf(args.library, [...SCENES.keys()], "library set"));
+      let set = (draft.sets ?? []).find((one) => one.name === name);
+      if (set && scene) throw new Error(`there is a set "${name}" already, and library only starts a new one`);
+      if (!set) {
+        set = newSet(draft, name);
+        if (scene) set.objects = scene.make().objects.map((piece, at) => S.setPiece(piece, at + 1));
+      }
+      hand.setId = set.id;
       return sceneText(draft, hand.setId);
     },
   },
