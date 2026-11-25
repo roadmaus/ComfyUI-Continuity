@@ -93,6 +93,10 @@ def manifest():
             # `lora` is what the switch offers to pick — the same shape H3's
             # turbo declaration has, because it is the same switch.
             "turbo": {"steps": dict(still.TURBO_STEPS),
+                      # What each stop's tooltip says. Translation keys, like every string here.
+                      "titles": {"draft": "4 steps — the fast look. Softer detail.",
+                                 "medium": "6 steps — quick and usable.",
+                                 "good": "8 steps — what the Turbo checkpoint was distilled for."},
                       "row": dict(still.KREA_TURBO),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": True, "default_strength": 1.0,

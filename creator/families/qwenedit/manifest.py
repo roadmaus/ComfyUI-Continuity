@@ -87,6 +87,10 @@ def manifest():
             # checkpoint, so `checkpoint` is False and the switch refuses to
             # engage without a file — Ideogram's arrangement, same reasons.
             "turbo": {"steps": dict(still.TURBO_STEPS),
+                      # What each stop's tooltip says. Translation keys, like every string here.
+                      "titles": {"draft": "4 steps — what the 4-step Lightning LoRA was distilled for.",
+                                 "medium": "6 steps — a little more than the short LoRA's own number.",
+                                 "good": "8 steps — what the 8-step Lightning LoRA was distilled for."},
                       "row": dict(still.TURBO_ROW),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": True, "default_strength": 1.0,

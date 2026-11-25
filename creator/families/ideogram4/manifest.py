@@ -101,6 +101,10 @@ def manifest():
             # weight of its own — the manager offers the second slider on it.
             "lora": {"uncond": True},
             "turbo": {"steps": dict(still.TURBO_STEPS),
+                      # What each stop's tooltip says. Translation keys, like every string here.
+                      "titles": {"draft": "2 steps — as short as the distillation goes. For framing, not for finals.",
+                                 "medium": "4 steps — quick and usable.",
+                                 "good": "8 steps — where a distilled Ideogram stops gaining."},
                       "row": dict(still.TURBO_ROW),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": True, "default_strength": still.DEFAULT_TURBO_STRENGTH,

@@ -408,7 +408,8 @@ check("krea2 weight slots are the family's fields",
       [w["id"] for w in krea["weights"]], list(k2.FIELDS))
 check("krea2 turbo capability carries the presets",
       krea["capabilities"]["turbo"],
-      {"steps": k2.TURBO_STEPS, "row": k2.KREA_TURBO,
+      {"steps": k2.TURBO_STEPS, "titles": krea["capabilities"]["turbo"]["titles"],
+       "row": k2.KREA_TURBO,
        "default_quality": k2.DEFAULT_TURBO_QUALITY,
        "lora": True, "default_strength": 1.0, "checkpoint": True,
        "hints": {"family": "krea"}})
@@ -464,7 +465,8 @@ check("flux2klein weight slots are the family's fields",
       [w["id"] for w in klein["weights"]], list(kl.FIELDS))
 check("flux2klein turbo is the distilled checkpoint and only that",
       klein["capabilities"]["turbo"],
-      {"steps": kl.TURBO_STEPS, "row": kl.KLEIN_TURBO,
+      {"steps": kl.TURBO_STEPS, "titles": klein["capabilities"]["turbo"]["titles"],
+       "row": kl.KLEIN_TURBO,
        "default_quality": kl.DEFAULT_TURBO_QUALITY,
        "lora": False, "checkpoint": True})
 check("flux2klein references are native and the first can be the one edited",
@@ -494,7 +496,8 @@ check("qwen21 wants its own VAE and the shared qwen_image encoder type",
       (q21.VAE_KIND, q21.CLIP_TYPE), ("qwen_image21", "qwen_image"))
 check("qwen21 turbo is a LoRA and only a LoRA — there is no distilled file",
       qwen21["capabilities"]["turbo"],
-      {"steps": q21.TURBO_STEPS, "row": q21.TURBO_ROW,
+      {"steps": q21.TURBO_STEPS, "titles": qwen21["capabilities"]["turbo"]["titles"],
+       "row": q21.TURBO_ROW,
        "default_quality": q21.DEFAULT_TURBO_QUALITY,
        "lora": True, "default_strength": 1.0, "checkpoint": False,
        "hints": qwen21["capabilities"]["turbo"]["hints"]})
@@ -785,5 +788,12 @@ check("flux3klein is a still family on the pill, beside Flux 2 Klein",
       (registry.STILL_ARCHES.get("flux3klein"), "flux3klein" in ci.ARCHES,
        registry.FAMILIES.index("flux3klein") - registry.FAMILIES.index("flux2klein")),
       ("flux3klein", True, 1))
+
+for _name in sorted(set(registry.STILL_ARCHES.values())):
+    _stops = manifest.describe(_name)["capabilities"].get("turbo")
+    if _stops:
+        check(f"{_name}: every turbo stop's tooltip opens with its own step count",
+              {stop: title.split(" — ")[0] for stop, title in _stops["titles"].items()},
+              {stop: f"{steps} steps" for stop, steps in _stops["steps"].items()})
 
 passed("the registry serves every family and the manifests hold their sources")

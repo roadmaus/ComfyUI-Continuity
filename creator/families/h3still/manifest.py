@@ -74,6 +74,10 @@ def manifest():
             # its weights, the same file in the same field and only the row
             # thrown.
             "turbo": {"steps": dict(still.TURBO_STEPS),
+                      # What each stop's tooltip says. Translation keys, like every string here.
+                      "titles": {"draft": "12 steps — for framing, not for finals.",
+                                 "medium": "16 steps — quick and usable.",
+                                 "good": "20 steps — the still recipe's number."},
                       "row": dict(still.TURBO_ROW),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": True, "default_strength": still.DEFAULT_TURBO_STRENGTH,

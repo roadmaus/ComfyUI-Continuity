@@ -98,6 +98,10 @@ def manifest():
             # distillation as its own file and no LoRA extraction of it, so
             # the pill throws the file — Krea's arrangement minus the LoRA.
             "turbo": {"steps": dict(still.TURBO_STEPS),
+                      # What each stop's tooltip says. Translation keys, like every string here.
+                      "titles": {"draft": "2 steps — below the distillation's own number. For framing, not for finals.",
+                                 "medium": "4 steps — what the Klein distillation was trained for.",
+                                 "good": "6 steps — a little headroom over the distillation's own number."},
                       "row": dict(still.KLEIN_TURBO),
                       "default_quality": still.DEFAULT_TURBO_QUALITY,
                       "lora": False,

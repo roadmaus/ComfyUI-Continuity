@@ -63,42 +63,6 @@ const QUALITY_TITLE = {
   turbo: "12 steps on the shifted schedule — the hosted service's 'Turbo' tier.",
 };
 
-// Keyed by arch, because the same three words mean different step counts on
-// each side — Krea's ladder is the distilled checkpoint's, Ideogram's is what a
-// distillation LoRA over an undistilled checkpoint will hold up at.
-const TURBO_TITLE = {
-  krea2: {
-    draft: "4 steps — the fast look. Softer detail.",
-    medium: "6 steps — quick and usable.",
-    good: "8 steps — what the Turbo checkpoint was distilled for.",
-  },
-  ideogram4: {
-    draft: "2 steps — as short as the distillation goes. For framing, not for finals.",
-    medium: "4 steps — quick and usable.",
-    good: "8 steps — where a distilled Ideogram stops gaining.",
-  },
-  qwenedit: {
-    draft: "4 steps — what the 4-step Lightning LoRA was distilled for.",
-    medium: "6 steps — a little more than the short LoRA's own number.",
-    good: "8 steps — what the 8-step Lightning LoRA was distilled for.",
-  },
-  flux2klein: {
-    draft: "2 steps — below the distillation's own number. For framing, not for finals.",
-    medium: "4 steps — what the Klein distillation was trained for.",
-    good: "6 steps — a little headroom over the distillation's own number.",
-  },
-  qwen21: {
-    draft: "4 steps — what the 4-step Lightning LoRA was distilled for.",
-    medium: "6 steps — a little more than the short LoRA's own number.",
-    good: "8 steps — what the 8-step Lightning LoRA was distilled for.",
-  },
-  h3still: {
-    draft: "12 steps — for framing, not for finals.",
-    medium: "16 steps — quick and usable.",
-    good: "20 steps — the still recipe's number.",
-  },
-};
-
 /** The distilled-checkpoint answer in the turbo source picker: not a file, and
  *  only offered by an arch that ships one. */
 const TURBO_CHECKPOINT = "— distilled checkpoint —";
@@ -1886,7 +1850,6 @@ export class PreStageRow {
     if (!spec) return [];
     const turbo = state.turbo[state.arch];
     const io = this.widgetIO();
-    const titles = TURBO_TITLE[state.arch] ?? {};
 
     if (spec.lora && !turbo.lora) loadLoraNames();
 
@@ -1916,7 +1879,7 @@ export class PreStageRow {
       parts.push(...Object.keys(spec.steps).map((quality) => el("button", {
           class: "mmc-turbo-opt",
           "aria-pressed": steps === spec.steps[quality],
-          title: t(titles[quality] ?? ""),
+          title: t(spec.titles[quality]),
           onclick: () => {
             turbo.quality = quality;
             io.set("steps", spec.steps[quality]);
