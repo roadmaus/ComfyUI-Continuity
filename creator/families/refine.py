@@ -360,6 +360,22 @@ def chatml(system, message, images=0, prefill=PREFILL, think=False):
     return turns + "<think>\n\n</think>\n\n" + prefill
 
 
+def chatml_turns(system, turns, think=False):
+    """A conversation of several turns as one Qwen prompt, the assistant's next
+    turn begun: `chatml` for a caller that holds more than one exchange.
+
+    `turns` is `[(role, text, images)]`, role "user" or "assistant", `images`
+    how many pictures stand at the head of that turn. They are bound in the
+    order the turns are written, so the pictures are passed in that same order.
+    No prefill: the reply is a line and then an object, as the chat's is.
+    """
+    written = "<|im_start|>system\n" + system + "<|im_end|>\n"
+    for role, text, images in turns:
+        written += f"<|im_start|>{role}\n" + VISION_BLOCK * int(images) + text + "<|im_end|>\n"
+    written += "<|im_start|>assistant\n"
+    return written if think else written + "<think>\n\n</think>\n\n"
+
+
 # ---- handles and labels -----------------------------------------------------
 
 LABEL_RE = re.compile(r"<\s*(Picture|Video|Audio)\s+(\d+)\s*>")

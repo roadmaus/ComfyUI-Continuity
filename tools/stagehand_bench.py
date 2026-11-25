@@ -9,7 +9,8 @@ Nothing is rendered or queued. `--brief` may be given again for a next message.
 `--fake` takes a list of `[tool, arguments]` and asks no model. DIR gets the log,
 the pictures the model looked at, and the piece it made (`piece.json`).
 
-The model is the one the refiner's settings have selected, unless `--model`
+`--fenced` asks the server in the fenced form, so that form can be read on a
+model without a GPU here. The model is the one the refiner's settings have selected, unless `--model`
 names another of the server's. The browser is a Firefox or a Chromium: the one
 `--browser` or `BROWSER_EXECUTABLE_PATH` names, or the first found on the path.
 """
@@ -36,6 +37,8 @@ parser.add_argument("--out", required=True)
 parser.add_argument("--brief", action="append", default=[])
 parser.add_argument("--fake")
 parser.add_argument("--model", help="one of the server's models, instead of the refiner's")
+parser.add_argument("--fenced", action="store_true",
+                    help="ask the server the way a model in ComfyUI is asked: tools in words, a fenced JSON reply")
 parser.add_argument("--browser", default=os.environ.get("BROWSER_EXECUTABLE_PATH"))
 parser.add_argument("--piece", help="a piece to start from, as JSON")
 parser.add_argument("--comfy", default=os.path.dirname(os.path.dirname(ROOT)))
@@ -85,6 +88,11 @@ def refiner():
 
 def scripted(model, messages, tools, **_):
     at = sum(1 for message in messages if message["role"] == "assistant")
+    if tools is None:
+        # The fenced form: the same script, written the way a model writes it.
+        wrote = {"say": "done"} if at >= len(fake) else {"calls": [{"tool": fake[at][0], "args": fake[at][1]}]}
+        return {"choices": [{"message": {"role": "assistant", "content": "Next.\n```json\n" + json.dumps(wrote) + "\n```"},
+                             "finish_reason": "stop"}]}
     message = {"role": "assistant", "content": "done"}
     if at < len(fake):
         name, given = fake[at]
@@ -157,7 +165,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             try:
                 answer = pkg.stagehand.turn(body["session"], body["model"], body["messages"], body["tools"],
                                             body["seen"], backend=body["backend"], eject=body["eject"],
-                                            root=OUT, ask=scripted if fake is not None else None)
+                                            root=OUT, ask=scripted if fake is not None else None, fenced=args.fenced)
                 # Inside the request: this server has no socket to answer on.
                 self.out("application/json", json.dumps({"result": answer}).encode())
             except Exception as exc:  # noqa: BLE001 — told to the page, as the route does
@@ -174,7 +182,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
         elif body["kind"] == "reply":
             for call in body["message"].get("tool_calls") or []:
                 print(f"{call['function']['name']} {call['function']['arguments'][:200]}", flush=True)
-        else:
+        elif body["kind"] not in ("call", "picture"):   # said by their result
             print(json.dumps(body, ensure_ascii=False)[:1500], flush=True)
         self.out("text/plain", b"")
 

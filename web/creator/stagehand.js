@@ -15,7 +15,7 @@ import { api } from "../../../scripts/api.js";
 import { JSON_HEADERS } from "./api.js";
 import * as S from "./state.js";
 import { rulesFor } from "./canvas.js";
-import { run as runJob } from "./queue.js";
+import { run as runJob, cancelPrompt } from "./queue.js";
 import { settings as refinerSettings, chosenModel } from "./refine.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
 import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf } from "./blockout.js";
@@ -742,7 +742,8 @@ function stagedIn(hand, draft, args) {
  * answered; `{kind: "result", id, name, args, content, refused, changed}` once
  * it is, the piece already changed; `{kind: "picture", id, url}` for the
  * picture of the set put on the last changing call of a reply; and
- * `{kind: "reply", message}` for each of the model's replies.
+ * `{kind: "reply", message}` for each of the model's replies. `{kind: "note",
+ * text}` is a sentence from the server half about how the model was asked.
  */
 export function refinerRequest(current = refinerSettings()) {
   const backend = current.backend === "remote" ? "remote" : "local";
@@ -763,8 +764,14 @@ export class Stagehand {
     this.asking = null;     // the backend and model of the message being worked on
   }
 
-  /** End the work at once. What was done stays. */
-  stop() { this.abort?.abort(Object.assign(new Error("Stopped."), { stopped: true })); }
+  /** End the work at once. What was done stays. A job in ComfyUI is cancelled
+   *  the way ComfyUI's own Cancel cancels it; a server's connection is closed
+   *  by `release`. */
+  stop() {
+    if (!this.abort) return;
+    if (this.queued) cancelPrompt(this.queued).catch(() => {});
+    this.abort.abort(Object.assign(new Error("Stopped."), { stopped: true }));
+  }
 
   /** Tell the server a message ended without the model's closing words: it
    *  closes what it has out, and drops the model if the settings ask for that. */
@@ -853,14 +860,19 @@ export class Stagehand {
   async ask() {
     const { signal } = this.abort;
     signal.throwIfAborted();
-    const asked = runJob(ROUTE, { session: this.session, ...this.asking, messages: this.messages, tools: tools(), seen: this.logged });
+    this.queued = null;
+    const asked = runJob(ROUTE, { session: this.session, ...this.asking, messages: this.messages, tools: tools(), seen: this.logged },
+      { onQueued: (id) => { this.queued = id; } });
     // Left behind by a Stop, it still ends, and nobody is listening.
     asked.catch(() => {});
     const body = await Promise.race([asked, new Promise((_, reject) => {
       signal.addEventListener("abort", () => reject(signal.reason), { once: true });
     })]);
+    this.queued = null;
     const { message } = body.choices[0];
     this.usage = body.usage;
+    // Something the server half has to say about how it asked, said once.
+    if (body.note) this.told({ kind: "note", text: body.note });
     // Its own reply is in the log already.
     this.logged = this.messages.length + 1;
     return { ...message, role: "assistant", content: message.content ?? "" };

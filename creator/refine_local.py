@@ -253,8 +253,19 @@ def _progress_context():
     return CurrentNodeContext(prompt_id=PROGRESS_ID, node_id=PROGRESS_ID)
 
 
+def converse(name, system, turns, images=(), **options):
+    """One generation over a conversation -> the assistant's raw content string.
+
+    `chat` for a caller that holds more than one exchange (`stagehand`):
+    `turns` is `[(role, text, images)]` as `refine.chatml_turns` takes them,
+    and `images` every picture of every turn, in the order the turns show
+    them. Everything else is `chat`'s, with no prefill.
+    """
+    return chat(name, system, "", images, prefill="", turns=turns, **options)
+
+
 def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=None,
-         prefill=refine.PREFILL, device="", reasoning=None):
+         prefill=refine.PREFILL, device="", reasoning=None, turns=None):
     """One generation -> the assistant's raw content string.
 
     The returned string carries the prefill back, because that is what the
@@ -282,7 +293,8 @@ def chat(name, system, message, images=(), temperature=0.7, seed=-1, max_tokens=
         max_tokens += refine.REASONING_ALLOWANCE
         prefill = ""
 
-    prompt = refine.chatml(system, message, images=len(images), prefill=prefill, think=think)
+    prompt = (refine.chatml_turns(system, turns, think=think) if turns is not None
+              else refine.chatml(system, message, images=len(images), prefill=prefill, think=think))
     tokens = clip.tokenize(prompt, images=list(images))
 
     # Its own clause below, not an `isinstance` inside one: ComfyUI's interrupt

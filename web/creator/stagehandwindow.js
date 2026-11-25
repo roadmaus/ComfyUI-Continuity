@@ -205,7 +205,8 @@ export class Talk {
       this.bench?.paintAgent();
       return;
     }
-    if (event.kind === "reply") {
+    if (event.kind === "note") this.items.push({ kind: "note", text: event.text });
+    else if (event.kind === "reply") {
       // Its words, as text: a line of what it is about to do, or its last.
       const words = String(event.message.content ?? "").trim();
       if (words) this.items.push({ kind: "say", text: words });

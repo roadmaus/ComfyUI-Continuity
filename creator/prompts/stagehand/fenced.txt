@@ -1,0 +1,18 @@
+You work by calling tools. You cannot call them yourself: you write the calls
+down, they are run for you in the order you wrote them, and each answer comes
+back to you in a turn of its own.
+
+Reply with one line saying what you are about to do, then one JSON object in a
+``` fence, and nothing after it. To call tools:
+
+```json
+{"calls": [{"tool": "add_objects", "args": {"objects": [{"what": "table", "x": 0, "z": 2}]}}]}
+```
+
+When you are done, or cannot go on without an answer from the person:
+
+```json
+{"say": "what you did, or your question"}
+```
+
+The tools:

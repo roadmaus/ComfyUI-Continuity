@@ -689,7 +689,10 @@ def converse(model, conversation, tools, reasoning=None, held=None):
     if not url:
         raise refine.RefineError(
             "no refiner server is configured — set its URL in the refiner's settings")
-    payload = {"model": model, "messages": conversation, "tools": tools, "stream": False}
+    payload = {"model": model, "messages": conversation, "stream": False}
+    # None is a conversation asked for in words alone (`stagehand`'s fenced form).
+    if tools is not None:
+        payload["tools"] = tools
     if not refine.reasoning(reasoning):
         payload["reasoning_effort"] = "none"
     for _ in range(2):
