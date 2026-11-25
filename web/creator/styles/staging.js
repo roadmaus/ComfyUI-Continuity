@@ -34,13 +34,13 @@ export const css = `
 .mmc-st-focus .mmc-reel-script, .mmc-st-focus .mmc-reel-lane { display: none; }
 .mmc-st-focus .mmc-reel-foot { padding-top: 0; }
 .mmc-st-focus .mmc-reel-side { position: absolute; z-index: 6; top: 22px; right: 30px; bottom: 22px; width: min(360px, calc(100% - 60px)); overflow: auto;
-  border: 1px solid var(--mmc-line); border-radius: 14px; background: var(--mmc-float); box-shadow: 0 18px 48px var(--mmc-shadow);
+  border: 1px solid var(--mmc-line); border-radius: calc(14px * var(--mmc-round)); background: var(--mmc-float); box-shadow: 0 18px 48px var(--mmc-shadow);
   transform: translateX(calc(100% + 40px)); visibility: hidden; transition: transform .18s ease, visibility 0s linear .18s; }
 .mmc-st-focus.mmc-st-drawer .mmc-reel-side { transform: none; visibility: visible; transition: transform .18s ease; }
 /* The tools over the stage stay clear of the drawer: its width, less the gap between them. */
 .mmc-st-focus.mmc-st-drawer .mmc-st .mmc-bo-hud { right: calc(min(360px, 100% - 60px) + 28px); transition: right .18s ease; }
 .mmc-st-col { min-height: 0; display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; }
-.mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: 14px; overflow: hidden; background: var(--mmc-media-bg, #0e0f11); }
+.mmc-st-glass { position: relative; flex: 1; min-height: 220px; border-radius: calc(14px * var(--mmc-round)); overflow: hidden; background: var(--mmc-media-bg, #0e0f11); }
 .mmc-st { position: absolute; inset: 0; }
 .mmc-st canvas { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; touch-action: none; display: block; }
 .mmc-st video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
@@ -48,14 +48,14 @@ export const css = `
   padding: 24px; text-align: center; color: #d6d3cc; font-size: calc(13.5px * var(--mmc-type, 1)); line-height: 1.5; background: rgba(14, 15, 17, .72); }
 .mmc-st .mmc-st-blank[hidden] { display: none; }
 .mmc-st .mmc-st-blank p { margin: 0; max-width: 44ch; }
-.mmc-st-shelf { position: absolute; inset: 48px 12px 52px; z-index: 5; overflow: auto; padding: 14px; border-radius: 12px; background: rgba(20, 21, 24, .95); color: #f0ede7; }
+.mmc-st-shelf { position: absolute; inset: 48px 12px 52px; z-index: 5; overflow: auto; padding: 14px; border-radius: calc(12px * var(--mmc-round)); background: rgba(20, 21, 24, .95); color: #f0ede7; }
 .mmc-st-shelf .mmc-close { position: sticky; float: right; top: 0; }
 .mmc-st-shelfname { margin: 10px 0 6px; font-weight: 600; font-size: calc(12.5px * var(--mmc-type, 1)); }
 .mmc-st-models { display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 8px; }
-.mmc-st-model { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; border: 1px solid transparent; border-radius: 10px;
+.mmc-st-model { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px; border: 1px solid transparent; border-radius: calc(10px * var(--mmc-round));
   background: rgba(255, 255, 255, .05); color: inherit; font: inherit; font-size: calc(12px * var(--mmc-type, 1)); cursor: pointer; }
 .mmc-st-model:hover, .mmc-st-model:focus-visible { border-color: var(--mmc-accent); }
-.mmc-st-model canvas { position: static; width: 100%; height: auto; border-radius: 6px; }
+.mmc-st-model canvas { position: static; width: 100%; height: auto; border-radius: calc(6px * var(--mmc-round)); }
 .mmc-st-scenes { grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); }
 .mmc-st-shelfnote { margin: 0 0 4px; max-width: 60ch; color: #c9c5bd; font-size: calc(12.5px * var(--mmc-type, 1)); }
 .mmc-st-starts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; max-width: 560px; }
@@ -67,7 +67,7 @@ export const css = `
 .mmc-st .mmc-bo-seg:disabled { opacity: .4; cursor: not-allowed; }
 
 /* --- the shot camera's frame in its corner, and what a drag is about to do --------- */
-.mmc-st-monitor { position: absolute; z-index: 3; top: 50px; right: 12px; width: min(31%, 320px); border-radius: 8px; overflow: hidden;
+.mmc-st-monitor { position: absolute; z-index: 3; top: 50px; right: 12px; width: min(31%, 320px); border-radius: calc(8px * var(--mmc-round)); overflow: hidden;
   border: 1px solid rgba(255, 255, 255, .22); background: #000; box-shadow: 0 8px 26px rgba(0, 0, 0, .5); }
 .mmc-st-monitor.tall { width: min(17%, 170px); }
 .mmc-st-monitor[hidden] { display: none; }
@@ -78,16 +78,16 @@ export const css = `
 .mmc-st-monitorswitch .mmc-bo-seg { height: calc(20px * var(--mmc-type, 1)); padding: 0 7px; font-size: calc(10.5px * var(--mmc-type, 1)); }
 .mmc-st-focus.mmc-st-drawer .mmc-st-monitor { right: calc(min(360px, 100% - 60px) + 28px); transition: right .18s ease; }
 .mmc-st-badge { position: absolute; z-index: 3; top: 50px; left: 12px; max-width: calc(64% - 24px); display: flex; align-items: center; gap: 7px; padding: 4px 10px;
-  border-radius: 8px; background: rgba(14, 15, 17, .78); border: 1px solid rgba(255, 255, 255, .16); color: #f0ede7; pointer-events: none;
+  border-radius: calc(8px * var(--mmc-round)); background: rgba(14, 15, 17, .78); border: 1px solid rgba(255, 255, 255, .16); color: #f0ede7; pointer-events: none;
   font-size: calc(11.5px * var(--mmc-type, 1)); line-height: 1.35; font-variant-numeric: tabular-nums; }
 .mmc-st-badge[hidden] { display: none; }
 .mmc-st-badge i { flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--mmc-dim); }
 .mmc-st-badge.new i { background: var(--mmc-accent); }
 .mmc-st-badge.move i { background: var(--mmc-role-motion, #6ebeff); }
-.mmc-st-badge.path i { border-radius: 2px; transform: rotate(45deg); background: var(--mmc-accent); }
+.mmc-st-badge.path i { border-radius: calc(2px * var(--mmc-round)); transform: rotate(45deg); background: var(--mmc-accent); }
 
 /* --- the mark sheet under the glass: a lane for each mover, a diamond for each stop -- */
-.mmc-st-sheet { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 8px; border-radius: 12px; background: var(--mmc-surface); }
+.mmc-st-sheet { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 8px 0 8px; border-radius: calc(12px * var(--mmc-round)); background: var(--mmc-surface); }
 .mmc-st-sheet [hidden] { display: none; }
 .mmc-st-sheethead { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 0 10px; }
 .mmc-st-sheethead .mmc-bn-gap { flex: 1; }
@@ -110,9 +110,9 @@ export const css = `
 .mmc-st-tick { position: absolute; top: 2px; bottom: 0; padding-left: 4px; border-left: 1px solid var(--mmc-line-2); pointer-events: none; white-space: nowrap;
   font-size: calc(10.5px * var(--mmc-type, 1)); color: var(--mmc-off); font-variant-numeric: tabular-nums; }
 .mmc-st-tick.end { transform: translateX(-100%); padding: 0 4px 0 0; border-left: 0; border-right: 1px solid var(--mmc-line-2); }
-.mmc-st-leg { position: absolute; top: 50%; height: 4px; margin-top: -2px; border-radius: 2px; pointer-events: none; background: color-mix(in srgb, var(--hue) 55%, transparent); }
+.mmc-st-leg { position: absolute; top: 50%; height: 4px; margin-top: -2px; border-radius: calc(2px * var(--mmc-round)); pointer-events: none; background: color-mix(in srgb, var(--hue) 55%, transparent); }
 .mmc-st-leg.still { background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--hue) 45%, transparent) 0 4px, transparent 4px 8px); }
-.mmc-st-stop { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; padding: 0; transform: rotate(45deg); border-radius: 2px;
+.mmc-st-stop { position: absolute; top: 50%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; padding: 0; transform: rotate(45deg); border-radius: calc(2px * var(--mmc-round));
   background: var(--mmc-surface); border: 2px solid var(--hue); cursor: grab; touch-action: none; }
 .mmc-st-stop::after { content: ""; position: absolute; inset: -8px; }
 .mmc-st-stop.here { background: var(--hue); }
@@ -135,15 +135,15 @@ export const css = `
 .mmc-st-getshead span { flex: 1; font-size: calc(12.5px * var(--mmc-type, 1)); color: var(--mmc-dim); }
 .mmc-st-frames { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .mmc-st-frames figure { margin: 0; min-width: 0; }
-.mmc-st-frames canvas { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--mmc-line); }
+.mmc-st-frames canvas { display: block; width: 100%; height: auto; border-radius: calc(6px * var(--mmc-round)); border: 1px solid var(--mmc-line); }
 .mmc-st-frames figcaption { margin-top: 3px; font-size: calc(11px * var(--mmc-type, 1)); color: var(--mmc-off); }
 .mmc-st-file { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: calc(11px * var(--mmc-type, 1)); color: var(--mmc-dim); overflow-wrap: anywhere; }
-.mmc-st-given { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--mmc-line); background: var(--mmc-surface);
+.mmc-st-given { display: flex; flex-direction: column; gap: 7px; padding: 10px 12px; border-radius: calc(10px * var(--mmc-round)); border: 1px solid var(--mmc-line); background: var(--mmc-surface);
   font-size: calc(13px * var(--mmc-type, 1)); line-height: 1.55; color: var(--mmc-text); }
 .mmc-st-prose { white-space: pre-wrap; }
 .mmc-st-prose.none { color: var(--mmc-off); }
 .mmc-st-cite { color: var(--mmc-role-motion, #6ebeff); }
-.mmc-st-clause { border-radius: 4px; cursor: pointer; border-bottom: 1px dotted var(--mmc-line-3); }
+.mmc-st-clause { border-radius: calc(4px * var(--mmc-round)); cursor: pointer; border-bottom: 1px dotted var(--mmc-line-3); }
 .mmc-st-clause:hover { background: color-mix(in srgb, var(--tag, var(--mmc-role-motion, #6ebeff)) 28%, transparent); }
 .mmc-st-clause.changed { animation: mmc-st-flash 1.8s ease-out; }
 @keyframes mmc-st-flash { from { background: color-mix(in srgb, var(--mmc-accent) 60%, transparent); } to { background: transparent; } }
@@ -155,7 +155,7 @@ export const css = `
 .mmc-st-pacehead { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 30px; }
 .mmc-st-pacename { font-weight: 600; font-size: calc(12.5px * var(--mmc-type, 1)); }
 .mmc-st-pacenow { position: absolute; right: 22px; bottom: 44px; pointer-events: none; font-size: calc(12px * var(--mmc-type, 1)); font-variant-numeric: tabular-nums; color: var(--mmc-dim); }
-.mmc-st-pace canvas { width: 100%; height: 64px; display: block; border-radius: 10px; cursor: pointer; touch-action: none;
+.mmc-st-pace canvas { width: 100%; height: 64px; display: block; border-radius: calc(10px * var(--mmc-round)); cursor: pointer; touch-action: none;
   color: var(--mmc-text); background: var(--mmc-surface-2); }
 
 /* --- the strip: the sets over the film, a shot's guide on its card, the playhead -- */
@@ -168,7 +168,7 @@ export const css = `
 .mmc-st-head::before { content: ""; position: absolute; top: -4px; left: -4px; width: 10px; height: 10px; border-radius: 50%; background: var(--mmc-accent); }
 
 /* --- the script's sets, and the inspector's own rows ------------------------------- */
-.mmc-st-bench .mmc-reel-face canvas { width: 38px; height: 26px; border-radius: 6px; display: block; }
+.mmc-st-bench .mmc-reel-face canvas { width: 38px; height: 26px; border-radius: calc(6px * var(--mmc-round)); display: block; }
 .mmc-st-hue { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: var(--tag, var(--mmc-surface-3)); flex: none; }
 .mmc-st-name { width: 100%; max-width: 240px; }
 .mmc-st-bench .mmc-reel-icontrol .mmc-bo-vec { width: 100%; max-width: 300px; min-width: 0; }
@@ -193,9 +193,9 @@ export const css = `
 .mmc-st-handdot, .mmc-st-agentpill i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-st-agent 1.1s ease-in-out infinite; }
 .mmc-st-handdot[hidden], .mmc-st-agentpill[hidden] { display: none; }
 .mmc-st-agentpill { position: absolute; z-index: 4; left: 12px; bottom: 54px; max-width: calc(100% - 24px); display: flex; align-items: center; gap: 8px; padding: 5px 11px;
-  border-radius: 9px; background: color-mix(in srgb, var(--mmc-ground) 90%, transparent); border: 1px solid color-mix(in srgb, var(--mmc-accent) 45%, transparent);
+  border-radius: calc(9px * var(--mmc-round)); background: color-mix(in srgb, var(--mmc-ground) 90%, transparent); border: 1px solid color-mix(in srgb, var(--mmc-accent) 45%, transparent);
   color: var(--mmc-accent); font-size: calc(12px * var(--mmc-type)); font-weight: 500; pointer-events: none; }
-.mmc-st-lit { animation: mmc-st-lit 1.6s ease-out; border-radius: 6px; }
+.mmc-st-lit { animation: mmc-st-lit 1.6s ease-out; border-radius: calc(6px * var(--mmc-round)); }
 @keyframes mmc-st-agent { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 @keyframes mmc-st-lit { 0%, 35% { background-color: color-mix(in srgb, var(--mmc-accent) 26%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 26%, transparent); }
   100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; } }

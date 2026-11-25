@@ -860,13 +860,13 @@ export const css = `
 .mmc-reel-plan i { font-style: normal; color: var(--mmc-role-voice); }
 .mmc-reel-problem { color: var(--mmc-warn); font-size: calc(13px * var(--mmc-type)); }
 .mmc-reel-shoot {
-  height: 36px; padding: 0 18px; border-radius: 10px; border: 0; cursor: pointer;
+  height: 36px; padding: 0 18px; border-radius: calc(10px * var(--mmc-round)); border: 0; cursor: pointer;
   background: var(--mmc-accent); color: var(--mmc-on-accent); font: inherit; font-weight: 650;
   font-size: calc(14px * var(--mmc-type));
 }
 .mmc-reel-head .mmc-close { margin-left: 0; }
 .mmc-reel-step {
-  display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 8px;
+  display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: calc(8px * var(--mmc-round));
   background: none; color: var(--mmc-text); cursor: pointer;
 }
 .mmc-reel-step + .mmc-reel-step { margin-left: -10px; }
@@ -878,7 +878,7 @@ export const css = `
 
 .mmc-reel-main { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) minmax(380px, 0.72fr); }
 .mmc-reel-script { min-height: 0; overflow: auto; padding: 16px 24px 24px 18px; border-right: 1px solid var(--mmc-line); }
-.mmc-reel-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: baseline; gap: 6px; padding: 7px 10px 7px 0; border-radius: 12px; }
+.mmc-reel-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: baseline; gap: 6px; padding: 7px 10px 7px 0; border-radius: calc(12px * var(--mmc-round)); }
 .mmc-reel-shot.selected { background: var(--mmc-tint); }
 .mmc-reel-shot.merged .mmc-reel-gutter { border-left: 2px dotted var(--mmc-line-3); }
 .mmc-reel-gutter { display: flex; flex-direction: column; align-items: flex-start; padding-left: 12px; }
@@ -906,7 +906,7 @@ export const css = `
 .mmc-reel-clipname { font: inherit; text-align: left; background: none; border: 0; padding: 0; color: var(--mmc-dim); cursor: pointer; font-size: calc(15px * var(--mmc-type)); }
 .mmc-reel-tag {
   align-self: center; white-space: nowrap; font-size: calc(11.5px * var(--mmc-type)); font-weight: 600;
-  padding: 2px 8px; border-radius: 6px;
+  padding: 2px 8px; border-radius: calc(6px * var(--mmc-round));
 }
 .mmc-reel-tag:empty { display: none; }
 .mmc-reel-tag.changed, .mmc-reel-tag.reshoot { color: var(--mmc-on-accent); background: var(--mmc-accent); }
@@ -930,7 +930,7 @@ export const css = `
 }
 .mmc-reel-gap::before { content: ""; flex: 1; height: 1px; background: var(--mmc-line-3); opacity: 0; }
 .mmc-reel-gap-add {
-  font: inherit; font-size: calc(12px * var(--mmc-type)); line-height: 20px; padding: 0 9px; border-radius: 10px;
+  font: inherit; font-size: calc(12px * var(--mmc-type)); line-height: 20px; padding: 0 9px; border-radius: calc(10px * var(--mmc-round));
   border: 1px solid var(--mmc-line-3); background: var(--mmc-bg); color: var(--mmc-text); cursor: pointer;
   opacity: 0; pointer-events: none;
 }
@@ -943,12 +943,12 @@ export const css = `
 .mmc-reel-handle .mmc-reel-num { cursor: grab; }
 .mmc-reel-dragging, .mmc-reel-dragging * { cursor: grabbing !important; user-select: none; }
 .mmc-reel-dragging .mmc-reel-gap { display: none; }
-.mmc-reel-drop { position: absolute; z-index: 6; pointer-events: none; background: var(--mmc-accent); border-radius: 2px; }
+.mmc-reel-drop { position: absolute; z-index: 6; pointer-events: none; background: var(--mmc-accent); border-radius: calc(2px * var(--mmc-round)); }
 .mmc-reel-drop.reel { top: -3px; height: 90px; width: 4px; margin-left: -2px; }
 .mmc-reel-drop.script { left: 0; right: 0; height: 3px; margin-top: -2px; }
 .mmc-reel-ghostcard {
   position: fixed; left: 0; top: 0; z-index: 20; pointer-events: none; max-width: 260px; display: flex; gap: 8px;
-  padding: 7px 11px; border-radius: 8px; background: var(--mmc-surface-2); color: var(--mmc-text);
+  padding: 7px 11px; border-radius: calc(8px * var(--mmc-round)); background: var(--mmc-surface-2); color: var(--mmc-text);
   border: 1px solid var(--mmc-accent); font-size: calc(13px * var(--mmc-type));
 }
 .mmc-reel-ghostcard span { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
@@ -957,13 +957,13 @@ export const css = `
 /* The cast and references, as faces and frames above the script. */
 .mmc-reel-castrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 2px 0 14px 64px; }
 .mmc-reel-face {
-  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 3px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px 0 3px; border-radius: var(--mmc-pill-r);
   border: 0; background: var(--mmc-surface); color: var(--mmc-accent); font: inherit; font-weight: 550;
   font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-reel-face.frame { color: var(--mmc-role-motion); padding-left: 4px; }
 .mmc-reel-face img, .mmc-reel-face-blank { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; background: var(--mmc-surface-3); display: grid; place-items: center; color: var(--mmc-dim); }
-.mmc-reel-face.frame img, .mmc-reel-face.frame .mmc-reel-face-blank { width: 38px; height: 26px; border-radius: 6px; }
+.mmc-reel-face.frame img, .mmc-reel-face.frame .mmc-reel-face-blank { width: 38px; height: 26px; border-radius: calc(6px * var(--mmc-round)); }
 .mmc-reel-face-wrap, .mmc-reel-thumb-wrap { position: relative; display: inline-flex; }
 .mmc-reel-x {
   position: absolute; top: -6px; right: -6px; z-index: 2; width: 20px; height: 20px; padding: 0; border-radius: 50%;
@@ -985,7 +985,7 @@ export const css = `
   position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--mmc-accent); transform-origin: left; transition: transform .2s;
 }
 .mmc-reel-progress {
-  position: absolute; top: 0; height: 84px; box-sizing: border-box; z-index: 5; pointer-events: none; border-radius: 8px;
+  position: absolute; top: 0; height: 84px; box-sizing: border-box; z-index: 5; pointer-events: none; border-radius: calc(8px * var(--mmc-round));
   border: 2px solid var(--mmc-accent); overflow: hidden;
 }
 .mmc-reel-progress::after {
@@ -1009,7 +1009,7 @@ export const css = `
 /* The side: the player, then the inspector. */
 .mmc-reel-side { min-height: 0; display: flex; flex-direction: column; }
 .mmc-reel-player {
-  position: relative; flex: none; margin: 16px 20px 0; height: clamp(150px, 24vh, 290px); border-radius: 14px;
+  position: relative; flex: none; margin: 16px 20px 0; height: clamp(150px, 24vh, 290px); border-radius: calc(14px * var(--mmc-round));
   overflow: hidden; background: var(--mmc-media-bg);
 }
 .mmc-reel-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
@@ -1018,7 +1018,7 @@ export const css = `
   color: var(--mmc-dim); background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 14px, var(--mmc-surface-2) 14px 28px);
 }
 .mmc-reel-plabel, .mmc-reel-tc {
-  position: absolute; top: 12px; padding: 4px 10px; border-radius: 8px; font-size: calc(13px * var(--mmc-type));
+  position: absolute; top: 12px; padding: 4px 10px; border-radius: calc(8px * var(--mmc-round)); font-size: calc(13px * var(--mmc-type));
   color: #fff; background: rgba(0, 0, 0, .58);
 }
 .mmc-reel-plabel { left: 12px; }
@@ -1047,7 +1047,7 @@ export const css = `
 .mmc-reel-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 6px; }
 .mmc-reel-actions.quiet { margin-top: 8px; padding-top: 10px; border-top: 1px solid var(--mmc-line); }
 .mmc-reel-btn {
-  display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 7px; height: 32px; padding: 0 14px; border-radius: calc(10px * var(--mmc-round));
   border: 1px solid var(--mmc-line-2); background: var(--mmc-surface); color: var(--mmc-text);
   font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
@@ -1065,11 +1065,11 @@ export const css = `
 .mmc-reel-btn:disabled { opacity: .4; cursor: not-allowed; }
 .mmc-reel-link {
   font: inherit; font-size: calc(13px * var(--mmc-type)); background: none; border: 0; padding: 2px 4px;
-  color: var(--mmc-accent); cursor: pointer; border-radius: 5px;
+  color: var(--mmc-accent); cursor: pointer; border-radius: calc(5px * var(--mmc-round));
 }
 .mmc-reel-link:hover { background: var(--mmc-wash); }
 .mmc-reel-value {
-  display: inline-flex; align-items: baseline; gap: 8px; height: 32px; padding: 0 12px; border-radius: 9px;
+  display: inline-flex; align-items: baseline; gap: 8px; height: 32px; padding: 0 12px; border-radius: calc(9px * var(--mmc-round));
   border: 0; background: var(--mmc-surface-2); color: var(--mmc-strong); font: inherit; font-size: calc(13.5px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-reel-value small { color: var(--mmc-dim); font-size: calc(11.5px * var(--mmc-type)); }
@@ -1077,16 +1077,16 @@ export const css = `
 .mmc-reel-value svg { color: var(--mmc-dim); }
 .mmc-reel .mmc-refine-split { display: inline-flex; align-items: center; position: static; }
 .mmc-reel .mmc-refine-split .mmc-tool-icon { display: none; }
-.mmc-reel .mmc-refine-split .mmc-reel-btn { border-radius: 10px 0 0 10px; }
+.mmc-reel .mmc-refine-split .mmc-reel-btn { border-radius: calc(10px * var(--mmc-round)) 0 0 calc(10px * var(--mmc-round)); }
 .mmc-reel .mmc-refine-more {
   position: static; height: 32px; width: 30px; border: 1px solid var(--mmc-line-2); border-left: 0;
-  border-radius: 0 10px 10px 0; background: var(--mmc-surface); color: var(--mmc-dim); cursor: pointer;
+  border-radius: 0 calc(10px * var(--mmc-round)) calc(10px * var(--mmc-round)) 0; background: var(--mmc-surface); color: var(--mmc-dim); cursor: pointer;
   display: grid; place-items: center; padding: 0;
 }
-.mmc-reel-family .mmc-pill { height: 32px; border-radius: 9px; border: 0; background: var(--mmc-surface-2); }
-.mmc-reel-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: 10px; background: var(--mmc-surface-2); }
+.mmc-reel-family .mmc-pill { height: 32px; border-radius: calc(9px * var(--mmc-round)); border: 0; background: var(--mmc-surface-2); }
+.mmc-reel-seg { display: inline-flex; flex-wrap: wrap; gap: 2px; padding: 3px; border-radius: calc(10px * var(--mmc-round)); background: var(--mmc-surface-2); }
 .mmc-reel-seg button {
-  display: inline-flex; align-items: baseline; gap: 5px; border: 0; background: none; padding: 5px 11px; border-radius: 8px;
+  display: inline-flex; align-items: baseline; gap: 5px; border: 0; background: none; padding: 5px 11px; border-radius: calc(8px * var(--mmc-round));
   color: var(--mmc-dim); font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
 .mmc-reel-seg button small { font-variant-numeric: tabular-nums; font-size: calc(11px * var(--mmc-type)); opacity: .75; }
@@ -1095,7 +1095,7 @@ export const css = `
 .mmc-reel-seg.voice button[aria-pressed="true"] { color: var(--mmc-role-voice); }
 .mmc-reel-seg button:disabled { opacity: .38; cursor: not-allowed; }
 .mmc-reel-switch {
-  position: relative; width: 38px; height: 22px; border-radius: 11px; border: 0; padding: 0; cursor: pointer;
+  position: relative; width: 38px; height: 22px; border-radius: calc(11px * var(--mmc-round)); border: 0; padding: 0; cursor: pointer;
   background: var(--mmc-surface-3); flex: none;
 }
 .mmc-reel-switch::after {
@@ -1105,22 +1105,22 @@ export const css = `
 .mmc-reel-switch[aria-checked="true"] { background: var(--mmc-accent); }
 .mmc-reel-switch[aria-checked="true"]::after { transform: translateX(16px); background: var(--mmc-on-accent); }
 .mmc-reel-switch:disabled { opacity: .4; cursor: not-allowed; }
-.mmc-reel-stepper { display: inline-flex; align-items: center; border-radius: 9px; background: var(--mmc-surface-2); overflow: hidden; }
+.mmc-reel-stepper { display: inline-flex; align-items: center; border-radius: calc(9px * var(--mmc-round)); background: var(--mmc-surface-2); overflow: hidden; }
 .mmc-reel-stepper button { width: 28px; height: 30px; border: 0; background: none; color: var(--mmc-dim); cursor: pointer; font: inherit; }
 .mmc-reel-stepper button:hover { color: var(--mmc-strong); }
 .mmc-reel-stepper span { min-width: 56px; text-align: center; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type)); color: var(--mmc-strong); }
 .mmc-reel-seed {
-  width: 150px; height: 30px; padding: 0 10px; border-radius: 9px; border: 0; background: var(--mmc-surface-2);
+  width: 150px; height: 30px; padding: 0 10px; border-radius: calc(9px * var(--mmc-round)); border: 0; background: var(--mmc-surface-2);
   color: var(--mmc-strong); font: inherit; font-variant-numeric: tabular-nums; font-size: calc(13px * var(--mmc-type));
 }
 .mmc-reel-seed::placeholder { color: var(--mmc-dim); }
 .mmc-reel-thumbs { display: flex; flex-wrap: wrap; gap: 8px; }
-.mmc-reel-thumbs img, .mmc-reel-thumb-blank, .mmc-reel-thumb-add { width: 62px; height: 40px; border-radius: 7px; object-fit: cover; }
+.mmc-reel-thumbs img, .mmc-reel-thumb-blank, .mmc-reel-thumb-add { width: 62px; height: 40px; border-radius: calc(7px * var(--mmc-round)); object-fit: cover; }
 .mmc-reel-thumb-blank { display: grid; place-items: center; background: var(--mmc-surface-2); color: var(--mmc-dim); }
 .mmc-reel-thumb-add { display: grid; place-items: center; border: 1px dashed var(--mmc-line-3); background: none; color: var(--mmc-dim); cursor: pointer; }
 .mmc-reel-loras { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
 .mmc-reel-lora {
-  display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: 7px; border: 0;
+  display: inline-flex; align-items: baseline; gap: 6px; padding: 4px 10px; border-radius: calc(7px * var(--mmc-round)); border: 0;
   background: color-mix(in srgb, var(--mmc-role-voice) 15%, transparent); color: var(--mmc-role-voice);
   font: inherit; font-size: calc(13px * var(--mmc-type)); cursor: pointer;
 }
@@ -1136,12 +1136,12 @@ export const css = `
 .mmc-reel-passes { position: relative; height: 16px; }
 .mmc-reel-pass {
   position: absolute; top: 0; height: 16px; border: 1px solid var(--mmc-line-3); border-bottom: 0;
-  border-radius: 6px 6px 0 0; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
+  border-radius: calc(6px * var(--mmc-round)) calc(6px * var(--mmc-round)) 0 0; font-size: calc(10.5px * var(--mmc-type)); color: var(--mmc-dim);
   padding: 0 8px; overflow: hidden; white-space: nowrap; box-sizing: border-box;
 }
 .mmc-reel-picture { position: relative; height: 84px; }
 .mmc-reel-card {
-  position: absolute; top: 0; height: 84px; padding: 0; border-radius: 8px; overflow: hidden; cursor: grab;
+  position: absolute; top: 0; height: 84px; padding: 0; border-radius: calc(8px * var(--mmc-round)); overflow: hidden; cursor: grab;
   touch-action: none; user-select: none;
   border: 1px solid var(--mmc-line-2); color: var(--mmc-text); font: inherit; text-align: left;
   background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 9px, var(--mmc-surface-2) 9px 18px);
@@ -1165,11 +1165,11 @@ export const css = `
 }
 .mmc-reel-card-tag {
   position: absolute; left: calc(7px + var(--lead, 0px)); bottom: 6px; z-index: 5; font-size: calc(10.5px * var(--mmc-type)); font-weight: 650;
-  padding: 1px 7px; border-radius: 5px; background: var(--mmc-accent); color: var(--mmc-on-accent);
+  padding: 1px 7px; border-radius: calc(5px * var(--mmc-round)); background: var(--mmc-accent); color: var(--mmc-on-accent);
 }
 .mmc-reel-card-tag.gone { background: var(--mmc-bad); color: #fff; }
 .mmc-reel-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; display: grid; place-items: center; z-index: 3; }
-.mmc-reel-edge::after { content: ""; width: 2px; height: 24px; border-radius: 1px; background: rgba(255, 255, 255, .45); }
+.mmc-reel-edge::after { content: ""; width: 2px; height: 24px; border-radius: calc(1px * var(--mmc-round)); background: rgba(255, 255, 255, .45); }
 .mmc-reel-card:hover .mmc-reel-edge::after { background: #fff; }
 /* The frames a blend carries over: ticks, like the sound thread's, under a
    bracket like a pass's. Over pictures they stand back for the pictures' own
@@ -1190,12 +1190,12 @@ export const css = `
   position: absolute; left: 0; right: 0; width: 100%; top: -17px; height: 16px; padding: 0; box-sizing: border-box; cursor: pointer;
   pointer-events: auto; font: inherit; font-size: calc(10.5px * var(--mmc-type)); line-height: 15px; text-align: center;
   white-space: nowrap; color: var(--mmc-role-motion); border: 1px solid var(--mmc-role-motion);
-  border-bottom: 0; border-radius: 6px 6px 0 0; background: var(--mmc-bg);
+  border-bottom: 0; border-radius: calc(6px * var(--mmc-round)) calc(6px * var(--mmc-round)) 0 0; background: var(--mmc-bg);
 }
 .mmc-reel-blend.selected .mmc-reel-bracket { background: color-mix(in oklab, var(--mmc-role-motion) 20%, var(--mmc-bg)); }
 .mmc-reel-grip { position: absolute; z-index: 1; right: -7px; top: 0; width: 14px; height: 100%; cursor: ew-resize; pointer-events: auto; }
 .mmc-reel-grip::after {
-  content: ""; position: absolute; left: 6px; top: 50%; width: 2px; height: 24px; margin-top: -12px; border-radius: 1px;
+  content: ""; position: absolute; left: 6px; top: 50%; width: 2px; height: 24px; margin-top: -12px; border-radius: calc(1px * var(--mmc-round));
   background: var(--mmc-role-motion); opacity: .6;
 }
 .mmc-reel-blend:hover .mmc-reel-grip::after, .mmc-reel-blend.selected .mmc-reel-grip::after { opacity: 1; }
@@ -1210,7 +1210,7 @@ export const css = `
 .mmc-reel-join.selected { box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 60%, transparent); }
 .mmc-reel-sound { position: relative; height: 26px; }
 .mmc-reel-wave {
-  position: absolute; top: 5px; height: 16px; border-radius: 3px;
+  position: absolute; top: 5px; height: 16px; border-radius: calc(3px * var(--mmc-round));
   background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--mmc-role-voice) 55%, transparent) 0 2px, transparent 2px 5px);
 }
 .mmc-reel-sdot {
@@ -1219,7 +1219,7 @@ export const css = `
 }
 .mmc-reel-sdot.on { border-color: var(--mmc-role-voice); background: var(--mmc-role-voice); }
 .mmc-reel-track {
-  position: absolute; top: 1px; height: 24px; border-radius: 6px; padding: 0 8px; z-index: 3; cursor: pointer;
+  position: absolute; top: 1px; height: 24px; border-radius: calc(6px * var(--mmc-round)); padding: 0 8px; z-index: 3; cursor: pointer;
   border: 1px solid var(--mmc-role-voice); background: color-mix(in oklab, var(--mmc-role-voice) 26%, var(--mmc-bg));
   color: var(--mmc-strong); font: inherit; font-size: calc(11.5px * var(--mmc-type)); text-align: left;
   overflow: hidden; white-space: nowrap; text-overflow: ellipsis;

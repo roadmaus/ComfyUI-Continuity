@@ -256,7 +256,7 @@ export const css = `
    the grid they open into. */
 .mmc-cell-shots {
   position: absolute; right: 6px; bottom: 6px; display: flex; align-items: center; gap: 5px;
-  height: calc(28px * var(--mmc-type)); padding: 0 9px; border: 0; border-radius: 9px;
+  height: calc(28px * var(--mmc-type)); padding: 0 9px; border: 0; border-radius: calc(9px * var(--mmc-round));
   background: var(--mmc-scrim-3); color: var(--mmc-accent); cursor: pointer;
   font-size: calc(11px * var(--mmc-type)); font-family: inherit; font-weight: 600;
 }
@@ -267,7 +267,7 @@ export const css = `
 .mmc-shots {
   grid-column: 1 / -1; display: grid; gap: 14px; padding: 14px;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  border: 1px solid var(--mmc-accent); border-radius: 14px; background: var(--mmc-surface);
+  border: 1px solid var(--mmc-accent); border-radius: calc(14px * var(--mmc-round)); background: var(--mmc-surface);
 }
 
 /* --- organize mode --------------------------------------------------------- */
