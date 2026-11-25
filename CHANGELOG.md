@@ -6,6 +6,15 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The blockout can be staged by talking.** **Stagehand**, in the bench's header, opens
+a conversation over the inspector. Say what the set is, who is in it and what the shots
+are, with up to four pictures if you have some, and it builds that while you watch: each
+object lands on the stage, each text in the script and each shot on the strip as it is
+made. It runs on the model the refiner has selected, on a server or in ComfyUI, and is
+designed for larger ones, 27B and up. Editing waits while it works and is yours again
+the moment it is done or stopped, one message is one Undo, and it never renders. How
+well any model stages has not been measured yet.
+
 **A blockout clip can carry its depth.** **Depth as alpha**, on As staged and Labelled,
 lays the clip over black with its depth as the alpha: near is as drawn, far fades out.
 For the piece or for one shot. How a model reads it is not measured yet.

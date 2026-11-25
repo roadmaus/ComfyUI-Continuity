@@ -252,6 +252,41 @@ that does not line up says what jumps (the camera's distance or turn, who
 moved and how far, a change of posture), wears the accent on the strip, and
 offers **Start shot N where shot N−1 ends**.
 
+### Stagehand
+
+**Stagehand** in the bench's header opens a conversation over the inspector.
+Say what the set should be, who is in it and what the shots are, and it builds
+that in the bench while you watch: objects and ready models on the set, the
+cast, the scene's text, shots, a camera for each, and who walks where. It
+looks at what it built before it says it is done, and the pictures it looked
+at are in the conversation. It never renders: Shoot stays yours.
+
+![Stagehand at work in the blockout bench: the conversation over the inspector with one line for each thing it did, the picture it looked at, a call it was refused, and a pill on the glass saying what it is doing](img/stagehand.png)
+
+| | |
+|---|---|
+| The model | whatever the refiner's settings have selected, on a server or in ComfyUI. The header names it and where it runs, and **Change** opens the refiner's settings. A change applies from the next message. It is designed for larger models, 27B and up; nothing stops a smaller one being tried |
+| A message | Enter sends, Shift+Enter breaks the line. Up to four pictures can go with it, by the picture button, dropped on the window or pasted: a reference for the set, or a frame to match. They are scaled to 1024 px and are part of what you said, not references of the piece |
+| What it knows | the scene as it stands, the shot and the moment the bench has open, and what is selected, so "move this to the window" means what you are looking at. It starts on the set the glass shows |
+| While it works | each thing it does lands at once: the object lit on the stage, the words in the script, the shot on the strip, and a pill on the glass says what it is doing. You can orbit, play, scrub and select. Editing and Shoot wait, and are yours again the moment it is done, fails or is stopped |
+| **Stop** | ends it at once. What was done stays |
+| Undo | everything one message made it do is one step back, and one step forward again |
+| The transcript | one line for each thing it did, which opens to the tool's own answer. A call that was refused is drawn as that, with the reason. **New conversation** forgets what was said and leaves the piece alone |
+
+A server is asked with tool calls. A model in ComfyUI has none, so it is asked
+in words and answers with a list of calls in JSON; each exchange is a job on
+ComfyUI's queue, behind a render that is running. A server that does not call
+tools is asked the same way, and the window says so. Closing the window or the
+bench does not stop it: the button carries a dot while it works, and the
+conversation is there when the bench is opened again, for as long as the page
+is. It is not saved with the workflow. Every conversation is logged under the
+user directory, in `continuity/stagehand/`, with its pictures; the newest
+twenty are kept.
+
+Nothing here has been measured on a model yet: how well any model stages, how
+the plain-JSON form compares with tool calls, and what a model in ComfyUI costs
+per exchange are all still to be read on the bench (`tools/stagehand_bench.py`).
+
 ### Without a piece
 
 Opened where there is no strip (from the pre-stage), the bench is a piece of
