@@ -69,7 +69,15 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   reading an old saved scene, Copy and the sweep on close; and, handled by
   hand, the plan and the monitor, the badge, the sheet of stops (retiming a
   stop, adding one, stepping between them), Draw path, what the model is given
-  with whose words it sends, and the labelled pass. `SHOT=path.png` writes
+  with whose words it sends, and the labelled pass. Stagehand's window is checked
+  here too, with a model that is a script answered one exchange at a time: it
+  opens and closes over the inspector, its header names the refiner's model on
+  either backend and Change opens the refiner's settings, the composer is shut
+  with no model selected, each call lands on the stage, in the script and on
+  the strip before the next is asked, editing waits while it works and is free
+  the moment it is done or stopped, a message is one step back, a picture
+  attached goes out scaled with the message, and a bench closed and opened
+  again finds the conversation still working. `SHOT=path.png` writes
   screenshots at 2×.
 
 - **Stagehand's tools:** the real `stagehand.js` with the same stubs, and a

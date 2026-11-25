@@ -21,7 +21,7 @@ const catalog = execFileSync('python3', ['-c',
 const apiStub = "const ok = (body) => new Response(JSON.stringify(body), { status: 200, headers: { 'content-type': 'application/json' } });\n"
   + "const CATALOG = " + catalog + ";\n"
   + "export const api = {\n"
-  + "  async fetchApi(url, init) { if (/^\\/(continuity\\/(blockout|probe)|upload\\/image)/.test(url)) return fetch(url, init);\n"
+  + "  async fetchApi(url, init) { if (/^\\/(continuity\\/(blockout|probe|stagehand|refine\\/remote)|upload\\/image)/.test(url)) return fetch(url, init);\n"
   + "    return url.startsWith('/continuity/families') ? ok(CATALOG) : ok({}); },\n"
   + "  apiURL: (u) => u, getUserData: async () => new Response('{}', { status: 404 }),\n"
   + "  storeUserData: async () => {}, addEventListener() {}, removeEventListener() {},\n"
@@ -34,6 +34,9 @@ const sweeps = [];
 let uploads = 0;
 const results = [];
 async function check(name, fn) { await fn(); results.push({ name, passed: true }); }
+// Stagehand's model: a script of replies, each a list of `[tool, arguments]`,
+// handed out one exchange at a time when `go()` lets the next one answer.
+const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting.shift()?.(); } };
 
 (async () => {
   browser = await chromium.launch({ executablePath: process.env.BROWSER_EXECUTABLE_PATH || undefined, headless: true });
@@ -84,6 +87,21 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     if (url.origin === ORIGIN && url.pathname === '/continuity/blockout/sweep') {
       sweeps.push(JSON.parse(route.request().postData() || '{}').drop);
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ gone: 0 }) });
+    }
+    if (url.origin === ORIGIN && url.pathname === '/continuity/refine/remote') {
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ url: 'http://192.168.1.20:8080/v1', key_set: false }) });
+    }
+    if (url.origin === ORIGIN && url.pathname === '/continuity/stagehand/stop') {
+      hand.stops.push(JSON.parse(route.request().postData()).session);
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ stopped: true }) });
+    }
+    if (url.origin === ORIGIN && url.pathname === '/continuity/stagehand') {
+      hand.sent.push(JSON.parse(route.request().postData()));
+      await new Promise((resolve) => hand.waiting.push(resolve));
+      const next = hand.script.shift();
+      const message = typeof next === 'string' ? { role: 'assistant', content: next } : { role: 'assistant', content: '', tool_calls: (next ?? []).map(([name, given], at) => (
+        { id: `c${hand.sent.length}-${at}`, type: 'function', function: { name, arguments: JSON.stringify(given) } })) };
+      return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ result: { choices: [{ message, finish_reason: 'stop' }] } }) }).catch(() => {});
     }
     if (url.origin === ORIGIN && url.pathname === '/continuity/probe') {
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ missing: false }) });
@@ -822,6 +840,319 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
       [...document.querySelectorAll('.mmc-st-gets .mmc-reel-ilabel')].map((n) => n.textContent)]), [false, ['Guide', 'Words']]);
   });
 
+
+  // ---- Stagehand: the agent's window over the inspector --------------------------------
+
+  const refiner = (block) => page.evaluate((block) => {
+    if (block) localStorage.setItem('continuity.refiner', JSON.stringify(block)); else localStorage.removeItem('continuity.refiner');
+  }, block);
+  const handState = () => page.evaluate(() => {
+    const win = document.querySelector('.mmc-sh');
+    return { open: !win.hidden, pressed: document.querySelector('.mmc-st-handbtn').getAttribute('aria-pressed'),
+      model: win.querySelector('.mmc-sh-model').textContent, size: win.querySelector('.mmc-sh-size').textContent,
+      box: win.querySelector('.mmc-sh-box').disabled, send: [win.querySelector('.mmc-sh-send').textContent, win.querySelector('.mmc-sh-send').disabled],
+      note: win.querySelector('.mmc-sh-note').hidden ? '' : win.querySelector('.mmc-sh-note').textContent };
+  });
+  const lines = () => page.evaluate(() => [...document.querySelector('.mmc-sh-log').children].map((node) =>
+    `${node.className.replace('mmc-sh-', '')}: ${(node.querySelector('summary') ?? node).textContent}${node.querySelectorAll('.mmc-sh-pic').length ? ` [${node.querySelectorAll('.mmc-sh-pic').length}]` : ''}`));
+  const locks = () => page.evaluate(() => ({
+    working: bench.locked, modal: bench.modal.classList.contains('mmc-agent-working'),
+    inert: [bench.scriptEl.inert, bench.inspectHost.inert, bench.hudBottom.inert],
+    shoot: [bench.shootButton.disabled, bench.shootButton.title], undo: bench.undoButton.disabled,
+    status: document.querySelector('.mmc-reel-status .mmc-reel-hint').textContent,
+    pill: bench.agentPill.hidden ? '' : bench.agentPill.textContent, dot: !bench.handDot.hidden }));
+  const say = async (words) => {
+    await page.locator('.mmc-sh-box').fill(words);
+    await page.locator('.mmc-sh-box').press('Enter');
+  };
+  /** Let the next exchange answer, and wait until the one after it is asked or the message is over. */
+  const step = async () => {
+    const asked = hand.sent.length;
+    while (!hand.waiting.length) await page.waitForTimeout(10);
+    hand.go();
+    for (let tries = 0; tries < 300; tries++) {
+      if (hand.sent.length > asked && hand.waiting.length) return;
+      if (!(await page.evaluate(() => bench.locked))) return;
+      await page.waitForTimeout(10);
+    }
+    throw new Error('the exchange never ended');
+  };
+
+  await check('Stagehand opens as a window over the inspector, and closes again', async () => {
+    await refiner({ backend: 'remote', remoteModel: 'Bonsai-27B' });
+    await open();
+    await page.waitForTimeout(200);
+    assert.deepEqual([(await handState()).open, (await handState()).pressed], [false, 'false']);
+    await page.locator('.mmc-st-handbtn').click();
+    await page.waitForTimeout(100);
+    const shown = await handState();
+    assert.deepEqual([shown.open, shown.pressed, shown.box, shown.send, shown.note], [true, 'true', false, ['Send', false], '']);
+    assert.equal(shown.model, 'Bonsai-27B · on 192.168.1.20');
+    assert.equal(shown.size, 'Designed for larger models, 27B and up.');
+    const over = await page.evaluate(() => {
+      const win = document.querySelector('.mmc-sh').getBoundingClientRect(), side = document.querySelector('.mmc-reel-side').getBoundingClientRect();
+      const stage = document.querySelector('.mmc-st').getBoundingClientRect(), script = document.querySelector('.mmc-reel-script').getBoundingClientRect();
+      return { inside: win.right <= side.right && win.top >= side.top && win.bottom <= side.bottom, wide: win.width > side.width * 0.9,
+        clear: win.left > stage.left + stage.width * 0.8 && script.right < win.left, inspector: Boolean(document.querySelector('.mmc-reel-side .mmc-reel-ihead')),
+        shadow: getComputedStyle(document.querySelector('.mmc-sh')).boxShadow !== 'none' };
+    });
+    assert.deepEqual(over, { inside: true, wide: true, clear: true, inspector: true, shadow: true });
+    assert.match((await lines())[0], /^empty: Say what the set should be/);
+    // Escape closes the window before it closes the bench.
+    await page.keyboard.press('Escape');
+    assert.deepEqual([(await handState()).open, await page.evaluate(() => document.querySelectorAll('.mmc-overlay').length)], [false, 1]);
+    await page.locator('.mmc-st-handbtn').click();
+    await page.locator('.mmc-sh-x').click();
+    assert.equal((await handState()).open, false);
+  });
+
+  await check('Its header names the refiner\'s model on either backend, and Change opens the refiner\'s settings', async () => {
+    await refiner({ backend: 'local', model: 'qwen35_27b' });
+    await page.locator('.mmc-st-handbtn').click();
+    assert.equal((await handState()).model, 'qwen35_27b · in ComfyUI');
+    const before = await page.evaluate(() => document.querySelectorAll('.mmc-refine-pop').length);
+    await page.locator('.mmc-sh-row .mmc-sh-btn', { hasText: 'Change' }).click();
+    await page.waitForTimeout(150);
+    assert.equal(await page.evaluate(() => document.querySelectorAll('.mmc-refine-pop').length), before + 1);
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(100);
+    await page.evaluate(() => document.querySelectorAll('.mmc-refine-pop').forEach((node) => node.remove()));
+  });
+
+  await check('With no model selected the composer is shut, and says where one is chosen', async () => {
+    await refiner({ backend: 'remote', remoteModel: '' });
+    await page.evaluate(() => bench.handWindow.render());
+    const remote = await handState();
+    assert.deepEqual([remote.model, remote.box, remote.send], ['No model selected', true, ['Send', true]]);
+    assert.equal(remote.note, 'No model chosen. Pick one of the server\'s models in the refiner\'s settings.Open the refiner\'s settings');
+    await refiner(null);
+    await page.evaluate(() => bench.handWindow.render());
+    assert.match((await handState()).note, /^No text encoder chosen\. .* pick it in the refiner's settings\.Open the refiner's settings$/);
+    await page.evaluate(() => { bench.handWindow.box.disabled = false; bench.handWindow.box.value = 'go'; bench.handWindow.send(); });
+    assert.deepEqual([hand.sent.length, await page.evaluate(() => bench.locked)], [0, false], 'nothing is asked of no model');
+    await refiner({ backend: 'remote', remoteModel: 'Bonsai-27B', eject: true });
+    await page.evaluate(() => bench.handWindow.render());
+    assert.deepEqual([(await handState()).box, (await handState()).note], [false, '']);
+  });
+
+  await check('A message works in the bench while you watch: each call lands before the next, editing waits, and it is one step back', async () => {
+    await open();
+    await page.waitForTimeout(200);
+    await page.locator('.mmc-st-handbtn').click();
+    const before = await page.evaluate(() => ({ text: S.serializeTimeline(tl), steps: bench.done.length, objects: tl.sets[0].objects.length,
+      kept: S.isKept(tl.segments[0]), view: JSON.stringify(Object.values(bench.freeCam()).map((v) => Math.round(v * 100) / 100)),
+      meta: document.querySelector('.mmc-reel-meta').textContent }));
+    hand.script = [
+      [['add_objects', { objects: [{ what: 'block', x: 0, z: 1, name: 'crate' }, { what: 'lamp', x: 9, z: 99 }] }]],
+      [['write_film_text', { look: 'A kitchen at night, one lamp.' }]],
+      [['change_shot', { shot: 1, seconds: 6 }], ['move_object', { id: 99, x: 0 }]],
+      [['look_through_camera', { shot: 1 }]],
+      'The crate is by the table and shot 1 runs 6 seconds.'];
+    hand.sent.length = 0;
+    await say('Add a crate and make shot 1 longer.');
+    while (!hand.sent.length) await page.waitForTimeout(10);
+    // Asked, and not yet answered: the bench is for looking.
+    const locked = await locks();
+    assert.deepEqual([locked.working, locked.modal, locked.inert, locked.undo, locked.dot], [true, true, [true, true, true], true, true]);
+    assert.deepEqual(locked.shoot, [true, 'Stagehand is working. Stop it to shoot.']);
+    assert.equal(locked.status, 'Stagehand is working. You can look around; editing waits until it is done or stopped.');
+    assert.equal(locked.pill, 'Stagehand: working');
+    assert.deepEqual(await lines(), ['user: Add a crate and make shot 1 longer.', 'working: Working']);
+    assert.deepEqual([(await handState()).send, (await handState()).box], [['Stop', false], true]);
+    const { session, messages, tools, seen, client_id, ...asked } = hand.sent[0];
+    assert.deepEqual(asked, { backend: 'remote', model: 'Bonsai-27B', device: '', eject: true });
+    assert.match(messages[0].content, /^Add a crate and make shot 1 longer\.\n\nThe bench has shot 1 open, at 0 s\. The glass shows the set "Kitchen"\. Nothing is selected\. The frame is \d+ by \d+\. The longest shot this film's model renders is 60 s\.\n\nFilm: /);
+    assert.match(messages[0].content, /\nShot 1: 5 s, on set "Kitchen", has a kept take that a change to the shot releases\. Text: /);
+    // A hand on the glass turns the view and moves nothing; keys that write wait.
+    const box = await page.locator('.mmc-st > canvas').boundingBox();
+    const spot = await page.evaluate(() => { const at = bench.raster && null; const p = tl.sets[0].objects.find((o) => o.id === 5); return [p.x, p.z]; });
+    await page.evaluate(() => bench.select({ kind: 'thing', id: 5 }));
+    await page.keyboard.press('Delete');
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 60, box.y + box.height / 2 + 20, { steps: 4 }); await page.mouse.up();
+    await page.keyboard.press('Control+z');
+    // The drag turned the view, which is looking; the piece's objects and its steps are as they were.
+    const looked = await page.evaluate(() => { const p = tl.sets[0].objects.find((o) => o.id === 5); return [p.x, p.z, tl.sets[0].objects.length, bench.done.length, JSON.stringify(Object.values(bench.freeCam()).map((v) => Math.round(v * 100) / 100))]; });
+    assert.deepEqual(looked.slice(0, 4), [...spot, before.objects, before.steps]);
+    assert.notEqual(looked[4], before.view);
+    before.view = looked[4];
+    await page.evaluate(() => bench.select(null));
+
+    // The first call: the crate is on the stage and the transcript before the model is asked again.
+    await step();
+    const first = await page.evaluate(() => ({ objects: tl.sets[0].objects.map((o) => o.word || o.kind).slice(-1), steps: bench.done.length,
+      lit: [...(bench.litThings ?? [])], locked: bench.locked }));
+    assert.deepEqual(first, { objects: ['crate'], steps: before.steps, lit: [9], locked: true });
+    assert.deepEqual((await lines()).slice(1), ['call: ✓Added 1 object to the set Kitchen [1]', 'working: Working']);
+    assert.equal(hand.sent.length, 2, 'and only then is the next asked');
+    // The second: the words are in the script, whole, and lit.
+    await step();
+    assert.deepEqual(await page.evaluate(() => [tl.prompt, bench.promptBox.getValue(), bench.promptBox.frame.classList.contains('mmc-st-lit')]),
+      ['A kitchen at night, one lamp.', 'A kitchen at night, one lamp.', true]);
+    assert.equal((await lines()).at(-2), 'call: ✓Wrote the film\'s text');
+    // The third: the shot is longer on the strip, its kept take is released, and the refused call is drawn as that.
+    await step();
+    assert.deepEqual(await page.evaluate(() => [tl.segments[0].duration_s, S.isKept(tl.segments[0]), document.querySelector('.mmc-reel-meta').textContent]),
+      [6, false, '3 shots · 14.8 s']);
+    assert.notEqual(before.meta, '3 shots · 14.8 s', 'the header follows');
+    assert.equal(before.kept, true);
+    assert.deepEqual((await lines()).slice(-3, -1), ['call: ✓Shot 1 is 6 s now', 'call refused: ✕Refused: Moved #99. there is no object #99 in the set "Kitchen"']);
+    // The fourth: what it looked at is in the transcript, and can be enlarged.
+    await step();
+    assert.equal((await lines()).at(-2), 'call looks: ◉Looked through the camera of shot 1 [1]');
+    assert.equal((await locks()).pill, 'Stagehand: looking through the camera of shot 1');
+    await page.locator('.mmc-sh-call.looks .mmc-sh-pic').click();
+    assert.equal(await page.locator('.mmc-sh-zoom img').count(), 1);
+    await page.locator('.mmc-sh-zoom').click();
+    assert.equal(await page.locator('.mmc-sh-zoom').count(), 0);
+    // A line opens to the tool's own answer.
+    await page.locator('.mmc-sh-call summary').first().click();
+    assert.match(await page.locator('.mmc-sh-call .mmc-sh-answer').first().textContent(), /^Added #9 block "crate", at x 0, z 1, .*\nObject 2 of the list was not added: z has to be between -40 and 40/s);
+    assert.equal(await page.evaluate(() => JSON.stringify(Object.values(bench.freeCam()).map((v) => Math.round(v * 100) / 100))), before.view, 'the glass keeps the view the person has');
+
+    // Its last words: the bench is the person's again without a click.
+    await step();
+    const free = await locks();
+    assert.deepEqual([free.working, free.modal, free.inert, free.shoot[0], free.shoot[1], free.undo, free.pill, free.dot],
+      [false, false, [false, false, false], false, '', false, '', false]);
+    assert.notEqual(free.status, locked.status);
+    assert.equal((await lines()).at(-1), 'say: The crate is by the table and shot 1 runs 6 seconds.');
+    assert.deepEqual((await handState()).send, ['Send', false]);
+    assert.equal(hand.stops.length, 0);
+    // One message, one step back; and forward again.
+    assert.equal(await page.evaluate(() => bench.done.length), before.steps + 1);
+    await page.locator('.mmc-reel-step:not(.redo)').click();
+    assert.deepEqual(await page.evaluate(() => [S.serializeTimeline(tl), bench.done.length, tl.sets[0].objects.length]), [before.text, before.steps, before.objects]);
+    await page.locator('.mmc-reel-step.redo').click();
+    assert.deepEqual(await page.evaluate(() => [tl.sets[0].objects.at(-1).word, tl.segments[0].duration_s, tl.prompt]), ['crate', 6, 'A kitchen at night, one lamp.']);
+    // The conversation is not rewound by a step back: the next message carries the scene as it stands.
+    await page.locator('.mmc-reel-step:not(.redo)').click();
+    hand.script = ['Nothing to do.'];
+    hand.sent.length = 0;
+    await say('And now?');
+    await step();
+    assert.match(hand.sent[0].messages.at(-1).content, /\nSet "Kitchen", 8 objects:\n/);
+    assert.equal(hand.sent[0].messages.length > 8, true);
+  });
+
+  await check('A change of set is followed by the glass, and a change by hand is free the moment it is done', async () => {
+    hand.script = [[['use_set', { name: 'Street' }]], 'On the street.'];
+    await page.evaluate(() => bench.select({ kind: 'shot', index: 0 }));
+    assert.equal(await page.evaluate(() => bench.set().name), 'Kitchen');
+    await say('Go to the street.');
+    await step();
+    assert.equal(await page.evaluate(() => bench.set().name), 'Street');
+    await step();
+    // No step for a message that changed nothing, and a drag by hand works at once.
+    const steps = await page.evaluate(() => bench.done.length);
+    await page.evaluate(() => { bench.select({ kind: 'thing', id: 2 }); });
+    await page.keyboard.press('Delete');
+    assert.deepEqual(await page.evaluate(() => [tl.sets[1].objects.some((o) => o.id === 2), bench.done.length]), [false, steps + 1]);
+    await page.keyboard.press('Control+z');
+  });
+
+  await check('A picture attached goes out with the message, scaled, and is shown with it', async () => {
+    const png = Buffer.from(await page.evaluate(() => {
+      const canvas = Object.assign(document.createElement('canvas'), { width: 2400, height: 1200 });
+      const context = canvas.getContext('2d');
+      context.fillStyle = '#356'; context.fillRect(0, 0, 2400, 1200); context.fillStyle = '#fc8'; context.fillRect(300, 200, 900, 500);
+      return canvas.toDataURL('image/png').split(',')[1];
+    }), 'base64');
+    const files = [1, 2, 3, 4, 5].map((n) => ({ name: `kitchen-${n}.png`, mimeType: 'image/png', buffer: png }));
+    await page.locator('.mmc-sh input[type=file]').setInputFiles(files);
+    await page.waitForFunction(() => document.querySelectorAll('.mmc-sh-chip').length === 4);
+    assert.match((await handState()).note, /^A message carries up to 4 pictures\./);
+    await page.locator('.mmc-sh-chip button').nth(3).click();
+    await page.locator('.mmc-sh-chip button').nth(2).click();
+    assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.mmc-sh-chip span')].map((n) => n.textContent)), ['kitchen-1.png', 'kitchen-2.png']);
+    // Dropped on the window, one more.
+    await page.evaluate(async (b64) => {
+      const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const data = new DataTransfer();
+      data.items.add(new File([bytes], 'dropped.png', { type: 'image/png' }));
+      data.items.add(new File(['words'], 'notes.txt', { type: 'text/plain' }));
+      document.querySelector('.mmc-sh').dispatchEvent(new DragEvent('drop', { dataTransfer: data, bubbles: true, cancelable: true }));
+    }, png.toString('base64'));
+    await page.waitForFunction(() => document.querySelectorAll('.mmc-sh-chip').length === 3);
+    hand.script = ['I see a kitchen.'];
+    hand.sent.length = 0;
+    await say('Like this.');
+    while (!hand.sent.length) await page.waitForTimeout(10);
+    const { content } = hand.sent[0].messages.at(-1);
+    assert.deepEqual(content.map((part) => part.type), ['image_url', 'image_url', 'image_url', 'text']);
+    assert.match(content[3].text, /^Like this\.\n\nThe bench has /);
+    const sizes = await page.evaluate(async (urls) => Promise.all(urls.map(async (url) => {
+      const picture = new Image(); picture.src = url; await picture.decode(); return [url.slice(0, 23), picture.naturalWidth, picture.naturalHeight];
+    })), content.slice(0, 3).map((part) => part.image_url.url));
+    assert.deepEqual(sizes, [['data:image/jpeg;base64,', 1024, 512], ['data:image/jpeg;base64,', 1024, 512], ['data:image/jpeg;base64,', 1024, 512]]);
+    assert.equal(await page.locator('.mmc-sh-chip').count(), 0);
+    assert.equal((await lines()).at(-2), 'user: Like this. [3]');
+    await step();
+    assert.equal(await page.evaluate(() => (tl.assets ?? []).length + tl.segments.reduce((n, card) => n + (card.assets?.length ?? 0), 0)), 0, 'a picture said is not a reference of the piece');
+  });
+
+  await check('Stop ends it at once and gives the bench back, with what was done as one step', async () => {
+    const before = await page.evaluate(() => ({ steps: bench.done.length, text: S.serializeTimeline(tl) }));
+    hand.script = [[['add_objects', { objects: [{ what: 'post', x: 3, z: 3, name: 'sign' }] }]], [['add_objects', { objects: [{ what: 'post', x: 4, z: 3 }] }]]];
+    hand.stops.length = 0; hand.sent.length = 0;
+    await say('Put up signs.');
+    await step();
+    assert.equal((await locks()).working, true);
+    await page.locator('.mmc-sh-send', { hasText: 'Stop' }).click();
+    await page.waitForFunction(() => !bench.locked);
+    const after = await locks();
+    assert.deepEqual([after.modal, after.inert, after.shoot[0], after.pill], [false, [false, false, false], false, '']);
+    assert.equal((await lines()).at(-1), 'quiet: Stopped. What was done stays, as one step to undo.');
+    assert.deepEqual(await page.evaluate(() => [bench.set().objects.at(-1).word, bench.done.length]), ['sign', before.steps + 1]);
+    for (let tries = 0; tries < 100 && !hand.stops.length; tries++) await page.waitForTimeout(10);
+    assert.equal(hand.stops.length, 1);
+    hand.go();
+    await page.keyboard.press('Control+z');
+    assert.equal(await page.evaluate(() => S.serializeTimeline(tl)), before.text);
+    // And the conversation goes on from it.
+    hand.script = ['Yes.'];
+    await say('Still there?');
+    await step();
+    assert.equal((await lines()).at(-1), 'say: Yes.');
+  });
+
+  await check('A failure is said in the server\'s words, and New conversation forgets what was said', async () => {
+    await page.evaluate(() => { bench.agent.hand.ask = async () => { throw new Error('the server answered 400: the request exceeds the available context size'); }; });
+    await say('More.');
+    await page.waitForFunction(() => !bench.locked);
+    assert.equal((await lines()).at(-1), 'error: the server answered 400: the request exceeds the available context sizeNew conversation');
+    assert.equal((await locks()).working, false);
+    const text = await page.evaluate(() => S.serializeTimeline(tl));
+    await page.locator('.mmc-sh-error .mmc-sh-btn').click();
+    assert.match((await lines())[0], /^empty: /);
+    assert.deepEqual(await page.evaluate(() => [bench.agent.hand.messages.length, S.serializeTimeline(tl)]), [0, text]);
+  });
+
+  await check('Closing the bench does not stop it: opened again, the conversation is there and still working', async () => {
+    hand.script = [[['add_objects', { objects: [{ what: 'block', x: -2, z: 1, name: 'box' }] }]], [['add_objects', { objects: [{ what: 'block', x: -3, z: 1, name: 'box two' }] }]], 'Two boxes.'];
+    hand.sent.length = 0;
+    await page.evaluate(() => { window.wrote = 0; });
+    await say('Two boxes.');
+    await step();
+    await page.evaluate(() => bench.close());
+    assert.equal(await page.evaluate(() => document.querySelectorAll('.mmc-overlay').length), 0);
+    // With no window open the call still lands in the piece.
+    await step();
+    assert.deepEqual(await page.evaluate(() => tl.sets.find((set) => set.objects.some((o) => o.word === 'box')).objects.slice(-2).map((o) => o.word)), ['box', 'box two']);
+    await page.evaluate(async () => {
+      const B = await import('/ext/web/creator/staging.js');
+      B.openStaging({ timeline: tl, onCommit: () => {}, queue: () => {}, opened: (bench) => { window.bench = bench; bench.plan = false; } });
+    });
+    await page.waitForTimeout(200);
+    const again = await locks();
+    assert.deepEqual([again.working, again.modal, again.shoot[0], again.dot], [true, true, true, true]);
+    await page.locator('.mmc-st-handbtn').click();
+    assert.deepEqual((await lines()).slice(-3), ['call: ✓Added 1 object to the set Street [1]', 'call: ✓Added 1 object to the set Street [1]', 'working: Working']);
+    const steps = await page.evaluate(() => bench.done.length);
+    await step();
+    assert.deepEqual([(await locks()).working, (await lines()).at(-1), await page.evaluate(() => bench.done.length)], [false, 'say: Two boxes.', steps + 1]);
+  });
+
   if (process.env.SHOT) {
     await open();
     await page.waitForTimeout(300);
@@ -831,6 +1162,17 @@ async function check(name, fn) { await fn(); results.push({ name, passed: true }
     await page.evaluate(() => { bench.setLook('lens'); bench.select({ kind: 'shot', index: 1 }); });
     await page.waitForTimeout(300);
     await page.screenshot({ path: process.env.SHOT.replace('.png', '2.png') });
+    // Stagehand at work: a message under way, its lines and what it looked at.
+    await refiner({ backend: 'remote', remoteModel: 'Bonsai-27B' });
+    await page.evaluate(() => { bench.setLook('around'); bench.select(null); });
+    await page.locator('.mmc-st-handbtn').click();
+    hand.script = [[['add_objects', { objects: [{ what: 'lamp', x: 0.4, z: 2.6, name: 'lamp' }] }]], [['change_shot', { shot: 1, seconds: 6 }], ['move_object', { id: 99, x: 0 }]],
+      [['look_through_camera', { shot: 1 }]]];
+    await say('Put a lamp by the counter and give shot 1 another second.');
+    for (let n = 0; n < 3; n++) await step();
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: process.env.SHOT.replace('.png', '3.png') });
+    await page.locator('.mmc-sh-send').click();
   }
 
   assert.deepEqual(errors, []);

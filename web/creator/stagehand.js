@@ -22,6 +22,8 @@ import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, 
 
 /** Where a loop that never ends is ended. */
 export const MOST_TURNS = 60;
+/** How many pictures a person's message carries. */
+export const MOST_PICTURES = 4;
 const LOOK_WIDE = 1024;
 const FAR = 40, BIG = 60, SMALL = 0.05, MOST_OBJECTS = 200, MOST_ID = 253;
 
@@ -735,6 +737,12 @@ function stagedIn(hand, draft, args) {
  * `windowState()` is what the user has open and selected, or "", and
  * `told(event)` hears what happens. `request()` is which model to ask, and is
  * the refiner's own answer unless the caller has another.
+ *
+ * What is told, in order: `{kind: "call", id, name, args}` before a call is
+ * answered; `{kind: "result", id, name, args, content, refused, changed}` once
+ * it is, the piece already changed; `{kind: "picture", id, url}` for the
+ * picture of the set put on the last changing call of a reply; and
+ * `{kind: "reply", message}` for each of the model's replies.
  */
 export function refinerRequest(current = refinerSettings()) {
   const backend = current.backend === "remote" ? "remote" : "local";
@@ -756,7 +764,7 @@ export class Stagehand {
   }
 
   /** End the work at once. What was done stays. */
-  stop() { this.abort?.abort(new Error("Stopped.")); }
+  stop() { this.abort?.abort(Object.assign(new Error("Stopped."), { stopped: true })); }
 
   /** Tell the server a message ended without the model's closing words: it
    *  closes what it has out, and drops the model if the settings ask for that. */
@@ -790,15 +798,19 @@ export class Stagehand {
     return picture(timeline, objects, wholeSet(objects, above, lookSize(timeline)), { labels: true });
   }
 
-  /** Say something, and let the model work until it has nothing left to call. -> its last words. */
-  async send(words) {
+  /** Say something, with up to `MOST_PICTURES` pictures as `data:` URLs, and let
+   *  the model work until it has nothing left to call. -> its last words. */
+  async send(words, pictures = []) {
     if (this.abort) throw new Error("it is still working");
     this.abort = new AbortController();
     // A change of model applies from the next message, never under this one.
     this.asking = this.request();
     const scene = this.scene();
     const beside = [this.windowState(), scene !== this.known ? scene : ""].filter(Boolean);
-    this.messages.push({ role: "user", content: [words, ...beside].join("\n\n") });
+    const said = [words, ...beside].join("\n\n");
+    // A plain string where nothing is attached: the one shape every server reads.
+    this.messages.push({ role: "user", content: !pictures.length ? said
+      : [...pictures.slice(0, MOST_PICTURES).map((url) => ({ type: "image_url", image_url: { url } })), { type: "text", text: said }] });
     this.known = scene;
     try {
       for (let turn = 0; turn < MOST_TURNS; turn++) {
@@ -809,10 +821,14 @@ export class Stagehand {
         let dressed = null;
         for (const call of message.tool_calls) if (await this.answer(call)) dressed = this.messages.at(-1);
         // One picture for all the changes of a reply, on the last of them.
-        if (dressed) dressed.content = [{ type: "text", text: dressed.content }, this.overview()];
+        if (dressed) {
+          const shown = this.overview();
+          dressed.content = [{ type: "text", text: dressed.content }, shown];
+          this.told({ kind: "picture", id: dressed.tool_call_id, url: shown.image_url.url });
+        }
         this.known = this.scene();
       }
-      throw new Error(`stopped after ${MOST_TURNS} turns`);
+      throw Object.assign(new Error(`stopped after ${MOST_TURNS} turns`), { limit: MOST_TURNS });
     } catch (exc) {
       this.release();
       throw exc;
@@ -855,10 +871,11 @@ export class Stagehand {
     this.abort.signal.throwIfAborted();
     const { name } = call.function;
     const tool = Object.hasOwn(TOOLS, name) ? TOOLS[name] : null;
-    let content, changed = false;
+    let content, changed = false, refused = false, args = {};
     try {
       if (!tool) throw new Error(`there is no tool ${name}`);
-      const args = JSON.parse(call.function.arguments || "{}");
+      args = JSON.parse(call.function.arguments || "{}");
+      this.told({ kind: "call", id: call.id, name, args });
       const draft = S.parseTimeline(S.serializeTimeline(this.timeline()));
       content = tool.run(this, draft, args);
       S.ensureCardIds(draft);
@@ -867,9 +884,10 @@ export class Stagehand {
       if (changed) this.apply(draft);
     } catch (exc) {
       content = `Error: ${exc.message ?? exc}`;
+      refused = true;
     }
     this.messages.push({ role: "tool", tool_call_id: call.id, content });
-    this.told({ kind: "result", name, content });
+    this.told({ kind: "result", id: call.id, name, args, content, refused, changed });
     // Let the window draw what was done before the next is.
     await new Promise((resolve) => setTimeout(resolve));
     return changed && Boolean(tool.set);

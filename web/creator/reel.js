@@ -226,6 +226,8 @@ export class Reel {
     // undo is taken. See `record`.
     this.undone = [];
     this.done = [];
+    // The conversation an agent holds about this piece, where there is one.
+    this.agent = null;
     this.onCommit = () => { onCommit?.(); this.record(); };
     this.resolve = resolve;
     // The node's sampler widgets, so a card's preset can carry the row it was
@@ -481,14 +483,14 @@ export class Reel {
   }
 
   renderSteps() {
-    this.undoButton.disabled = !this.done.length;
-    this.redoButton.disabled = !this.undone.length;
+    this.undoButton.disabled = !this.done.length || this.locked;
+    this.redoButton.disabled = !this.undone.length || this.locked;
   }
 
   /** Go to the newest state in `from`, leaving this one in `to`. The piece is
    *  refilled in place: the node holds the same object. */
   step(from, to) {
-    if (!from.length || this.endDrag) return;
+    if (!from.length || this.endDrag || this.locked) return;
     to.push(this.now);
     const { state } = from.pop();
     for (const key of Object.keys(this.timeline)) delete this.timeline[key];
@@ -502,9 +504,18 @@ export class Reel {
     this.arranged = S.arrangement(this.timeline);
     // Only a take that landed since can differ from its card here.
     S.releaseEdited(this.timeline);
-    this.promptBox.setValue(this.timeline.prompt ?? "");
     this.onCommit();
     this.render();
+    this.showTexts();
+    this.stepping = false;
+    this.now = this.capture();
+    this.renderSteps();
+  }
+
+  /** Put the piece's texts into the boxes that show them, after the piece was
+   *  changed from under them. */
+  showTexts() {
+    this.promptBox.setValue(this.timeline.prompt ?? "");
     for (const box of [this.soundscapeBox, this.musicBox]) {
       box.value = this.timeline[box === this.musicBox ? "music" : "soundscape"] ?? "";
       fitText(box);
@@ -515,9 +526,55 @@ export class Reel {
       row.box.setValue(row.segment.prompt ?? "");
       if (document.activeElement === row.box.root) focusEnd(row.box.root);
     }
-    this.stepping = false;
-    this.now = this.capture();
+  }
+
+  // ---- an agent's hand on the piece ---------------------------------------------
+  //
+  // An agent (`stagehand.js`) changes the piece through the same commit a hand
+  // does, one call at a time, while the person watches. Two hands on one piece
+  // make an undo step nobody can name, so editing waits while it works, and
+  // everything one message made it do is one step.
+
+  /** Whether an agent is working on this piece: looking stays, editing waits. */
+  get locked() {
+    return Boolean(this.agent?.working);
+  }
+
+  /** Put a changed piece in place of this one, as a step back does, and commit
+   *  it as an edit by hand is committed. Not a step: see `oneStep`. */
+  land(next) {
+    for (const key of Object.keys(this.timeline)) delete this.timeline[key];
+    Object.assign(this.timeline, structuredClone(next));
+    this.stepping = true;
+    try {
+      this.refiners.clear();
+      this.armed = null;
+      this.commit();
+      this.showTexts();
+    } finally {
+      this.stepping = false;
+    }
+  }
+
+  /** Everything landed since `held` was captured becomes one step. */
+  oneStep(held) {
+    const now = this.capture();
+    if (held && held.text !== now.text) {
+      this.done.push(held);
+      if (this.done.length > 100) this.done.shift();
+      this.undone = [];
+      this.lastField = null;
+    }
+    this.now = now;
     this.renderSteps();
+  }
+
+  /** The agent began or ended: draw what is locked and what is free again. */
+  renderLock() {
+    this.modal?.classList.toggle("mmc-agent-working", this.locked);
+    this.renderSteps();
+    this.renderHead();
+    this.renderStatus();
   }
 
   /** A render landed. Film is not a step: going back keeps it on its card, and
@@ -550,6 +607,8 @@ export class Reel {
     if (!this.onTop()) return;
     // A number being typed into the side has its own.
     if (event.target?.tagName === "INPUT") return;
+    // And so has a message being written to an agent.
+    if (event.target?.classList?.contains("mmc-sh-box")) return;
     const redo = key === "y" || event.shiftKey;
     event.preventDefault();
     event.stopImmediatePropagation();
@@ -599,10 +658,18 @@ export class Reel {
     this.renderPool();
   }
 
-  /** One line of header: how long the piece is, what the next render will do
-   *  with it, and the button that does it. */
+  /** The header, and over it what an agent at work holds back: Shoot. */
   renderHead() {
     if (!this.titleMeta) return;
+    this.paintHead();
+    if (!this.locked) return;
+    this.shootButton.disabled = true;
+    this.shootButton.title = t("Stagehand is working. Stop it to shoot.");
+  }
+
+  /** One line of header: how long the piece is, what the next render will do
+   *  with it, and the button that does it. */
+  paintHead() {
     const seconds = S.timelineSeconds(this.timeline);
     const auto = S.hasAutoDuration(this.timeline);
     const count = this.timeline.segments.length;
@@ -748,7 +815,7 @@ export class Reel {
 
   /** Queue the node this window belongs to, the way its own Render does. */
   shoot() {
-    if (!this.queue) return;
+    if (!this.queue || this.locked) return;
     this.refusal = null;
     this.shooting = true;
     this.renderHead();
@@ -2327,13 +2394,13 @@ export class Reel {
       class: "mmc-reel-lane",
       // A video file from outside the page lands as a clip where it is dropped.
       ondragover: (event) => {
-        if (!dragsFiles(event)) return;
+        if (!dragsFiles(event) || this.locked) return;
         event.preventDefault();
         this.markDrop(this.dropAt(event));
       },
       ondragleave: (event) => { if (!this.reelHost.contains(event.relatedTarget)) this.markDrop(null); },
       ondrop: (event) => {
-        if (!dragsFiles(event)) return;
+        if (!dragsFiles(event) || this.locked) return;
         event.preventDefault();
         event.stopPropagation();
         const at = this.dropAt(event);
@@ -2431,6 +2498,7 @@ export class Reel {
   dragLength(event, index, rules) {
     event.preventDefault();
     event.stopPropagation();
+    if (this.locked) return;
     const segment = this.timeline.segments[index];
     const start = Number(segment.duration_s) || 0;
     const x0 = event.clientX;

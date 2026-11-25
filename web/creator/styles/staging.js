@@ -184,4 +184,22 @@ export const css = `
   .mmc-st-col { order: -1; }
   .mmc-st-glass { min-height: 0; aspect-ratio: 16 / 9; flex: none; }
 }
+
+/* --- an agent at work: said on the glass, on its button, and on what it touched ------- */
+.mmc-st-bench .mmc-reel-side { position: relative; }
+.mmc-st-handbtn { display: inline-flex; align-items: center; gap: 8px; }
+.mmc-st-handbtn[aria-pressed="true"] { background: var(--mmc-wash); color: var(--mmc-strong); }
+.mmc-st-handdot, .mmc-st-agentpill i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-st-agent 1.1s ease-in-out infinite; }
+.mmc-st-handdot[hidden], .mmc-st-agentpill[hidden] { display: none; }
+.mmc-st-agentpill { position: absolute; z-index: 4; left: 12px; bottom: 54px; max-width: calc(100% - 24px); display: flex; align-items: center; gap: 8px; padding: 5px 11px;
+  border-radius: 9px; background: color-mix(in srgb, var(--mmc-ground) 90%, transparent); border: 1px solid color-mix(in srgb, var(--mmc-accent) 45%, transparent);
+  color: var(--mmc-accent); font-size: calc(12px * var(--mmc-type)); font-weight: 500; pointer-events: none; }
+.mmc-st-lit { animation: mmc-st-lit 1.6s ease-out; border-radius: 6px; }
+@keyframes mmc-st-agent { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+@keyframes mmc-st-lit { 0%, 35% { background-color: color-mix(in srgb, var(--mmc-accent) 26%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--mmc-accent) 26%, transparent); }
+  100% { background-color: transparent; box-shadow: 0 0 0 3px transparent; } }
+/* What writes waits while it works; what looks does not. */
+.mmc-st-bench.mmc-agent-working [inert] { opacity: .6; }
+.mmc-st-bench.mmc-agent-working .mmc-reel-edge { pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .mmc-st-handdot, .mmc-st-agentpill i, .mmc-st-lit { animation: none; } }
 `;

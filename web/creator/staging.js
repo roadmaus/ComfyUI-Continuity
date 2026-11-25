@@ -35,6 +35,7 @@ import {
   paintPass, castTints, stagedClauses, citeLine, flatForwardOf, stagingWords,
 } from "./blockout.js";
 import { rulesFor } from "./canvas.js";
+import { talkOf, StagehandWindow } from "./stagehandwindow.js";
 
 /** The four views of the glass. Still is drawn and not yet built (spec 7). */
 const VIEWS = ["stage", "guide", "still", "take"];
@@ -132,6 +133,8 @@ class Blockout extends Reel {
     this.playing = false;
     this.rasters = new Map();
     this.said = "";
+    // How the node is written with no window open: an agent may outlast this one.
+    this.writeNode = options.onCommit ?? null;
   }
 
   // ---- where the glass is ----------------------------------------------------
@@ -326,7 +329,9 @@ class Blockout extends Reel {
       el("div", { class: "mmc-st-monitorcap" }, [this.monitorName, this.monitorSwitch])]);
     // What a drag is about to do, said before it is done.
     this.badge = el("div", { class: "mmc-st-badge", hidden: true });
-    this.stageEl = el("div", { class: "mmc-st" }, [this.canvas, this.video, this.blank, this.monitor, this.badge, this.hudTop, this.hudBottom]);
+    // What Stagehand is doing, said on the glass with its window open or shut.
+    this.agentPill = el("div", { class: "mmc-st-agentpill", hidden: true, role: "status" });
+    this.stageEl = el("div", { class: "mmc-st" }, [this.canvas, this.video, this.blank, this.monitor, this.badge, this.agentPill, this.hudTop, this.hudBottom]);
     this.sheet = new MarkSheet(this);
     this.getsHost = el("div", { class: "mmc-st-gets", hidden: true });
     this.glass = el("div", { class: "mmc-st-glass" }, [this.stageEl]);
@@ -336,6 +341,16 @@ class Blockout extends Reel {
     });
 
     this.writeButton = el("button", { class: "mmc-reel-shoot", text: t("Write the guide"), onclick: () => this.writeHere() });
+    // The conversation about this piece, which may be older than this window
+    // and still working, and the window it is held in.
+    this.agent = talkOf(this.timeline);
+    this.agent.attach(this, this.writeNode);
+    this.handWindow = new StagehandWindow(this, this.agent);
+    this.handDot = el("i", { class: "mmc-st-handdot", hidden: true });
+    this.handButton = el("button", { class: "mmc-reel-btn quiet mmc-st-handbtn", "aria-pressed": "false",
+      title: t("Build or change the blockout by talking. It runs on the model the refiner has selected."),
+      onclick: () => this.handWindow.toggle() }, [el("span", { text: t("Stagehand") }), this.handDot]);
+    this.sideEl = el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost, this.getsHost, this.handWindow.node]);
     this.modal = el("div", { class: `mmc-modal mmc-tl-modal mmc-reel mmc-st-bench${this.single ? " mmc-st-single" : ""}` }, [
       el("div", { class: "mmc-reel-head" }, [
         this.back
@@ -348,13 +363,14 @@ class Blockout extends Reel {
         this.planEl,
         this.cancelButton,
         ...(this.openTimelineWindow ? [this.openButton] : []),
+        this.handButton,
         ...(this.single ? [this.writeButton] : this.queue ? [this.shootButton] : []),
         el("button", { class: "mmc-close", text: "✕", title: t("Close"), onclick: () => this.close() }),
       ]),
       el("div", { class: "mmc-reel-main" }, [
-        this.scriptColumn(),
+        (this.scriptEl = this.scriptColumn()),
         el("div", { class: "mmc-st-col" }, [this.glass, this.sheet.node]),
-        el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost, this.getsHost]),
+        this.sideEl,
       ]),
       el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
     ]);
@@ -364,7 +380,8 @@ class Blockout extends Reel {
     }, [this.modal]);
     // Escape puts down the path being drawn, then in focus gives the window its
     // columns back, before it closes it.
-    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.focused ? this.setFocus(false) : this.close()));
+    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.handWindow.open ? this.handWindow.toggle(false)
+      : this.focused ? this.setFocus(false) : this.close()));
     this.onUndoKey = (event) => this.undoKey(event);
     window.addEventListener("keydown", this.onUndoKey, true);
     this.onKeys = (event) => this.key(event);
@@ -388,6 +405,76 @@ class Blockout extends Reel {
     // A frame taken from a still is the still's shape, known once it is looked at.
     probeAspectSizes(this.timeline, () => this.paint());
     if (!this.single && remembered(FOCUS_KEY) === "1") this.setFocus(true);
+    // Opened on a piece an agent is still working on.
+    if (this.locked) this.renderLock();
+  }
+
+  // ---- Stagehand: the agent's window, and what waits while it works ---------------
+
+  /** The window was opened or closed. */
+  handOpened() {
+    this.handButton.setAttribute("aria-pressed", String(this.handWindow.open));
+    this.syncDrawer();
+  }
+
+  /** What the bench has open and selected, said beside each message, so that
+   *  "this" and "here" mean what the person is looking at. */
+  agentSees() {
+    const set = this.set(), index = this.index(), segment = this.segment();
+    const piece = this.selectedThing();
+    const { w, h } = guideSize(this.timeline);
+    return [
+      segment && !S.isClip(segment) ? `The bench has shot ${index + 1} open, at ${Math.round(this.at.t * 100) / 100} s.` : "",
+      set ? `The glass shows the set "${set.name}".` : "The glass shows no set.",
+      piece ? `Selected: #${piece.id} ${piece.model || piece.kind}${piece.word ? ` "${piece.word}"` : ""}.`
+        : this.sel?.kind === "shot" ? `Selected: shot ${this.sel.index + 1}.`
+        : this.sel?.kind === "set" ? "Selected: the set." : "Nothing is selected.",
+      `The frame is ${w} by ${h}. The longest shot this film's model renders is ${rulesFor(S.pieceFamily(this.timeline)).maxSeconds} s.`,
+    ].filter(Boolean).join(" ");
+  }
+
+  /** The pill on the glass and the dot on the button: what it is doing. */
+  paintAgent() {
+    if (!this.agentPill) return;
+    const working = this.locked;
+    this.agentPill.hidden = !working;
+    this.agentPill.replaceChildren(el("i", {}), el("span", { text: `${t("Stagehand")}: ${this.agent.status || t("working")}` }));
+    this.handDot.hidden = !working;
+  }
+
+  /** Lead the eye to what a call touched, for a moment: an object on the
+   *  stage, a text in the script, a shot on the strip. The view is not moved. */
+  lit({ things = [], texts = [], shot = null } = {}) {
+    clearTimeout(this.litTimer);
+    for (const node of this.litNodes ?? []) node.classList.remove("mmc-st-lit");
+    this.litThings = new Set(things);
+    this.litNodes = [
+      ...texts.map((key) => ({ look: this.promptBox?.frame, sound: this.soundscapeBox, music: this.musicBox }[key])),
+      ...(shot ? [this.rows.get(this.timeline.segments[shot - 1]?.card_id)?.el, this.reelHost.querySelectorAll(".mmc-reel-card")[shot - 1]] : []),
+    ].filter(Boolean);
+    for (const node of this.litNodes) node.classList.add("mmc-st-lit");
+    this.paint();
+    this.litTimer = setTimeout(() => {
+      for (const node of this.litNodes) node.classList.remove("mmc-st-lit");
+      this.litThings = null;
+      this.paint();
+    }, 1600);
+  }
+
+  renderLock() {
+    super.renderLock();
+    const locked = this.locked;
+    // Looking stays: the glass, the strip, the playhead. What writes waits.
+    for (const node of [this.scriptEl, this.inspectHost, this.getsHost, this.hudBottom, this.blank, this.sheet?.addButton, this.sheet?.lanes, this.sheet?.paceHost]) {
+      if (node) node.inert = locked;
+    }
+    this.openButton.disabled = locked;
+    this.writeButton.disabled = locked || Boolean(this.writing) || !this.set();
+    if (locked && this.tool !== "move") this.tool = "move";
+    if (locked && this.shelf) this.closeShelf();
+    this.paintAgent();
+    this.paintHud();
+    this.paint();
   }
 
   // ---- focus: the stage fills the window -----------------------------------------
@@ -421,7 +508,7 @@ class Blockout extends Reel {
   syncDrawer() {
     const key = this.sel ? JSON.stringify(this.sel) : "";
     if (key !== this.drawerFor) { this.drawerFor = key; this.drawer = this.sel?.kind === "thing" || this.sel?.kind === "set"; }
-    this.modal?.classList.toggle("mmc-st-drawer", Boolean(this.focused && this.drawer));
+    this.modal?.classList.toggle("mmc-st-drawer", Boolean(this.focused && (this.drawer || this.handWindow?.open)));
   }
 
   toggleDrawer() {
@@ -431,6 +518,10 @@ class Blockout extends Reel {
 
   close() {
     if (open === this) open = null;
+    // The conversation goes on without a window, and is found again.
+    this.agent?.detach(this);
+    this.handWindow?.unmount();
+    clearTimeout(this.litTimer);
     // The derived guides this window's pieces named while it was open and name no
     // longer. Never the rest of the folder: another window, or a workflow that
     // is not open, may be what the other files belong to.
@@ -496,10 +587,9 @@ class Blockout extends Reel {
   /** The reel's header, said the bench's way: how many shots and how long,
    *  then what the next render shoots and what it plays. While a render runs,
    *  or something stands in the way of one, it is the reel's own. */
-  renderHead() {
-    if (!this.titleMeta) return;
+  paintHead() {
     const count = this.timeline.segments.length;
-    super.renderHead();
+    super.paintHead();
     this.titleMeta.textContent = `${t(count === 1 ? "{n} shot" : "{n} shots", { n: count })} · ${secondsText(S.timelineSeconds(this.timeline))}`;
     if (this.single) {
       this.planEl.replaceChildren(...(this.writeError ? [el("span", { class: "mmc-reel-problem", text: this.writeError })]
@@ -656,6 +746,8 @@ class Blockout extends Reel {
     const cam = this.eye();
     const objects = this.objectsNow();
     const tints = castTints(objects);
+    // What an agent just touched, in a light of its own for a moment.
+    for (const id of this.litThings ?? []) tints[id] = [255, 214, 150];
     this.raster.raster(objects, cam);
     this.raster.shade(this.context, "stage", { selected: this.selectedThing()?.id ?? 0, tints,
       plan: this.plan && !this.lens ? this.planView().span / this.raster.h : 0 });
@@ -1448,9 +1540,10 @@ class Blockout extends Reel {
             ? t("Draw path: click the floor for each stop of whoever is selected, or of the camera. The stops are spread at one pace over the shot. Esc when done.")
             : `${t("Move: drag a person to block them, drag a wall or the table to change the set. Pull a path to bend it.")} ${looking}`;
     }
+    const waits = this.locked ? t("Stagehand is working. You can look around; editing waits until it is done or stopped.") : "";
     this.statusHost.replaceChildren(
       el("button", { class: "mmc-reel-link", text: t("The piece"), onclick: () => this.select(null) }),
-      el("span", { class: "mmc-reel-hint", text: this.said || hint }),
+      el("span", { class: "mmc-reel-hint", text: waits || this.said || hint }),
     );
   }
 
@@ -1777,9 +1870,12 @@ class Blockout extends Reel {
     const { px, py } = this.glassPoint(event);
     const scale = this.inkScale();
     const slide = event.button === 1 || event.button === 2 || event.shiftKey;
+    // While an agent works the glass is for looking: a press picks out or
+    // turns the view, and through the lens, where every drag is a mark, nothing.
+    const locked = this.locked;
     let move = null;
     let edits = false;
-    if (!this.lens && !slide) {
+    if (!this.lens && !slide && !locked) {
       const grab = this.grabbed(this.gizmo(cam), px, py, scale);
       if (grab) { move = this.dragHandle(grab, event, cam); edits = Boolean(move); }
       const path = move ? null : this.grabbedPath(cam, px, py, scale);
@@ -1788,7 +1884,7 @@ class Blockout extends Reel {
     let pressedThing = false;
     // Drawing a path, a press on the floor is the next stop and a press on
     // somebody is them picked out; nothing is dragged but the view.
-    const laying = this.tool === "path" && !this.lens && !slide && !move;
+    const laying = this.tool === "path" && !this.lens && !slide && !move && !locked;
     let lay = laying;
     // Measured now, in the buffer the press is in: it is another size once the drag is over.
     const spot = laying ? this.floorPoint(px, py, cam, 0) : null;
@@ -1801,11 +1897,13 @@ class Blockout extends Reel {
       } else if (piece) {
         pressedThing = true;
         if (!(this.sel?.kind === "thing" && this.sel.id === id)) this.select({ kind: "thing", id });
-        move = this.tool === "lift" ? this.dragLift(id, event) : this.dragFloor(id, px, py, cam);
-        edits = true;
+        if (!locked) {
+          move = this.tool === "lift" ? this.dragLift(id, event) : this.dragFloor(id, px, py, cam);
+          edits = true;
+        }
       }
     }
-    if (!move) move = this.dragCamera(event, slide);
+    if (!move) move = locked && (this.lens || pressedThing) ? () => {} : this.dragCamera(event, slide);
     const x0 = event.clientX, y0 = event.clientY;
     let moved = false;
     const step = (e) => {
@@ -1821,7 +1919,7 @@ class Blockout extends Reel {
       this.endDrag = null;
       this.sizing = false;
       this.setDraft(false);
-      if (moved && (edits || this.lens)) { this.commit(); return; }
+      if (moved && (edits || this.lens) && !locked) { this.commit(); return; }
       if (!moved && lay) { this.layStop(spot); return; }
       if (laying) { this.paint(); return; }
       // A click on the floor, not a drag: back to the shot.
@@ -1992,6 +2090,7 @@ class Blockout extends Reel {
   wheel(event) {
     if (this.view !== "stage" || !this.set()) return;
     event.preventDefault();
+    if (this.lens && this.locked) return;
     if (this.lens) {
       const mark = this.cameraMark();
       const ahead = forwardOf(mark);
@@ -2253,6 +2352,8 @@ class Blockout extends Reel {
     const at = event.target;
     if (at && (at.tagName === "INPUT" || at.tagName === "TEXTAREA" || at.tagName === "SELECT" || at.isContentEditable)) return;
     if (event.metaKey || event.ctrlKey || event.altKey) return;
+    // Keys that write wait while an agent works; the ones that look do not.
+    if (this.locked && !["Escape", " ", "f", "F", "i", "I", ",", "."].includes(event.key)) return;
     if (event.key === " " && at?.tagName !== "BUTTON") { this.playing ? this.stopPlay() : this.startPlay(); }
     else if ((event.key === "Delete" || event.key === "Backspace") && this.sel?.kind === "thing") this.removeThing();
     else if (event.key === "Escape" && this.sel) this.select(null);
