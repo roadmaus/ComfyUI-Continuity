@@ -184,15 +184,15 @@ function hueOf(id) {
   });
 }
 
-function picture(timeline, objects, cam, { labels = false } = {}) {
+function picture(timeline, objects, cam) {
   const size = lookSize(timeline);
   const canvas = Object.assign(document.createElement("canvas"), { width: size[0], height: size[1] });
   const context = canvas.getContext("2d");
   const raster = new Raster(...size);
   raster.raster(objects, cam);
-  // Each object in a colour of its own, where they are to be told apart.
-  raster.shade(context, "stage", labels ? { tints: Object.fromEntries(objects.map((piece) => [piece.id, hueOf(piece.id)])) } : {});
-  if (labels) writeNumbers(context, objects, cam, size);
+  // Each object in a colour of its own, to tell them apart.
+  raster.shade(context, "stage", { tints: Object.fromEntries(objects.map((piece) => [piece.id, hueOf(piece.id)])) });
+  writeNumbers(context, objects, cam, size);
   return { type: "image_url", image_url: { url: canvas.toDataURL("image/png") } };
 }
 
@@ -441,7 +441,7 @@ Returns:
     run: (hand, draft, args) => {
       const of = (key) => number(args, key, -1000, 1000);
       const cam = aimed({ x: of("x"), y: of("y"), z: of("z") }, { x: of("at_x"), y: of("at_y"), z: of("at_z") }, 24);
-      return [picture(draft, hand.setIn(draft).objects, cam, { labels: true })];
+      return [picture(draft, hand.setIn(draft).objects, cam)];
     },
   },
 
@@ -461,7 +461,7 @@ Returns:
       const set = S.setOf(draft, segment);
       if (!set || !segment.staging?.camera.length) throw new Error(`shot ${index + 1} has no camera yet`);
       const time = number(args, "time", 0, segment.duration_s, 0);
-      return [picture(draft, stagedAt(set, segment.staging, time), filmAt(set, segment.staging, time, S.shakeRun(draft, index)), { labels: true })];
+      return [picture(draft, stagedAt(set, segment.staging, time), filmAt(set, segment.staging, time, S.shakeRun(draft, index)))];
     },
   },
 
@@ -597,7 +597,7 @@ Returns:
       }).sort((a, b) => a.t - b.t);
       const set = S.setOf(draft, segment);
       return [{ type: "text", text: shotLines(draft, segment, index).join("\n") },
-        picture(draft, stagedAt(set, segment.staging, 0), filmAt(set, segment.staging, 0, null), { labels: true })];
+        picture(draft, stagedAt(set, segment.staging, 0), filmAt(set, segment.staging, 0, null))];
     },
   },
 
@@ -812,7 +812,7 @@ export class Stagehand {
   overview(above = false) {
     const timeline = this.timeline();
     const { objects } = this.setIn(timeline);
-    return picture(timeline, objects, wholeSet(objects, above, lookSize(timeline)), { labels: true });
+    return picture(timeline, objects, wholeSet(objects, above, lookSize(timeline)));
   }
 
   /** Say something, with up to `MOST_PICTURES` pictures as `data:` URLs, and let
