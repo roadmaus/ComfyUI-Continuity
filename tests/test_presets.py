@@ -982,7 +982,7 @@ check("an old H3 still opens as a MiniMax H3 Image still, its sentence kept",
       old_h3.get("opened"), True)
 check("an old H3 preset's weights set the arch", old_h3.get("arch"), "minimax")
 check("...without carrying the video checkpoints onto it", old_h3.get("noVideoFiles"), True)
-check("...and with the canvas moved into MiniMax H3 Image's range", old_h3.get("edge"), 2048)
+check("...and with the canvas kept, 1024 being inside MiniMax H3 Image's range", old_h3.get("edge"), 1024)
 
 into = report.get("refsIntoPreStage", {})
 check("a card's start frame becomes the pre-stage's init", into.get("init"), True)

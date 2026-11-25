@@ -224,7 +224,9 @@ const reviewMedia = shell.reviewing.media;
 const reviewReadout = reviewCard.querySelector(".mmc-stage-readout");
 const reviewObserver = __observers.at(-1);
 eq(reviewCard.dataset.media, "video", "take review uses the same video marker");
-eq(reviewCard.children, [reviewMedia, reviewReadout], "take review footer is separate from media");
+// The third child is the corner button that turns the take over to what made it.
+eq(reviewCard.children.slice(0, 2), [reviewMedia, reviewReadout], "take review footer is separate from media");
+eq(reviewCard.children.slice(2).map((node) => node.className), ["mmc-fs-flip"], "and the turner is all there is beside them");
 eq(reviewReadout.children.length, 2, "take review separates action and clock groups");
 truth(reviewReadout.children[0].classList.contains("mmc-stage-actions"), "review action group");
 truth(reviewReadout.children[1].classList.contains("mmc-stage-times"), "review clock group");

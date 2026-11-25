@@ -999,13 +999,15 @@ try:
         "segments": [{"prompt": "one", "duration_s": 5},
                      {"prompt": "two", "duration_s": 5, "continue": True, "feather": 22}],
     })
-    seam_was = settings_mod.seam_handoff
+    # The keystone is off for both: on, it takes the masked road whatever the
+    # handoff says, and the saved settings of this machine may have it on.
+    seam_was, keystone_was = settings_mod.seam_handoff, settings_mod.keystone
     for road, holds in (("masked", 1), ("latent", 0)):
-        settings_mod.seam_handoff = lambda road=road: road
+        settings_mod.seam_handoff, settings_mod.keystone = lambda road=road: road, lambda: None
         try:
             masked_kinds = by_class(build(data=masked_data, steps=6).expand)
         finally:
-            settings_mod.seam_handoff = seam_was
+            settings_mod.seam_handoff, settings_mod.keystone = seam_was, keystone_was
         check(f"the {road} road holds the seam between the sittings {holds} time(s)",
               len(masked_kinds.get("ContinuitySeamHold", [])), holds)
         if holds:

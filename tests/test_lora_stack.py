@@ -56,8 +56,8 @@ lora = layout.load("lora").lora
 
 check("every family says which stack its LoRAs take",
       sorted(registry.LORA_STACK), sorted(registry.FAMILIES))
-check("the vendored stack is H3's and nobody else's",
-      [f for f, stack in registry.LORA_STACK.items() if stack == "h3lora"], ["h3"])
+check("the vendored stack is H3's and H3 Still's, which is the same model, and nobody else's",
+      [f for f, stack in registry.LORA_STACK.items() if stack == "h3lora"], ["h3", "h3still"])
 check("LTX 2.5 takes core's loader", registry.LORA_STACK["ltx25"], "core")
 
 # ---- the dispatch ------------------------------------------------------------

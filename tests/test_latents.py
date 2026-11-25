@@ -17,11 +17,11 @@ else.
 Skips itself with a message if ComfyUI core cannot be imported.
 """
 
-import importlib.util
 import os
 import shutil
 import sys
 
+import harness
 import layout
 import tempfile
 import time
@@ -29,35 +29,19 @@ import types
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 COMFY = os.environ.get("COMFYUI_PATH", os.path.expanduser("~/ComfyUI"))
+if not os.path.isfile(os.path.join(COMFY, "folder_paths.py")):
+    harness.skip("set COMFYUI_PATH to a ComfyUI installation")
 sys.path.insert(0, COMFY)
 
 try:
     import torch
 except Exception as exc:  # noqa: BLE001
-    print(f"skipped: needs torch ({type(exc).__name__}: {exc})")
-    sys.exit(0)
+    harness.skip(f"needs torch ({type(exc).__name__}: {exc})")
 
 
-def _load(name):
-    if "mmc" not in sys.modules:
-        package = types.ModuleType("mmc")
-        package.__path__ = [layout.PY_ROOT]
-        sys.modules["mmc"] = package
-    spec = importlib.util.spec_from_file_location(f"mmc.{name}", layout.py(name))
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[f"mmc.{name}"] = module
-    spec.loader.exec_module(module)
-    return module
-
-
-try:
-    latents = _load("latents")
-    compiler = _load("compile")
-    media = _load("media")
-    encoder = _load("encode")
-except Exception as exc:  # noqa: BLE001
-    print(f"skipped: package not importable ({type(exc).__name__}: {exc})")
-    sys.exit(0)
+# Outside any guard: a pack that will not import is a failure, not a skip.
+pkg = layout.load("latents", "compile", "media", "encode", package="mmc")
+latents, compiler, media, encoder = pkg.latents, pkg.compile, pkg.media, pkg.encode
 
 from harness import FAILURES, check, passed
 

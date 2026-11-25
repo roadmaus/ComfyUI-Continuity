@@ -4150,8 +4150,9 @@ check("switching to an image model rebuilds the body",
       report.get("switch", {}).get("image"), "PreStageEditor")
 check("and switching back rebuilds it again",
       report.get("switch", {}).get("back"), "PreStageEditor")
+# Krea's 1024 is inside MiniMax H3 Image's range, so it is kept on the way back.
 check("the short edge lands inside each arch's own range",
-      report.get("switch", {}).get("edges"), [1024, 2048])
+      report.get("switch", {}).get("edges"), [1024, 1024])
 check("the prompt survives the round trip",
       report.get("switch", {}).get("promptKept"), True)
 check("the rebuilt body is not empty",
@@ -4236,8 +4237,10 @@ check("...and she is out of the cast", detached.get("cast"), 0)
 # nothing else in this file noticed: the chips render and the sentence queues.
 doors = report.get("doors") or {}
 check("a cast chip on the node face opens somebody", doors.get("onTheFace"), "true")
+# The fourth box is Stagehand's message box: a name there is a mention, it
+# opens nobody and does not wear the pointer that says it would.
 check("...and so does one in the window's scene and every shot of its script",
-      doors.get("inTheWindow"), "true,true,true")
+      doors.get("inTheWindow"), "true,true,true,false")
 check("...and one in a card of the strip, whose cast is owned a level up",
       doors.get("inACard"), "true")
 

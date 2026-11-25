@@ -64,6 +64,11 @@ except Exception as exc:  # noqa: BLE001
 # reported eight suites green on a branch whose node did not load.
 package = importlib.import_module(PACKAGE)
 
+# The settings are the defaults, not what this machine has saved: a keystone
+# left on in the settings page puts its own nodes into every graph built here.
+_settings = importlib.import_module(f"{PACKAGE}.creator.settings")
+_settings.load = lambda: _settings.clean({})
+
 tl = importlib.import_module(f"{PACKAGE}.creator.timeline")
 # The user-facing node moved to `creator_node` when the Creator and the Timeline
 # became one. This id is the retired one, kept loadable for saved workflows, and
@@ -752,7 +757,6 @@ check("...and the restore node's latent", _rf_segments[1][1].get("prev_latent"),
 
 # The road can be closed from the settings file to compare the two joins on
 # one strip; closed, the graph is byte-for-byte what it was before it existed.
-_settings = importlib.import_module(f"{PACKAGE}.creator.settings")
 _was = _settings.seam_handoff
 _settings.seam_handoff = lambda: "frames"
 try:

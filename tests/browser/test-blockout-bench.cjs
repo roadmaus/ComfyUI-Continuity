@@ -1010,7 +1010,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
     assert.deepEqual(await lines(), ['user: Add a crate and make shot 1 longer.', 'working: Working']);
     assert.deepEqual([(await handState()).send, (await handState()).box], [['Stop', false], true]);
     const { session, messages, tools, seen, client_id, ...asked } = hand.sent[0];
-    assert.deepEqual(asked, { backend: 'remote', model: 'Bonsai-27B', device: '', eject: true });
+    assert.deepEqual(asked, { backend: 'remote', model: 'Bonsai-27B', device: '', eject: true, place: 'blockout' });
     assert.match(messages[0].content, /^Add a crate and make shot 1 longer\.\n\nThe bench has shot 1 open, at 0 s\. The glass shows the set "Kitchen"\. Nothing is selected\. The frame is \d+ by \d+\. The longest shot this film's model renders is 60 s\.\n\nFilm: /);
     assert.match(messages[0].content, /\nShot 1: 5 s, on set "Kitchen", has a kept take that a change to the shot releases\. Text: /);
     // A hand on the glass turns the view and moves nothing; keys that write wait.
