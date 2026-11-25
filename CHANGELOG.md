@@ -14,7 +14,8 @@ made. It runs on the model the refiner has selected, on a server or in ComfyUI, 
 designed for larger ones, 27B and up. Editing waits while it works and is yours again
 the moment it is done or stopped, one message is one Undo, and it never renders. How
 well any model stages has not been measured yet. It can start a set from the scene
-library: asked for a kitchen, it has the kitchen to take.
+library: asked for a kitchen, it has the kitchen to take. Typing `@` in a message
+lists the cast to name.
 
 **A blockout clip can carry its depth.** **Depth as alpha**, on As staged and Labelled,
 lays the clip over black with its depth as the alpha: near is as drawn, far fades out.

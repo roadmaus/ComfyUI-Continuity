@@ -51,7 +51,9 @@ export const css = `
 .mmc-sh-working i { width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-sh-pulse 1.1s ease-in-out infinite; }
 @keyframes mmc-sh-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
 
-.mmc-sh-composer { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; border-top: 1px solid var(--mmc-line); }
+.mmc-sh-composer { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 10px 12px 12px; border-top: 1px solid var(--mmc-line); }
+/* The cast under an @, over the conversation and as wide as the composer. */
+.mmc-sh-mention { position: absolute; z-index: 2; left: 12px; right: 12px; bottom: calc(100% + 4px); width: auto; max-height: 220px; }
 .mmc-sh-write { align-items: flex-end; }
 .mmc-sh-picture { flex: none; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: calc(10px * var(--mmc-round));
   border: 1px solid var(--mmc-edge); background: none; color: var(--mmc-text); cursor: pointer; }

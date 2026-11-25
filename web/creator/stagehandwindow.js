@@ -283,8 +283,11 @@ export class StagehandWindow {
     this.pictureButton = el("button", { class: "mmc-sh-picture", "aria-label": t("Attach a picture"),
       title: t("Attach a picture: a reference for the set, or a frame to match"), onclick: () => this.file.click() }, [glyph(PICTURE_ICON)]);
     this.box = el("textarea", { class: "mmc-sh-box", rows: "2", "aria-label": t("Message to Stagehand"),
-      oninput: () => { this.talk.draft = this.box.value; },
+      oninput: () => { this.talk.draft = this.box.value; this.offerCast(); },
+      onclick: () => this.offerCast(),
+      onblur: () => this.closeMention(),
       onkeydown: (event) => {
+        if (this.mentionKey(event)) return;
         if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
         event.preventDefault();
         this.send();
@@ -295,6 +298,9 @@ export class StagehandWindow {
         event.preventDefault();
         this.attach(files);
       } });
+    // The cast, offered under an @ being typed: a name the model is told with the scene.
+    this.mention = el("div", { class: "mmc-mention mmc-sh-mention", role: "listbox", "aria-label": t("The cast"), hidden: true });
+    this.offered = [];
     this.sendButton = el("button", { class: "mmc-sh-send", onclick: () => (this.talk.working ? this.talk.stop() : this.send()) });
     this.note = el("div", { class: "mmc-sh-note", hidden: true });
     this.node = el("section", {
@@ -319,6 +325,7 @@ export class StagehandWindow {
       ]),
       this.log,
       el("div", { class: "mmc-sh-composer" }, [
+        this.mention,
         this.chips,
         el("div", { class: "mmc-sh-row mmc-sh-write" }, [this.pictureButton, this.box, this.sendButton, this.file]),
         this.note,
@@ -326,6 +333,57 @@ export class StagehandWindow {
     ]);
     this.onTalk = () => this.render();
     talk.listeners.add(this.onTalk);
+  }
+
+  /** The @ being typed at the caret, as `{ from, typed }`, or null. */
+  mentionAt() {
+    const caret = this.box.selectionStart;
+    const found = /(?:^|\s)@([a-z0-9-]*)$/i.exec(this.box.value.slice(0, caret));
+    return found ? { from: caret - found[1].length - 1, typed: found[1].toLowerCase() } : null;
+  }
+
+  /** The cast whose names start with what is typed after an @, to pick from. */
+  offerCast() {
+    const at = this.mentionAt();
+    this.offered = at ? (this.talk.timeline.subjects ?? []).filter((member) => member.handle.startsWith(at.typed)) : [];
+    this.picked = Math.min(this.picked ?? 0, Math.max(0, this.offered.length - 1));
+    this.mention.hidden = !this.offered.length;
+    this.mention.replaceChildren(...this.offered.map((member, index) => el("button", {
+      class: "mmc-mention-row", role: "option", "aria-selected": String(index === this.picked),
+      // The box keeps the caret: a press that took it would close the list first.
+      onpointerdown: (event) => { event.preventDefault(); this.pickCast(member); },
+    }, [el("span", { class: "mmc-mention-text" }, [
+      el("span", { class: `mmc-mention-handle mmc-tag-${S.tagIndex(member.handle)}`, text: `@${member.handle}` }),
+      ...(member.description ? [el("span", { class: "mmc-mention-sub", text: member.description })] : []),
+    ])])));
+  }
+
+  get mentioning() { return !this.mention.hidden; }
+
+  closeMention() {
+    this.offered = [];
+    this.mention.hidden = true;
+  }
+
+  pickCast(member) {
+    const at = this.mentionAt();
+    if (!at) return;
+    const caret = this.box.selectionStart;
+    this.box.setRangeText(`@${member.handle} `, at.from, caret, "end");
+    this.talk.draft = this.box.value;
+    this.closeMention();
+  }
+
+  /** The keys the list takes while it is open. -> whether it took this one. */
+  mentionKey(event) {
+    if (!this.mentioning || event.isComposing) return false;
+    const step = { ArrowDown: 1, ArrowUp: -1 }[event.key];
+    if (step) this.picked = (this.picked + step + this.offered.length) % this.offered.length;
+    else if (event.key !== "Enter" && event.key !== "Tab") return false;
+    event.preventDefault();
+    if (step) this.offerCast();
+    else this.pickCast(this.offered[this.picked]);
+    return true;
   }
 
   /** Taken out of its bench: the conversation goes on without a window. */

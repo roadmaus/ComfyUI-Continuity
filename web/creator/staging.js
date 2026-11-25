@@ -378,9 +378,11 @@ class Blockout extends Reel {
       class: "mmc-overlay",
       onpointerdown: (event) => { if (event.target === this.overlay) this.close(); },
     }, [this.modal]);
-    // Escape puts down the path being drawn, then in focus gives the window its
+    // Escape puts down the path being drawn, then Stagehand's list of the cast and
+    // its window, then in focus gives the window its
     // columns back, before it closes it.
-    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.handWindow.open ? this.handWindow.toggle(false)
+    this.unmount = mountOverlay(this.overlay, () => (this.tool === "path" ? this.setTool("move") : this.handWindow.mentioning ? this.handWindow.closeMention()
+      : this.handWindow.open ? this.handWindow.toggle(false)
       : this.focused ? this.setFocus(false) : this.close()));
     this.onUndoKey = (event) => this.undoKey(event);
     window.addEventListener("keydown", this.onUndoKey, true);
