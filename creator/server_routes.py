@@ -33,7 +33,7 @@ from aiohttp import web
 import folder_paths
 from server import PromptServer
 
-from . import (assets, compile as compiler, crop as framing, latents, lift, lorameta, media,
+from . import (assets, compile as compiler, crop as framing, latents, lift, lorameta, lorasearch, media,
                models, refmod, preview, renders, settings, vdn)
 from .guard import same_origin
 from .screens import spec as screen_spec
@@ -441,6 +441,56 @@ async def lora_detail(request):
     # the event loop must not sit on.
     loop = asyncio.get_running_loop()
     return web.json_response(await loop.run_in_executor(None, lorameta.detail, name, path))
+
+
+def _all_rows():
+    """A row for every LoRA there is, unordered: what Stagehand searches.
+
+    Every file's sidecars are read once and then held by `lorameta` against
+    their signatures, so the first search of a large library pays for the
+    reading and the next ones do not.
+    """
+    rows = []
+    for name in _lora_names():
+        path = folder_paths.get_full_path("loras", name)
+        if path is None:
+            continue
+        try:
+            rows.append(lorameta.row(name, path))
+        except OSError:
+            continue
+    return rows
+
+
+def _lora_search(query):
+    """Stagehand's question about the library, answered off the event loop.
+
+    `q` searches the whole library (`base` narrows it to a base model, `folder`
+    to a folder); `name` resolves one LoRA by whatever the model called it, and
+    `about=1` says what that one is, in words.
+    """
+    rows = _all_rows()
+    if "name" not in query:
+        return lorasearch.search(rows, query.get("q", ""), base=query.get("base", ""),
+                                 folder=query.get("folder", "").strip("/"),
+                                 limit=query.get("limit") or lorasearch.DEFAULT_HITS)
+    row, others = lorasearch.resolve(rows, query.get("name", ""))
+    if row is None:
+        return {"found": None, "others": others}
+    out = {"found": lorasearch.hit(row)}
+    if query.get("about") == "1":
+        path = folder_paths.get_full_path("loras", row["name"])
+        out["about"] = lorasearch.about(row["name"], lorameta.detail(row["name"], path) if path else None)
+    return out
+
+
+@PromptServer.instance.routes.get("/continuity/lora_search")
+async def lora_search(request):
+    query = dict(request.query)
+    if not str(query.get("limit", "")).isdigit():
+        query.pop("limit", None)
+    loop = asyncio.get_running_loop()
+    return web.json_response(await loop.run_in_executor(None, _lora_search, query))
 
 
 @PromptServer.instance.routes.get("/continuity/lora_showcase")

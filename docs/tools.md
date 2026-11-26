@@ -279,8 +279,9 @@ invent one.
 | While it works | each thing it does lands at once: the object lit on the stage, the words in the script, the shot on the strip, and a pill on the glass says what it is doing. You can orbit, play, scrub and select. Editing and Shoot wait, and are yours again the moment it is done, fails or is stopped |
 | **Stop** | ends it at once. What was done stays |
 | A failure | a server that did not answer, a reply that could not be read or a model still loading is asked again by itself, twice more, and the line that says it is working says so. One that stays failed is said in the server's words with **Try again**, which goes on from what it had done: nothing is typed again and nothing is done twice. A wrong key or a missing model is not asked again unasked. After 60 exchanges on one message it stops, with **Go on** |
+| LoRAs | it sees every LoRA on the film, on a shot and worn by the cast, with its strength and trigger words. It can search the whole LoRA library on this machine by name, title, trigger words and tags, narrowed to a base model or a folder, and read what one LoRA's sidecars say about it. It attaches a LoRA to the film, a shot or a cast member, changes its strength, its trigger words or whether it is on, and takes it off. A LoRA attached anew starts where the [LoRA manager](#lora-manager) last had it, or at the strength its author suggests |
 | Undo | everything one message made it do is one step back, and one step forward again |
-| The transcript | one line for each thing it did, which opens to the tool's own answer. A call that was refused is drawn as that, with the reason. **New conversation** forgets what was said and leaves the piece alone |
+| The transcript | what it says is drawn from its markdown: lists, tables, code and links. Under it is one line for each thing it did, which opens to the tool's own answer. A call that was refused is drawn as that, with the reason. **New conversation** forgets what was said and leaves the piece alone |
 
 The timeline has the same button, on the same conversation, with a film's tools
 in place of the bench's: see [Stagehand in the timeline](timeline.md#stagehand).

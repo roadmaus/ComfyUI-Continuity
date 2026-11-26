@@ -84,7 +84,9 @@ the timeline while you watch: the film's text, its sound and music, the cast,
 and the shots, each with its text, its length and the join in front of it. It
 can add a shot anywhere, move one, change or remove one, set a join's picture
 to continue or to cut and its sound to carry over or to start fresh, and
-rewrite a cast member's description. It never renders: Shoot stays yours.
+rewrite a cast member's description. It can find a LoRA in your library and
+put it on the film, on one shot or on a cast member, or change or take off one
+that is there. It never renders: Shoot stays yours.
 
 ![Stagehand in the timeline: the message, one line for each thing it did, and the three shots it wrote in the script and on the reel](img/timeline-stagehand.png)
 

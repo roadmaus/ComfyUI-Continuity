@@ -44,6 +44,16 @@ export function talkOf(timeline) {
 
 const count = (content, word) => (typeof content === "string" ? content : "").split("\n").filter((line) => line.startsWith(word)).length;
 
+/** A LoRA as a line names it: the file, without its folder or extension. */
+const loraName = (name) => String(name ?? "").split("/").pop().replace(/\.(safetensors|ckpt|pt|bin)$/i, "");
+
+/** What a LoRA call was about: a shot, a cast member, or the whole film. */
+function loraWhere(args) {
+  if (args.shot !== undefined && args.shot !== null) return t("shot {n}", { n: args.shot });
+  if (args.cast) return `@${String(args.cast).replace(/^@/, "")}`;
+  return t("the whole film");
+}
+
 /** What the agent is doing, for the pill on the glass, read off the call. */
 export function statusOf(name, args = {}) {
   const shot = { n: args.shot };
@@ -72,6 +82,10 @@ export function statusOf(name, args = {}) {
     keep_camera_on: () => t("turning the camera of shot {n}", shot),
     shake_camera: () => t("shaking the camera of shot {n}", shot),
     walk: () => t("moving #{id} through shot {n}", { id: args.id, n: args.shot }),
+    find_loras: () => t("looking through the LoRAs"),
+    read_lora: () => t("reading about {name}", { name: loraName(args.name) }),
+    set_lora: () => t("setting {name}", { name: loraName(args.name) }),
+    remove_lora: () => t("taking off {name}", { name: loraName(args.name) }),
   }[name] ?? (() => t("working")))();
 }
 
@@ -104,6 +118,10 @@ export function lineOf(name, args = {}, content = "", set = "") {
     keep_camera_on: () => (args.id === 0 ? t("Camera of shot {n} let go", shot) : t("Camera of shot {n} kept on #{id}", { n: args.shot, id: args.id })),
     shake_camera: () => t("Camera shake of shot {n}: {kind}", { n: args.shot, kind: args.kind ?? "" }),
     walk: () => t("#{id} moves through shot {n}", { id: args.id, n: args.shot }),
+    find_loras: () => (args.query ? t("Looked for LoRAs: {query}", { query: args.query }) : t("Looked through the LoRAs")),
+    read_lora: () => t("Read about {name}", { name: loraName(args.name) }),
+    set_lora: () => t("{name} on {where}", { name: loraName(args.name), where: loraWhere(args) }),
+    remove_lora: () => t("Took {name} off {where}", { name: loraName(args.name), where: loraWhere(args) }),
   }[name] ?? (() => name))();
 }
 
@@ -118,6 +136,7 @@ function touchedBy(name, args = {}, content = "") {
   if (name === "add_shot") return { shot: Number(/^Shot (\d+)/.exec(text)?.[1]) || null };
   if (["change_shot", "set_join", "move_camera", "keep_camera_on", "shake_camera"].includes(name)) return { shot: args.shot };
   if (name === "move_shot") return { shot: args.to };
+  if (["set_lora", "remove_lora"].includes(name) && args.shot != null) return { shot: args.shot };
   return {};
 }
 
