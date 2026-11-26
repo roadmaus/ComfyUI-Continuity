@@ -81,7 +81,7 @@ async function stopped(count) {
         sent.push(JSON.parse(route.request().postData()));
         if (hold) await hold;
         const next = script.shift();
-        if (next === 'refuse') return json({ error: 'the server answered 500: out of memory' }, 400);
+        if (next === 'refuse') return json({ error: (await page.evaluate(() => window.refusal)) || 'the server answered 500: out of memory' }, 400);
         const message = { role: 'assistant', content: next ? '' : 'done' };
         if (next) {
           message.tool_calls = next.map(([name, given], at) => ({ id: `c${sent.length}-${at}`, type: 'function',
@@ -119,7 +119,8 @@ async function stopped(count) {
     return page.evaluate(async (words) => {
       const before = window.applied, from = window.hand.messages.length;
       let said, failed = null;
-      try { said = await window.hand.send(words); } catch (exc) { failed = exc.message; }
+      // `null` for the words goes on with the message that ended without its last.
+      try { said = await (words === null ? window.hand.again() : window.hand.send(words)); } catch (exc) { failed = exc.message; }
       // Read off the conversation, which is what the model is sent: the picture
       // of a changed set is put on its answer after the call has been told.
       const names = new Map(), answers = [];
@@ -486,12 +487,44 @@ async function stopped(count) {
     assert.deepEqual((await piece()).sets.at(-1).objects.length, 1);
   });
 
-  await check('a server that fails is said in its own words, and ends the message', async () => {
-    stops.length = 0;
-    const { failed, said } = await say('More.', ['refuse']);
-    assert.deepEqual([failed, said], ['the server answered 500: out of memory', undefined]);
+  await check('a failure that passes is asked again unasked, with the same messages, and the message goes on', async () => {
+    stops.length = 0; sent.length = 0;
+    await page.evaluate(() => { window.hand.pauses = [5, 5]; window.told.length = 0; });
+    const { failed, said, answers } = await say('A crate.', ['refuse', ['add_objects', { objects: [{ what: 'crate', x: 0, z: 3 }] }], 'refuse']);
+    assert.deepEqual([failed, said, answers.length], [null, 'done', 1]);
+    // Four requests for two exchanges, and each second attempt sent what the first did.
+    assert.equal(sent.length, 4);
+    assert.deepEqual([sent[1].messages, sent[3].messages], [sent[0].messages, sent[2].messages]);
+    assert.deepEqual(await page.evaluate(() => window.told.filter((event) => event.kind === 'again').map(({ attempt, of, text }) => [attempt, of, text])),
+      [[2, 3, 'the server answered 500: out of memory'], [2, 3, 'the server answered 500: out of memory']]);
+    await stopped(0);
+  });
+
+  await check('a server that keeps failing is said in its own words after three attempts, and ends the message', async () => {
+    stops.length = 0; sent.length = 0;
+    const { failed, said } = await say('More.', ['refuse', 'refuse', 'refuse']);
+    assert.deepEqual([failed, said, sent.length], ['the server answered 500: out of memory', undefined, 3]);
     await stopped(1);
+  });
+
+  await check('the message that failed is gone on with, without being said again', async () => {
+    sent.length = 0;
+    const before = await page.evaluate(() => window.hand.messages.length);
+    const { failed, said, answers } = await say(null, [['add_objects', { objects: [{ what: 'barrel', x: 1, z: 3 }] }]]);
+    assert.deepEqual([failed, said, answers.length], [null, 'done', 1]);
+    // What went out is the conversation as it stood: the person's words are in it once.
+    assert.equal(sent[0].messages.length, before);
+    assert.equal(sent[0].messages.filter((message) => message.role === 'user' && JSON.stringify(message.content).includes('More.')).length, 1);
     assert.equal((await say('More.', [])).said, 'done');
+  });
+
+  await check('a failure that asking again cannot change is not asked again', async () => {
+    sent.length = 0;
+    await page.evaluate(() => { window.refusal = 'the server answered 401: bad key'; });
+    const { failed } = await say('More.', ['refuse']);
+    assert.deepEqual([failed, sent.length], ['the server answered 401: bad key', 1]);
+    await page.evaluate(() => { window.refusal = null; });
+    assert.equal((await say(null, [])).said, 'done');
   });
 
   await check('a message that never ends is ended after 60 exchanges', async () => {

@@ -20,6 +20,7 @@ import * as S from "./state.js";
 import { rulesFor } from "./canvas.js";
 import { run as runJob, cancelPrompt } from "./queue.js";
 import { settings as refinerSettings, chosenModel } from "./refine.js";
+import { asking } from "./talk.js";
 import { MODELS, MODEL_GROUPS } from "./setmodels.js";
 import { SCENES } from "./setscenes.js";
 import { Raster, DEG, stagedAt, filmAt, project, cornersOf, forwardOf, rightOf, upOf, vfovOf, guideSize, faceArrival, facingOf, aimedMarks } from "./blockout.js";
@@ -1007,6 +1008,7 @@ export class Stagehand {
     this.setId = null;      // the set it is working on
     this.abort = null;
     this.asking = null;     // the backend and model of the message being worked on
+    this.pauses = undefined; // how long is waited before asking again; `talk.asking`'s own unless set
   }
 
   /** End the work at once. What was done stays. A job in ComfyUI is cancelled
@@ -1086,22 +1088,7 @@ export class Stagehand {
       this.messages.push({ role: "user", content: !attached.length ? said
         : [...attached.map((url) => ({ type: "image_url", image_url: { url } })), { type: "text", text: said }] });
       this.known = scene;
-      for (let turn = 0; turn < MOST_TURNS; turn++) {
-        const message = await this.ask();
-        this.messages.push(message);
-        this.told({ kind: "reply", message });
-        if (!message.tool_calls?.length) return message.content;
-        let dressed = null;
-        for (const call of message.tool_calls) if (await this.answer(call)) dressed = this.messages.at(-1);
-        // One picture for all the changes of a reply, on the last of them.
-        if (dressed) {
-          const shown = this.overview();
-          dressed.content = [{ type: "text", text: dressed.content }, shown];
-          this.told({ kind: "picture", id: dressed.tool_call_id, url: shown.image_url.url });
-        }
-        this.known = this.scene();
-      }
-      throw Object.assign(new Error(`stopped after ${MOST_TURNS} turns`), { limit: MOST_TURNS });
+      return await this.work();
     } catch (exc) {
       this.release();
       throw exc;
@@ -1109,6 +1096,45 @@ export class Stagehand {
       this.settle();
       this.abort = null;
     }
+  }
+
+  /** Go on from where a message ended without the model's last words: a
+   *  failure, a Stop, or the limit on exchanges. Nothing is said again; the
+   *  conversation is asked as it stands, with every call already answered. */
+  async again() {
+    if (this.abort) throw new Error("it is still working");
+    if (!this.messages.length) throw new Error("nothing was said yet");
+    this.abort = new AbortController();
+    this.asking = this.request();
+    try {
+      return await this.work();
+    } catch (exc) {
+      this.release();
+      throw exc;
+    } finally {
+      this.settle();
+      this.abort = null;
+    }
+  }
+
+  /** Ask, answer its calls, and ask again, until it calls nothing. -> its last words. */
+  async work() {
+    for (let turn = 0; turn < MOST_TURNS; turn++) {
+      const message = await this.ask();
+      this.messages.push(message);
+      this.told({ kind: "reply", message });
+      if (!message.tool_calls?.length) return message.content;
+      let dressed = null;
+      for (const call of message.tool_calls) if (await this.answer(call)) dressed = this.messages.at(-1);
+      // One picture for all the changes of a reply, on the last of them.
+      if (dressed) {
+        const shown = this.overview();
+        dressed.content = [{ type: "text", text: dressed.content }, shown];
+        this.told({ kind: "picture", id: dressed.tool_call_id, url: shown.image_url.url });
+      }
+      this.known = this.scene();
+    }
+    throw Object.assign(new Error(`stopped after ${MOST_TURNS} turns`), { limit: MOST_TURNS });
   }
 
   /** Every call needs its result, or the conversation cannot go on. */
@@ -1121,9 +1147,16 @@ export class Stagehand {
     }
   }
 
-  /** One exchange. The answer comes on the socket, as a chat turn's does: a
-   *  model building a set outlasts a fetch. */
-  async ask() {
+  /** One exchange, asked again where its failure is one that passes
+   *  (`talk.asking`): the same messages go out, so nothing is done twice. */
+  ask() {
+    const { signal } = this.abort;
+    return asking(() => this.askOnce(), { signal, pauses: this.pauses, onAgain: (trying) => this.told({ kind: "again", ...trying }) });
+  }
+
+  /** One attempt at an exchange. The answer comes on the socket, as a chat
+   *  turn's does: a model building a set outlasts a fetch. */
+  async askOnce() {
     const { signal } = this.abort;
     signal.throwIfAborted();
     this.queued = null;

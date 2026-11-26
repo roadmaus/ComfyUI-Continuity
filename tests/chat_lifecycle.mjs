@@ -312,6 +312,58 @@ await test("deletion drains a save already writing before removing both copies",
   assert.equal(files.has("continuity.chat.new-chat.json"), true, "deletion must not suppress a new chat");
 });
 
+await test("a turn that fails in passing is asked again unasked, and one that stays failed has a door", async () => {
+  const failing = { ok: false, status: 400, json: async () => ({ error: "the server answered 503: the model is loading" }) };
+  let asked = 0, answers = [failing, response({ result: { say: "Done" } })];
+  lifecycle.http = async route => (route === "/continuity/chat/turn" ? (asked++, answers.shift() ?? failing) : undefined);
+  // The wait before a further attempt, run at once: `talk.asking`'s two pauses.
+  const waited = async () => {
+    for (const [id, timer] of [...timers]) {
+      if (timer.after !== 1200 && timer.after !== 3500) continue;
+      timers.delete(id);
+      timer.run();
+    }
+    await drain();
+  };
+  const said = () => [...document.body.querySelectorAll(".mmc-ch-said")].at(-1)?.textContent;
+  // Pressed and not waited for: the turn does not end until its pauses are run.
+  const press = async node => {
+    for (const handler of node.listeners.click ?? []) handler({ currentTarget: node, target: node, stopPropagation() {}, preventDefault() {} });
+    await drain();
+  };
+  const sendOff = async text => {
+    one(".mmc-ch-box").replaceChildren(document.createTextNode(text));
+    await press(one(".mmc-ch-send"));
+  };
+  await click(one(".mmc-ch-new"));
+  await sendOff("a turn that passes");
+  // Nobody is told it failed: the row that says it is thinking says it is asking again.
+  assert.match(one(".mmc-ch-thinking").children.at(-1).textContent, /Asking again, 2 of 3/);
+  assert.equal(document.body.querySelector(".mmc-ch-fail"), null);
+  await waited();
+  assert.deepEqual([asked, said()], [2, "Done"]);
+
+  // Three attempts, then it is said in the server's words, with a door.
+  answers = [];
+  await sendOff("a turn that stays failed");
+  await waited();
+  await waited();
+  assert.equal(asked, 5);
+  const fail = one(".mmc-ch-fail");
+  assert.equal(one(".mmc-ch-said", fail).textContent, "the server answered 503: the model is loading");
+  // The door asks the same message again, and nothing is typed.
+  answers = [response({ result: { say: "Now" } })];
+  await click(one(".mmc-ch-door", fail));
+  assert.deepEqual([asked, said()], [6, "Now"]);
+  assert.equal(document.body.querySelector(".mmc-ch-fail"), null);
+
+  // A failure asking again cannot change is asked once.
+  answers = [{ ok: false, status: 400, json: async () => ({ error: "the server answered 401: bad key" }) }];
+  await send("a turn the server refuses");
+  assert.equal(asked, 7);
+  assert.equal(one(".mmc-ch-said", one(".mmc-ch-fail")).textContent, "the server answered 401: bad key");
+});
+
 await click(one('[title="Close the room"]'));
 await closed;
 console.log(JSON.stringify(results));

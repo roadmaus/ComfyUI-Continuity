@@ -47,6 +47,7 @@ export const css = `
 .mmc-sh-user .mmc-sh-pic img { width: 72px; height: 52px; object-fit: cover; }
 .mmc-sh-error { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 8px 11px; border-radius: calc(10px * var(--mmc-round)); border: 1px solid var(--mmc-bad); color: var(--mmc-bad);
   overflow-wrap: anywhere; }
+.mmc-sh-error.quiet { border-color: var(--mmc-line); color: var(--mmc-dim); }
 .mmc-sh-working { display: flex; align-items: center; gap: 8px; color: var(--mmc-dim); font-size: calc(12px * var(--mmc-type)); }
 .mmc-sh-working i { width: 7px; height: 7px; border-radius: 50%; background: var(--mmc-accent); animation: mmc-sh-pulse 1.1s ease-in-out infinite; }
 @keyframes mmc-sh-pulse { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }

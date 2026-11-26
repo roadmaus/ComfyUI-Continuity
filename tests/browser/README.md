@@ -25,6 +25,7 @@ node tests/browser/test-reference-preview.cjs
 node tests/browser/test-timeline-reel.cjs
 node tests/browser/test-blockout-bench.cjs
 node tests/browser/test-stagehand-tools.cjs
+node tests/browser/test-talk.cjs
 ```
 
 On other operating systems, the same scripts work with the equivalent environment
@@ -91,6 +92,14 @@ scripts do not launch ComfyUI, touch a user browser profile, or modify project d
   limit on exchanges. The server half has its own suite,
   `tests/test_stagehand.py`; `tools/stagehand_bench.py --fake` runs the two
   together.
+
+- **What the conversations share:** the real `talk.js` alone. Reading a failure
+  for its kind, asking again up to three times and saying so, a Stop ending
+  the wait between attempts, the transcript keeping rows, the caret and the
+  newest line, and a failure's line with the doors it was given. How Stagehand
+  uses it is in the two suites above (a failure asked again, **Try again**
+  going on without the message being said twice); how the chat room does is in
+  `tests/test_chat_lifecycle.py`.
 
 These are isolated browser regression tests, **not end-to-end ComfyUI tests or
 GPU/rendering validation**. Source extraction is intentionally explicit: if a

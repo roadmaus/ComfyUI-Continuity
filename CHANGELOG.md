@@ -6,6 +6,23 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The chat room and Stagehand ask and draw their conversations with the same code, and a
+model that fails is asked again.** They were written apart, months apart, and shared only
+the prompt box: two transcripts, two ways of saying a failure, and in Stagehand no way
+back from one but typing the message again. `web/creator/talk.js` is now what both stand
+on. A failure that passes by itself (a server that did not answer, a 5xx or a 429, a reply
+that could not be read, a model still loading) is asked again twice before anybody is
+told, and the line that says it is working says so; Stop ends that wait at once. One that
+stays failed is said in the server's words with a door: **Try again** in Stagehand goes on
+from what it had done, with the same conversation and nothing said or done twice, and the
+room's **Ask again** is the same row. A wrong key or a missing model is not asked again
+unasked, and a conversation too long for the model is offered a new one. Stagehand's stop
+after 60 exchanges has **Go on** where it said to send another message. The transcript of
+both is one class, which keeps the rows that did not change, the caret, and the newest line
+in view. What a line is stays with its owner: a render card is the room's and a tool's
+line is Stagehand's. Not shared yet: the composer, and the room's saved chats and versions,
+which Stagehand does not have.
+
 **The README and the docs show the timeline, the blockout and Stagehand as they are, and
 there is a film of the three.** The pictures were of the editor before the reel. They are
 taken again from the frontend itself, by `tools/ui_harness/docs.cjs`, and

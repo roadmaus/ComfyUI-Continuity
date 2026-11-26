@@ -278,6 +278,7 @@ invent one.
 | What it knows | the scene as it stands, the shot and the moment the bench has open, and what is selected, so "move this to the window" means what you are looking at. It starts on the set the glass shows |
 | While it works | each thing it does lands at once: the object lit on the stage, the words in the script, the shot on the strip, and a pill on the glass says what it is doing. You can orbit, play, scrub and select. Editing and Shoot wait, and are yours again the moment it is done, fails or is stopped |
 | **Stop** | ends it at once. What was done stays |
+| A failure | a server that did not answer, a reply that could not be read or a model still loading is asked again by itself, twice more, and the line that says it is working says so. One that stays failed is said in the server's words with **Try again**, which goes on from what it had done: nothing is typed again and nothing is done twice. A wrong key or a missing model is not asked again unasked. After 60 exchanges on one message it stops, with **Go on** |
 | Undo | everything one message made it do is one step back, and one step forward again |
 | The transcript | one line for each thing it did, which opens to the tool's own answer. A call that was refused is drawn as that, with the reason. **New conversation** forgets what was said and leaves the piece alone |
 
@@ -637,6 +638,13 @@ What it makes is an ordinary render. It goes on the same queue, Cancel reaches
 it, the progress bar under the card is the real one, and the finished file
 lands in your output folder beside everything else, with the blob that made it
 in its metadata.
+
+A turn the model did not answer (the server down for a moment, a reply that
+could not be read) is asked again by itself, twice more, and the thinking row
+says so. One that stays failed has **Ask again**. A render is never queued
+twice this way: only the model's answer is asked for again. The room and
+[Stagehand](#stagehand) ask and draw their conversations with the same code
+(`web/creator/talk.js`), so this is true of both.
 
 Each render gets a handle — `pic-1`, `clip-2` — and the handles are how you ask
 for a change: cite one and the model builds the next request on it. "It" and

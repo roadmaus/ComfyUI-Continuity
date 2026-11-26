@@ -99,6 +99,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
       hand.sent.push(JSON.parse(route.request().postData()));
       await new Promise((resolve) => hand.waiting.push(resolve));
       const next = hand.script.shift();
+      if (next === 'fail') return route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ error: 'the server answered 503: the model is loading' }) });
       const message = typeof next === 'string' ? { role: 'assistant', content: next } : { role: 'assistant', content: '', tool_calls: (next ?? []).map(([name, given], at) => (
         { id: `c${hand.sent.length}-${at}`, type: 'function', function: { name, arguments: JSON.stringify(given) } })) };
       return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ result: { choices: [{ message, finish_reason: 'stop' }] } }) }).catch(() => {});
@@ -855,7 +856,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
       note: win.querySelector('.mmc-sh-note').hidden ? '' : win.querySelector('.mmc-sh-note').textContent };
   });
   const lines = () => page.evaluate(() => [...document.querySelector('.mmc-sh-log').children].map((node) =>
-    `${node.className.replace('mmc-sh-', '')}: ${(node.querySelector('summary') ?? node).textContent}${node.querySelectorAll('.mmc-sh-pic').length ? ` [${node.querySelectorAll('.mmc-sh-pic').length}]` : ''}`));
+    `${node.className.replace('mmc-sh-', '').replace(' mmc-talk-fail', '')}: ${(node.querySelector('summary') ?? node).textContent}${node.querySelectorAll('.mmc-sh-pic').length ? ` [${node.querySelectorAll('.mmc-sh-pic').length}]` : ''}`));
   const locks = () => page.evaluate(() => ({
     working: bench.locked, modal: bench.modal.classList.contains('mmc-agent-working'),
     inert: [bench.scriptEl.inert, bench.inspectHost.inert, bench.hudBottom.inert],
@@ -1176,6 +1177,31 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
     await page.locator('.mmc-sh-error .mmc-sh-btn').click();
     assert.match((await lines())[0], /^empty: /);
     assert.deepEqual(await page.evaluate(() => [bench.agent.hand.messages.length, S.serializeTimeline(tl)]), [0, text]);
+  });
+
+  await check('A failure that passes is asked again while the window says so, and one that stays has a door to go on', async () => {
+    await page.evaluate(() => { bench.agent.hand.pauses = [150, 150]; });
+    const piece = await page.evaluate(() => S.serializeTimeline(tl));
+    hand.sent.length = 0;
+    hand.script = ['fail', 'fail', 'fail', [['add_objects', { objects: [{ what: 'block', x: -4, z: 1, name: 'crate' }] }]], 'A crate.'];
+    await say('A crate.');
+    while (!hand.waiting.length) await page.waitForTimeout(10);
+    hand.go();
+    // The first attempt failed: the line that says it is working says it is asking again.
+    await page.waitForFunction(() => /Asking again, 2 of 3/.test(document.querySelector('.mmc-sh-working')?.textContent ?? ''));
+    assert.deepEqual([(await locks()).working, (await locks()).pill], [true, 'Stagehand: asking again']);
+    for (let n = 0; n < 2; n++) { while (!hand.waiting.length) await page.waitForTimeout(10); hand.go(); }
+    await page.waitForFunction(() => !bench.locked);
+    // Three attempts, then it is said, with a door; the bench is the person's again.
+    assert.equal(hand.sent.length, 3);
+    assert.equal((await lines()).at(-1), 'error: the server answered 503: the model is loadingTry again');
+    assert.equal(await page.evaluate(() => S.serializeTimeline(tl)), piece);
+    // The door goes on with the same message: nothing is typed and nothing is said twice.
+    await page.locator('.mmc-sh-error .mmc-sh-btn').click();
+    for (let n = 0; n < 2; n++) await step();
+    assert.deepEqual((await lines()).slice(-3), ['user: A crate.', 'call: ✓Added 1 object to the set Street [1]', 'say: A crate.']);
+    assert.equal(hand.sent.at(-1).messages.filter((message) => message.role === 'user' && JSON.stringify(message.content).includes('A crate.')).length, 1);
+    assert.equal(await page.evaluate(() => tl.sets.find((set) => set.name === 'Street').objects.at(-1).word), 'crate');
   });
 
   await check('Closing the bench does not stop it: opened again, the conversation is there and still working', async () => {

@@ -64,6 +64,7 @@ import { listChats, loadChat, saveChat, renameChat, deleteChat, newId, pack, gro
          coverOf } from "./chatstore.js";
 import * as D from "./director.js";
 import { t } from "./i18n.js";
+import { Transcript, asking, failRow, againWords } from "./talk.js";
 import { api } from "../../../scripts/api.js";
 
 /** Where a pasted or dropped file lands. Its own shelf under the input folder,
@@ -147,6 +148,9 @@ const state = {
   // counter. On the state rather than on the room for the same reason
   // everything else here is: the turn outlives the overlay.
   tokens: null,
+  // The further attempt a turn is on, while a failure that passes is being
+  // asked again (`askModel`): `{attempt, of, text}`.
+  trying: null,
   error: null,
   // The first run, while it is being answered — see `chatsetup.js`. Null once
   // the card is in the transcript; the scan it was answered against is kept
@@ -790,6 +794,36 @@ function requestBlock(sync) {
     aspect: bar.aspect || "",
     ...sync.families(),
   };
+}
+
+/**
+ * Ask the model. The door every turn of the room goes through, and the one
+ * Stagehand's exchanges go through (`talk.asking`): a failure that passes by
+ * itself is asked again before anybody is told, and the thinking row says so
+ * meanwhile. Only for a call that decides and does nothing: a turn, a plan, a
+ * plan turn. A render is queued once, by its own door.
+ */
+async function askModel(route, body) {
+  try {
+    return await asking(() => run(route, body, {
+      // The token counter the refine button already shows. Only the queued
+      // backend reports one: a remote call answers off the queue and ticks
+      // nothing, so its absence is the honest state rather than a bar at zero.
+      onProgress: (_fraction, value, max) => {
+        state.tokens = { value, max };
+        notify();
+      },
+    }), {
+      onAgain: (trying) => {
+        state.trying = trying;
+        state.tokens = null;
+        notify();
+      },
+    });
+  } finally {
+    state.trying = null;
+    state.tokens = null;
+  }
 }
 
 /** An aspect label as CSS: "4:3" -> "4 / 3", and the room's default where the
@@ -1773,81 +1807,20 @@ class Room {
    *  otherwise kept by `keepScroll`, and pinned to the bottom only when it
    *  was already there. */
   paintLog() {
-    const bottom = this.log.scrollHeight - this.log.scrollTop - this.log.clientHeight < 60;
+    // The lines are the room's; keeping the ones that did not change, the
+    // caret and the newest line in view is `talk.Transcript`, as it is for
+    // Stagehand's window.
+    this.transcript ??= new Transcript(this.log);
+    const flight = this.lastInFlight();
+    const drawn = this.transcript.settle(state.messages.map((message, index) => (
+      { of: message, key: this.rowKey(message, index, flight), draw: () => this.messageRows(message, index, flight) })));
     const rows = [];
     if (!state.messages.length && !state.setup) rows.push(this.emptyRoom());
-    this.rows ??= new Map();
-    const seen = new Set();
-    const flight = this.lastInFlight();
-    state.messages.forEach((message, index) => {
-      seen.add(message);
-      const key = this.rowKey(message, index, flight);
-      const kept = this.rows.get(message);
-      if (kept && kept.key === key) { rows.push(...kept.nodes); return; }
-      const nodes = [];
-      if (message.role === "user") {
-        nodes.push(el("div", { class: "mmc-ch-msg mmc-ch-user" }, [
-          el("div", { class: "mmc-ch-turn" }, [
-            message.attached?.length
-              ? el("div", { class: "mmc-ch-thumbs" }, message.attached.map((entry) => this.thumb(entry)))
-              : null,
-            message.brief
-              ? el("span", { class: "mmc-ch-briefmark", title: t("Sent as a brief for a planned piece.") },
-                   [icon("clapperboard", 12), el("span", { text: t("Plan") })])
-              : null,
-            message.text ? el("div", { class: "mmc-ch-said", text: message.text }) : null,
-          ].filter(Boolean)),
-          message.local ? null : this.acts([
-            ["pen", t("Edit and send again"), () => this.edit(index)],
-          ], index, flight),
-        ].filter(Boolean)));
-      } else {
-        if (message.say) {
-          nodes.push(el("div", { class: `mmc-ch-msg mmc-ch-bot${message.bad ? " mmc-ch-bad" : ""}` }, [
-            el("div", { class: "mmc-ch-said", text: message.say }),
-            message.local ? null : this.acts([
-              // A reply that refused its own render is asked to render again,
-              // not to think again: the model's answer stood, the machine did not.
-              ...(message.bad && message.action
-                ? [["rewind", t("Try the render again"), () => this.retry(message)]] : []),
-              ["turnLeft", t("Ask again from here"), () => this.again(index)],
-            ], index, flight),
-          ].filter(Boolean)));
-        }
-        if (message.offer && !livePlan()) {
-          const ceiling = message.offer.ceiling;
-          const why = {
-            long: t("Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip."),
-            ceiling: t("The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.",
-                       { seconds: ceiling ?? "" }),
-            shots: t("You named several shots, and this is one clip. Planned as a piece, each is a shot of its own."),
-          }[message.offer.why];
-          nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
-            el("button", { class: "mmc-ch-door", text: t("Plan it as a piece"),
-                           disabled: state.busy || undefined, title: why ?? null,
-                           onclick: () => this.planOffered(message) }),
-          ]));
-        }
-        if (message.plan?.held && message === livePlan()) {
-          nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
-            el("button", { class: "mmc-ch-door", text: t("Render it as one clip"),
-                           disabled: state.busy || undefined,
-                           title: t("Turn the plan down and render what you asked for as a single clip. Past about 15 seconds one clip drifts more than chained shots."),
-                           onclick: () => this.oneClip(message) }),
-          ]));
-        }
-        if (message.card) nodes.push(this.renderCard(message.card, message));
-        if (message.plan?.doc) nodes.push(this.planCardFor(message));
-      }
-      this.rows.set(message, { key, nodes });
-      rows.push(...nodes);
-    });
+    rows.push(...drawn.flat());
     // Dimmed from the message being edited on: still the conversation until
     // the edit is sent. Toggled on every paint, since the rows are kept.
-    state.messages.forEach((message, index) => {
-      for (const node of this.rows.get(message)?.nodes ?? []) {
-        node.classList.toggle("mmc-ch-revised", this.revising !== null && index >= this.revising);
-      }
+    drawn.forEach((nodes, index) => {
+      for (const node of nodes) node.classList.toggle("mmc-ch-revised", this.revising !== null && index >= this.revising);
     });
     // Each split's row goes under the message that changed; one whose version
     // on screen is still empty — asked again and not answered — goes last.
@@ -1855,11 +1828,10 @@ class Room {
       const message = state.messages[fork.index];
       const row = this.versionsRow(fork, message?.role ?? "assistant", flight);
       if (!message) { rows.push(row); continue; }
-      const after = rows.lastIndexOf(this.rows.get(message)?.nodes.at(-1));
+      const after = rows.lastIndexOf(drawn[fork.index]?.at(-1));
       if (after < 0) rows.push(row);
       else rows.splice(after + 1, 0, row);
     }
-    for (const message of this.rows.keys()) if (!seen.has(message)) this.rows.delete(message);
     if (state.setup) rows.push(this.firstRun.render());
     if (state.busy) rows.push(this.thinkingRow());
     else this.stopThinking();
@@ -1868,29 +1840,75 @@ class Room {
       // person's, and asking again is asking it again.
       const last = state.messages.length - 1;
       const askable = last >= 0 && state.messages[last].role === "user" && !state.messages[last].local;
-      rows.push(el("div", { class: "mmc-ch-msg mmc-ch-bot mmc-ch-bad" }, [
-        el("div", { class: "mmc-ch-fail" }, [
-          el("div", { class: "mmc-ch-said", text: state.error }),
-          askable ? el("button", {
-            class: "mmc-ch-door", text: t("Ask again"),
-            title: t("Send the same message again."),
-            onclick: () => this.again(last + 1),
-          }) : null,
+      rows.push(el("div", { class: "mmc-ch-msg mmc-ch-bot mmc-ch-bad" }, [failRow({
+        text: state.error, cls: "mmc-ch-fail", words: "mmc-ch-said", door: "mmc-ch-door",
+        again: askable ? () => this.again(last + 1) : null,
+        againWords: t("Ask again"), againTitle: t("Send the same message again."),
+      })]));
+    }
+    // A field being typed into on a plan card survives the repaint, and the
+    // queue repaints on every step of every render: `put` keeps the caret.
+    this.transcript.put(rows);
+  }
+
+  /** One message as its rows: what was said, and whatever hangs off it. */
+  messageRows(message, index, flight) {
+    const nodes = [];
+    if (message.role === "user") {
+      nodes.push(el("div", { class: "mmc-ch-msg mmc-ch-user" }, [
+        el("div", { class: "mmc-ch-turn" }, [
+          message.attached?.length
+            ? el("div", { class: "mmc-ch-thumbs" }, message.attached.map((entry) => this.thumb(entry)))
+            : null,
+          message.brief
+            ? el("span", { class: "mmc-ch-briefmark", title: t("Sent as a brief for a planned piece.") },
+                 [icon("clapperboard", 12), el("span", { text: t("Plan") })])
+            : null,
+          message.text ? el("div", { class: "mmc-ch-said", text: message.text }) : null,
         ].filter(Boolean)),
-      ]));
+        message.local ? null : this.acts([
+          ["pen", t("Edit and send again"), () => this.edit(index)],
+        ], index, flight),
+      ].filter(Boolean)));
+    } else {
+      if (message.say) {
+        nodes.push(el("div", { class: `mmc-ch-msg mmc-ch-bot${message.bad ? " mmc-ch-bad" : ""}` }, [
+          el("div", { class: "mmc-ch-said", text: message.say }),
+          message.local ? null : this.acts([
+            // A reply that refused its own render is asked to render again,
+            // not to think again: the model's answer stood, the machine did not.
+            ...(message.bad && message.action
+              ? [["rewind", t("Try the render again"), () => this.retry(message)]] : []),
+            ["turnLeft", t("Ask again from here"), () => this.again(index)],
+          ], index, flight),
+        ].filter(Boolean)));
+      }
+      if (message.offer && !livePlan()) {
+        const ceiling = message.offer.ceiling;
+        const why = {
+          long: t("Past about 15 seconds one clip drifts. Planned as a piece, it is shots chained on the strip."),
+          ceiling: t("The video model renders at most {seconds} seconds in one clip, so this one stops there. Planned as a piece, it runs the whole length.",
+                     { seconds: ceiling ?? "" }),
+          shots: t("You named several shots, and this is one clip. Planned as a piece, each is a shot of its own."),
+        }[message.offer.why];
+        nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
+          el("button", { class: "mmc-ch-door", text: t("Plan it as a piece"),
+                         disabled: state.busy || undefined, title: why ?? null,
+                         onclick: () => this.planOffered(message) }),
+        ]));
+      }
+      if (message.plan?.held && message === livePlan()) {
+        nodes.push(el("div", { class: "mmc-ch-oneclip" }, [
+          el("button", { class: "mmc-ch-door", text: t("Render it as one clip"),
+                         disabled: state.busy || undefined,
+                         title: t("Turn the plan down and render what you asked for as a single clip. Past about 15 seconds one clip drifts more than chained shots."),
+                         onclick: () => this.oneClip(message) }),
+        ]));
+      }
+      if (message.card) nodes.push(this.renderCard(message.card, message));
+      if (message.plan?.doc) nodes.push(this.planCardFor(message));
     }
-    // A field being typed into on a plan card survives the repaint: the rows
-    // are kept, but putting them back takes the focus out of the one the
-    // person is in, and the queue repaints on every step of every render.
-    const focused = this.log.contains(document.activeElement) ? document.activeElement : null;
-    const caret = focused && typeof focused.selectionStart === "number"
-      ? [focused.selectionStart, focused.selectionEnd] : null;
-    this.log.replaceChildren(...rows);
-    if (focused?.isConnected && document.activeElement !== focused) {
-      focused.focus({ preventScroll: true });
-      if (caret) focused.setSelectionRange(...caret);
-    }
-    if (bottom) this.log.scrollTop = this.log.scrollHeight;
+    return nodes;
   }
 
   /**
@@ -2042,6 +2060,7 @@ class Room {
    *  in a queue. The count is the tokens written so far and nothing else: the
    *  budget beside it was a limit dressed as a progress bar. */
   thinking() {
+    if (state.trying && !state.tokens?.value) return againWords(state.trying);
     if (state.tokens?.value) {
       return t("Writing · {count} tokens", { count: state.tokens.value.toLocaleString() });
     }
@@ -2938,7 +2957,7 @@ class Room {
 
     let turn;
     try {
-      turn = await run("/continuity/chat/turn", {
+      turn = await askModel("/continuity/chat/turn", {
         messages: forServer(),
         ledger: state.ledger,
         strip: stripSummary(),
@@ -2947,15 +2966,6 @@ class Room {
         // has to accept (`chat.cast_entries`).
         piece: state.piece,
         settings: requestBlock(this.sync),
-      }, {
-        // The token counter the refine button already shows. Only the queued
-        // backend reports one — a remote call answers off the queue and
-        // ticks nothing — so its absence is the honest state rather than a bar
-        // that sits at zero.
-        onProgress: (_fraction, value, max) => {
-          state.tokens = { value, max };
-          notify();
-        },
       });
     } catch (error) {
       state.tokens = null;
@@ -3001,17 +3011,12 @@ class Room {
     const asked = state.messages[at - 1]?.planAsk;
     let result;
     try {
-      result = await run("/continuity/director/plan", {
+      result = await askModel("/continuity/director/plan", {
         brief: asked ? asked.brief : withAttached(message),
         ...(asked ? { answer: withAttached(message) } : {}),
         ledger: state.ledger,
         piece: state.piece,
         settings: requestBlock(this.sync),
-      }, {
-        onProgress: (_fraction, value, max) => {
-          state.tokens = { value, max };
-          notify();
-        },
       });
     } catch (error) {
       state.tokens = null;
@@ -3134,17 +3139,12 @@ class Room {
     const sent = plan.doc;
     let result;
     try {
-      result = await run("/continuity/director/turn", {
+      result = await askModel("/continuity/director/turn", {
         plan: sent,
         text: withAttached(message),
         ledger: state.ledger,
         piece: state.piece,
         settings: requestBlock(this.sync),
-      }, {
-        onProgress: (_fraction, value, max) => {
-          state.tokens = { value, max };
-          notify();
-        },
       });
     } catch (error) {
       state.tokens = null;

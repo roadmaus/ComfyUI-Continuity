@@ -29,6 +29,7 @@ import { css as loupe } from "./styles/loupe.js";
 import { css as blockout } from "./styles/blockout.js";
 import { css as staging } from "./styles/staging.js";
 import { css as stagehand } from "./styles/stagehand.js";
+import { css as talk } from "./styles/talk.js";
 import { css as chat } from "./styles/chat.js";
 import { css as director } from "./styles/director.js";
 import { css as lift } from "./styles/lift.js";
@@ -73,6 +74,8 @@ const CSS = [
   staging,
   // Over the bench's inspector, and so after the bench.
   stagehand,
+  // What that window and the chat room draw the same way.
+  talk,
   // After the bench sheet: the chat room is that room with its rail on the
   // other side, so the two rules it turns round have to win over the ones they
   // are turning round.

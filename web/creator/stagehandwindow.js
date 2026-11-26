@@ -10,6 +10,11 @@
 // inspector: header, transcript, composer. Here the window a piece is open in
 // is called the bench, whichever of the two it is.
 //
+// How the conversation is asked and drawn is `talk.js`, which the chat room
+// shares: a failure that passes is asked again unasked, one that does not has a
+// door to ask again without typing, and the transcript is its `Transcript`.
+// What is here is what only Stagehand has: a tool's line, and the bench.
+//
 // The piece is changed the way a hand changes it: each call lands through the
 // window's own commit (`Reel.land`) and is drawn before the next is answered,
 // editing waits while the agent works, and a whole message is one step back.
@@ -22,9 +27,9 @@ import { Stagehand, refinerRequest, MOST_PICTURES } from "./stagehand.js";
 import { PromptBox } from "./prompt.js";
 import { viewUrl } from "./api.js";
 import { remoteStatus, openSettings as openRefinerSettings } from "./refine.js";
+import { Transcript, failRow, failureOf, againWords, scaled, isPicture, enlarge, PICTURE_EDGE } from "./talk.js";
 
-/** The long edge a person's picture is scaled to before it is sent. */
-export const PICTURE_EDGE = 1024;
+export { scaled, PICTURE_EDGE };
 
 const TALKS = new WeakMap();
 
@@ -126,6 +131,7 @@ export class Talk {
     this.items = [];         // the transcript
     this.working = false;
     this.status = "";
+    this.trying = null;      // the further attempt an exchange is on, while it is
     this.held = null;        // the piece as it stood when the message was sent
     this.draft = "";
     this.pictures = [];      // attached to the message being written, as data URLs
@@ -196,11 +202,32 @@ export class Talk {
     this.hand.stop();
   }
 
-  async send(words, pictures = []) {
-    if (this.working || !refinerRequest().model) return;
+  send(words, pictures = []) {
+    if (this.working || !refinerRequest().model) return null;
     this.items.push({ kind: "user", text: words, pictures });
+    return this.run(() => this.hand.send(words, pictures));
+  }
+
+  /** Whether the message that ended last can be gone on with: it failed, or
+   *  ran into the limit on exchanges, and nothing was said since. */
+  get resumable() {
+    return !this.working && Boolean(this.items.at(-1)?.again);
+  }
+
+  /** Go on with the message that failed, without saying it again. The line
+   *  that said it failed goes, and what the model does next follows what it
+   *  had done. */
+  retry() {
+    if (!this.resumable || !refinerRequest().model) return null;
+    this.items.pop();
+    return this.run(() => this.hand.again());
+  }
+
+  /** One stretch of work, however it was started and however it ends. */
+  async run(start) {
     this.working = true;
     this.status = "";
+    this.trying = null;
     this.held = { state: structuredClone(this.timeline), text: S.serializeTimeline(this.timeline) };
     // It starts on the set the glass shows.
     const shown = this.bench?.set?.()?.id;
@@ -208,19 +235,19 @@ export class Talk {
     this.bench?.renderLock();
     this.changed();
     try {
-      await this.hand.send(words, pictures);
+      await start();
     } catch (exc) {
-      if (exc?.stopped) this.items.push({ kind: "note", text: t("Stopped. What was done stays, as one step to undo.") });
-      else if (exc?.limit) this.items.push({ kind: "note", text: t("Stagehand stopped after {n} exchanges. Send another message and it goes on.", { n: exc.limit }) });
-      else {
-        const text = String(exc?.message ?? exc);
-        this.items.push({ kind: "error", text, restart: /context|too long|too many tokens|exceed/i.test(text) });
-      }
+      const { kind, text } = failureOf(exc);
+      if (kind === "stopped") this.items.push({ kind: "note", text: t("Stopped. What was done stays, as one step to undo.") });
+      else if (kind === "limit") this.items.push({ kind: "error", quiet: true, again: true, text: t("Stagehand stopped after {n} exchanges.", { n: exc.limit }) });
+      // A conversation that outgrew the model is not helped by asking again.
+      else this.items.push({ kind: "error", text, again: kind !== "long", restart: kind === "long" });
     } finally {
       // However it ended, the bench is the person's again at once, and what
       // the message did is one step back.
       this.working = false;
       this.status = "";
+      this.trying = null;
       const held = this.held;
       this.held = null;
       this.bench?.oneStep(held);
@@ -230,6 +257,15 @@ export class Talk {
   }
 
   heard(event) {
+    if (event.kind === "again") {
+      // The exchange failed in a way that passes, and is being asked again.
+      this.trying = event;
+      this.status = t("asking again");
+      this.bench?.paintAgent();
+      this.changed();
+      return;
+    }
+    this.trying = null;
     if (event.kind === "call") {
       this.status = statusOf(event.name, event.args);
       this.bench?.paintAgent();
@@ -263,20 +299,6 @@ export class Talk {
   }
 }
 
-// ---- a person's pictures ------------------------------------------------------------
-
-/** A picture file -> a `data:` URL, scaled so its long edge is at most `PICTURE_EDGE`. */
-export async function scaled(file) {
-  const bitmap = await createImageBitmap(file);
-  const k = Math.min(1, PICTURE_EDGE / Math.max(bitmap.width, bitmap.height));
-  const canvas = Object.assign(document.createElement("canvas"), { width: Math.max(1, Math.round(bitmap.width * k)), height: Math.max(1, Math.round(bitmap.height * k)) });
-  canvas.getContext("2d").drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close?.();
-  return canvas.toDataURL("image/jpeg", 0.9);
-}
-
-const isPicture = (file) => /^image\//.test(file?.type ?? "");
-
 // ---- the window ---------------------------------------------------------------------
 
 const PICTURE_ICON = "M2.5 3.5h13v11h-13z M3 13l3.5-3.5 3 3 2-2 3.5 3.5";
@@ -298,7 +320,6 @@ export class StagehandWindow {
     this.talk = talk;
     this.open = false;
     this.host = null;
-    this.drawn = new Map();
     this.modelName = el("b", {});
     this.modelWhere = el("span", {});
     this.changeButton = el("button", { class: "mmc-sh-btn", text: t("Change"),
@@ -307,6 +328,7 @@ export class StagehandWindow {
     this.restartButton = el("button", { class: "mmc-sh-btn", text: t("New conversation"), title: t("Forget what was said. The piece is not changed."),
       onclick: () => this.talk.restart() });
     this.log = el("div", { class: "mmc-sh-log", role: "log", "aria-label": t("The conversation") });
+    this.transcript = new Transcript(this.log);
     this.chips = el("div", { class: "mmc-sh-chips", hidden: true });
     this.file = el("input", { type: "file", accept: "image/*", multiple: "", hidden: true,
       onchange: () => { this.attach([...this.file.files]); this.file.value = ""; } });
@@ -461,28 +483,31 @@ export class StagehandWindow {
   }
 
   renderLog() {
-    const { items, working } = this.talk;
-    const nodes = items.map((item) => {
-      if (item.redraw) { this.drawn.delete(item); item.redraw = false; }
-      if (!this.drawn.has(item)) this.drawn.set(item, this.draw(item));
-      return this.drawn.get(item);
+    const { items, working, trying } = this.talk;
+    const rows = items.map((item, at) => {
+      if (item.redraw) { this.transcript.forget(item); item.redraw = false; }
+      // A failure's doors are there only while nothing was said after it.
+      const live = item.kind === "error" && at === items.length - 1 && !working;
+      return { of: item, key: live ? "live" : "", draw: () => this.draw(item, live) };
     });
-    for (const item of this.drawn.keys()) if (!items.includes(item)) this.drawn.delete(item);
-    this.workingLine ??= el("div", { class: "mmc-sh-working" }, [el("i", {}), el("span", { text: t("Working") })]);
-    const all = [...nodes, ...(working ? [this.workingLine] : [])];
-    if (!all.length) {
-      all.push(this.empty ??= el("div", { class: "mmc-sh-empty", text: this.talk.place === "reel"
+    if (working) {
+      this.workingWords ??= el("span", {});
+      this.workingLine ??= el("div", { class: "mmc-sh-working" }, [el("i", {}), this.workingWords]);
+      this.workingWords.textContent = trying ? againWords(trying) : t("Working");
+      this.workingLine.title = trying?.text ?? "";
+      rows.push(this.workingLine);
+    }
+    if (!rows.length) {
+      rows.push(this.empty ??= el("div", { class: "mmc-sh-empty", text: this.talk.place === "reel"
         ? t("Say what the film is, who is in it and what the shots are. Stagehand builds it here while you watch, and never renders. Ask for a 3D scene and it opens the blockout.")
         : t("Say what the set should be, who is in it and what the shots are. Stagehand builds it here while you watch, and never renders.") }));
     }
-    const now = [...this.log.children];
-    if (now.length !== all.length || now.some((node, at) => node !== all[at])) this.log.replaceChildren(...all);
     // The newest line stays in view.
-    this.log.scrollTop = this.log.scrollHeight;
+    this.transcript.show(rows, { follow: "always" });
   }
 
   /** One line of the transcript. Nothing the agent wrote is drawn as markup. */
-  draw(item) {
+  draw(item, live = false) {
     const thumbs = (urls, name) => (urls.length ? [el("div", { class: "mmc-sh-pics" }, urls.map((url) => el("button", {
       class: "mmc-sh-pic", "aria-label": name, title: t("Enlarge"), onclick: () => this.enlarge(url) }, [el("img", { src: url, alt: "" })])))] : []);
     if (item.kind === "user") {
@@ -491,8 +516,13 @@ export class StagehandWindow {
     if (item.kind === "say") return el("div", { class: "mmc-sh-say", text: item.text });
     if (item.kind === "note") return el("div", { class: "mmc-sh-quiet", text: item.text });
     if (item.kind === "error") {
-      return el("div", { class: "mmc-sh-error", role: "alert" }, [el("span", { text: item.text }),
-        ...(item.restart ? [el("button", { class: "mmc-sh-btn", text: t("New conversation"), onclick: () => this.talk.restart() })] : [])]);
+      return failRow({
+        text: item.text, cls: `mmc-sh-error${item.quiet ? " quiet" : ""}`, door: "mmc-sh-btn",
+        again: live && item.again ? () => this.talk.retry() : null,
+        againWords: item.quiet ? t("Go on") : t("Try again"),
+        againTitle: t("Goes on from what it had done. Nothing is typed again."),
+        restart: item.restart ? () => this.talk.restart() : null,
+      });
     }
     const reason = item.refused ? item.answer.replace(/^Error: /, "") : "";
     return el("div", { class: `mmc-sh-call${item.refused ? " refused" : item.looks ? " looks" : ""}` }, [
@@ -506,10 +536,6 @@ export class StagehandWindow {
   }
 
   enlarge(url) {
-    const close = () => zoom.remove();
-    const zoom = el("button", { class: "mmc-sh-zoom", "aria-label": t("Close the picture"), onclick: close,
-      onkeydown: (event) => { if (event.key === "Escape") { event.stopPropagation(); close(); } } }, [el("img", { src: url, alt: "" })]);
-    this.bench.modal.append(zoom);
-    zoom.focus();
+    enlarge(url, this.bench.modal, "mmc-sh-zoom");
   }
 }
