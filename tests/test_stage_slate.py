@@ -66,9 +66,9 @@ const { api } = await import("../scripts/api.js");
 const { Stage } = await import("./web/creator/stage.js");
 const out = {};
 const text = (stage) => stage.root.textContent.replace(/\\s+/g, " ").trim();
-// The lightweight shim stores each element's own text rather than aggregating
-// descendants; the labeled clocks now have separate label/value spans.
-const chipText = (node) => node.textContent + node.children.map(chipText).join("");
+// The labeled clocks are separate label and value spans; the shim joins a
+// node's descendants' text as the DOM does.
+const chipText = (node) => node.textContent;
 const slate = (stage) => ({
   state: stage.state,
   showing: stage.showing(),

@@ -20,6 +20,7 @@
 // editing waits while the agent works, and a whole message is one step back.
 
 import { el } from "./dom.js";
+import { markdown } from "./markdown.js";
 import { t } from "./i18n.js";
 import * as S from "./state.js";
 import { syncStagingWords } from "./blockout.js";
@@ -506,14 +507,15 @@ export class StagehandWindow {
     this.transcript.show(rows, { follow: "always" });
   }
 
-  /** One line of the transcript. Nothing the agent wrote is drawn as markup. */
+  /** One line of the transcript. What the agent said is drawn from its
+   *  markdown, by hand (markdown.js); nothing it wrote is parsed as HTML. */
   draw(item, live = false) {
     const thumbs = (urls, name) => (urls.length ? [el("div", { class: "mmc-sh-pics" }, urls.map((url) => el("button", {
       class: "mmc-sh-pic", "aria-label": name, title: t("Enlarge"), onclick: () => this.enlarge(url) }, [el("img", { src: url, alt: "" })])))] : []);
     if (item.kind === "user") {
       return el("div", { class: "mmc-sh-user" }, [...thumbs(item.pictures, t("A picture you sent")), el("div", { class: "mmc-sh-words", text: item.text })]);
     }
-    if (item.kind === "say") return el("div", { class: "mmc-sh-say", text: item.text });
+    if (item.kind === "say") return el("div", { class: "mmc-sh-say mmc-md" }, markdown(item.text));
     if (item.kind === "note") return el("div", { class: "mmc-sh-quiet", text: item.text });
     if (item.kind === "error") {
       return failRow({

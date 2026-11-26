@@ -242,13 +242,23 @@ class Node {
   // A text node's text, under the name the DOM gives it. `PromptBox.getValue`
   // walks the box with this, which is how what was typed becomes the prompt in
   // the state — without it the box round-trips to `undefined` here.
+  // As the DOM has it: an element's text is its children's, joined, and
+  // setting it replaces them. A reply drawn from its markdown is a paragraph of
+  // pieces, and what it says is read off the paragraph.
+  get textContent() {
+    return this.children.length ? this.children.map((c) => c.textContent).join("") : this._text;
+  }
+  set textContent(v) {
+    this._text = v === null || v === undefined ? "" : String(v);
+    if (this.children?.length) this.children.splice(0);
+  }
   get nodeValue() { return this.textContent; }
   set nodeValue(v) { this.textContent = v; }
   set value(v) { this._value = v; }
   get value() { return this._value ?? ""; }
   /** Everything rendered under this node, flattened — what the checks read. */
   get text() {
-    return [this.textContent, ...this.children.map((c) => c.text ?? "")].join(" ");
+    return [this._text, ...this.children.map((c) => c.text ?? "")].join(" ");
   }
 }
 globalThis.document = {

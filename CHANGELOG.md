@@ -6,6 +6,17 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**What Stagehand and the chat room's model say is drawn from its markdown.** Chat models
+answer in markdown whether they are asked to or not, and drawn as text a reply was a wall of
+`**`, `- ` and `###`. `web/creator/markdown.js` reads the part of it models write
+(paragraphs, headings, lists nested and numbered and ticked, quotes, fenced code, pipe
+tables, rules, emphasis, inline code and links) and builds the elements by hand: nothing is
+parsed as HTML, so a `<script>` in a reply is still its characters, a link is kept only when
+it is http(s) and opens apart without a referrer, and a picture is a link to it, never
+fetched. Underscores inside a word are the word's, so a LoRA's file name stays one name. A
+failure is still drawn in the server's words, as written. The tests' DOM shim reads an
+element's text off its children now, as the DOM does.
+
 **The chat room and Stagehand ask and draw their conversations with the same code, and a
 model that fails is asked again.** They were written apart, months apart, and shared only
 the prompt box: two transcripts, two ways of saying a failure, and in Stagehand no way

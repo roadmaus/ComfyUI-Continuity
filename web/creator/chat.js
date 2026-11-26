@@ -64,6 +64,7 @@ import { listChats, loadChat, saveChat, renameChat, deleteChat, newId, pack, gro
          coverOf } from "./chatstore.js";
 import * as D from "./director.js";
 import { t } from "./i18n.js";
+import { markdown } from "./markdown.js";
 import { Transcript, asking, failRow, againWords } from "./talk.js";
 import { api } from "../../../scripts/api.js";
 
@@ -1873,7 +1874,11 @@ class Room {
     } else {
       if (message.say) {
         nodes.push(el("div", { class: `mmc-ch-msg mmc-ch-bot${message.bad ? " mmc-ch-bad" : ""}` }, [
-          el("div", { class: "mmc-ch-said", text: message.say }),
+          // The model's words are drawn from their markdown; a failure is the
+          // server's words and stays as they were written.
+          message.bad
+            ? el("div", { class: "mmc-ch-said", text: message.say })
+            : el("div", { class: "mmc-ch-said mmc-md" }, markdown(message.say)),
           message.local ? null : this.acts([
             // A reply that refused its own render is asked to render again,
             // not to think again: the model's answer stood, the machine did not.

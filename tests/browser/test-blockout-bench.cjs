@@ -856,7 +856,7 @@ const hand = { script: [], sent: [], stops: [], waiting: [], go() { this.waiting
       note: win.querySelector('.mmc-sh-note').hidden ? '' : win.querySelector('.mmc-sh-note').textContent };
   });
   const lines = () => page.evaluate(() => [...document.querySelector('.mmc-sh-log').children].map((node) =>
-    `${node.className.replace('mmc-sh-', '').replace(' mmc-talk-fail', '')}: ${(node.querySelector('summary') ?? node).textContent}${node.querySelectorAll('.mmc-sh-pic').length ? ` [${node.querySelectorAll('.mmc-sh-pic').length}]` : ''}`));
+    `${node.className.replace('mmc-sh-', '').replace(' mmc-talk-fail', '').replace(' mmc-md', '')}: ${(node.querySelector('summary') ?? node).textContent}${node.querySelectorAll('.mmc-sh-pic').length ? ` [${node.querySelectorAll('.mmc-sh-pic').length}]` : ''}`));
   const locks = () => page.evaluate(() => ({
     working: bench.locked, modal: bench.modal.classList.contains('mmc-agent-working'),
     inert: [bench.scriptEl.inert, bench.inspectHost.inert, bench.hudBottom.inert],

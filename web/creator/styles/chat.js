@@ -129,6 +129,8 @@ export const css = `
   font-size: calc(14px * var(--mmc-type)); line-height: 1.55;
   white-space: pre-wrap; word-break: break-word; user-select: text;
 }
+/* A reply drawn from its markdown is blocks, not lines: the blocks space it. */
+.mmc-ch-said.mmc-md { white-space: normal; }
 .mmc-ch-bad .mmc-ch-said, .mmc-ch-note.mmc-ch-bad { color: var(--mmc-bad); }
 .mmc-ch-thinking { display: flex; align-items: center; gap: 10px; color: var(--mmc-faint); }
 /* The seed mark, walking, while the model writes: the pill's 5x5 as
