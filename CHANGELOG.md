@@ -6,6 +6,16 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**The README and the docs show the timeline, the blockout and Stagehand as they are, and
+there is a film of the three.** The pictures were of the editor before the reel. They are
+taken again from the frontend itself, by `tools/ui_harness/docs.cjs`, and
+`tools/ui_harness/film.cjs` makes `docs/vid/timeline-blockout-stagehand.mp4`: a film
+written from a sentence, a shot staged in the bench, the stage played and looked through,
+and the takes back on the reel. Neither needs ComfyUI, so neither shows a render:
+Stagehand's replies are a script, and the takes are stills from the style atlas. The docs
+also said six families where there are eleven, and called the **Add shot** pill by the
+reel's *Write the next shot*.
+
 **Stagehand sees the cast.** A cast member with pictures is shown to it once, small, with
 the message, and the film it reads says the video model is given those pictures. It used
 to know only that somebody "has pictures", so asked for detail it made a look up, wrote

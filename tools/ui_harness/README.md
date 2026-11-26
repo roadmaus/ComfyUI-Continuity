@@ -13,6 +13,37 @@ node tools/ui_harness/shots.cjs out/ --light  # the same on ComfyUI's light pale
 `playwright`; `PLAYWRIGHT_MODULE` and `BROWSER_EXECUTABLE_PATH` work as they
 do in `tests/browser/`.
 
+## The pictures in the docs, and the film
+
+```sh
+node tools/ui_harness/docs.cjs                # every picture README.md and docs/ show, into docs/img
+node tools/ui_harness/docs.cjs out/ hero chat # two of them, somewhere else
+node tools/ui_harness/film.cjs                # docs/vid/timeline-blockout-stagehand.mp4
+node tools/ui_harness/film.cjs out.mp4 --dry  # one picture per held moment, nothing encoded
+```
+
+Both stand on `demo.cjs`, which answers in the browser what a piece needs and
+the server above does not: these also need `ffmpeg`.
+
+- **Takes and faces** are cut from the style atlas that ships in
+  `web/creator/presets/atlas/` (one frame each of clips from
+  `ostris/minimax_h3_1k`), a take being a still with a slow push in. Nothing
+  shown was rendered by this pack.
+- **Stagehand's model** is a script of replies. The tools it calls are the real
+  ones, so the film it writes and the set it builds are what those calls make.
+- **The blockout's guides** are drawn for real and the routes that would write
+  them accept them and keep nothing.
+- **The settings** say the chat room's first-run questions were answered.
+
+The film is not a screen recording. Each frame is a screenshot taken after the
+page was put where that frame needs it (a letter typed, the pointer moved, the
+playhead set), so it comes out the same on any machine. The pointer and the
+captions are drawn over the page by the script.
+
+Two pictures are not made here and were taken in ComfyUI: `simple-prestage.png`
+(the pre-stage is a second node, and there is no graph to spawn it in) and
+`style-atlas.png`.
+
 ## What is real and what is not
 
 - **Real:** everything under `web/` (layout, components, CSS), and the family

@@ -2,7 +2,7 @@
 
 ## Adding shots
 
-Under the prompt there is a band labeled **Write the next shot**. Click it and
+Under the prompt there is a pill labeled **Add shot**. Click it and
 the piece has two shots, the reel opens on the new one, and the node's face
 becomes a timeline lane, proportional to the shots' durations. Delete back down to one shot and the
 single-shot face comes back. There is no mode to switch.
@@ -15,6 +15,8 @@ on Krea 2 feeding start frames into shots on LTX 2.5.
 
 **Edit timeline** opens the reel: one window for writing, joining, watching and
 reshooting the piece.
+
+![The timeline: the cast and the script on the left, the player and a join's settings on the right, the reel underneath with two kept takes and a shot still to shoot](img/timeline.png)
 
 - **The header** says how long the piece is and what the next render will do
   (how many shots it shoots, how many kept takes it plays), and **Shoot**
@@ -84,6 +86,8 @@ can add a shot anywhere, move one, change or remove one, set a join's picture
 to continue or to cut and its sound to carry over or to start fresh, and
 rewrite a cast member's description. It never renders: Shoot stays yours.
 
+![Stagehand in the timeline: the message, one line for each thing it did, and the three shots it wrote in the script and on the reel](img/timeline-stagehand.png)
+
 It builds nothing in 3D here. Ask it for a 3D scene, a blockout or a staged
 shot and it opens the [blockout bench](tools.md#blockout-bench) on that shot and goes
 on there with the bench's tools. That way is one way: the timeline's tools are
@@ -95,6 +99,12 @@ bench: the model is the refiner's, a message can carry up to four pictures,
 `@` lists the cast and the cast library, editing and Shoot wait while it works,
 **Stop** ends it at once, and everything one message did is one Undo. See
 [Stagehand](tools.md#stagehand) for the whole of it.
+
+[A film of it](vid/timeline-blockout-stagehand.mp4) goes from an empty
+timeline to a staged shot and back: a film written from a sentence, a shot
+staged in the bench, the stage played and looked through, and the takes on the
+reel. It is the real frontend driven by `tools/ui_harness/film.cjs`; the
+model's replies are a script and the takes are stand-in stills.
 
 ## Passes
 

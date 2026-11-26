@@ -1,12 +1,12 @@
 # Continuity
 
 One node for AI video and stills in ComfyUI. Write a prompt, attach media with
-`@`, press Render. Six model families, all through ComfyUI core, all local
+`@`, press Render. Eleven model families, all through ComfyUI core, all local
 open weights. The one thing that can talk to the outside is the prompt
 refiner, and only if you point it at your own server or provider - LM Studio,
 Ollama, or a hosted API with your key.
 
-![A shot sampling, with the render beside it](docs/img/hero.png)
+![The timeline: a film's script on the left, a kept take in the player, and the reel underneath](docs/img/hero.png)
 
 ## What it does
 
@@ -39,11 +39,36 @@ runs both; an untouched pre-stage doesn't re-render.
 
 ### Timelines
 
-Under the prompt: *Write the next shot*. Every shot on the strip is a whole
+**Add shot**, under the prompt, makes the piece a film. Every shot is a whole
 generation with its own prompt, references, LoRAs and even its own family - a
-pre-stage on Krea 2 feeding start frames into shots on LTX 2.5 is one strip.
-Seams carry picture and sound across the cut, or don't, independently.
+pre-stage on Krea 2 feeding start frames into shots on LTX 2.5 is one piece.
+The timeline is one window for all of it: the script on the left, an inspector
+for whatever is selected on the right, and the reel at its real length
+underneath. Joins carry picture and sound across the cut, or don't,
+independently. Takes are kept, so the next render shoots only what changed.
 [Timelines](docs/timeline.md).
+
+![The timeline with a join selected: picture continues, sound carries over, and the blend drawn over the cut on the reel](docs/img/timeline.png)
+
+### Stagehand
+
+Say what the film is and Stagehand builds it on the timeline while you watch:
+the film's text, its sound, the shots, and the join in front of each. Ask it
+for a 3D scene and it opens the blockout bench on that shot and stages it
+there: a set, the cast on it, who walks where, and a camera. It runs on the
+model the refiner already uses, it never renders, and everything one message
+made it do is one Undo. [Stagehand](docs/timeline.md#stagehand).
+
+![Stagehand in the timeline, having written a film of three shots from one sentence](docs/img/timeline-stagehand.png)
+
+The three together, in a minute and three quarters:
+
+[![A film of the timeline, Stagehand and the blockout bench. Click to play](docs/img/film-poster.jpg)](docs/vid/timeline-blockout-stagehand.mp4)
+
+The film is the real frontend, driven by `tools/ui_harness/film.cjs` with no
+ComfyUI behind it. Stagehand's replies in it are a script and the two takes
+are stand-in stills, so it shows how the windows work and not what a model
+makes.
 
 ### Chat
 
@@ -65,7 +90,7 @@ an upscale bench. [Tools](docs/tools.md).
 
 ![The tool dashboard](docs/img/dashboard.png)
 
-![The blockout bench](docs/img/blockout.png)
+![The blockout bench: the kitchen set as a floor plan, the shot camera's frame in the corner, and what the model is given on the right](docs/img/blockout.png)
 
 The style atlas is 941 looks captioned from real clips, applied as a prefix
 to the prompt:
@@ -82,8 +107,9 @@ you never asked for. Most of the work now goes there: measuring the drift on
 real strips rather than guessing, and pushing the number of shots a piece can
 hold before it shows.
 
-The other direction is getting the graph out of the way. The chat room and the
-blockout bench are both ways of saying what you want without touching a pill,
+The other direction is getting the graph out of the way. The chat room,
+Stagehand and the blockout bench are all ways of saying what you want without
+touching a pill,
 and the pre-stage plus the timeline are what let one prompt become a scene.
 There is no cloud in any of that, and there won't be: everything renders on
 your hardware from weights you downloaded.
@@ -139,9 +165,9 @@ for a render in plain words.
 - [Getting started](docs/getting-started.md)
 - [Model downloads](docs/models.md) - every file, and the folder it goes in
 - [The node](docs/the-node.md) - prompting, references, the cast, Refine
-- [Timelines](docs/timeline.md) - pieces with more than one shot
+- [Timelines](docs/timeline.md) - pieces with more than one shot, and Stagehand
 - [Model families](docs/families.md) - what each model can do
-- [Tools](docs/tools.md) - chat, ControlNet, upscaling, presets, LoRAs
+- [Tools](docs/tools.md) - chat, the blockout bench, ControlNet, upscaling, presets, LoRAs
 - [Scripts and agents](docs/headless.md) - rendering from a shell or a coding agent
 - [FAQ and troubleshooting](docs/faq.md)
 - [Changelog](CHANGELOG.md) - what changed, release by release

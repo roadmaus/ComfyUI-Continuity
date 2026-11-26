@@ -57,7 +57,10 @@ blockout** comes back. Nothing selected means the piece is selected. A set is
 taken off the piece from its own page in the inspector; its shots stay, with no
 staging.
 
-![The blockout bench: the script on the left; the kitchen set as a floor plan with @ben selected, the shot camera's frame in the corner and the sheet of stops under it; his blocking in the inspector over what the model is given; and the piece underneath with the sets over the film and shot 3's guide on its card](img/blockout.png)
+![The blockout bench: the script on the left; the kitchen set as a floor plan with @ben selected at the end of his walk, the shot camera's frame in the corner and the sheet of stops under it; his blocking in the inspector over what the model is given; and the piece underneath with a kept take on shot 1 and shot 2's guide on its card](img/blockout.png)
+
+There is [a film](vid/timeline-blockout-stagehand.mp4) of a shot being staged
+here and played, from the timeline and back.
 
 No model, no download, no queue for the stage itself: the renderer is
 arithmetic in the browser, and what the glass shows in **Guide** is exactly what
@@ -266,7 +269,7 @@ and, under them, the cast library; somebody picked from the library is cast
 onto the piece with their files, so Stagehand stages that member and does not
 invent one.
 
-![Stagehand at work in the blockout bench: the conversation over the inspector with one line for each thing it did, the picture it looked at, a call it was refused, and a pill on the glass saying what it is doing](img/stagehand.png)
+![Stagehand at work in the blockout bench: the conversation over the inspector with one line for each thing it did and the pictures it looked at, the set it built on the stage with the shot camera's frame in the corner, and a pill on the glass saying what it is doing](img/stagehand.png)
 
 | | |
 |---|---|
