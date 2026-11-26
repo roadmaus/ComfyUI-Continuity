@@ -86,7 +86,9 @@ can add a shot anywhere, move one, change or remove one, set a join's picture
 to continue or to cut and its sound to carry over or to start fresh, and
 rewrite a cast member's description. It can find a LoRA in your library and
 put it on the film, on one shot or on a cast member, or change or take off one
-that is there. It never renders: Shoot stays yours.
+that is there, and put a look from the style library at the front of the film's
+text or a shot's. It touches LoRAs and styles only when you ask it to. It never
+renders: Shoot stays yours.
 
 ![Stagehand in the timeline: the message, one line for each thing it did, and the three shots it wrote in the script and on the reel](img/timeline-stagehand.png)
 

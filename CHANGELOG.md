@@ -6,6 +6,14 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**Stagehand can use the style library, when it is asked to.** `find_styles` searches the
+atlas's 941 looks by their words, or lists the categories, and says which style the film's
+text and each shot's open with now; `use_style` puts one at the front of the film's text or a
+shot's, swapping out a style already there the way the library's Apply does; `remove_style`
+takes it off and leaves the rest. Only the words reach the model, never the frames: the words
+are what the video model is given, and they gave the better results. The atlas is loaded the
+first time a style tool is called, and the prompts say to use it only when the person asks.
+
 **Stagehand knows the LoRAs, and can find them and put them on.** It was writing shots for
 somebody with a character LoRA without knowing they wore one. The scene it is sent now says
 which LoRAs are on the film, on each shot and worn by each cast member, at what strength and

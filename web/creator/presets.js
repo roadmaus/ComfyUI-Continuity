@@ -1200,6 +1200,13 @@ function leadLength(text) {
   return 0;
 }
 
+/** The descriptor `text` opens with, lowercased, or "" — which style a text
+ *  wears, for whoever has to say so. Knows only what `stylelib.js` registered. */
+export function styleLeadOf(text) {
+  const body = String(text ?? "").trim();
+  return body.slice(0, leadLength(body)).toLowerCase();
+}
+
 // The openings it is safe to lower-case once they are mid-sentence behind a
 // descriptor: a closed list of articles and prepositions. Lower-casing whatever
 // the prompt happens to start with would turn "Marcus waits at the gate" into

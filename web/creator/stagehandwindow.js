@@ -86,6 +86,9 @@ export function statusOf(name, args = {}) {
     read_lora: () => t("reading about {name}", { name: loraName(args.name) }),
     set_lora: () => t("setting {name}", { name: loraName(args.name) }),
     remove_lora: () => t("taking off {name}", { name: loraName(args.name) }),
+    find_styles: () => t("looking through the styles"),
+    use_style: () => t("styling {where}", { where: loraWhere(args) }),
+    remove_style: () => t("taking the style off {where}", { where: loraWhere(args) }),
   }[name] ?? (() => t("working")))();
 }
 
@@ -122,6 +125,9 @@ export function lineOf(name, args = {}, content = "", set = "") {
     read_lora: () => t("Read about {name}", { name: loraName(args.name) }),
     set_lora: () => t("{name} on {where}", { name: loraName(args.name), where: loraWhere(args) }),
     remove_lora: () => t("Took {name} off {where}", { name: loraName(args.name), where: loraWhere(args) }),
+    find_styles: () => (args.query ? t("Looked for styles: {query}", { query: args.query }) : t("Looked through the styles")),
+    use_style: () => t("Style {style} on {where}", { style: String(args.style ?? "").replace(/^style\./, ""), where: loraWhere(args) }),
+    remove_style: () => t("Took the style off {where}", { where: loraWhere(args) }),
   }[name] ?? (() => name))();
 }
 
@@ -137,6 +143,7 @@ function touchedBy(name, args = {}, content = "") {
   if (["change_shot", "set_join", "move_camera", "keep_camera_on", "shake_camera"].includes(name)) return { shot: args.shot };
   if (name === "move_shot") return { shot: args.to };
   if (["set_lora", "remove_lora"].includes(name) && args.shot != null) return { shot: args.shot };
+  if (["use_style", "remove_style"].includes(name)) return args.shot != null ? { shot: args.shot } : { texts: ["look"] };
   return {};
 }
 

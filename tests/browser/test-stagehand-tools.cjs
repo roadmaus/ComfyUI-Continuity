@@ -33,9 +33,11 @@ const appStub = `export const app = { graph: { _nodes: [] }, extensionManager: {
 
 const NAMES = ['see_scene', 'add_objects', 'move_object', 'resize_object', 'describe_object', 'copy_object', 'remove_objects',
   'use_set', 'look_overview', 'look_from', 'look_through_camera', 'add_cast', 'write_film_text', 'add_shot', 'change_shot',
-  'remove_shot', 'move_camera', 'keep_camera_on', 'shake_camera', 'walk', 'find_loras', 'read_lora', 'set_lora', 'remove_lora'];
+  'remove_shot', 'move_camera', 'keep_camera_on', 'shake_camera', 'walk', 'find_loras', 'read_lora', 'set_lora', 'remove_lora',
+  'find_styles', 'use_style', 'remove_style'];
 const REEL_NAMES = ['see_scene', 'add_cast', 'change_cast', 'write_film_text', 'add_shot', 'change_shot', 'move_shot', 'remove_shot',
-  'set_join', 'open_blockout', 'find_loras', 'read_lora', 'set_lora', 'remove_lora'];
+  'set_join', 'open_blockout', 'find_loras', 'read_lora', 'set_lora', 'remove_lora',
+  'find_styles', 'use_style', 'remove_style'];
 
 let browser, requests = 0;
 // The model: each exchange takes the next reply off the script, a list of
@@ -420,6 +422,35 @@ async function stopped(count) {
     refusedWith(await one('remove_lora', { name: 'anna_face', cast: 'anna' }), '@anna has no LoRA "anna_face"');
     const left = await piece();
     assert.deepEqual([left.loras, left.segments[0].loras, left.subjects.map((member) => member.wears ?? null)], [[], [], [null, null]]);
+  });
+
+  await check('the style tools search the real library, put a style in front of a text and take it off again', async () => {
+    const kept = await page.evaluate(() => window.S.serializeTimeline(window.piece()));
+    const shelves = (await one('find_styles')).text;
+    assert.match(shelves, /^941 styles in 8 categories: .*Stop-Motion & Puppetry \(\d+\)/);
+    const found = await say('go', [['find_styles', { query: 'claymation fingerprint', limit: 3 }]]);
+    assert.equal(found.applied, 0);
+    const lines = found.answers[0].text.split('\n');
+    assert.match(lines[0], /^style\.\d{6} \[[^\]]+\]: Claymation.*finger/i);
+    assert.equal(lines.length, 4);
+    assert.match(lines[3], /^\d+ more fit; narrow the search or ask for more\.$/);
+    refusedWith(await one('find_styles', { category: 'Watercolour' }), 'there is no category "Watercolour": it is one of ');
+    refusedWith(await one('use_style', { style: 'style.999999' }), 'there is no style "style.999999" in the library');
+
+    // On the film: in front of its text. Another style swaps it, never stacks.
+    assert.equal((await one('use_style', { style: '000006' })).text,
+      'Film: Claymation with visible fingerprint texture and gently stuttering stop-motion movement, a small kitchen, early.');
+    assert.equal((await one('use_style', { style: 'style.000465' })).text,
+      'Film: Claymation animation with thumbprint ridges visible across every surface and slightly asymmetrical eyes, a small kitchen, early.');
+    // On a shot: its own text, and the rest of the line as it was.
+    assert.match((await one('use_style', { style: '000006', shot: 1 })).text,
+      /^Shot 1: 6 s[^]*Text: Claymation with visible fingerprint texture and gently stuttering stop-motion movement, @ben comes in, wet\./);
+    assert.match((await one('find_styles', { query: 'neon' })).text, /\nNow: the whole film opens with style\.000465; shot 1 opens with style\.000006\.$/);
+
+    assert.equal((await one('remove_style')).text, 'Film: a small kitchen, early.');
+    assert.match((await one('remove_style', { shot: 1 })).text, /Text: @ben comes in, wet\./);
+    refusedWith(await one('remove_style', { shot: 1 }), 'the text of shot 1 does not open with a style from the library');
+    await page.evaluate((kept) => window.put(window.S.parseTimeline(kept)), kept);
   });
 
   await check('the piece is what the calls made of it', async () => {

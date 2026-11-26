@@ -17,6 +17,7 @@
 import { api } from "../../../scripts/api.js";
 import { JSON_HEADERS, viewUrl, loadLoraPrefs } from "./api.js";
 import { videoFamily } from "./manifest.js";
+import { leadWithStyle, styleLeadOf } from "./presets.js";
 import * as S from "./state.js";
 import { rulesFor } from "./canvas.js";
 import { run as runJob, cancelPrompt } from "./queue.js";
@@ -243,6 +244,59 @@ async function libraryLora(hand, name, about = false) {
     throw new Error(`there is no LoRA "${asked}" in the library${others.length ? `. Did you mean: ${others.join(", ")}` : ". Search with find_loras"}`);
   }
   return answer;
+}
+
+// ---- styles ------------------------------------------------------------------------
+
+/**
+ * The style library: the atlas's looks, each a clause of words put at the front
+ * of a text. Loaded the first time it is asked for, since the atlas is a sixth
+ * of a megabyte, and loading it is what teaches `leadWithStyle` which openings
+ * are styles. Only the words: what the library shows as pictures never reaches
+ * the model. A conversation can be given another, as with the LoRAs.
+ *
+ * `rows()` -> `[{id, category, text, caption}]`.
+ */
+export const STYLES = {
+  async rows() {
+    const { styleRows } = await import("./presets/stylelib.js");
+    return styleRows().map((row) => ({ id: row.id, category: row.folder, text: row.data.style.text, caption: row.note }));
+  },
+};
+
+/** One style by its id, or a sentence about it. `style.000123` and `000123`
+ *  are the same style. */
+function styleIn(rows, args) {
+  const asked = text(args, "style", undefined, 80).trim();
+  const id = asked.startsWith("style.") ? asked : `style.${asked}`;
+  const row = rows.find((item) => item.id === id);
+  if (!row) throw new Error(`there is no style "${asked}" in the library: its ids are as find_styles gives them, such as ${rows[0]?.id ?? "style.000001"}`);
+  return row;
+}
+
+/** Which style each text opens with: `[where, row]`. */
+function stylesWorn(draft, rows) {
+  const byText = new Map();
+  for (const row of rows) for (const words of [row.text, row.caption]) byText.set(String(words).trim().replace(/[,.;:\s]+$/, "").toLowerCase(), row);
+  const worn = [];
+  const look = (where, words) => {
+    const row = byText.get(styleLeadOf(words).replace(/[,.;:\s]+$/, ""));
+    if (row) worn.push([where, row]);
+  };
+  look("the whole film", draft.prompt);
+  draft.segments.forEach((segment, index) => { if (!S.isClip(segment)) look(`shot ${index + 1}`, segment.prompt); });
+  return worn;
+}
+
+/** The text a style goes on: a shot's, or the film's. -> `{get, put, line}`. */
+function styleTarget(draft, args) {
+  if (args.shot !== undefined && args.shot !== null) {
+    const { segment, index } = shotIn(draft, args);
+    return { where: `shot ${index + 1}`, get: () => segment.prompt ?? "", put: (words) => { segment.prompt = words; },
+      line: () => filmShotLine(draft, segment, index) };
+  }
+  return { where: "the whole film", get: () => draft.prompt ?? "", put: (words) => { draft.prompt = words; },
+    line: () => `Film: ${draft.prompt || "none"}` };
 }
 
 /** The list a LoRA is attached to: a shot's, a cast member's for the piece's
@@ -1156,7 +1210,95 @@ Returns:
   },
 };
 
-const PLACES = { blockout: { ...TOOLS, ...LORA_TOOLS }, reel: { ...REEL_TOOLS, ...LORA_TOOLS } };
+const STYLE_WHERE = `    shot (int, optional): Number of the shot, from 1, for that shot's text. Left out, the film's text, which goes with every shot.`;
+
+/** The style library's tools, the same in both places. */
+const STYLE_TOOLS = {
+  find_styles: {
+    doc: `Search the style library: looks written as a few words each, such as a medium, a technique, a film stock or a kind of light, made for MiniMax H3 and read by every video model. Only when the person has asked for a style.
+
+Args:
+    query (str, optional): Words to look for in the styles. Left out, with no category, the categories and how many styles each has.
+    category (str, optional): Only styles in this category.
+    limit (int, optional): How many to answer with, 1 to 40. Default 12.
+
+Returns:
+    str: One line for each style, best first: its id, its category and the words it puts in front of a text. Then which style the film's text and each shot's text open with now, if any.`,
+    properties: { query: str, category: str, limit: whole },
+    required: [],
+    ready: (hand) => hand.styles.rows(),
+    run: (hand, draft, args, rows) => {
+      const limit = args.limit === undefined || args.limit === null ? 12 : count(args, "limit", 1, 40);
+      const query = text(args, "query", "", 200), category = text(args, "category", "", 80).trim().toLowerCase();
+      const categories = [...new Set(rows.map((row) => row.category))];
+      if (category && !categories.some((name) => name.toLowerCase() === category)) {
+        throw new Error(`there is no category "${args.category}": it is one of ${categories.join(", ")}`);
+      }
+      const worn = stylesWorn(draft, rows);
+      const wornLines = worn.length ? `\nNow: ${worn.map(([where, row]) => `${where} opens with ${row.id}`).join("; ")}.` : "";
+      const words = query.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
+      if (!words.length && !category) {
+        return `${rows.length} styles in ${categories.length} categories: ${categories.map((name) => `${name} (${rows.filter((row) => row.category === name).length})`).join(", ")}.${wornLines}`;
+      }
+      const scored = rows.filter((row) => !category || row.category.toLowerCase() === category).map((row) => {
+        const hay = `${row.text} ${row.caption} ${row.category}`.toLowerCase();
+        const own = row.text.toLowerCase();
+        let matched = 0, points = 0;
+        for (const word of words) {
+          const at = new RegExp(`(?<![\\p{L}\\p{N}])${word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`, "u");
+          if (at.test(own)) { matched++; points += 2; } else if (at.test(hay)) { matched++; points += 1; }
+        }
+        return { row, matched, points };
+      }).filter((item) => !words.length || item.matched)
+        .sort((a, b) => b.matched - a.matched || b.points - a.points || a.row.text.length - b.row.text.length);
+      if (!scored.length) return `No style in the library fits that.${wornLines}`;
+      const more = scored.length > limit ? `\n${scored.length - limit} more fit; narrow the search or ask for more.` : "";
+      return scored.slice(0, limit).map(({ row }) => `${row.id} [${row.category}]: ${row.text}`).join("\n") + more + wornLines;
+    },
+  },
+
+  use_style: {
+    doc: `Put a style at the front of a text. Where the text opens with a style from the library already, that one comes out, so styles are never stacked. The rest of the text stays as it is. Only when the person has asked for a style.
+
+Args:
+    style (str): The style's id, as find_styles gives it.
+${STYLE_WHERE}
+
+Returns:
+    str: The text as it is now.`,
+    properties: { style: str, shot: whole },
+    required: ["style"],
+    ready: (hand) => hand.styles.rows(),
+    run: (hand, draft, args, rows) => {
+      const row = styleIn(rows, args);
+      const target = styleTarget(draft, args);
+      target.put(leadWithStyle(target.get(), row.text));
+      return target.line();
+    },
+  },
+
+  remove_style: {
+    doc: `Take the style from the library off the front of a text, and leave the rest of it.
+
+Args:
+${STYLE_WHERE}
+
+Returns:
+    str: The text as it is now.`,
+    properties: { shot: whole },
+    required: [],
+    ready: (hand) => hand.styles.rows(),
+    run: (hand, draft, args) => {
+      const target = styleTarget(draft, args);
+      const before = target.get();
+      if (!styleLeadOf(before)) throw new Error(`the text of ${target.where} does not open with a style from the library`);
+      target.put(leadWithStyle(before, ""));
+      return target.line();
+    },
+  },
+};
+
+const PLACES = { blockout: { ...TOOLS, ...LORA_TOOLS, ...STYLE_TOOLS }, reel: { ...REEL_TOOLS, ...LORA_TOOLS, ...STYLE_TOOLS } };
 
 export const tools = (place = "blockout") => Object.entries(PLACES[place]).map(([name, { doc, properties = {}, required = [] }]) =>
   ({ type: "function", function: { name, description: doc, parameters: { type: "object", properties, required } } }));
@@ -1248,8 +1390,8 @@ const ROUTE = "/continuity/stagehand";
 
 export class Stagehand {
   constructor({ timeline, apply, request = refinerRequest, windowState = () => "", told = () => {}, place = () => "blockout",
-    cross = () => { throw new Error("the blockout cannot be opened from here"); }, library = LIBRARY }) {
-    Object.assign(this, { timeline, apply, request, windowState, told, place, cross, library });
+    cross = () => { throw new Error("the blockout cannot be opened from here"); }, library = LIBRARY, styles = STYLES }) {
+    Object.assign(this, { timeline, apply, request, windowState, told, place, cross, library, styles });
     this.session = `${new Date().toISOString().slice(0, 19).replace(/[^0-9]/g, "-")}-${Math.random().toString(36).slice(2, 8)}`;
     this.messages = [];
     this.logged = 0;
