@@ -14,7 +14,9 @@ library on this machine by name, title, trigger words and tags, narrowed to a ba
 folder, and says which video model the film renders with; `read_lora` reads what one file's
 sidecars say about it, the person's own notes first, and the author's description fenced as
 the author's; `set_lora` attaches one to the film, a shot or a cast member, or changes its
-strength, trigger words or whether it is on; `remove_lora` takes one off. A LoRA attached anew
+strength, trigger words or whether it is on; `remove_lora` takes one off. It touches LoRAs only when
+asked to: the prompt and the tools' own docstrings say so, since a model left to judge when
+a look wants one reached for them on every message. A LoRA attached anew
 starts where the LoRA manager last had it, or at its author's strength. The library is asked
 before the piece is copied, so a change made by hand meanwhile is not written over, and what
 it did is one Undo with the rest of the message. The server half is `/continuity/lora_search`

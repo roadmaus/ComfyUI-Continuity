@@ -1038,7 +1038,7 @@ const WHERE = `    shot (int, optional): Number of the shot, from 1, for a LoRA 
  *  is a thing about the film, its shots and its cast, wherever it is asked for. */
 const LORA_TOOLS = {
   find_loras: {
-    doc: `Search the LoRAs on this machine. A LoRA is a small file of extra weights for the video model that gives it a look, a style, a kind of motion, an effect or a person. A LoRA works only with the base model it was trained for, and the answer says which video model the film renders with.
+    doc: `Search the LoRAs on this machine. A LoRA is a small file of extra weights for the video model that gives it a look, a style, a kind of motion, an effect or a person. A LoRA works only with the base model it was trained for, and the answer says which video model the film renders with. Only when the person has asked for a LoRA.
 
 Args:
     query (str, optional): Words to look for in the names, titles, trigger words and tags. Left out, the newest LoRAs.
@@ -1094,7 +1094,7 @@ Returns:
     // Asked of the library before the draft is taken, so the piece is never
     // held open across a request.
     ready: (hand, args) => libraryLora(hand, args.name).then(async ({ found }) => ({ found, memory: await hand.library.memory(found.name) })),
-    doc: `Attach a LoRA, or change one that is attached. What is left out stays as it is; a LoRA attached anew starts at the strength the person last used it at, or the one its author suggests, and with its trigger words, which are put in front of the text the video model reads.
+    doc: `Attach a LoRA, or change one that is attached. Only when the person has asked for it. What is left out stays as it is; a LoRA attached anew starts at the strength the person last used it at, or the one its author suggests, and with its trigger words, which are put in front of the text the video model reads.
 
 Args:
     name (str): The LoRA's name, as find_loras gives it.
