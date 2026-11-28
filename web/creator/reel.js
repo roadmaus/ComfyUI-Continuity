@@ -211,7 +211,8 @@ export async function compiledFor(timeline, card, seed) {
 }
 
 export class Reel {
-  constructor({ timeline, onCommit, edit = null, io = null, widgets = null, queue = null, stage = null, run = null }, resolve) {
+  constructor({ timeline, onCommit, edit = null, io = null, widgets = null, queue = null, stage = null, run = null,
+                queuePart = null, runs = null, dropRun = null, moveRun = null }, resolve) {
     this.timeline = timeline;
     // The node's stage, for what it says when a render fails. See `failed`.
     this.stage = stage;
@@ -222,6 +223,17 @@ export class Reel {
     // Queue the node this window belongs to: the header's Shoot. Absent where
     // nothing lent it, and then there is no button.
     this.queue = queue;
+    // Queue the same node with a blob of the caller's (`state.partialPiece`):
+    // how picked shots are shot alone. Resolves false where the press could
+    // not be sent as asked. With it, this node's prompts on the queue, and
+    // taking one off or moving it. All absent where nothing lent them.
+    this.queuePart = queuePart;
+    this.runs = runs ?? (() => []);
+    this.dropRun = dropRun;
+    this.moveRun = moveRun;
+    // The shots picked to shoot by themselves, as their passes' first card
+    // ids, in the order they were picked. Live while `sel` is `{kind: "picks"}`.
+    this.picks = [];
     // Every write in this window ends here, so this is where a step of its
     // undo is taken. See `record`.
     this.undone = [];
@@ -785,6 +797,7 @@ export class Reel {
     this.renderHead();
     this.renderPlayer();
     this.paintShooting();
+    this.renderQueue();
   }
 
   /** The pass being made, on the reel and beside its words. */
@@ -1697,6 +1710,7 @@ export class Reel {
     this.renderReel();
     this.renderSide();
     this.renderHead();
+    this.renderQueue();
   }
 
   /** A keystroke in the script: the card changed, so a kept take of it may have
@@ -1710,6 +1724,7 @@ export class Reel {
   }
 
   select(sel, { reveal = true } = {}) {
+    if (sel?.kind !== "picks") this.picks = [];
     this.sel = sel;
     this.watching = !sel;
     this.failureSeen = this.stage?.failure ?? null;
@@ -1743,6 +1758,7 @@ export class Reel {
     const head = pass.segments[0];
     const take = S.takeOn(head);
     if (take && this.gone.has(take.filename)) return "gone";
+    if (S.isLocked(head)) return "locked";
     if (take && S.isHeld(head)) return "kept";
     if (take) return this.edits?.has(pass.start) ? "changed" : "reshoot";
     return "new";
@@ -1751,8 +1767,104 @@ export class Reel {
   /** The word a shot wears — only when it is not what a shot is by default.
    *  Kept is the default once a piece has been shot, and not shot is drawn by
    *  the card itself, so neither is said. */
-  stateTag(state) {
+  stateTag(state, index = null) {
+    if (state === "locked") {
+      if (index === null) return t("Locked");
+      const pass = S.passOf(this.timeline, index);
+      if (S.lockedJumps(this.timeline).has(S.passIndexOf(this.timeline, index))) return t("Locked, the cut may jump");
+      return this.edits?.has(pass.start) ? t("Locked, edit not shot") : t("Locked");
+    }
     return { changed: t("Changed, reshoots"), reshoot: t("Reshoots"), gone: t("File missing") }[state] ?? "";
+  }
+
+  /** Lock or unlock the take of the shot at `index`. */
+  setTakeLock(index, locked) {
+    if (S.lockTake(this.timeline, index, locked)) this.commit();
+  }
+
+  /** A click on a shot: select it, or with Shift, Ctrl or Cmd held, add it to
+   *  (or take it out of) the shots picked to shoot by themselves. */
+  pickOrSelect(event, index) {
+    const segment = this.timeline.segments[index];
+    const adding = event?.shiftKey || event?.metaKey || event?.ctrlKey;
+    if (!adding || !segment || S.isClip(segment)) { this.select({ kind: "shot", index }); return; }
+    const headOf = (i) => S.passOf(this.timeline, i).segments[0].card_id;
+    let picks = this.sel?.kind === "picks" ? [...this.picks] : [];
+    // The shot already selected is the first pick: Shift-click is "and this one".
+    if (!picks.length && this.sel?.kind === "shot" && !S.isClip(this.timeline.segments[this.sel.index])) {
+      picks.push(headOf(this.sel.index));
+    }
+    const id = headOf(index);
+    picks = picks.includes(id) ? picks.filter((p) => p !== id) : [...picks, id];
+    if (picks.length >= 2) {
+      this.picks = picks;
+      this.select({ kind: "picks" });
+    } else if (picks.length === 1) {
+      this.select({ kind: "shot", index: this.timeline.segments.findIndex((card) => card.card_id === picks[0]) });
+    } else this.select(null);
+  }
+
+  /** The picks as pass indices on the strip as it stands, in pick order. */
+  pickedPasses() {
+    const runs = S.passes(this.timeline);
+    return this.picks.map((id) => runs.findIndex((pass) => pass.segments[0].card_id === id))
+      .filter((k) => k >= 0 && !S.isClip(runs[k].segments[0]));
+  }
+
+  /** The passes a render already on the queue is generating. */
+  busyPasses() {
+    const runs = S.passes(this.timeline);
+    const out = new Set();
+    for (const run of this.runs()) {
+      for (const id of run.shot ?? []) {
+        const k = runs.findIndex((pass) => pass.segments.some((card) => card.card_id === id));
+        if (k >= 0) out.add(k);
+      }
+    }
+    return out;
+  }
+
+  /** A pass by the shot numbers it covers: "4", or "4–5" for merged shots. */
+  passName(k) {
+    const pass = S.passes(this.timeline)[k];
+    return pass.segments.length > 1 ? `${pass.start + 1}–${pass.end}` : String(pass.start + 1);
+  }
+
+  /** Queue each entry (`state.shootEntries`) as a render of its own, in order. */
+  async shootOnly(entries) {
+    if (!this.queuePart || this.locked || !entries.length) return;
+    this.refusal = null;
+    this.shooting = true;
+    this.renderHead();
+    if (syncStagingWords(this.timeline)) this.commit();
+    // A staged shot is rendered along its guide, drawn here first exactly as
+    // Shoot draws it, but only for the shots this press makes.
+    const only = entries.flatMap((entry) => entry.passes);
+    if (guidesWanted(this.timeline, only).length) {
+      try {
+        const changed = await deriveGuides(this.timeline, {
+          only, step: (sentence) => { this.shootLabel = sentence; this.renderHead(); } });
+        this.shootLabel = null;
+        if (changed) this.commit();
+      } catch (error) {
+        this.shootLabel = null;
+        this.shooting = false;
+        this.refusal = t("The guide could not be drawn: {why}", { why: String(error?.message || error) });
+        this.renderHead();
+        return;
+      }
+    }
+    // One after another, each sent once the last was: ComfyUI's queue runs
+    // prompts in the order they arrive, and that order is the pick's.
+    for (const entry of entries) {
+      const answer = await this.queuePart(S.partialPiece(this.timeline, entry.passes));
+      if (answer === false) {
+        this.shooting = false;
+        this.refusal = t("ComfyUI was still sending another render. Try again in a moment.");
+        this.renderHead();
+        return;
+      }
+    }
   }
 
   // ---- the script ---------------------------------------------------------
@@ -1806,11 +1918,20 @@ export class Reel {
     const index = () => this.timeline.segments.indexOf(row.segment);
     row.number = el("button", {
       class: "mmc-reel-num",
-      title: t("Select this shot"),
-      onclick: () => this.select({ kind: "shot", index: index() }),
+      title: t("Select this shot. Shift-click to pick several to shoot."),
+      onclick: (event) => this.pickOrSelect(event, index()),
     });
     row.seconds = el("span", { class: "mmc-reel-secs" });
     row.tag = el("span", { class: "mmc-reel-tag" });
+    // The take's lock, beside what the take is doing. Only on a shot that has
+    // one: there is nothing to keep until there is film.
+    row.lock = el("button", {
+      class: "mmc-reel-lock",
+      onclick: () => {
+        const at = index();
+        this.setTakeLock(at, !S.isLocked(S.passOf(this.timeline, at).segments[0]));
+      },
+    });
     if (row.clip) {
       row.body = el("button", {
         class: "mmc-reel-clipname",
@@ -1894,6 +2015,7 @@ export class Reel {
       row.gutter,
       row.body,
       row.tag,
+      row.lock,
     ]);
     return row;
   }
@@ -1904,9 +2026,21 @@ export class Reel {
     row.number.textContent = String(index + 1);
     row.seconds.textContent = t("{s} s", { s: S.showSeconds(seconds) });
     const state = this.shotState(index);
-    row.tag.textContent = this.stateTag(state);
+    row.tag.textContent = this.stateTag(state, index);
     row.tag.className = `mmc-reel-tag ${state}`;
-    row.el.classList.toggle("selected", this.sel?.kind === "shot" && this.sel.index === index);
+    const head = S.isClip(segment) ? null : S.passOf(this.timeline, index).segments[0];
+    const locked = Boolean(head && S.isLocked(head));
+    row.lock.hidden = !head || !S.takeOn(head) || state === "gone";
+    row.lock.classList.toggle("on", locked);
+    row.lock.setAttribute("aria-pressed", String(locked));
+    row.lock.title = locked ? t("Unlock this take") : t("Lock this take: it plays whatever you change");
+    row.lock.setAttribute("aria-label", row.lock.title);
+    if (row.lock.dataset.on !== String(locked)) {
+      row.lock.dataset.on = String(locked);
+      row.lock.replaceChildren(icon(locked ? "lock" : "lockOpen", 15));
+    }
+    const picked = this.sel?.kind === "picks" && head && this.picks.includes(head.card_id);
+    row.el.classList.toggle("selected", (this.sel?.kind === "shot" && this.sel.index === index) || Boolean(picked));
     row.el.classList.toggle("merged", index > 0 && S.merged(segment));
     if (row.clip) {
       row.name.textContent = t("A clip you added: {name}", { name: (segment.filename || "").split("/").pop() });
@@ -2205,13 +2339,15 @@ export class Reel {
       const thumb = thumbs[i];
       const lead = half[i] && span(i) > half[i] + 50 ? half[i] : 0;
       const tail = half[i + 1] ?? 0;
-      const tag = this.stateTag(state);
+      const tag = this.stateTag(state, i);
+      const head = S.isClip(segment) ? null : S.passOf(this.timeline, i).segments[0];
+      const pickAt = this.sel?.kind === "picks" && head ? this.picks.indexOf(head.card_id) : -1;
       const card = el("button", {
-        class: `mmc-reel-card ${state}${thumb ? " filmed" : ""}${half[i] ? " runs-in" : ""}${half[i + 1] ? " runs-on" : ""}${sel?.kind === "shot" && sel.index === i ? " selected" : ""}`,
+        class: `mmc-reel-card ${state}${thumb ? " filmed" : ""}${half[i] ? " runs-in" : ""}${half[i + 1] ? " runs-on" : ""}${(sel?.kind === "shot" && sel.index === i) || pickAt >= 0 ? " selected" : ""}`,
         style: { left: `${at(i)}px`, width: `${Math.max(4, span(i) - (half[i + 1] ? 0 : 2))}px`,
                  "--lead": `${lead}px`, "--tail": `${tail && span(i) > lead + tail + 50 ? tail : 0}px` },
         title: (segment.prompt || segment.filename || "").trim(),
-        onclick: () => this.select({ kind: "shot", index: i }),
+        onclick: (event) => this.pickOrSelect(event, i),
         onpointerdown: (event) => this.pressCard(event, segment, i),
         ondblclick: () => (S.isClip(segment) ? this.editClip(i) : this.edit(i)),
       }, [
@@ -2224,6 +2360,9 @@ export class Reel {
           text: (segment.prompt || "").trim() || t("No words yet"),
         })]),
         ...(tag ? [el("span", { class: `mmc-reel-card-tag ${state}`, text: tag })] : []),
+        ...(state === "locked" ? [el("span", { class: "mmc-reel-card-lock", title: t("Locked") }, [icon("lock", 12)])] : []),
+        // The order a pick shoots in, on the pass's first card.
+        ...(pickAt >= 0 && head === segment ? [el("span", { class: "mmc-reel-card-pick", text: String(pickAt + 1) })] : []),
       ]);
       this.dressCard(card, i, { thumb, width: span(i) });
       // The right edge sets the length: dragged, it snaps to the family's frame
@@ -2427,6 +2566,8 @@ export class Reel {
       },
     });
     this.statusHost = el("div", { class: "mmc-reel-status" });
+    // This node's renders on the queue: see `renderQueue`.
+    this.queueHost = el("div", { class: "mmc-reel-queue", hidden: true });
   }
 
   /** The script as a column: the cast row, the scene with its Sound and
@@ -2584,6 +2725,7 @@ export class Reel {
     if (sel?.kind === "cast" && !(this.timeline.subjects ?? []).some((s) => s.handle === sel.handle)) this.sel = null;
     if (sel?.kind === "ref" && !(this.timeline.assets ?? []).some((a) => a.handle === sel.handle)) this.sel = null;
     if (sel?.kind === "track" && !(this.timeline.sound ?? [])[sel.index]) this.sel = null;
+    this.settlePicks();
     this.renderPlayer();
     const kind = this.sel?.kind;
     const body = kind === "join" ? this.inspectJoin(this.sel.index)
@@ -2592,6 +2734,7 @@ export class Reel {
       : kind === "cast" ? this.inspectCast(this.sel.handle)
       : kind === "ref" ? this.inspectRef(this.sel.handle)
       : kind === "track" ? this.inspectTrack(this.sel.index)
+      : kind === "picks" ? this.inspectPicks()
       : this.inspectPiece();
     this.inspectHost.replaceChildren(...(this.sel ? [el("button", {
       class: "mmc-reel-link mmc-reel-back", text: t("‹ The piece"), title: t("The settings of the whole piece"),
@@ -2781,29 +2924,52 @@ export class Reel {
                                    : "Shots {list} continue from it and are shot again too.",
           { list: followNames.join(", ") })
       : t("Nothing else changes.");
+    const edited = this.edits?.has(runs[passIndex].start);
+    const jumps = state === "locked" && S.lockedJumps(this.timeline).has(passIndex);
+    const lockedWhy = [t("Locked. This take plays whatever changes: edits to this shot, a new take of the shot it continues from, or cards moving around.")];
+    if (edited) lockedWhy.push(t("You changed it since the take was made. The change is kept on the shot, but it is not shot until you unlock it."));
     const why = {
       kept: t("Its take is kept. The next render plays it instead of shooting it again."),
-      changed: t("You changed it after its take was made, so the next render shoots it again."),
+      locked: lockedWhy.join(" "),
+      changed: t("You changed it after its take was made, so the next render shoots it again. Lock the take to keep it anyway."),
       reshoot: t("The next render shoots it again. Its current take stays until the new one lands."),
       new: t("The next render shoots it."),
       gone: t("Its take's file is not under output/ any more, so the next render shoots it again."),
-    }[state] + (state === "kept" || (state === "new" && !followNames.length) ? "" : " " + ripple);
+    }[state] + (state === "kept" || state === "locked" || (state === "new" && !followNames.length) ? "" : " " + ripple);
     const take = S.takeOn(runs[passIndex].segments[0]);
     const film = [];
-    if (state === "kept") {
+    const lockButton = (label, primary = false) => el("button", {
+      class: `mmc-reel-btn${primary ? " primary" : ""}`,
+      title: t("Lock this take: it plays whatever you change"),
+      onclick: () => this.setTakeLock(index, true),
+    }, [icon("lock", 14), el("span", { text: label })]);
+    if (state === "locked") {
+      film.push(el("button", { class: "mmc-reel-btn mmc-reel-locked",
+        onclick: () => this.setTakeLock(index, false) }, [icon("lockOpen", 14), el("span", { text: t("Unlock") })]));
+      film.push(...this.takeTools(index, "mmc-reel-btn quiet"));
+    } else if (state === "kept") {
       film.push(el("button", { class: "mmc-reel-btn primary", title: ripple,
         onclick: () => { if (S.reshoot(this.timeline, index)) this.commit(); } },
       [icon("rewind", 14), el("span", { text: t("Reshoot") })]));
+      film.push(lockButton(t("Lock take")));
       film.push(el("span", { class: "mmc-reel-note", text: ripple }));
       film.push(...this.takeTools(index, "mmc-reel-btn quiet"));
+    } else if (state === "changed") {
+      film.push(lockButton(t("Lock this take"), true));
     } else if (state === "reshoot") {
       film.push(el("button", { class: "mmc-reel-btn",
         onclick: () => {
           if (S.keepTake(this.timeline, index)) this.commit();
           else { this.keepRefused = index; this.renderSide(); }
         } }, [el("span", { text: t("Keep the old take") })]));
+      film.push(lockButton(t("Lock this take")));
     }
-    if (take && state !== "gone") {
+    if (jumps) {
+      film.push(el("p", { class: "mmc-reel-note mmc-reel-jump", text: t("The shot it continues from has a new take, or is getting one, but this take is locked to the old one, so the cut into it may jump. Unlock it to shoot it again from the new film.") }));
+    }
+    // A locked take is forgotten only once it is unlocked: the lock is the
+    // promise that nothing takes this film away.
+    if (take && state !== "gone" && state !== "locked") {
       film.push(el("button", { class: "mmc-reel-btn quiet", title: t("The file stays under output/."),
         onclick: () => { if (S.dropTake(this.timeline, index)) this.commit(); } }, [el("span", { text: t("Forget take") })]));
     }
@@ -2815,8 +2981,142 @@ export class Reel {
   filmRows(index, film) {
     return [
       ...(film.length ? [el("div", { class: "mmc-reel-actions" }, film)] : []),
-      ...(this.keepRefused === index ? [el("p", { class: "mmc-reel-note", text: t("It can't be kept while the shot it continues from is being shot again.") })] : []),
+      ...(this.keepRefused === index ? [el("p", { class: "mmc-reel-note", text: t("It can't be kept while the shot it continues from is being shot again. Lock the take to keep it anyway.") })] : []),
+      ...this.shootOnlyRows(index),
     ];
+  }
+
+  /** Shoot this shot and nothing else: the button, and what it will do. */
+  shootOnlyRows(index) {
+    const segment = this.timeline.segments[index];
+    if (!this.queuePart || !segment || S.isClip(segment)) return [];
+    const runs = S.passes(this.timeline);
+    const k = S.passIndexOf(this.timeline, index);
+    const head = runs[k].segments[0];
+    const { entries, problem } = S.shootEntries(this.timeline, [k], this.busyPasses());
+    if (problem) {
+      return [el("p", { class: "mmc-reel-note", text: t("It starts from the last frame of shot {m}, which is still being shot. Shoot it once that lands.", { m: this.passName(problem.source) }) })];
+    }
+    const entry = entries[0];
+    if (!entry) return [];
+    const busy = this.busyPasses().has(k);
+    const added = entry.added.map((j) => this.passName(j));
+    const label = busy ? t("Already on the queue")
+      : added.length ? t("Shoot {list}, then {n}", { list: added.join(", "), n: this.passName(k) })
+        : S.takeOn(head) ? t("Shoot a new take of this shot only") : t("Shoot only this shot");
+    const notes = [];
+    if (added.length) {
+      notes.push(t(added.length === 1
+        ? "It starts from the last frame of shot {list}, which is not shot yet, so that goes first, in the same render."
+        : "It starts from shots {list}, which are not shot yet, so they go first, in the same render.", { list: added.join(", ") }));
+    } else {
+      notes.push(t("Renders just this shot, as its own render on the queue. The rest of the piece is left as it is."));
+    }
+    // A source that has a take but is due for a new one: this shot starts from
+    // the film there is, and will want shooting again once that one lands.
+    const due = [...S.passSources(this.timeline)[k]].filter((j) => {
+      const source = runs[j].segments[0];
+      return !S.isClip(source) && S.takeOn(source) && !S.isHeld(source);
+    });
+    if (due.length && !S.isLocked(head)) {
+      notes.push(t("It starts from the take shot {m} has now. Shot {m} is due a new take, so this one will be due again after that.", { m: due.map((j) => this.passName(j)).join(", ") }));
+    }
+    if (S.isLocked(head)) notes.push(t("The new take replaces this one when it lands, and stays locked."));
+    return [el("div", { class: "mmc-reel-only" }, [
+      el("div", { class: "mmc-reel-actions" }, [el("button", {
+        class: "mmc-reel-btn", disabled: busy || this.locked,
+        onclick: () => this.shootOnly(entries),
+      }, [icon("play", 14), el("span", { text: label })])]),
+      el("p", { class: "mmc-reel-note", text: notes.join(" ") }),
+      el("p", { class: "mmc-reel-note", text: t("Shift-click other shots to shoot several, in the order you pick them.") }),
+    ])];
+  }
+
+  /** Drop picks that have gone from the strip; fall back when fewer than two remain. */
+  settlePicks() {
+    if (this.sel?.kind !== "picks") return;
+    const live = new Set(S.passes(this.timeline).map((pass) => pass.segments[0].card_id));
+    this.picks = this.picks.filter((id) => live.has(id));
+    if (this.picks.length >= 2) return;
+    const index = this.timeline.segments.findIndex((card) => card.card_id === this.picks[0]);
+    this.picks = [];
+    this.sel = index >= 0 ? { kind: "shot", index } : null;
+  }
+
+  /** The shots picked to shoot by themselves: what each render will make, in order. */
+  inspectPicks() {
+    const ks = this.pickedPasses();
+    const runs = S.passes(this.timeline);
+    const { entries, problem } = S.shootEntries(this.timeline, ks, this.busyPasses());
+    const rows = [
+      this.ihead(t("{n} shots picked", { n: ks.length }), null, null),
+      el("p", { class: "mmc-reel-why", text: t("They shoot one after another, in the order you picked them. Each lands as soon as it is done, and the rest of the piece is left as it is.") }),
+      el("ol", { class: "mmc-reel-picklist" }, entries.map((entry) => {
+        const names = entry.passes.map((j) => this.passName(j));
+        const why = entry.added.length
+          ? t("with {list} first, which it starts from", { list: entry.added.map((j) => this.passName(j)).join(", ") })
+          : entry.passes.length > 1 ? t("one render: each continues from the one before it") : "";
+        return el("li", {}, [
+          el("span", { text: t(names.length === 1 ? "Shot {list}" : "Shots {list}", { list: names.join(", ") }) }),
+          ...(why ? [el("span", { class: "mmc-reel-note", text: ` ${why}` })] : []),
+        ]);
+      })),
+      ...(problem ? [el("p", { class: "mmc-reel-note", text: t("Shot {n} starts from the last frame of shot {m}, which is still being shot, so it is left out. Shoot it once that lands.", { n: this.passName(problem.pass), m: this.passName(problem.source) }) })] : []),
+    ];
+    const lockable = ks.filter((k) => S.takeOn(runs[k].segments[0]) && !S.isLocked(runs[k].segments[0]));
+    const actions = [];
+    if (this.queuePart && entries.length) {
+      actions.push(el("button", { class: "mmc-reel-btn primary", disabled: this.locked,
+        onclick: () => { this.shootOnly(entries).then(() => { if (this.sel?.kind === "picks") this.select(null); }); },
+      }, [icon("play", 14), el("span", { text: t(entries.length === 1 ? "Shoot it" : "Shoot {n} in this order", { n: entries.length }) })]));
+    }
+    if (lockable.length) {
+      actions.push(el("button", { class: "mmc-reel-btn",
+        onclick: () => {
+          let changed = false;
+          for (const k of lockable) if (S.lockTake(this.timeline, runs[k].start, true)) changed = true;
+          if (changed) this.commit();
+        } }, [icon("lock", 14), el("span", { text: t("Lock their takes") })]));
+    }
+    actions.push(el("button", { class: "mmc-reel-btn quiet", text: t("Clear"), onclick: () => this.select(null) }));
+    rows.push(el("div", { class: "mmc-reel-actions" }, actions));
+    return el("div", { class: "mmc-reel-inspect-body" }, rows);
+  }
+
+  /** This node's renders on the queue, in the order they will run, under the
+   *  reel: what each makes, and the ones still waiting moved or taken off. */
+  renderQueue() {
+    if (!this.queueHost) return;
+    const all = this.runs();
+    this.queueHost.hidden = !all.length;
+    if (!all.length) { this.queueHost.replaceChildren(); return; }
+    const segments = this.timeline.segments;
+    const waiting = all.filter((run) => run.state !== "running");
+    const chips = all.map((run, k) => {
+      const numbers = [...new Set((run.shot ?? []).map((id) => {
+        const index = segments.findIndex((card) => card.card_id === id);
+        return index >= 0 ? S.passOf(this.timeline, index).start : -1;
+      }).filter((start) => start >= 0))].sort((a, b) => a - b)
+        .map((start) => this.passName(S.passIndexOf(this.timeline, start)));
+      const what = !numbers.length ? t("Putting the piece together")
+        : run.partial ? t(numbers.length === 1 ? "Shot {list}" : "Shots {list}", { list: numbers.join(", ") })
+          : t("Everything due: {list}", { list: numbers.join(", ") });
+      const running = run.state === "running";
+      const at = waiting.indexOf(run);
+      return el("span", { class: `mmc-reel-qchip${running ? " running" : ""}` }, [
+        el("span", { class: "mmc-reel-qk", text: running ? t("now") : `#${k + 1}` }),
+        el("span", { text: what }),
+        ...(!running && this.moveRun ? [
+          el("button", { class: "mmc-reel-qbtn", title: t("Run it earlier"), "aria-label": t("Run it earlier"),
+            disabled: at <= 0, onclick: () => this.moveRun(run.id, -1) }, [el("span", { text: "‹" })]),
+          el("button", { class: "mmc-reel-qbtn", title: t("Run it later"), "aria-label": t("Run it later"),
+            disabled: at < 0 || at >= waiting.length - 1, onclick: () => this.moveRun(run.id, 1) }, [el("span", { text: "›" })]),
+        ] : []),
+        ...(!running && this.dropRun ? [el("button", { class: "mmc-reel-qbtn", title: t("Take it off the queue"),
+          "aria-label": t("Take it off the queue"), onclick: () => this.dropRun(run.id) }, [el("span", { text: "✕" })])] : []),
+      ]);
+    });
+    this.queueHost.replaceChildren(el("span", { class: "mmc-reel-qlabel", text: t("Queue") }), ...chips);
   }
 
   /** A shot's length: a stepper on the family's grid, and the model's own

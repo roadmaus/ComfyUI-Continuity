@@ -24,7 +24,7 @@ import { openSettings } from "./settings.js";
 import { facesPill, neuralPill, guideLoraPill } from "./pills.js";
 import { adopted, blobIO, samplingBar } from "./sampling.js";
 import { Stage, stageSource } from "./stage.js";
-import { watchSubmittedPrompts, submittedPrompt, queueNode } from "./queue.js";
+import { watchSubmittedPrompts, submittedPrompt, queueNode, dropQueued, promptQueueState } from "./queue.js";
 import { familyPill, weightsPill, loadCatalog, adoptWeights, rememberedWeights } from "./models.js";
 import * as S from "./state.js";
 import * as Turbo from "./turbo.js";
@@ -84,7 +84,7 @@ export class Timeline extends Reel {
         (this.scriptEl = this.scriptColumn()),
         el("div", { class: "mmc-reel-side" }, [this.playerHost, this.inspectHost, this.handWindow.node]),
       ]),
-      el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
+      el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.queueHost, this.statusHost]),
     ]);
 
     this.overlay = el("div", {
@@ -385,10 +385,19 @@ export class TimelineBody {
     this.queueLookups = new Map();
     this.takeArrivals = new Map();
     this.takeSequence = 0;
+    // The blob each of this node's prompts went out with, while it waits: what
+    // moving it on the queue sends again (`moveRun`). Gone once it starts.
+    this.sent = new Map();
     this.offSubmitted = watchSubmittedPrompts(
-      (output) => this.submittedCards(output),
+      (output) => {
+        const snapshot = this.submittedCards(output);
+        if (snapshot) snapshot.blob = this.blobOf(output);
+        return snapshot;
+      },
       (promptId, snapshot) => {
-        this.rememberQueued(promptId, snapshot);
+        const { blob, ...kept } = snapshot;
+        this.rememberQueued(promptId, kept);
+        if (typeof blob === "string") this.sent.set(String(promptId), blob);
         this.runs.set(String(promptId), "queued");
         this.reel?.accepted();
       });
@@ -399,10 +408,12 @@ export class TimelineBody {
       if (type === "status") {
         if (detail?.exec_info?.queue_remaining !== 0 || !this.runs.size) return;
         this.runs.clear();
+        this.sent.clear();
       } else {
         const id = String(detail?.prompt_id);
         if (!this.runs.has(id)) return;
         if (type === "execution_start") this.runs.set(id, "running"); else this.runs.delete(id);
+        this.sent.delete(id);
       }
       this.reel?.staged();
     };
@@ -469,11 +480,68 @@ export class TimelineBody {
       ? { id: this.stage.renderPromptId, state: "running", cards: this.queued.get(this.stage.renderPromptId).ids } : null;
   }
 
-  /** Only this node's submitted blob, not the strip currently on screen. */
-  submittedCards(output) {
+  /** This node's blob in a submitted prompt, or null. */
+  blobOf(output) {
     const inputs = output?.[String(this.nodeId())]?.inputs;
     // The unified Creator and the legacy Timeline mount this same body.
     const raw = inputs?.creator_data ?? inputs?.timeline_data;
+    return typeof raw === "string" ? raw : null;
+  }
+
+  /** This node's renders on the queue, in the order they were sent: what each
+   *  is shooting, and whether it shoots only some of the piece. */
+  queuedRuns() {
+    return [...this.runs].map(([id, state]) => {
+      const snapshot = this.queued.get(id);
+      return { id, state, shot: snapshot?.shot ?? [], partial: Boolean(snapshot?.partial) };
+    });
+  }
+
+  /** Take one of this node's waiting renders off the queue. */
+  async dropRun(id) {
+    await dropQueued(id);
+    if (await promptQueueState(id).catch(() => "unknown") !== null) return;
+    this.runs.delete(id);
+    this.sent.delete(id);
+    this.reel?.staged();
+  }
+
+  /**
+   * Move one of this node's waiting renders `delta` places along the queue.
+   *
+   * ComfyUI's queue has no move. So every waiting render of this node from the
+   * earlier of the two places on is taken off and sent again in the new order,
+   * each with the blob it went out with. One that started in the meantime is
+   * left where it is, which is the order it was going to run in anyway.
+   */
+  async moveRun(id, delta) {
+    if (this.moving) return;
+    const waiting = [...this.runs].filter(([, state]) => state === "queued").map(([key]) => key);
+    const at = waiting.indexOf(id);
+    const to = at + delta;
+    if (at < 0 || to < 0 || to >= waiting.length) return;
+    const order = [...waiting];
+    [order[at], order[to]] = [order[to], order[at]];
+    const tail = order.slice(Math.min(at, to)).filter((key) => this.sent.has(key));
+    this.moving = true;
+    try {
+      const blobs = new Map(tail.map((key) => [key, this.sent.get(key)]));
+      await Promise.all(tail.map((key) => dropQueued(key)));
+      for (const key of tail) {
+        if (await promptQueueState(key).catch(() => "unknown") !== null) continue;
+        this.runs.delete(key);
+        this.sent.delete(key);
+        await queueNode(this.nodeId(), { inputs: { creator_data: blobs.get(key) } });
+      }
+    } finally {
+      this.moving = false;
+      this.reel?.staged();
+    }
+  }
+
+  /** Only this node's submitted blob, not the strip currently on screen. */
+  submittedCards(output) {
+    const raw = this.blobOf(output);
     if (typeof raw !== "string") return null;
     try {
       const parsed = JSON.parse(raw);
@@ -497,7 +565,9 @@ export class TimelineBody {
    *  changed while that film was being made. */
   filmMade(promptId) {
     const snapshot = this.queued.get(String(promptId));
-    if (!snapshot || this.destroyed || S.cutStamp(this.timeline, snapshot.shot) !== snapshot.cut) return;
+    // A render of some of the shots writes a film of those shots, not the piece.
+    if (!snapshot || snapshot.partial || this.destroyed
+        || S.cutStamp(this.timeline, snapshot.shot) !== snapshot.cut) return;
     this.timeline.cut = S.cutStamp(this.timeline);
     this.commit();
     this.reel?.landed();
@@ -851,7 +921,7 @@ export class TimelineBody {
       // Lent so a card's preset can carry the sampler row — see `Timeline.io`.
       io: () => this.widgetIO(),
       widgets: this.widgets,
-      ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
+      ...(this.nodeId != null ? this.queueLends() : {}),
       stage: this.stage,
       run: () => this.currentRun(),
       openBlockout: (shot = null) => this.openBlockout({ ...bench, shot }),
@@ -870,12 +940,23 @@ export class TimelineBody {
       onCommit: () => this.commit(),
       io: () => this.widgetIO(),
       widgets: this.widgets,
-      ...(this.nodeId != null ? { queue: () => queueNode(this.nodeId()) } : {}),
+      ...(this.nodeId != null ? this.queueLends() : {}),
       stage: this.stage,
       run: () => this.currentRun(),
       openTimeline: () => this.open({ bench: { targets, back } }),
       opened: (bench) => { held = bench; this.reel = bench; this.stage.onChange = () => bench.staged(); },
     }).then(() => { if (this.reel === held) { this.reel = null; this.stage.onChange = null; } });
+  }
+
+  /** What the strip and the bench are lent to queue this node with. */
+  queueLends() {
+    return {
+      queue: () => queueNode(this.nodeId()),
+      queuePart: (blob) => queueNode(this.nodeId(), { inputs: { creator_data: blob } }),
+      runs: () => this.queuedRuns(),
+      dropRun: (id) => this.dropRun(id),
+      moveRun: (id, delta) => this.moveRun(id, delta),
+    };
   }
 
   value(name, fallback) {

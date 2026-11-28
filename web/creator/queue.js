@@ -16,9 +16,56 @@ import { api } from "../../../scripts/api.js";
 import { t } from "./i18n.js";
 
 /** Queue one node, as pressing its Render does. A bare array for the target —
- *  see `fullscreen.queue` for why not `{queueNodeIds}`. */
-export function queueNode(nodeId) {
-  return app.queuePrompt(0, 1, [String(nodeId)]).catch(() => {});
+ *  see `fullscreen.queue` for why not `{queueNodeIds}`.
+ *
+ *  `inputs` replaces some of that node's inputs in the prompt that goes out,
+ *  and in nothing else: the graph, its widgets and the workflow saved with the
+ *  render stay as they are. It is how the reel shoots some of a piece — the
+ *  same node, handed a blob with the rest held (`state.partialPiece`) — without
+ *  writing that blob into the widget, where an edit made while the prompt was
+ *  being built would land on it, or the undo would remember it. */
+export async function queueNode(nodeId, { inputs = null } = {}) {
+  const id = String(nodeId);
+  if (!inputs) return app.queuePrompt(0, 1, [id]).catch(() => {});
+  // ComfyUI's `queuePrompt` hands a press made while it is still sending an
+  // earlier one to that earlier call, which builds it later — after this one
+  // has returned and the override is gone, so the press would go out as the
+  // whole plan. Waiting for it to be idle is what makes this call the one that
+  // builds this press. Refused rather than sent wrong if it never settles.
+  for (let tries = 0; app.processingQueue && tries < 200; tries++) {
+    await new Promise((resolve) => setTimeout(resolve, 50));
+  }
+  if (app.processingQueue) return false;
+  overrides.set(id, inputs);
+  try {
+    return await app.queuePrompt(0, 1, [id]);
+  } catch {
+    return undefined;
+  } finally {
+    overrides.delete(id);
+  }
+}
+
+// The inputs `queueNode` was asked to send instead, by node id, for the one
+// prompt being built. Applied by the `api.queuePrompt` wrapper below, before
+// anything snapshots the output, so the snapshot is of what was sent — and only
+// to a prompt aimed at that node alone, so a Queue pressed elsewhere at the
+// same moment goes out as it was.
+const overrides = new Map();
+
+function applyOverrides(output, targets) {
+  for (const [id, inputs] of overrides) {
+    const node = output?.[id];
+    if (!node?.inputs || targets.length !== 1 || targets[0] !== id) continue;
+    for (const [name, value] of Object.entries(inputs)) {
+      // A blob widget is named one of two ways (see `timeline.submittedCards`),
+      // so a value for one name goes where the node keeps it.
+      const key = name in node.inputs ? name
+        : name === "creator_data" && "timeline_data" in node.inputs ? "timeline_data" : name;
+      node.inputs[key] = value;
+    }
+    overrides.delete(id);
+  }
 }
 
 const listeners = new Set();
@@ -94,6 +141,7 @@ if (typeof api.queuePrompt === "function") {
   api.queuePrompt = async function (...args) {
     const output = args[1]?.output;
     const targets = (args[2]?.partialExecutionTargets ?? []).map(String);
+    applyOverrides(output, targets);
     const snapshots = [];
     for (const listener of submissions) {
       try {

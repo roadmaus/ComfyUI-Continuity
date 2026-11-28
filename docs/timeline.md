@@ -421,6 +421,53 @@ They change what plays, not the file: the render splices the window you
 trimmed, framed as you cropped it, and the next seam continues from the end of
 that window. A new take replaces the old one, and its trim and crop go with it.
 
+### Locking a take
+
+A kept take is let go by the smallest edit. When a take is the one you want
+no matter what, **lock** it: the padlock at the end of the shot's line, or
+**Lock take** on its side (**Lock this take** on a shot that already reads
+`Changed · reshoots`). A locked take plays whatever changes:
+
+- **Edits to the shot.** They stay on the shot, but nothing is shot until you
+  unlock it. The shot reads `Locked, edit not shot`.
+- **A new take of the shot it continues from.** The locked shot keeps the take
+  that continued from the old film, so the cut into it may not line up. The
+  shot reads `Locked, the cut may jump`, and unlocking it shoots it again from
+  the new film.
+- **Cards moving around.**
+
+Shots that continue from a locked shot do not follow anything through it,
+because the film they start from stays. **Forget take** and **Reshoot** need
+the shot unlocked first. **Unlock** lets the usual rules apply again: a shot
+you edited while it was locked goes back into the next render.
+
+### Shooting only some shots
+
+**Shoot only this shot** on a shot's side renders that shot and nothing else,
+as a render of its own on the queue. On a shot that has a take, it reads
+**Shoot a new take of this shot only**. A locked shot shot this way gets the
+new take and stays locked.
+
+To shoot several, Shift-click (or Ctrl/Cmd-click) them on the reel or by their
+numbers in the script. They are numbered in the order you picked them, and
+**Shoot N in this order** sends one render per shot in that order. **Lock
+their takes** locks every picked shot that has one.
+
+A shot that continues from a shot with no film yet cannot go alone: the frames
+it starts from do not exist. So that shot goes first, in the same render, and
+the button says so (`Shoot 4, then 5`). A shot that continues from a shot that
+has a take starts from that take, even one due for a reshoot; it will be due
+again once that shot has its new take.
+
+A render of some shots writes the takes of those shots (and a short film of
+them), not the piece. The next full **Shoot**, or **Put together** when
+nothing is left to shoot, makes the piece.
+
+Under the reel, **Queue** lists this node's renders in the order they will run.
+A waiting one can be moved earlier or later, or taken off with ✕. ComfyUI's
+queue cannot reorder, so a move takes the waiting renders off and sends them
+again in the new order, each as it was first sent.
+
 ## Cutting in your own footage
 
 A clip you already have can be a card on the strip, not just a reference. It

@@ -2233,6 +2233,29 @@ export const isKept = (segment) => isHeld(segment) && takeOn(segment) !== null;
 export const passShot = (pass) => !isClip(pass.segments[0]) && !isHeld(pass.segments[0]);
 
 /**
+ * Whether a pass's take is locked: kept whatever happens to the piece around it.
+ *
+ * A kept take is kept *until something says otherwise*, and nearly everything
+ * says otherwise — a comma in the shot's sentence, a new take of the shot it
+ * continues from, a card dragged past it. That is the right default (a take
+ * that no longer describes its card is last week's shot shipped quietly) and
+ * the wrong one for the take you have decided is the shot. A lock is that
+ * decision written down: `releaseEdited`, `reshoot`, `releaseRearranged` and
+ * `settleHolds` all pass it by, and only the lock's own button lets it go.
+ *
+ * Frontend only, like `hold`'s bookkeeping: a locked pass is a held pass with
+ * a take, which is all `compile.py` ever needs to know, and the key is popped
+ * from the request with the rest of the card's bookkeeping. A lock with no take
+ * behind it means nothing and is cleared by `settleHolds`. Read off the pass's
+ * first card, like the hold.
+ */
+export const isLocked = (segment) =>
+  !isClip(segment) && segment?.lock === true && takeOn(segment) !== null;
+
+/** The film a pass head plays, by name: a clip's file or a take's, or null. */
+const filmName = (head) => (isClip(head) ? head.filename : takeOn(head)?.filename) ?? null;
+
+/**
  * A card's own seed, or null for the piece's.
  *
  * Absent is the default and means the number on the node: a piece is one look
@@ -2281,6 +2304,7 @@ export function attachTakes(timeline, reports, queued = null) {
   // is the thing being hashed, and it is the same strip for all of them.
   const stamps = stampsOf(timeline);
   let landed = false;
+  const arrived = [];
   for (const report of reports ?? []) {
     const number = Number(report.segment);
     const index = queued ? queuedIndex(timeline, queued, number, stamps) : number - 1;
@@ -2290,8 +2314,25 @@ export function attachTakes(timeline, reports, queued = null) {
     // Stamped as the card was when it was queued where that is known, so an
     // edit made while its own render ran is marked rather than shipped.
     segment.take = takeFrom(report, queued?.stamps[number - 1] ?? stamps[index]);
-    if (segment.take.stamp === stamps[index]) holdPassAt(timeline, index, true);
+    // A locked pass shot on purpose stays locked, to the take that just came
+    // back: the lock says "this pass plays its take", and asking for a new one
+    // is asking for which take that is.
+    if (segment.take.stamp === stamps[index] || segment.lock === true) holdPassAt(timeline, index, true);
+    arrived.push(index);
     landed = true;
+  }
+  // What each new take was made from, written once every take of the report is
+  // on its card so a pass shot together with its source names the new film.
+  // `settleHolds` reads it to tell a take that continued from film the piece
+  // no longer has.
+  if (arrived.length) {
+    const runs = passes(timeline);
+    const sources = passSources(timeline);
+    for (const index of arrived) {
+      const k = passIndexOf(timeline, index);
+      const take = takeOn(timeline.segments[index]);
+      if (k >= 0 && take) take.from = [...sources[k]].sort((a, b) => a - b).map((j) => filmName(runs[j].segments[0]));
+    }
   }
   if (landed) settleHolds(timeline);
   return landed;
@@ -2338,7 +2379,9 @@ export function followers(timeline, passIndex) {
   const sources = passSources(timeline);
   const affected = new Set([passIndex]);
   for (let k = passIndex + 1; k < runs.length; k += 1) {
-    if (isClip(runs[k].segments[0])) continue;
+    // A locked pass keeps its take whatever it continues from, so nothing
+    // follows through it either: what comes after it reads film that stays.
+    if (isClip(runs[k].segments[0]) || isLocked(runs[k].segments[0])) continue;
     for (const from of sources[k]) {
       if (affected.has(from)) { affected.add(k); break; }
     }
@@ -2371,14 +2414,74 @@ function settleHolds(timeline) {
   let changed = false;
   runs.forEach((pass, k) => {
     const head = pass.segments[0];
-    if (isClip(head) || !isHeld(head)) return;
+    if (isClip(head)) return;
+    // A lock with nothing behind it locks nothing.
+    if (head.lock === true && !takeOn(head)) {
+      for (const segment of pass.segments) delete segment.lock;
+      changed = true;
+    }
+    if (isLocked(head)) return;
+    if (!isHeld(head)) return;
     if (!takeOn(head)) { if (holdPassAt(timeline, pass.start, false)) changed = true; return; }
-    const stale = [...sources[k]].some((from) => {
-      const source = runs[from].segments[0];
-      return !isClip(source) && !isHeld(source);
-    });
-    if (stale && holdPassAt(timeline, pass.start, false)) changed = true;
+    if (sourcesMoved(timeline, k, runs, sources) && holdPassAt(timeline, pass.start, false)) changed = true;
   });
+  return changed;
+}
+
+/**
+ * Whether pass `k`'s take reads from film the piece is replacing or has
+ * replaced: a source in the next render, or a source playing a different take
+ * than the one this take was continued from. The second only where the take
+ * says what it was made from (`take.from`, written by `attachTakes`), so a take
+ * from before that existed is never second-guessed.
+ */
+function sourcesMoved(timeline, k, runs = passes(timeline), sources = passSources(timeline)) {
+  const from = [...sources[k]].sort((a, b) => a - b);
+  if (from.some((j) => {
+    const source = runs[j].segments[0];
+    return !isClip(source) && !isHeld(source);
+  })) return true;
+  const made = takeOn(runs[k].segments[0])?.from;
+  return Array.isArray(made)
+    && JSON.stringify(made) !== JSON.stringify(from.map((j) => filmName(runs[j].segments[0])));
+}
+
+/**
+ * The locked passes whose cut in may jump: each reads from film that is being
+ * replaced or has been since its take was made, and the lock keeps it playing
+ * the take that continued from the old film. -> a Set of pass indices.
+ */
+export function lockedJumps(timeline) {
+  const runs = passes(timeline);
+  const sources = passSources(timeline);
+  const out = new Set();
+  runs.forEach((pass, k) => {
+    if (isLocked(pass.segments[0]) && sourcesMoved(timeline, k, runs, sources)) out.add(k);
+  });
+  return out;
+}
+
+/**
+ * Lock or unlock the take of the pass holding card `index`. -> whether it changed.
+ *
+ * Locking holds the pass, whatever has happened to it since its take was made:
+ * that is the point. Unlocking leaves the hold where it is and lets the rules
+ * that a lock suspends run again on the next commit (`releaseEdited`,
+ * `settleHolds`), so a shot edited under its lock goes back into the render the
+ * moment it is unlocked, which is what the person unlocking it means.
+ */
+export function lockTake(timeline, index, locked = true) {
+  const pass = passOf(timeline, index);
+  if (!pass || isClip(pass.segments[0])) return false;
+  if (locked && !takeOn(pass.segments[0])) return false;
+  let changed = false;
+  for (const segment of pass.segments) {
+    if (locked === (segment.lock === true)) continue;
+    if (locked) segment.lock = true; else delete segment.lock;
+    changed = true;
+  }
+  if (locked && holdPassAt(timeline, index, true)) changed = true;
+  if (!locked && settleHolds(timeline)) changed = true;
   return changed;
 }
 
@@ -2396,6 +2499,7 @@ export function reshoot(timeline, index) {
   const runs = passes(timeline);
   let changed = false;
   for (const k of [passIndex, ...followers(timeline, passIndex)]) {
+    if (isLocked(runs[k].segments[0])) continue;
     if (holdPassAt(timeline, runs[k].start, false)) changed = true;
   }
   return changed;
@@ -2434,7 +2538,8 @@ export function keepTake(timeline, index) {
 export function releaseEdited(timeline) {
   let changed = false;
   for (const index of editedSince(timeline)) {
-    if (isHeld(timeline.segments[index]) && reshoot(timeline, index)) changed = true;
+    const segment = timeline.segments[index];
+    if (isHeld(segment) && !isLocked(segment) && reshoot(timeline, index)) changed = true;
   }
   if (settleHolds(timeline)) changed = true;
   return changed;
@@ -2490,9 +2595,115 @@ export function shootPlan(timeline) {
   passes(timeline).forEach((pass, k) => {
     const head = pass.segments[0];
     if (isClip(head)) return;
-    if (isHeld(head) && takeOn(head)) kept.push(k); else shoot.push(k);
+    if (isHeld(head) && takeOn(head)) kept.push(k);
+    // Held with nothing to play is out of this render altogether. Never on the
+    // live strip (`settleHolds` releases it), only on a part-render's blob.
+    else if (!isHeld(head)) shoot.push(k);
   });
   return { shoot, kept };
+}
+
+// ---- shooting only some of it ------------------------------------------------
+//
+// The reel's Shoot takes everything that needs shooting. Picking shots and
+// shooting only those is the other gesture, and it is not a different render:
+// it is the same blob with every other pass held, which `compile.rendered_piece`
+// has always known how to make — a held pass with a take plays it, a held pass
+// with none is out of the render. So nothing here reaches the server but a blob.
+//
+// Two rules make that blob honest. A picked pass that continues from a pass
+// with no film yet cannot go alone (the frames it starts from do not exist,
+// and `_rebase_seam` refuses it), so that pass is shot with it, in the same
+// render. And a pass that is not picked and that no picked pass reads from has
+// its take left off the blob, so the film this render writes is the picked
+// shots and what they start from rather than the whole piece spliced again.
+
+/**
+ * The renders a pick queues, one per entry, in the order the shots were picked.
+ *
+ * `picks` are pass indices in click order. -> `{ entries, problem }`: each
+ * entry is `{ passes, added }`, ascending pass indices it generates and the ones
+ * among them nobody picked (sources with nothing filmed). A pick that needs a
+ * source already picked earlier joins that source's entry, because the frames
+ * it starts from only exist inside that render. `busy` holds the pass indices a
+ * render already on the queue is generating: a pass that needs one of those
+ * with no film yet is refused rather than shot twice.
+ */
+export function shootEntries(timeline, picks, busy = new Set()) {
+  const runs = passes(timeline);
+  const sources = passSources(timeline);
+  const entries = [];
+  const home = new Map();
+  let problem = null;
+  for (const k of picks) {
+    if (home.has(k) || !runs[k] || isClip(runs[k].segments[0])) continue;
+    const chain = new Set([k]);
+    const joins = new Set();
+    let waits = false;
+    const walk = (j) => {
+      for (const from of sources[j]) {
+        const head = runs[from].segments[0];
+        if (isClip(head) || takeOn(head) || chain.has(from)) continue;
+        if (home.has(from)) { joins.add(home.get(from)); continue; }
+        if (busy.has(from)) {
+          problem ??= { pass: k, source: from };
+          waits = true;
+          continue;
+        }
+        chain.add(from);
+        walk(from);
+      }
+    };
+    walk(k);
+    if (waits) continue;
+    const into = joins.size ? Math.min(...joins) : entries.length;
+    if (into === entries.length) entries.push({ passes: [], added: [] });
+    // Entries this pick ties together become one render.
+    for (const other of [...joins].sort((a, b) => b - a)) {
+      if (other === into) continue;
+      const [gone] = entries.splice(other, 1);
+      entries[into].passes.push(...gone.passes);
+      entries[into].added.push(...gone.added);
+      for (const [pass, at] of home) home.set(pass, at === other ? into : at > other ? at - 1 : at);
+    }
+    for (const pass of chain) {
+      entries[into].passes.push(pass);
+      if (pass !== k && !picks.includes(pass)) entries[into].added.push(pass);
+      home.set(pass, into);
+    }
+  }
+  for (const entry of entries) {
+    entry.passes = [...new Set(entry.passes)].sort((a, b) => a - b);
+    entry.added = [...new Set(entry.added)].filter((k) => !picks.includes(k)).sort((a, b) => a - b);
+  }
+  return { entries, problem };
+}
+
+/**
+ * The blob that shoots only `wanted` (pass indices) of the piece. -> a string,
+ * as the node's widget would hold it.
+ *
+ * Every other pass is held. A held pass a wanted one reads from keeps its take
+ * and plays it, stale or not — shooting shot 5 alone means starting it from
+ * the shot 4 there is. Every other held pass loses its take on the blob only,
+ * which takes it out of this render. The live strip is not touched.
+ */
+export function partialPiece(timeline, wanted) {
+  const copy = parseTimeline(serializeTimeline(timeline));
+  const runs = passes(copy);
+  const sources = passSources(copy);
+  const want = new Set(wanted);
+  const plays = new Set();
+  for (const k of want) for (const from of sources[k] ?? []) if (!want.has(from)) plays.add(from);
+  runs.forEach((pass, k) => {
+    const head = pass.segments[0];
+    if (isClip(head)) return;
+    for (const segment of pass.segments) {
+      if (want.has(k)) delete segment.hold; else segment.hold = true;
+    }
+    if (!want.has(k) && !plays.has(k)) delete head.take;
+  });
+  return serializeTimeline(copy);
 }
 
 /**
@@ -2504,8 +2715,12 @@ export function queuedCards(timeline, { legacy = false } = {}) {
   ensureCardIds(timeline);
   const shot = shootPlan(timeline).shoot
     .flatMap((k) => passes(timeline)[k].segments.map((card) => card.card_id));
+  // A part-render (`partialPiece`) leaves passes out with nothing to play, so
+  // the film it writes is not the piece even where every stamp agrees.
+  const partial = passes(timeline).some(
+    (pass) => isHeld(pass.segments[0]) && !takeOn(pass.segments[0]));
   return { ids: timeline.segments.map((card) => card.card_id),
-           stamps: stampsOf(timeline), legacy, shot, cut: cutStamp(timeline, shot) };
+           stamps: stampsOf(timeline), legacy, shot, cut: cutStamp(timeline, shot), partial };
 }
 
 /**
@@ -2517,7 +2732,7 @@ export function cutStamp(timeline, shot = []) {
   const { cut, sets, ...blob } = JSON.parse(serializeTimeline(parseTimeline(serializeTimeline(timeline))));
   return hash(JSON.stringify([blob, (sets ?? []).map(setStamped), blob.segments.map((card) =>
     (!card.take || shot.includes(card.card_id) ? null : [card.take.filename, card.take.trim, card.take.crop]))],
-  (key, value) => (["hold", "take", "words"].includes(key) ? undefined : value)));
+  (key, value) => (["hold", "lock", "take", "words"].includes(key) ? undefined : value)));
 }
 
 /** Whether the last film made of the piece is the piece as it stands. */
@@ -2620,7 +2835,7 @@ function stampsOf(timeline) {
   const { segments, sets, staging_pass, staging_clip, staging_say, staging_depth, guide, cut, ...piece } = blob;
   const head = JSON.stringify(piece);
   return (segments ?? []).map((card, index) => {
-    const { hold, take, card_id, ...rest } = card;
+    const { hold, lock, take, card_id, ...rest } = card;
     // A staging's words are derived from the staging and its set, which are
     // both stamped; leaving them out means writing them is never an edit.
     if (rest.staging?.words) rest.staging = { ...rest.staging, words: undefined };
@@ -3689,7 +3904,7 @@ function syncCanvas(timeline) {
     if (index && isClip(timeline.segments[index - 1])) delete segment.merge;
     // A clip is played rather than generated, so it has no hold to be out of
     // the render by and no take to play instead of one.
-    if (isClip(segment)) { delete segment.hold; delete segment.take; }
+    if (isClip(segment)) { delete segment.hold; delete segment.lock; delete segment.take; }
   });
   // Holds belong to the pass. A pass is one generation and its take is one
   // file, so a run of merged cards is shot or held together and the run's first
@@ -3700,8 +3915,10 @@ function syncCanvas(timeline) {
   for (const pass of passes(timeline)) {
     if (pass.segments.length < 2) continue;
     const held = isHeld(pass.segments[0]);
+    const locked = pass.segments[0].lock === true;
     pass.segments.forEach((segment, offset) => {
       if (held) segment.hold = true; else delete segment.hold;
+      if (locked) segment.lock = true; else delete segment.lock;
       if (offset) delete segment.take;
     });
   }
@@ -4186,6 +4403,8 @@ export function parseTimeline(raw) {
         // forgot which cards were done would ask for them all again.
         delete segment.hold;
         if (raw?.hold === true) segment.hold = true;
+        delete segment.lock;
+        if (raw?.lock === true) segment.lock = true;
         delete segment.take;
         const take = raw?.take;
         if (take && typeof take === "object" && String(take.filename || "").trim()) {
@@ -4197,6 +4416,8 @@ export function parseTimeline(raw) {
             has_audio: take.has_audio !== false,
             ...(Number.isInteger(take.seed) ? { seed: take.seed } : {}),
             ...(take.stamp ? { stamp: String(take.stamp) } : {}),
+            ...(Array.isArray(take.from)
+              ? { from: take.from.map((name) => (name == null ? null : String(name))) } : {}),
           };
           // The window and framing set on the take, read the way a clip card's
           // are: a take is spliced as a clip, and these are its clip settings.
@@ -4416,6 +4637,7 @@ export function serializeTimeline(timeline) {
       // deliberate states are written: a card nobody has held and nothing has
       // rendered writes exactly what it always did.
       if (segment.hold === true) out.hold = true;
+      if (segment.lock === true && takeOn(segment)) out.lock = true;
       if (takeOn(segment)) out.take = { ...segment.take };
       if (segmentSeed(segment) !== null) out.seed = segmentSeed(segment);
       // The set it is staged on and its staging, only where it has them.

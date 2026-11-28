@@ -3794,7 +3794,10 @@ def _chained_request(data, segment, pool, global_prompt, cast=()):
     #   part-render missed the cache the whole render had just filled.
     # - `card_id` is persistent UI ownership for queued takes, not a model
     #   input. Assigning/recovering an identity must not re-encode a shot.
-    for key in ("seed", "take", "hold", "card_no", "card_id"):
+    # - `lock` is the reel's promise to keep a take whatever changes around
+    #   it. A locked card is held, so it only reaches here when it is shot on
+    #   purpose, and locking or unlocking it must not cost a re-encode.
+    for key in ("seed", "take", "hold", "lock", "card_no", "card_id"):
         request.pop(key, None)
     # The staging reaches the model twice, and as neither of these keys: as the
     # guide asset the bench derived from it, and as its words, joined onto the

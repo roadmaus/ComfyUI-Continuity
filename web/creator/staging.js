@@ -372,7 +372,7 @@ class Blockout extends Reel {
         el("div", { class: "mmc-st-col" }, [this.glass, this.sheet.node]),
         this.sideEl,
       ]),
-      el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.statusHost]),
+      el("div", { class: "mmc-reel-foot" }, [this.reelHost, this.queueHost, this.statusHost]),
     ]);
     this.overlay = el("div", {
       class: "mmc-overlay",
@@ -2573,6 +2573,7 @@ class Blockout extends Reel {
     if (sel?.kind === "join" && sel.index < 1) this.sel = null;
     if (sel?.kind === "set" && !(this.timeline.sets ?? []).some((set) => set.id === sel.id)) this.sel = null;
     if (sel?.kind === "thing" && !this.selectedThing()) this.sel = null;
+    this.settlePicks();
     this.renderPlayer();
     const kind = this.sel?.kind;
     const segment = kind === "shot" ? this.timeline.segments[this.sel.index] : null;
@@ -2583,6 +2584,7 @@ class Blockout extends Reel {
       : kind === "track" ? this.inspectTrack(this.sel.index)
       : kind === "set" && this.inspectSet ? this.inspectSet(this.sel.id)
       : kind === "thing" && this.inspectThing ? this.inspectThing()
+      : kind === "picks" ? this.inspectPicks()
       : this.inspectBenchPiece();
     this.inspectHost.replaceChildren(...(this.sel ? [this.backLink()] : []), body);
     this.renderGets();

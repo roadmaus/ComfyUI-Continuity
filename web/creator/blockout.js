@@ -1618,8 +1618,10 @@ export function syncStagingWords(timeline) {
 
 /** The shots the next render samples whose derived guide is not the one their
  *  staging calls for — what Shoot has to draw before it can queue. */
-export function guidesWanted(timeline) {
-  const { shoot } = S.shootPlan(timeline);
+export function guidesWanted(timeline, only = null) {
+  // `only`: the pass indices a press is shooting, where it shoots some of the
+  // piece rather than everything due (`reel.shootOnly`).
+  const shoot = only ?? S.shootPlan(timeline).shoot;
   const runs = S.passes(timeline);
   const out = [];
   for (const k of shoot) {
@@ -1725,11 +1727,11 @@ export function drawStaged(raster, canvas, context, set, staging, at, pass, run 
  *
  * `step(sentence)` is told what is happening, for the button that waits.
  */
-export async function deriveGuides(timeline, { step = () => {} } = {}) {
+export async function deriveGuides(timeline, { step = () => {}, only = null } = {}) {
   // A frame taken from a still is that still's shape, which a look at it tells.
   await measureFrame(timeline);
   let changed = syncStagingWords(timeline);
-  const wanted = guidesWanted(timeline);
+  const wanted = guidesWanted(timeline, only);
   if (!wanted.length) return changed;
   const rules = rulesFor(S.pieceFamily(timeline));
   const { w, h } = S.stagesByReference(timeline) ? referenceSize(timeline) : guideSize(timeline);

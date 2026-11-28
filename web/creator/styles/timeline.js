@@ -911,6 +911,37 @@ export const css = `
 .mmc-reel-tag:empty { display: none; }
 .mmc-reel-tag.changed, .mmc-reel-tag.reshoot { color: var(--mmc-on-accent); background: var(--mmc-accent); }
 .mmc-reel-tag.gone { color: var(--mmc-bad); background: color-mix(in srgb, var(--mmc-bad) 14%, transparent); }
+.mmc-reel-tag.locked { color: var(--mmc-accent); background: color-mix(in srgb, var(--mmc-accent) 13%, transparent); }
+/* A take's lock, at the end of its line: open and quiet until it is closed. */
+.mmc-reel-shot { grid-template-columns: 64px minmax(0, 1fr) auto auto; }
+.mmc-reel-lock {
+  align-self: center; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; cursor: pointer;
+  border: 1px solid transparent; border-radius: calc(7px * var(--mmc-round)); background: none; color: var(--mmc-faint);
+}
+.mmc-reel-lock[hidden] { display: none; }
+.mmc-reel-lock:hover { color: var(--mmc-text); background: var(--mmc-wash); }
+.mmc-reel-lock.on { color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 40%, transparent); background: color-mix(in srgb, var(--mmc-accent) 10%, transparent); }
+.mmc-reel-btn.mmc-reel-locked { color: var(--mmc-accent); border-color: color-mix(in srgb, var(--mmc-accent) 45%, transparent); }
+.mmc-reel-jump { color: var(--mmc-warn); }
+/* Shooting only some of the piece: the button under a shot's film, the picks, and the queue under the reel. */
+.mmc-reel-only { display: flex; flex-direction: column; gap: 4px; margin: 4px 0 8px; padding-top: 8px; border-top: 1px solid var(--mmc-line); }
+.mmc-reel-picklist { margin: 4px 0 8px; padding-left: 22px; display: flex; flex-direction: column; gap: 4px; color: var(--mmc-text); }
+.mmc-reel-queue { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 0 0; }
+.mmc-reel-queue[hidden] { display: none; }
+.mmc-reel-qlabel { font-size: calc(11px * var(--mmc-type)); text-transform: uppercase; letter-spacing: .06em; color: var(--mmc-dim); margin-right: 4px; }
+.mmc-reel-qchip {
+  display: inline-flex; align-items: center; gap: 5px; padding: 2px 4px 2px 10px; font-size: calc(12.5px * var(--mmc-type));
+  border: 1px solid var(--mmc-line-2); border-radius: var(--mmc-pill-r); color: var(--mmc-text); background: var(--mmc-surface);
+}
+.mmc-reel-qchip.running { border-color: var(--mmc-accent); color: var(--mmc-accent); padding-right: 10px; }
+.mmc-reel-qk { color: var(--mmc-dim); font-variant-numeric: tabular-nums; }
+.mmc-reel-qchip.running .mmc-reel-qk { color: inherit; }
+.mmc-reel-qbtn {
+  width: 24px; height: 24px; padding: 0; display: inline-grid; place-items: center; cursor: pointer;
+  border: 0; border-radius: var(--mmc-pill-r); background: none; color: var(--mmc-dim); font: inherit;
+}
+.mmc-reel-qbtn:hover:not([disabled]) { color: var(--mmc-strong); background: var(--mmc-wash); }
+.mmc-reel-qbtn[disabled] { opacity: .35; cursor: default; }
 .mmc-reel-next-body { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
 .mmc-reel-ghost {
   font: inherit; font-size: calc(16.5px * var(--mmc-type)); color: var(--mmc-faint); background: none; border: 0;
@@ -1146,7 +1177,7 @@ export const css = `
   border: 1px solid var(--mmc-line-2); color: var(--mmc-text); font: inherit; text-align: left;
   background: repeating-linear-gradient(135deg, var(--mmc-surface) 0 9px, var(--mmc-surface-2) 9px 18px);
 }
-.mmc-reel-card.kept, .mmc-reel-card.reshoot, .mmc-reel-card.changed { background: var(--mmc-media-bg); }
+.mmc-reel-card.kept, .mmc-reel-card.locked, .mmc-reel-card.reshoot, .mmc-reel-card.changed { background: var(--mmc-media-bg); }
 .mmc-reel-card.runs-in { border-left: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
 .mmc-reel-card.runs-on { border-right: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
 .mmc-reel-card.filmed { background: none; }
@@ -1168,6 +1199,16 @@ export const css = `
   padding: 1px 7px; border-radius: calc(5px * var(--mmc-round)); background: var(--mmc-accent); color: var(--mmc-on-accent);
 }
 .mmc-reel-card-tag.gone { background: var(--mmc-bad); color: #fff; }
+.mmc-reel-card-tag.locked { background: rgba(0, 0, 0, .62); color: var(--mmc-accent); }
+.mmc-reel-card-lock {
+  position: absolute; right: 7px; top: 6px; z-index: 5; width: 20px; height: 20px; display: grid; place-items: center;
+  border-radius: calc(5px * var(--mmc-round)); background: rgba(0, 0, 0, .6); color: var(--mmc-accent);
+}
+.mmc-reel-card-pick {
+  position: absolute; right: 7px; bottom: 6px; z-index: 5; min-width: 20px; height: 20px; padding: 0 5px; box-sizing: border-box;
+  display: grid; place-items: center; border-radius: var(--mmc-pill-r); font-size: calc(11px * var(--mmc-type)); font-weight: 700;
+  background: var(--mmc-accent); color: var(--mmc-on-accent);
+}
 .mmc-reel-edge { position: absolute; top: 0; right: 0; width: 10px; height: 100%; cursor: ew-resize; display: grid; place-items: center; z-index: 3; }
 .mmc-reel-edge::after { content: ""; width: 2px; height: 24px; border-radius: calc(1px * var(--mmc-round)); background: rgba(255, 255, 255, .45); }
 .mmc-reel-card:hover .mmc-reel-edge::after { background: #fff; }

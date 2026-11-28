@@ -6,6 +6,22 @@ exactly as it was written, wall of text and all.
 
 ## Unreleased
 
+**A take can be locked, and a shot can be shot by itself.** A kept take was let go by the
+smallest edit to its shot, and by any new take of the shot it continues from, so a comma
+meant a reshoot. The padlock at the end of a shot's line (or Lock take on its side) now keeps
+the take whatever changes: an edit is kept on the shot and tagged `Locked, edit not shot`, a
+new take upstream is tagged `Locked, the cut may jump`, and nothing follows through a locked
+shot. Each take now records the film it continued from (`take.from`), which is how a cut that
+may jump is told after the fact. Shoot only this shot renders one shot as its own render, and
+Shift-click picks several, which render one after another in the order they were picked. A
+shot that continues from one with no film yet brings that shot into the same render. A
+part-render is the same node queued with a blob in which every other pass is held and the
+takes nothing reads are left off, so `compile.rendered_piece` makes only those shots; it does
+not mark the piece as put together. The reel shows this node's renders on the queue, and a
+waiting one can be moved or taken off: a move takes the waiting renders off ComfyUI's queue
+and sends their blobs again in the new order. `lock` is popped from the request with the rest
+of a card's bookkeeping, so locking never costs a re-encode.
+
 **Stagehand can use the style library, when it is asked to.** `find_styles` searches the
 atlas's 941 looks by their words, or lists the categories, and says which style the film's
 text and each shot's open with now; `use_style` puts one at the front of the film's text or a

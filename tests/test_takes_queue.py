@@ -300,11 +300,51 @@ const deliver = (body,id,reports) => say('executed',{
     read:()=>'{"segments":[{"prompt":"a"}]}',
     write:()=>{throw writeError;}}),error=>error===writeError);
 }
+// Shooting some of the piece queues the node with a blob of its own: only that
+// node's input is replaced, the widget is left alone, the snapshot is of what
+// was sent, and a part-render never marks the piece as put together. A Queue
+// aimed at anything but that node alone goes out as it was.
+{
+  const { app } = await import('../scripts/app.js');
+  const { queueNode } = await import('./web/creator/queue.js');
+  const body=make(['one','two'],'21');
+  body.timeline.segments[0].hold=true;
+  body.timeline.segments[0].take={filename:'takes/one.mp4 [output]',duration_s:5,has_audio:true};
+  body.commit();
+  const other=make(['elsewhere'],'22');
+  let targetsSent=null;
+  app.queuePrompt=async (number,count,targets)=>{
+    const pending=api.queuePrompt(number,{output:outputOf(body,other),workflow:{}},
+      {partialExecutionTargets:targetsSent ?? targets});
+    requests.at(-1).resolve({prompt_id:'part-'+requests.length});
+    await pending; return true;
+  };
+  const widget=body.read();
+  const blob=S.partialPiece(body.timeline,[1]);
+  await queueNode('21',{inputs:{creator_data:blob}});
+  const sent=requests.at(-1).args[1].output;
+  assert.equal(sent['21'].inputs.creator_data,blob);
+  assert.equal(sent['22'].inputs.creator_data,other.read());
+  assert.equal(body.read(),widget);
+  const id='part-'+requests.length;
+  assert.equal(body.queued.get(id).partial,true);
+  assert.equal(body.sent.get(id),blob);
+  assert.deepEqual(body.queuedRuns().find(run=>run.id===id),
+    {id,state:'queued',shot:[body.timeline.segments[1].card_id],partial:true});
+  body.filmMade(id);
+  assert.equal(body.timeline.cut,undefined);
+  // The same press built as a whole-graph Queue: not this node alone, so untouched.
+  targetsSent=[];
+  await queueNode('21',{inputs:{creator_data:blob}});
+  assert.equal(requests.at(-1).args[1].output['21'].inputs.creator_data,widget);
+  delete app.queuePrompt;
+  body.destroy(); other.destroy();
+}
 for(const body of bodies) body.destroy();
-console.log(JSON.stringify({passed:true,scenarios:16}));
+console.log(JSON.stringify({passed:true,scenarios:17}));
 """
 
 with layout.pack() as packed:
     result = layout.in_pack(DOM + SCRIPT, packed)
-check("prompt-scoped take ownership scenarios", result, {"passed": True, "scenarios": 16})
+check("prompt-scoped take ownership scenarios", result, {"passed": True, "scenarios": 17})
 passed("take identities, submitted prompts and history recovery stay paired")
